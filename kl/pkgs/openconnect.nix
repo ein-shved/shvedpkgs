@@ -1,5 +1,5 @@
 # https://github.com/NixOS/nixpkgs/pull/68780
-{ stdenv, fetchurl, pkgconfig, openssl ? null, gnutls ? null, gmp, libxml2, p11-kit, libp11 ? null, stoken, zlib, fetchgit, darwin } :
+{ stdenv, lib, fetchurl, pkgconfig, openssl ? null, gnutls ? null, gmp, libxml2, p11-kit, libp11 ? null, stoken, zlib, fetchgit, darwin } :
 
 assert (openssl != null) == (gnutls == null);
 assert (openssl != null) -> (libp11 != null);
@@ -30,15 +30,15 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl gnutls gmp libxml2 p11-kit stoken zlib ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.PCSC
-    ++ stdenv.lib.optional (openssl != null) libp11;
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.PCSC
+    ++ lib.optional (openssl != null) libp11;
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "VPN Client for Cisco's AnyConnect SSL VPN";
     homepage = "http://www.infradead.org/openconnect/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ pradeepchhetri tricktron ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
