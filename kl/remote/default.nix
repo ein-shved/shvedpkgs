@@ -6,6 +6,7 @@ let
                         };
     openconnect = pkgs.callPackage .././pkgs/openconnect.nix { openssl = null; };
     klvpn = pkgs.callPackage ./klvpn.nix { };
+    klfs = pkgs.callPackage ./klfs.nix { defaultserver="yuryshvedov.avp.ru"; };
 in
 {
     config = {
@@ -14,6 +15,7 @@ in
             openconnect
             gnutls
             klvpn
+            klfs
         ];
 
         services.pcscd = {
@@ -28,6 +30,7 @@ in
             text = "module: " + pcsc-safenet.outPath + "/lib/libeToken.so";
             mode = "0644";
         };
+        programs.fuse.userAllowOther = true;
     };
 }
 
