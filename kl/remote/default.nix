@@ -1,17 +1,14 @@
 { config, pkgs, ... }:
-
+with pkgs;
 let
-    unstable = import <nixos-unstable> {
-                            config.allowUnfree = true;
-                        };
-    openconnect = pkgs.callPackage .././pkgs/openconnect.nix { openssl = null; };
-    klvpn = pkgs.callPackage ./klvpn.nix { };
-    klfs = pkgs.callPackage ./klfs.nix { defaultserver="yuryshvedov.avp.ru"; };
+    openconnect = callPackage .././pkgs/openconnect.nix { openssl = null; };
+    klvpn = callPackage ./klvpn.nix { };
+    klfs = callPackage ./klfs.nix { defaultserver="yuryshvedov.avp.ru"; };
 in
 {
     config = {
-        environment.systemPackages = with pkgs; [
-            unstable.pcsc-safenet
+        environment.systemPackages = [
+            pcsc-safenet
             openconnect
             gnutls
             klvpn
@@ -20,17 +17,32 @@ in
 
         services.pcscd = {
             enable = true;
-            plugins = [ unstable.pcsc-safenet ];
+            plugins = [ pcsc-safenet ];
         };
         programs.gnupg.agent = {
             enable = true;
             pinentryFlavor = "gnome3";
         };
-        environment.etc."pkcs11/modules/libeToken.module" =  with unstable; {
-            text = "module: " + pcsc-safenet.outPath + "/lib/libeToken.so";
+        environment.etc."pkcs11/modules/libeToken.module" = {
+            text = "module: ${pcsc-safenet}/lib/libeToken.so";
             mode = "0644";
         };
         programs.fuse.userAllowOther = true;
+        #Allow to use token bu non-root user
+        security.polkit.extraConfig = ''
+            polkit.addRule(function(action, subject) {
+                if (action.id == "org.debian.pcsc-lite.access_card" &&
+                    subject.user == "shved") {
+                        return polkit.Result.YES;
+                }
+            });
+            polkit.addRule(function(action, subject) {
+                if (action.id == "org.debian.pcsc-lite.access_pcsc" &&
+                    subject.user == "shved") {
+                        return polkit.Result.YES;
+                }
+            });
+        '';
     };
 }
 

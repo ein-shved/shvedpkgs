@@ -4,7 +4,7 @@ let
     srv = if defaultserver == null then "$HOSTNAME.avp.ru" else defaultserver;
     usr = if defaultuser == null then "$USER" else defaultuser;
 in stdenv.mkDerivation {
-    name = "klfs";
+    pname = "klfs";
     version = "0.0.1";
     buildInputs = [ ];
 

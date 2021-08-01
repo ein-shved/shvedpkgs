@@ -1,11 +1,10 @@
-{ stdenv,  lib, pkgs, substituteAll, gnutls, gnugrep, gnused, sudo }:
+{ stdenv, lib, pkgs, substituteAll, gnutls, gnugrep, gnused, sudo }:
 let
-    klcerts = pkgs.callPackage .././pkgs/certificates.nix {};
     openconnect = pkgs.callPackage .././pkgs/openconnect.nix { openssl = null; };
 in stdenv.mkDerivation {
-    name = "klvpn";
+    pname = "klvpn";
     version = "0.0.1";
-    buildInputs = [ klcerts sudo ];
+    buildInputs = [ sudo ];
 
     buildCommand = ''
         install -Dm755 $script $out/bin/klvpn
