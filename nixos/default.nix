@@ -1,8 +1,14 @@
 { pkgs, ... }:
 let
     bashrc = pkgs.callPackage ./bashrc {};
+    secrets = if builtins.pathExists ./../secrets/default.nix
+                then [ ./../secrets ]
+              else if builtins.pathExists ./../secrets.nix
+                then [ ./../secrets.nix ]
+              else
+                [];
 in {
-    imports = [
+    imports = secrets ++ [
         ./user.nix
         ./desktop.nix
         ./packages.nix
