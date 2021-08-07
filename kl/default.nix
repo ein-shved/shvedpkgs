@@ -21,6 +21,8 @@ in
                 certutil = "${nss.tools}/bin/certutil -d ${db}";
                 modutil = "${nss.tools}/bin/modutil -dbdir ${db}";
             in {
+            # The certutil may hang openning db, when pkcs11 token plugged in
+            # removing it will solve this problem
                 installNssDbCerts = dag.entryAfter["writeBoundary"] ''
                     for crtf in ${klcerts}/*.crt; do
                         crtn="$(basename "$crtf")"

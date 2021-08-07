@@ -10,7 +10,7 @@ let
 in {
     imports = secrets ++ [
         ./user.nix
-        ./desktop.nix
+        ./desktop
         ./packages.nix
         ./services.nix
         ./../kl

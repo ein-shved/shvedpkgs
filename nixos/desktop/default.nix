@@ -1,7 +1,8 @@
 { config, pkgs, lib, ... }:
 with pkgs;
 let
-    mozilla_merge_nss = callPackage ./mozilla_merge_nss { };
+    mozilla_merge_nss = callPackage ./mozilla_merge_nss {};
+    xfce_conf = callPackage ./xfce4 {};
 in {
     imports = [
         <home-manager/nixos>
@@ -35,6 +36,12 @@ in {
             in {
                 mergeMzNssDb = dag.entryAfter["writeBoundary"] ''
                     ${mozilla_merge_nss}/bin/mozilla_merge_nss
+                '';
+                xfceConfig = dag.entryAfter["writeBoundary"] ''
+                    XFCONFPATH=$HOME/.config/xfce4
+                    mkdir -p "$XFCONFPATH"
+                    cp -r ${xfce_conf}/xfconf "$XFCONFPATH/"
+
                 '';
             };
         };
