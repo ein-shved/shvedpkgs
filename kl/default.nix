@@ -17,13 +17,18 @@ in
         home-manager.users.shved = { pkgs, ...  }: {
             home.activation = let
                 dag = hm.dag;
-                db = "sql:$HOME/.pki/nssdb";
+                dbpath = "$HOME/.pki/nssdb";
+                db = "sql:${dbpath}";
                 certutil = "${nss.tools}/bin/certutil -d ${db}";
                 modutil = "${nss.tools}/bin/modutil -dbdir ${db}";
             in {
             # The certutil may hang openning db, when pkcs11 token plugged in
             # removing it will solve this problem
                 installNssDbCerts = dag.entryAfter["writeBoundary"] ''
+                    if [ ! -d "${dbpath}" ]; then
+                        mkdir -p "${dbpath}"
+                        ${certutil} -N --empty-password
+                    fi
                     for crtf in ${klcerts}/*.crt; do
                         crtn="$(basename "$crtf")"
                         crtn="''${crtn::-4}"

@@ -5,6 +5,6 @@
         isNormalUser = true;
         home = "/home/shved";
         description = "Yury Shvedov";
-        extraGroups = [ "wheel" "pkcs11" "tty" "keys" ];
+        extraGroups = [ "wheel" "pkcs11" "tty" "keys" "audio" ];
     };
 }

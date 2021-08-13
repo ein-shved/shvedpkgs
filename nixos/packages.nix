@@ -21,6 +21,8 @@ in with pkgs;
             guake
             transmission-remote-gtk
             usbutils
+            nss.tools
+            git
         ];
     };
 }
