@@ -1,2 +1,4 @@
 secrets/
 secrets.nix
+nda/
+nda.nix

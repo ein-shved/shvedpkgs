@@ -1,43 +1,23 @@
 { pkgs, ... }:
-let
-    bashrc = pkgs.callPackage ./bashrc {};
-    secrets = if builtins.pathExists ./../secrets/default.nix
-                then [ ./../secrets ]
-              else if builtins.pathExists ./../secrets.nix
-                then [ ./../secrets.nix ]
-              else
-                [];
-in {
-    imports = secrets ++ [
-        ./user.nix
-        ./desktop
-        ./packages.nix
-        ./services.nix
-        ./../kl
-    ];
-    config = {
-        networking.hostName = "ShvedKLRemote";
-        environment.etc = {
-            inputrc = {
-                text = ''
-                    "\e[A": history-search-backward
-                    "\e[B": history-search-forward
-
-                    set bell-style none
-                    set colored-stats On
-                    set completion-ignore-case On
-                    set completion-prefix-display-length 3
-                    set mark-symlinked-directories On
-                    set show-all-if-ambiguous On
-                    set show-all-if-unmodified On
-                    set visible-stats On
-                '';
-                mode = "0644";
-            };
-            "bashrc" = {
-                source = bashrc;
-                mode = "0755";
-            };
-        };
+{
+  imports = [
+    ./user
+    ./packages
+    ./services
+    ./desktop
+    ./media
+    ./bashrc
+    ./tools
+    ./kl
+  ];
+  config = {
+    boot = {
+      tmpOnTmpfs = true;
+      #tmpOnTmpfsSize = "30%";
+      cleanTmpDir = true;
+      plymouth.enable = true;
+      kernelParams = [ "quiet" ];
+      supportedFilesystems = [ "ntfs" ];
     };
+  };
 }
