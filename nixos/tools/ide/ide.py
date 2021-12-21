@@ -105,7 +105,7 @@ def runSelector(db):
         key = item.text()
         table.removeRow(row)
         for n, (k, v) in enumerate(db):
-            if key == v:
+            if key == k:
                 del db[n]
                 break
         saveDb(db)
