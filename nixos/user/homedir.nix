@@ -86,11 +86,20 @@ in
     home-manager = {
       useGlobalPkgs = true;
       users."${login}" = {
-        home = {
-          activation = builtins.mapAttrs activationMapper cfg.activations;
-        } // cfg.home // loadExtras "home" cfg.extras;
-        programs = cfg.programs // loadExtras "programs" cfg.extras;
-        xdg = cfg.xdg // loadExtras "xdg" cfg.extras;
+        home = mkMerge [ {
+            activation = builtins.mapAttrs activationMapper cfg.activations;
+          }
+          cfg.home
+          (loadExtras "home" cfg.extras)
+        ];
+        programs = mkMerge [
+          cfg.programs
+          (loadExtras "programs" cfg.extras)
+        ];
+        xdg = mkMerge [
+          cfg.xdg
+          (loadExtras "xdg" cfg.extras)
+        ];
       };
     };
   };
