@@ -16,7 +16,7 @@ in ''
   endif
 
   if g:ide_running
-    colorscheme NeoSolarized
+    colorscheme solarized
     highlight Cursor guifg=white guibg=blue
     ${sessionrc.ide or ""}
     ${keymaprc.ide or ""}

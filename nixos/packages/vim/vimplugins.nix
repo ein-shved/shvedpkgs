@@ -32,7 +32,7 @@ in {
   start = [
     vim-nix               # From Nix docs
     vim-lastplace         # From Nix docs
-    NeoSolarized          # Lovely colors
+    Solarized             # Lovely colors
     easy-align            # Plugin to format spaces
     vim-expand-backspace  # My own plugin to greedy remove spaces
 
