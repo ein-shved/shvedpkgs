@@ -80,6 +80,10 @@ augroup vimrc_autocmds
   "2 spaces preferred languages
   autocmd FileType xml,nix setlocal tabstop=${smalltabwidth}
   autocmd FileType xml,nix setlocal shiftwidth=${smalltabwidth}
+  autocmd FileType gitcommit setlocal tw=72
+  autocmd FileType gitcommit setlocal colorcolumn=73
+  autocmd FileType markdown setlocal tw=${builtins.toString cfg.linewidth}
+  autocmd FileType gitcommit,markdown setlocal formatoptions+=a
 augroup END
 
 " vim -b : edit binary using xxd-format
