@@ -18,7 +18,6 @@ in
               load-module module-switch-on-connect
             '';
         };
-        programs.steam.enable = true;
         documentation.man.generateCaches = true;
     };
 }
