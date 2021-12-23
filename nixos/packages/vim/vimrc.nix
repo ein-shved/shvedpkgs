@@ -17,7 +17,10 @@ in ''
   set spell spelllang=en
 
 "Highlight next after linewidth column
+  set tw=${builtins.toString cfg.linewidth}
   set colorcolumn=${builtins.toString (cfg.linewidth + 1)}
+" Autoformating comments
+  set formatoptions=croqal
 
 "Indentation
   set backspace=indent,eol,start
@@ -26,6 +29,7 @@ in ''
   set smartindent
   set tabstop=${tabwidth}
   set shiftwidth=${tabwidth}
+
 
 "Diable wrapping
   set nowrap
@@ -83,7 +87,7 @@ augroup vimrc_autocmds
   autocmd FileType gitcommit setlocal tw=72
   autocmd FileType gitcommit setlocal colorcolumn=73
   autocmd FileType markdown setlocal tw=${builtins.toString cfg.linewidth}
-  autocmd FileType gitcommit,markdown setlocal formatoptions+=a
+  autocmd FileType gitcommit,markdown setlocal formatoptions+=t
 augroup END
 
 " vim -b : edit binary using xxd-format
