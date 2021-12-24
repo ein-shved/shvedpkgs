@@ -5,6 +5,7 @@
     ./3d
     ./browsers
     ./gnupass.nix
+    ./translate-shell.nix
   ];
   config = {
     nixpkgs.config.allowUnfree = true;
