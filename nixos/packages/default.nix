@@ -8,6 +8,11 @@
     ./translate-shell.nix
   ];
   config = {
+    nixpkgs.overlays = [
+      (self: super: {
+        aff4 = pkgs.callPackage ./aff4 {};
+      })
+    ];
     nixpkgs.config.allowUnfree = true;
     environment.systemPackages = with pkgs; [
       evince
