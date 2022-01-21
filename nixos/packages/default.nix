@@ -40,7 +40,6 @@
       man-pages-posix
       stdmanpages
       psmisc
-      ack
       unzip
       nix-index
       teamviewer

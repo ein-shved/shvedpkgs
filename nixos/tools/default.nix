@@ -7,6 +7,7 @@ in {
     ./make.nix
     ./python
     ./dhcps
+    ./ack.nix
   ];
   config = {
     environment.systemPackages = [
