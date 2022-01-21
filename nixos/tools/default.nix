@@ -8,7 +8,10 @@ in {
     ./python
     ./dhcps
   ];
-  config.environment.systemPackages = [
-      ide
-  ];
+  config = {
+    environment.systemPackages = [
+        ide
+    ];
+    virtualisation.docker.enable = true;
+  };
 }
