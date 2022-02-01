@@ -8,6 +8,7 @@ in {
     ./python
     ./dhcps
     ./ack.nix
+    ./dowork.nix
   ];
   config = {
     environment.systemPackages = [
