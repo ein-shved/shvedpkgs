@@ -106,6 +106,33 @@ let
     exec rm $files;
   '';
 
+  workCompletions = ''
+    ${sourcePrepare}
+
+    function _works()
+    {
+        local names file cur
+        COMPREPLY=()
+        cur="''${COMP_WORDS[COMP_CWORD]}"
+        if [[ $COMP_CWORD != 1 ]]; then
+          COMPREPLY=( $(compgen -W "*" -- ''${cur}) )
+          return 0
+        fi
+
+        for file in "$worksPath"/*; do
+          names="$names $(getWorkName $file)"
+        done
+
+        if [[ -n "$names" ]] ; then
+            COMPREPLY=( $(compgen -W "''${names}" -- ''${cur}) )
+            return 0
+        fi
+    }
+    complete -F _works dowork
+    complete -F _works editwork
+    complete -F _works flushwork
+  '';
+
 in {
   config = {
     environment.systemPackages = [
@@ -113,6 +140,9 @@ in {
         editWork
         listWorks
         flushWork
+    ];
+    programs.bash.extraCompletions = [
+      workCompletions
     ];
   };
 }

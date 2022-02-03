@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, config, ... }:
 let
   git_root = pkgs.gitAndTools.gitFull;
   git_prompt = "${git_root}/share/git/contrib/completion/git-prompt.sh";
@@ -6,15 +6,31 @@ let
     "${pkgs.bash-completion}/share/bash-completion/bash_completion";
   nix_index = "${pkgs.nix-index}/etc/profile.d/command-not-found.sh";
   ip = "${pkgs.iproute2}/bin/ip";
+  completions = let
+    cfg = config.programs.bash.extraCompletions;
+    script = builtins.foldl' (r: n: r + "\n" + n) "" cfg;
+    pkgname = "extraBashCompletions";
+    pkg = pkgs.writeShellScriptBin pkgname script;
+  in
+    "${pkg}/bin/${pkgname}";
+
 in
 {
   imports = [ ./inputrc.nix ];
+  options = {
+    programs.bash.extraCompletions = with lib; with types; mkOption {
+      description = "Add your bash-completion script bpdy here";
+      type = listOf str;
+      default = [];
+    };
+  };
   config.programs = {
     command-not-found.enable = false; # Use nix-index instead
     bash = {
       interactiveShellInit = ''
         source ${nix_index}
         source ${bash_completion}
+        source ${completions}
 
         export GIT_PS1_SHOWUPSTREAM="auto"
         source ${git_prompt}
