@@ -12,6 +12,16 @@ let
       exec "mksession!" . g:session_name_path
     endfunction
   '';
+  clearUpAbsolutes = let
+    name = "vim_session_clear_absilute_paths";
+    pkg = pkgs.writeShellScriptBin name ''
+      # Assume incoming file was generated with vim and each command on its
+      # single line.
+      sed -n '/\/nix\/store/!p' -i $1
+    '';
+  in
+    "${pkg}/bin/${name}";
+
   globals = ''
   "Remember current PWD
     let g:exec_path = getcwd()
@@ -33,8 +43,11 @@ let
             \ g:tag_name_path . " "  . g:exec_path
     let g:exec_tags_set = ":set tags=" . tag_name_path
 
-  "variable-command for session
+  "variable-command for loading session
     let g:exec_session_set = ":source " . session_name_path
+
+  "variable-command for tidying session
+    let g:exec_tidy_session = ":!${clearUpAbsolutes} " . session_name_path
 
   "and for cscope
     set csre
@@ -62,7 +75,10 @@ let
 
   "If session file is available - source it!
     if filereadable(g:session_name_path)
-        exec exec_session_set
+        silent exec exec_session_set
+        "we are going to run tidy withing session start to
+        "support old-generated sessions.
+        silent exec exec_tidy_session
     endif
   "Map Ctrl+s to use our Save function
     map <C-s> :call SaveWithSession()<CR>
