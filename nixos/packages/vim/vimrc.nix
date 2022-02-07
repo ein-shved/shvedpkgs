@@ -30,7 +30,6 @@ in ''
   set tabstop=${tabwidth}
   set shiftwidth=${tabwidth}
 
-
 "Diable wrapping
   set nowrap
 
@@ -40,6 +39,15 @@ in ''
 "Status line configuration
   set ruler
   set laststatus=2
+
+"Session global part
+  ${sessionrc.globals or ""}
+
+"Gui heading part
+  ${guirc.globals or ""}
+
+
+  ${guirc.sessionselect or ""}
 
 "Make vim to complete commands in the bash-like way:
 " First tab hit complete to the longest match if possible
@@ -88,6 +96,8 @@ augroup vimrc_autocmds
   autocmd FileType gitcommit setlocal colorcolumn=73
   autocmd FileType markdown setlocal tw=${builtins.toString cfg.linewidth}
   autocmd FileType gitcommit,markdown setlocal formatoptions+=t
+  "nospell languages
+  autocmd FileType sh,shell,bash,txt setlocal nospell
 augroup END
 
 " vim -b : edit binary using xxd-format
@@ -141,13 +151,9 @@ augroup END
     \ })
   endif
 
-
-"Session global part
-  ${sessionrc.globals or ""}
+"Gui process part
+  ${guirc.generic or ""}
 
 "Key Maps global
   ${keymaprc.globals or ""}
-
-"Gui part
-  ${guirc}
 ''

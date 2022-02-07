@@ -55,6 +55,13 @@ in
         type = types.ints.positive;
         default = 80;
       };
+      fontsize = mkOption {
+        description = ''
+          Font size for GUI
+        '';
+        type = types.ints.positive;
+        default = 9;
+      };
     };
   };
 }
