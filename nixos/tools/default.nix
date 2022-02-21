@@ -9,6 +9,8 @@ in {
     ./dhcps
     ./ack.nix
     ./dowork.nix
+    ./udev.nix
+    ./avr.nix
   ];
   config = {
     environment.systemPackages = [
