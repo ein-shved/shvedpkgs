@@ -46,7 +46,6 @@ in {
       firefox.enable = false;
       chromium = {
         enable = true;
-        useKerberos = config.local.kl.domain.enable;
       };
     };
     services = {
