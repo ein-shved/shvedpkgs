@@ -6,6 +6,7 @@
     ./git.nix
     ./ssh.nix
     ./top.nix
+    ./firewall.nix
   ];
   config = {
     services = {
