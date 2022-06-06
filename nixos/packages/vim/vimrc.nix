@@ -20,7 +20,7 @@ in ''
   set tw=${builtins.toString cfg.linewidth}
   set colorcolumn=${builtins.toString (cfg.linewidth + 1)}
 " Autoformating comments
-  set formatoptions=croqal
+  set formatoptions=croql
 
 "Indentation
   set backspace=indent,eol,start
