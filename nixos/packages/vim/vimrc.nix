@@ -7,7 +7,7 @@ let
   sessionrc = import ./sessionrc.nix { inherit pkgs config; };
   keymaprc = import ./keymaprc.nix { inherit pkgs config; };
   rnix-lsp-exe = "${pkgs.rnix-lsp.outPath}/bin/rnix-lsp";
-
+  query_driver = pkgs.lib.concatStringsSep "," cfg.clangd.query_driver;
 in ''
   set nocompatible
 
@@ -68,6 +68,12 @@ in ''
   set list
   set listchars=tab:→\ ,nbsp:␣,trail:•,precedes:«,extends:»
 
+"Map \e to edit file in current folder
+  nnoremap <Leader>e :e <C-R>=expand('%:p:h') . '/'<CR>
+
+"Map \d to mkdir in current folder
+  nnoremap <Leader>d :!mkdir -p <C-R>=expand('%:p:h') . '/'<CR>
+
 "Fix trailing whitespaces automatically
   autocmd BufWritePre *.c,*.h,*.cpp,*.hpp,*.lua,*.txt,*.sh,*.conf*,*.rb,*.py,*.scad,*.md,*.nix
     \ :%s/\s\+$//e
@@ -127,7 +133,7 @@ augroup END
   let g:lsp_diagnostics_float_cursor=1
   let g:lsp_settings = { 'clangd': {'cmd':
     \ ['clangd', '-j=8',
-    \            '--query-driver=${cfg.clangd.query_driver}',
+    \            '--query-driver=${query_driver}',
     \            '--header-insertion=never' ]
     \ }}
   let g:lsp_document_code_action_signs_enabled=0

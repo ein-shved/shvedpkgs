@@ -12,6 +12,7 @@ let
   vimdiff = pkgs.writeShellScriptBin "vimdiff" ''
     exec ${vim}/bin/vim -d "$@"
   '';
+  default_query_driver = ["/nix/store/**/*" "*"];
 in
 {
   config = {
@@ -28,6 +29,7 @@ in
     programs.vim = {
       package = vim;
       defaultEditor = true;
+      clangd.query_driver = default_query_driver;
     };
   };
   options = {
@@ -35,10 +37,10 @@ in
       clangd = {
         query_driver = mkOption {
           description = ''
-            The --query-driver option string for launching clangd server
+            The -query-driver option strings for launching clangd server
           '';
-          type = types.str;
-          default = "*";
+          type = types.listOf types.str;
+          default = default_query_driver;
         };
       };
       tabwidth = mkOption {
