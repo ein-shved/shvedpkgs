@@ -16,6 +16,14 @@ in {
     environment.systemPackages = [
         ide
     ];
-    virtualisation.docker.enable = true;
+    virtualisation = {
+      docker = {
+        enable = true;
+      };
+      virtualbox.host = {
+        enable = true;
+        enableExtensionPack = true;
+      };
+    };
   };
 }

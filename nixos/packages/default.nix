@@ -43,6 +43,8 @@
       unzip
       nix-index
       teamviewer
+      lutris
+      x11docker
     ];
     programs = {
       adb.enable = true;
