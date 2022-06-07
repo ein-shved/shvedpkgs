@@ -7,6 +7,7 @@
     ./ssh.nix
     ./top.nix
     ./firewall.nix
+    ./openvpn.nix
   ];
   config = {
     services = {
