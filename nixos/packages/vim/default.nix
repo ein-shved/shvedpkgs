@@ -5,7 +5,6 @@ let
 
   vim = pkgs.vim_configurable.customize {
     name = "vim";
-    wrapGui = true;
     vimrcConfig.packages.plugins = plugins;
     vimrcConfig.customRC = vimrc;
   };

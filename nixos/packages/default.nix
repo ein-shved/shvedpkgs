@@ -25,7 +25,7 @@
       guake
       usbutils
       thunderbird
-      gnome3.dconf
+      dconf
       fontconfig.lib
       bash-completion
       nix-bash-completions

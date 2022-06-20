@@ -19,5 +19,6 @@
       kernelParams = [ "quiet" ];
       supportedFilesystems = [ "ntfs" ];
     };
+    nix.autoOptimiseStore = true;
   };
 }
