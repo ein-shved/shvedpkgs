@@ -46,6 +46,8 @@ in
         gcm = "git commit --amend";
         gcmn = "git commit --amend --no-edit";
         grh = "git rebase -i HEAD";
+        gt = "git checkout";
+        gsh = "git show";
       };
       undistractMe = {
         enable = true;
