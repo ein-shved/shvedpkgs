@@ -4,13 +4,14 @@ with pkgs;
   config = {
     services.xserver = {
       enable = true;
-      desktopManager.xfce = {
-        enable = true;
+      desktopManager = {
+        xfce.enable = true;
+        xterm.enable = false;
       };
       displayManager =  {
-        lightdm = {
-            enable = true;
-        };
+#        lightdm = {
+#            enable = true;
+#        };
         defaultSession = "xfce";
       };
       useGlamor = true;
