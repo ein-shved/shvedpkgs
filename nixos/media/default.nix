@@ -7,6 +7,7 @@ in
   # I do not use BT audio for now and pulse is more stable
   #   ./pipewire
    ./spotify
+   ./mpv.nix
   ];
   config = {
     hardware.pulseaudio = {
