@@ -51,6 +51,7 @@ in {
     services = {
       spotify.daemon = false; # Spotifyd is a piece of crap
     };
+    boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
 }
 

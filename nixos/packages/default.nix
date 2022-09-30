@@ -42,6 +42,7 @@
       psmisc
       unzip
       nix-index
+      cifs-utils
     ];
     programs = {
       adb.enable = true;
