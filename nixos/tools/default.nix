@@ -16,6 +16,7 @@ in {
     ./avr.nix
     ./ncproxy.nix
     ./stm32.nix
+    ./keyutils
   ];
   config = {
     environment.systemPackages = [
