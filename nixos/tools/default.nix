@@ -14,6 +14,7 @@ in {
     ./dowork.nix
     ./udev.nix
     ./avr.nix
+    ./ncproxy.nix
   ];
   config = {
     environment.systemPackages = [
