@@ -15,6 +15,7 @@ in {
     ./udev.nix
     ./avr.nix
     ./ncproxy.nix
+    ./stm32.nix
   ];
   config = {
     environment.systemPackages = [
