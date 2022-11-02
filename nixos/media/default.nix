@@ -8,6 +8,7 @@ in
   #   ./pipewire
    ./spotify
    ./mpv.nix
+   ./camera.nix
   ];
   config = {
     hardware.pulseaudio = {
