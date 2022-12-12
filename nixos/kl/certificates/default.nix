@@ -4,7 +4,7 @@ stdenv.mkDerivation {
     name = "kl-certificates";
     src = fetchurl {
         url = "https://vpnhelp.kaspersky.com/Applications/certificates.zip";
-        sha256="1xd82l87d3d51dvwr5xc4wcv072b2hwzsvca7bwf28nvj7ms55vl";
+        sha256="1ppg0rfys6f0jrxsh4wvmbqq0xznbmckbqjm7g7plp2xxlc0r656";
     };
 
     nativeBuildInputs = [ unzip file openssl ];

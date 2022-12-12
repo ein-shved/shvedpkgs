@@ -19,7 +19,7 @@
       kernelParams = [ "quiet" ];
       supportedFilesystems = [ "ntfs" ];
     };
-    nix.autoOptimiseStore = true;
+    nix.settings.auto-optimise-store = true;
     nix.extraOptions = ''
       experimental-features = nix-command flakes
     '';

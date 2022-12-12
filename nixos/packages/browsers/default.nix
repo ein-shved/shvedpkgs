@@ -18,7 +18,6 @@ in
 {
   imports = [
     ./chromium
-    ./firefox
   ];
   config = {
     local.activations = {

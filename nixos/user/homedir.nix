@@ -100,6 +100,7 @@ in
           cfg.xdg
           (loadExtras "xdg" cfg.extras)
         ];
+        manual.manpages.enable = false;
       };
     };
   };

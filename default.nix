@@ -52,6 +52,7 @@ in {
       spotify.daemon = false; # Spotifyd is a piece of crap
     };
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+    systemd.services.nix-daemon.environment.TMPDIR = "/home/.nix-build";
   };
 }
 

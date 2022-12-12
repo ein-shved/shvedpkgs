@@ -14,7 +14,7 @@ with pkgs;
 #        };
         defaultSession = "xfce";
       };
-      useGlamor = true;
+#      useGlamor = true;
       layout = "us,ru";
     };
     fonts.fonts = [
