@@ -75,7 +75,7 @@ in ''
   nnoremap <Leader>d :!mkdir -p <C-R>=expand('%:p:h') . '/'<CR>
 
 "Fix trailing whitespaces automatically
-  autocmd BufWritePre *.c,*.h,*.cpp,*.hpp,*.lua,*.txt,*.sh,*.conf*,*.rb,*.py,*.scad,*.md,*.nix
+  autocmd BufWritePre *
     \ :%s/\s\+$//e
 
 "Escape newlines for C macros easilly
