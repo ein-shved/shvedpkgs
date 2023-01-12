@@ -43,6 +43,13 @@
       unzip
       nix-index
       cifs-utils
+      wget
+      screen
+      tcpdump
+      zstd
+      libreoffice
+      gdb
+      shunit2
     ];
     programs = {
       adb.enable = true;
