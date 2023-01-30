@@ -6,6 +6,7 @@
     ./browsers
     ./gnupass.nix
     ./translate-shell.nix
+    ./guake.nix
   ];
   config = {
     nixpkgs.overlays = [
@@ -22,7 +23,6 @@
       gimp
       docker
       sshfs
-      guake
       usbutils
       thunderbird
       dconf
@@ -30,7 +30,7 @@
       bash-completion
       nix-bash-completions
       minicom
-      lightlocker
+      #lightlocker
       remmina
       xclip
       killall
@@ -50,6 +50,7 @@
       libreoffice
       gdb
       shunit2
+      pdftk
     ];
     programs = {
       adb.enable = true;
