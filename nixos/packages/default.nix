@@ -51,6 +51,7 @@
       gdb
       shunit2
       pdftk
+      ascii
     ];
     programs = {
       adb.enable = true;
