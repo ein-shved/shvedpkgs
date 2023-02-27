@@ -52,6 +52,7 @@
       shunit2
       pdftk
       ascii
+      gnome.gnome-calculator
     ];
     programs = {
       adb.enable = true;
