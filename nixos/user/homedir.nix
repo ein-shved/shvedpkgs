@@ -3,7 +3,8 @@ with pkgs.lib;
 let
   cfg = config.local;
   login = cfg.user.login;
-  hm = pkgs.callPackage <home-manager/modules/lib> { };
+  exLib = (import <home-manager/modules/lib/stdlib-extended.nix>) pkgs.lib;
+  hm = pkgs.callPackage <home-manager/modules/lib> { lib = exLib; };
 
   actSubmodule = with types; {
     options = {
@@ -88,6 +89,7 @@ in
       users."${login}" = {
         home = mkMerge [ {
             activation = builtins.mapAttrs activationMapper cfg.activations;
+            stateVersion = "20.09";
           }
           cfg.home
           (loadExtras "home" cfg.extras)
