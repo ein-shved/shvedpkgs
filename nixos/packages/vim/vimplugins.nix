@@ -5,8 +5,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "mattn";
       repo = "vim-lsp-settings";
-      rev  = "b37de024025cc34ee5f422fcf3638da99851e243";
-      sha256 = "12qbxr28q36xkc3zh1z48iy1x1724lmf319x4p66p72ynaa913xm";
+      rev  = "b5c674592a89bff3539192ec26e84383dd68ab4a";
+      sha256 = "1RUkziNfjgq5SdBRXrx/0r+hiBspuBiSBWpmx6ouqRo=";
     };
     dontBuild = true;
   };
@@ -24,8 +24,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "prabirshrestha";
       repo = "asyncomplete-lsp.vim";
-      rev  = "684c34453db9dcbed5dbf4769aaa6521530a23e0";
-      sha256 = "0vqx0d6iks7c0liplh3x8vgvffpljfs1j3g2yap7as6wyvq621rq";
+      rev  = "cc5247bc268fb2c79d8b127bd772514554efb3ee";
+      sha256 = "SeEAy/jtrdHerZPVjQZXANTcuvMndIIWgGh3B8Ik1NM=";
      };
   };
 in {
