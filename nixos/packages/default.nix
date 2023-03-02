@@ -53,6 +53,8 @@
       pdftk
       ascii
       gnome.gnome-calculator
+      cdrkit
+      bear
     ];
     programs = {
       adb.enable = true;
