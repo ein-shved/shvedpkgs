@@ -6,6 +6,7 @@
         enable = true;
       };
     };
+    programs.ssh.startAgent = true;
     local = {
       extras = (pkgs.mkLocalExtra "programs" {
         ssh = {
