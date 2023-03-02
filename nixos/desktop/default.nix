@@ -33,5 +33,8 @@ with pkgs;
       xfce4-xkb-plugin
     ];
     programs.nm-applet.enable = true;
+    environment.sessionVariables = {
+      GTK_THEME = "Adwaita:dark";
+    };
   };
 }
