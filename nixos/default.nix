@@ -9,6 +9,8 @@
     ./bashrc
     ./tools
     ./kl
+    ./pkgs
+    ./modules
   ];
   config = {
     boot = {
