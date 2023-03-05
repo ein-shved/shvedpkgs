@@ -55,6 +55,7 @@
       gnome.gnome-calculator
       cdrkit
       bear
+      inotify-tools
     ];
     programs = {
       adb.enable = true;
