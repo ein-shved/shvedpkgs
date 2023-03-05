@@ -29,6 +29,12 @@ let
   '';
   gcmnu = gcme true;
   gcmu = gcme false;
+  gitignore = pkgs.writeText "gitignore" ''
+    .Session.vim
+    compile_commands.json
+    result
+    .cache
+  '';
 
 in
 {
@@ -53,6 +59,9 @@ in
             };
             http = {
               version = "HTTP/1.1";
+            };
+            core = {
+              excludesFile = "${gitignore}";
             };
           };
         }];
