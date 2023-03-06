@@ -56,6 +56,7 @@
       cdrkit
       bear
       inotify-tools
+      discord
     ];
     programs = {
       adb.enable = true;
