@@ -34,6 +34,9 @@ let
     compile_commands.json
     result
     .cache
+    .fuse_hidden*
+    cscope.out
+    tags
   '';
 
 in
