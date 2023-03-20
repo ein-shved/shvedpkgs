@@ -57,6 +57,7 @@
       bear
       inotify-tools
       discord
+      nixos-option
     ];
     programs = {
       adb.enable = true;

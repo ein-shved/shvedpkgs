@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
     name = "kl-certificates";
     src = fetchurl {
-        url = "https://vpnhelp.kaspersky.com/Applications/certificates.zip";
+        url = "https://vpnhelp.kaspersky.com/applications/certificates.zip";
         sha256="1ppg0rfys6f0jrxsh4wvmbqq0xznbmckbqjm7g7plp2xxlc0r656";
     };
 
@@ -23,22 +23,5 @@ stdenv.mkDerivation {
         mkdir -p $out
         cp -r *.crt $out
     '';
-    meta = {
-      certsList = [
-        "ExternalServicesPremiumCA.crt"
-        "EXTRootCA.crt"
-        "Kaspersky Root CA ECC G3.crt"
-        "Kaspersky Root CA G3.crt"
-        "Kaspersky Server Authentication AE CA ECC G3.crt"
-        "Kaspersky Server Authentication AE CA G3.crt"
-        "Kaspersky Server Authentication CA ECC G3.crt"
-        "Kaspersky Server Authentication CA G3.crt"
-        "Kaspersky User Authentication APAC CA G3.crt"
-        "Kaspersky User Authentication CA ECC G3.crt"
-        "Kaspersky User Authentication EU CA G3.crt"
-        "Kaspersky User Authentication RU CA G3.crt"
-        "Kaspersky User Authentication US CA G3.crt"
-      ];
-    };
 }
 

@@ -3,6 +3,13 @@ let
 # The kl certificates are globally available so it is not a part on NDA.
   klcerts = pkgs.callPackage ./certificates {};
   cfg = config.local.kl;
+  klcertsBundle = pkgs.runCommandLocal "klcertsBundle" {
+    inherit klcerts;
+  } ''
+    for cert in $klcerts/*.crt; do
+      cat $cert >> $out;
+    done
+  '';
 in
 {
   imports = [
@@ -33,8 +40,9 @@ in
         inherit klcerts;
       })
     ];
-    security.pki.certificateFiles =
-      map (c: "${klcerts}/${c}") klcerts.meta.certsList;
+    security.pki.certificateFiles = [
+      "${klcertsBundle}"
+    ];
     local.activations = with pkgs; let
       dbpath = "$HOME/.pki/nssdb";
       db = "sql:${dbpath}";
