@@ -21,7 +21,7 @@ with pkgs;
       jetbrains-mono
     ];
     time.timeZone = "Europe/Moscow";
-    qt5 = {
+    qt = {
       enable = true;
       platformTheme = "gnome";
       style = "adwaita-dark";

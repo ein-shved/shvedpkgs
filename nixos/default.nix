@@ -14,9 +14,10 @@
   ];
   config = {
     boot = {
-      tmpOnTmpfs = true;
-      #tmpOnTmpfsSize = "30%";
-      cleanTmpDir = true;
+      tmp = {
+        useTmpfs = true;
+        cleanOnBoot = true;
+      };
       plymouth.enable = true;
       kernelParams = [ "quiet" ];
       supportedFilesystems = [ "ntfs" ];
