@@ -37,6 +37,11 @@ let
 in
 {
   config = lib.mkIf cfg.remote.enable {
+    nixpkgs.overlays = [ (self: super: {
+      pcsc-safenet = super.callPackage ./pcsc-safenet {
+          openssl = super.openssl_1_1;
+        };
+    }) ];
     environment.systemPackages = [
       klvpn
     ];
