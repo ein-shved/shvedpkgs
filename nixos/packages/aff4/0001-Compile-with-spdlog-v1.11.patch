@@ -1,0 +1,232 @@
+From a202f51bb8d5b92b2a795daca799bc72dc32d296 Mon Sep 17 00:00:00 2001
+From: Yury Shvedov <yury.shvedov@kaspersky.com>
+Date: Wed, 21 Jun 2023 20:04:16 +0300
+Subject: [PATCH] Compile with spdlog v1.11
+
+---
+ aff4/Makefile.am          |  4 ++--
+ aff4/aff4_imager_utils.cc |  3 ++-
+ aff4/aff4_map.cc          |  9 ++++++---
+ aff4/aff4_symstream.cc    |  1 +
+ aff4/libaff4-c.cc         | 11 +++++++----
+ aff4/libaff4.cc           |  2 ++
+ aff4/rdf.h                |  6 ++++++
+ configure.ac              |  1 +
+ tools/pmem/Makefile.am    | 14 +++++++-------
+ 9 files changed, 34 insertions(+), 17 deletions(-)
+
+diff --git a/aff4/Makefile.am b/aff4/Makefile.am
+index d6e126b..6a90cec 100644
+--- a/aff4/Makefile.am
++++ b/aff4/Makefile.am
+@@ -81,7 +81,7 @@ libaff4_la_SOURCES = \
+ 	tclap_parsers.cc
+ 
+ libaff4_la_LDFLAGS = $(STATIC_LIBLDFLAGS)
+-libaff4_la_INCLUDES = ${RAPTOR2_CFLAGS} ${UUID_CFLAGS} ${TCLAP_CFLAGS} ${YAML_CPP_CFLAGS} ${ZLIB_CFLAGS} ${UUID_CFLAGS}
++libaff4_la_INCLUDES = ${RAPTOR2_CFLAGS} ${UUID_CFLAGS} ${TCLAP_CFLAGS} ${YAML_CPP_CFLAGS} ${ZLIB_CFLAGS} ${UUID_CFLAGS} ${SPDLOG_CFLAGS}
+ 
+ if WINDOWS
+ libaff4_la_LIBADD = -lrpcrt4 -lshlwapi ${LIBS} ${YAML_CPP_LIBS} ${ZLIB_LIBS} ${RAPTOR2_LIBS} ${TCLAP_LIBS}
+@@ -90,7 +90,7 @@ libaff4_la_LIBADD = ${LIBS} ${YAML_CPP_LIBS} ${ZLIB_LIBS} ${RAPTOR2_LIBS} ${TCLA
+ endif
+ 
+ bin_PROGRAMS = aff4imager
+-aff4imager_LDADD = libaff4.la ${LIBS} ${YAML_CPP_LIBS} ${ZLIB_LIBS} ${RAPTOR2_LIBS} ${TCLAP_LIBS} ${UUID_LIBS}
++aff4imager_LDADD = libaff4.la ${LIBS} ${YAML_CPP_LIBS} ${ZLIB_LIBS} ${RAPTOR2_LIBS} ${TCLAP_LIBS} ${UUID_LIBS} ${SPDLOG_LIBS}
+ aff4imager_INCLUDES = ${RAPTOR2_CFLAGS} ${UUID_CFLAGS} ${TCLAP_CFLAGS} ${YAML_CPP_CFLAGS} ${ZLIB_CFLAGS}
+ aff4imager_LDFLAGS = $(STATIC_LINKERLDFLAGS)
+ 
+diff --git a/aff4/aff4_imager_utils.cc b/aff4/aff4_imager_utils.cc
+index dc3ab49..4bb2815 100644
+--- a/aff4/aff4_imager_utils.cc
++++ b/aff4/aff4_imager_utils.cc
+@@ -11,6 +11,7 @@
+ #include <time.h>
+ #include <memory>
+ #include "spdlog/spdlog.h"
++#include "spdlog/sinks/basic_file_sink.h"
+ 
+ namespace aff4 {
+ 
+@@ -182,7 +183,7 @@ AFF4Status BasicImager::handle_logging() {
+     if (Get("logfile")->isSet()) {
+         std::vector<spdlog::sink_ptr> sinks = resolver.logger->sinks();
+ 
+-        auto new_sink = std::make_shared<spdlog::sinks::simple_file_sink_mt>(
++        auto new_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
+             GetArg<TCLAP::ValueArg<std::string>>(
+                 "logfile")->getValue());
+         sinks.push_back(new_sink);
+diff --git a/aff4/aff4_map.cc b/aff4/aff4_map.cc
+index addfe68..037bfcc 100644
+--- a/aff4/aff4_map.cc
++++ b/aff4/aff4_map.cc
+@@ -113,7 +113,7 @@ AFF4Status AFF4Map::OpenAFF4Map(
+     const auto n = map_stream->Size() / sizeof(BinaryRange);
+ 
+     // Ensure the Range type hasn't added any extra data members
+-    static_assert(sizeof(BinaryRange) == sizeof(Range), 
++    static_assert(sizeof(BinaryRange) == sizeof(Range),
+                   "Range has been extended and must be converted here");
+     auto buffer = std::unique_ptr<Range[]>{new Range[n]};
+ 
+@@ -524,8 +524,11 @@ AFF4Status AFF4Map::Flush() {
+ void AFF4Map::Dump() {
+     for (auto it : map) {
+         resolver->logger->info("Key: {}  map_offset={:x} target_offset={:x} length={:x} target_id={} ",
+-                               it.first, it.second.map_offset, it.second.target_offset,
+-                               it.second.length, it.second.target_id);
++                               it.first,
++                               static_cast<unsigned long>(it.second.map_offset),
++                               static_cast<unsigned long>(it.second.target_offset),
++                               static_cast<unsigned long>(it.second.length),
++                               static_cast<unsigned long>(it.second.target_id));
+     }
+ }
+ 
+diff --git a/aff4/aff4_symstream.cc b/aff4/aff4_symstream.cc
+index 77ae7be..5db766e 100644
+--- a/aff4/aff4_symstream.cc
++++ b/aff4/aff4_symstream.cc
+@@ -6,6 +6,7 @@
+  */
+ 
+ #include "aff4/aff4_symstream.h"
++#include <climits>
+ 
+ namespace aff4 {
+ 
+diff --git a/aff4/libaff4-c.cc b/aff4/libaff4-c.cc
+index c2576bb..fb734ad 100644
+--- a/aff4/libaff4-c.cc
++++ b/aff4/libaff4-c.cc
+@@ -34,9 +34,9 @@ public:
+         }
+ 
+         // populate our message struct
+-        char* str = new char[msg.raw.size()+1];
+-        std::strncpy(str, msg.raw.data(), msg.raw.size());
+-        str[msg.raw.size()] = '\0';
++        char* str = new char[msg.payload.size()+1];
++        std::strncpy(str, msg.payload.data(), msg.payload.size());
++        str[msg.payload.size()] = '\0';
+ 
+         AFF4_Message* m = new AFF4_Message{msg.level, str, nullptr};
+ 
+@@ -76,12 +76,15 @@ public:
+     }
+ 
+     void flush() override {}
++
++    void set_pattern(const std::string &) override {};
++    void set_formatter(std::unique_ptr<spdlog::formatter>) override {};
+ };
+ 
+ 
+ static std::shared_ptr<spdlog::logger> setup_c_api_logger() {
+     spdlog::drop(aff4::LOGGER);
+-    auto logger = spdlog::create(aff4::LOGGER, std::make_shared<LogSink>());
++    auto logger = spdlog::create<LogSink>(aff4::LOGGER);
+     logger->set_level(spdlog::level::err);
+     return logger;
+ }
+diff --git a/aff4/libaff4.cc b/aff4/libaff4.cc
+index 48fd089..64276e4 100644
+--- a/aff4/libaff4.cc
++++ b/aff4/libaff4.cc
+@@ -26,6 +26,8 @@ specific language governing permissions and limitations under the License.
+ #include "aff4/aff4_io.h"
+ #include "aff4/libaff4.h"
+ #include "aff4/aff4_directory.h"
++#include "spdlog/sinks/stdout_color_sinks.h"
++#include "spdlog/sinks/stdout_sinks.h"
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+diff --git a/aff4/rdf.h b/aff4/rdf.h
+index d9f0529..2c45386 100644
+--- a/aff4/rdf.h
++++ b/aff4/rdf.h
+@@ -20,6 +20,7 @@ specific language governing permissions and limitations under the License.
+ #include <spdlog/fmt/ostr.h>
+ #include <string>
+ #include <string>
++#include <fmt/ostream.h>
+ 
+ // #include "aff4/config.h"
+ #include "aff4/aff4_errors.h"
+@@ -330,6 +331,11 @@ class URN: public XSDString {
+ 
+ } // namespace aff4
+ 
++template <typename T>
++struct fmt::formatter<T,
++    std::enable_if_t<std::is_base_of<aff4::RDFValue, T>::value, char>>
++: ostream_formatter {};
++
+ // custom specialization of std::hash injected into std namespace.
+ namespace std {
+     template<> struct hash<aff4::URN> {
+diff --git a/configure.ac b/configure.ac
+index e0dcf67..41ebec6 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -58,6 +58,7 @@ fi
+ 
+ # Checks for libraries.
+ PKG_CHECK_MODULES([RAPTOR2], [raptor2], [], [AC_MSG_ERROR([raptor RDF library (libraptor2-dev) not found])])
++PKG_CHECK_MODULES([SPDLOG], [spdlog], [], [AC_MSG_ERROR([spdlog library not found])])
+ 
+ PKG_CHECK_MODULES([ZLIB], [zlib], [], [AC_MSG_ERROR([zlib library (zlib1g-dev) not found])])
+ AC_CHECK_LIB([snappy], [main], [], [AC_MSG_ERROR([Google Snappy Compression library (libsnappy-dev) not found])])
+diff --git a/tools/pmem/Makefile.am b/tools/pmem/Makefile.am
+index 601b4f0..a02b447 100644
+--- a/tools/pmem/Makefile.am
++++ b/tools/pmem/Makefile.am
+@@ -4,7 +4,7 @@
+ ACLOCAL_AMFLAGS = -I m4
+ 
+ # This is so we can #include <package/foo>
+-AM_CPPFLAGS = -I$(top_srcdir) -DHAVE_SSTREAM -I$(top_srcdir)/../osx/
++AM_CPPFLAGS = -I$(top_srcdir) -DHAVE_SSTREAM -I$(top_srcdir)/../osx/ ${SPDLOG_CFLAGS}
+ 
+ # On windows we need to specify this to avoid a bug in gcc
+ # (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52991)
+@@ -35,17 +35,17 @@ if WINDOWS
+ bin_PROGRAMS = winpmem
+ 
+ winpmem_LDFLAGS = $(STATIC_LINKERLDFLAGS)
+-winpmem_CXXFLAGS = -std=c++11 -Wall
++winpmem_CXXFLAGS = -std=c++14 -Wall
+ winpmem_SOURCES = pmem_imager.cc win_pmem.cc resources/winpmem/resources.cc
+-winpmem_LDADD = -lrpcrt4 -lshlwapi $(top_srcdir)/aff4/libaff4.la -lyaml-cpp
++winpmem_LDADD = -lrpcrt4 -lshlwapi $(top_srcdir)/aff4/libaff4.la -lyaml-cpp ${SPDLOG_LIBS}
+ endif
+ 
+ if LINUX
+ bin_PROGRAMS = linpmem
+ linpmem_LDFLAGS = $(STATIC_LINKERLDFLAGS)
+-linpmem_CXXFLAGS = -std=c++11 -Wall
++linpmem_CXXFLAGS = -std=c++14 -Wall
+ linpmem_SOURCES = pmem_imager.cc linux_pmem.cc
+-linpmem_LDADD = $(top_srcdir)/aff4/libaff4.la
++linpmem_LDADD = $(top_srcdir)/aff4/libaff4.la ${SPDLOG_LIBS}
+ all-local: linpmem
+ endif
+ 
+@@ -53,9 +53,9 @@ if OSX
+ bin_PROGRAMS = osxpmem
+ 
+ osxpmem_LDFLAGS = $(STATIC_LINKERLDFLAGS)
+-osxpmem_CXXFLAGS = -std=c++11 -Wall
++osxpmem_CXXFLAGS = -std=c++14 -Wall
+ osxpmem_SOURCES = pmem_imager.cc osxpmem.cc
+-osxpmem_LDADD = $(top_srcdir)/aff4/libaff4.la -lyaml-cpp
++osxpmem_LDADD = $(top_srcdir)/aff4/libaff4.la -lyaml-cpp ${SPDLOG_LIBS}
+ 
+ # In order to build a deployable bundle we must have all the libraries
+ # installed on the system first.
+-- 
+2.38.5
+

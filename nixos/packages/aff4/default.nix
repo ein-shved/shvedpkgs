@@ -1,6 +1,6 @@
 { lib, stdenv,
   fetchFromGitHub, autoreconfHook, autoconf, automake,  pkg-config,
-  librdf_raptor2, zlib, snappy, lz4, tclap, uriparser, libuuid, spdlog_0
+  librdf_raptor2, zlib, snappy, lz4, tclap, uriparser, libuuid, spdlog
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +15,14 @@ stdenv.mkDerivation rec {
     fetchSubmodules = false;
   };
 
+  patches = [
+    ./0001-Compile-with-spdlog-v1.11.patch
+  ];
+
   nativeBuildInputs = [ autoreconfHook  pkg-config ];
-  buildInputs = [ librdf_raptor2 zlib snappy lz4 tclap uriparser libuuid spdlog_0 ];
+  buildInputs = [ librdf_raptor2 zlib snappy lz4 tclap uriparser libuuid spdlog ];
+
+  NIX_CFLAGS_COMPILE=[ "-DSPDLOG_FMT_EXTERNAL=ON" ];
 
   meta = {
     homepage = "https://github.com/Velocidex/c-aff4";
