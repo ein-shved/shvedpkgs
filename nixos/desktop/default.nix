@@ -19,6 +19,7 @@ with pkgs;
     };
     fonts.fonts = [
       jetbrains-mono
+      nerdfonts
     ];
     time.timeZone = "Europe/Moscow";
     qt = {
