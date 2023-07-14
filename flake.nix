@@ -2,7 +2,7 @@
   inputs = {
     nixpkgs.url = github:NixOS/nixpkgs/nixos-23.05;
     home-manager = {
-      url = github:nix-community/home-manager;
+      url = github:nix-community/home-manager/release-23.05;
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils.url = github:numtide/flake-utils;
@@ -42,11 +42,29 @@
       modules = _modules;
       inherit mkConfig;
     } // mkConfigs {
-        test = {
-          modules = [ ./test/vm/configuration.nix ];
-        };
-        test2 = {
-          modules = [ ./test/vm/configuration.nix ];
-        };
+      testA = {
+        modules = [
+          ./test/vm/configuration.nix
+          {
+            user = {
+              name = "alice";
+              humanName = "Alice";
+              password = "alice";
+            };
+          }
+        ];
+      };
+      testB = {
+        modules = [
+          ./test/vm/configuration.nix
+          {
+            user = {
+              name = "bob";
+              humanName = "Bob";
+              password = "bob";
+            };
+          }
+        ];
+      };
     };
 }
