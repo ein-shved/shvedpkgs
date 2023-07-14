@@ -23,12 +23,19 @@ in
         pkgs.cscope
         pkgs.jetbrains-mono
         pkgs.clang-tools
+        pkgs.neovide
+        pkgs.lua-language-server
+        pkgs.rnix-lsp
+        pkgs.rust-analyzer
       ];
     };
     programs.vim = {
       package = vim;
       defaultEditor = true;
       clangd.query_driver = default_query_driver;
+    };
+    programs.neovim = {
+      enable = true;
     };
   };
   options = {
