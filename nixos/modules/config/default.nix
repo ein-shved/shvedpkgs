@@ -2,7 +2,7 @@
 {
   imports = [
     ./allowance.nix
-    ./home
+    ./bashrc
     ./desktop
     ./media
   ];
