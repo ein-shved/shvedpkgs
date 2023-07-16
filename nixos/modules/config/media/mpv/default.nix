@@ -3,7 +3,7 @@ let
 in
 {
   config = {
-    local.home.file = {
+    home.home.file = {
       ".config/mpv/mpv.conf" = {
         text = ''
           save-position-on-quit
