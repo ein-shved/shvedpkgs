@@ -44,5 +44,11 @@ in
       enable = true;
       lfs.enable = true;
     };
+    environment.systemPackages = with pkgs; [
+      gcmu
+      gcmnu
+      gitupdate
+      git-review
+    ];
   };
 }
