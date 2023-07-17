@@ -15,6 +15,8 @@
       ];
       mkConfigs = hosts: flake-utils.lib.eachDefaultSystem (system:
         let
+          pkgs = import nixpkgs { inherit system; };
+          _lib = pkgs.callPackage ./nixos/lib { };
           mkConfig =
             { hostname
             , specialArgs ? { }
@@ -22,7 +24,9 @@
             ,
             }: nixpkgs.lib.nixosSystem {
               inherit system;
-              specialArgs = attrs // specialArgs;
+              specialArgs = {
+                lib = pkgs.lib // _lib;
+              } // attrs // specialArgs;
               modules = _modules ++ modules;
             };
         in
@@ -50,6 +54,7 @@
               name = "alice";
               humanName = "Alice";
               password = "alice";
+              mail = "alice@example.com";
             };
           }
         ];
@@ -62,6 +67,7 @@
               name = "bob";
               humanName = "Bob";
               password = "bob";
+              mail = "bob@example.com";
             };
           }
         ];

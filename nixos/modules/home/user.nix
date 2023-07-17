@@ -65,10 +65,7 @@ in
       mail = mkOption {
         description = "User e-mail";
         type = types.nullOr types.str;
-        default =
-          if config.local.kl.enable
-          then config.local.kl.mail
-          else null;
+        default = null;
       };
 
     };
