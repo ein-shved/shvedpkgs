@@ -3,7 +3,7 @@ with pkgs.lib;
 let
   cfg = config.home;
   name = config.user.name;
-  hm = home-manager.lib;
+  hm = home-manager.lib.hm;
 
   actSubmodule = with types; {
     options = {
@@ -22,13 +22,10 @@ let
   activation = types.either types.str (types.submodule actSubmodule);
 
   activationMapper = name: act:
-    let
-      dag = hm.dag;
-    in
     if builtins.isString act then
-      dag.entryAfter [ "writeBoundary" ] act
+      hm.dag.entryAfter [ "writeBoundary" ] act
     else
-      dag.entryAfter (toList act.after) act.script;
+      hm.dag.entryAfter (toList act.after) act.script;
 
   mkHomeOption = name: mkOption {
     description = "Mirror of home-manager ${name} configuration";

@@ -14,13 +14,12 @@ let
             true;
         '';
     };
+
+    enable = with config.programs; (firefox.enable || chromium.enable);
 in
 {
-  imports = [
-    ./chromium
-  ];
   config = {
-    local.activations = {
+    home.activations = lib.mkIf enable {
       mergeMzNssDb = ''
         ${mozilla_merge_nss}/bin/mozilla_merge_nss
       '';

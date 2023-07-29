@@ -1,13 +1,11 @@
 { lib, config, pkgs, ... }:
-let
-  cfg = config.programs.chromium;
-in
 {
-  config = lib.mkIf cfg.enable {
+  config = {
     environment.systemPackages = [
       pkgs.google-chrome
     ];
     programs.chromium = {
+      enable = true;
       defaultSearchProviderSearchURL = ''
         https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}
       '';
