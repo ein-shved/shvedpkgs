@@ -38,6 +38,7 @@ let
     imports = [
       ./applications
       ./tools
+      ./data
     ];
   };
 in
@@ -52,9 +53,10 @@ in
       {
         inherit (overlays pkgs)
           cntlm-gss
-          gcmu
           gcmnu
+          gcmu
           gitupdate
+          klcacerts
           ;
       }
     )
