@@ -69,6 +69,7 @@
               password = "bob";
               mail = "bob@example.com";
             };
+            environment.printing3d.enable = true;
           }
         ];
       };

@@ -1,20 +1,17 @@
 { lib, config, pkgs, ... }:
 let
-  cfg = config.local.threed;
+  cfg = config.environment.printing3d;
 in
 {
-  options.local.threed = {
+  options.environment.printing3d = {
     enable = lib.mkEnableOption ''
       Is current system used for 3D modelling and printing
     '';
   };
-  imports = [
-    ./cura
-    ./nvidia
-  ];
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       pkgs.prusa-slicer
     ];
   };
 }
+
