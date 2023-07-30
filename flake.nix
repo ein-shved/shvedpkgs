@@ -6,8 +6,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils.url = github:numtide/flake-utils;
+    hasp = {
+      url = github:ein-shved/SentinelHasp.nix;
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
-  outputs = { self, nixpkgs, flake-utils, ... } @ attrs:
+  outputs = { self, nixpkgs, flake-utils, hasp, ... } @ attrs:
     let
       _modules = [
         ./nixos/modules
@@ -27,7 +34,11 @@
               specialArgs = {
                 lib = pkgs.lib // _lib;
               } // attrs // specialArgs;
-              modules = _modules ++ modules;
+              modules = _modules ++
+                [
+                  hasp.packages.${system}.module
+                ]
+                ++ modules;
             };
         in
         {

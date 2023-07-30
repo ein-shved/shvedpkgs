@@ -1,6 +1,0 @@
-{ config, ... }:
-{
-  imports = [
-    ./hasp.nix
-  ];
-}
