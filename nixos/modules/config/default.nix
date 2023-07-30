@@ -6,5 +6,6 @@
     ./bashrc
     ./desktop
     ./media
+    ./tools
   ];
 }
