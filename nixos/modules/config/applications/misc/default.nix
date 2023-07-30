@@ -1,7 +1,6 @@
 { ... }:
 {
   imports = [
-    ./networking
-    ./misc
+    ./translate-shell
   ];
 }

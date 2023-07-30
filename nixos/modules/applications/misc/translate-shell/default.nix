@@ -1,6 +1,6 @@
 { pkgs, config, lib, ... }:
 let
-  cfg = config.local.translate-shell;
+  cfg = config.programs.translate-shell;
 
   oneOrNone = f: x: f (x != null && x != "") x;
   concatIf = p: a: b: if p then a + b else "";
@@ -11,7 +11,7 @@ let
 
   hlOpt = makeOpt "hl" hl;
   langsOpt = makeOpt "t"
-             (lib.foldl (r: x: if r == "" then x else r + "+" + x) "" langs);
+    (lib.foldl (r: x: if r == "" then x else r + "+" + x) "" langs);
   proxyOpt = makeOpt "x" config.networking.proxy.default;
 
   formatter = cfg: opt: if !cfg then "" else ''
@@ -38,13 +38,16 @@ in
 {
   config = {
     environment = {
-      systemPackages = [
+      systemPackages = lib.mkIf cfg.enable [
         wrapped-translate-shell
       ];
     };
   };
   options = {
-    local.translate-shell = with lib; {
+    programs.translate-shell = with lib; {
+      enable = mkEnableOption ''
+        Cennable command-line translator
+      '';
       homeLanguage = mkOption {
         description = "The -hl option of trans";
         type = types.nullOr types.str;
