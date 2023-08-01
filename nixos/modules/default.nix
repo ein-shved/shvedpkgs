@@ -3,10 +3,11 @@
   imports = [
     ./applications
     ./config
+    ./hardware
     ./home
     ./security
-    ./tools
     ./services/networking/cntlm-gss.nix
+    ./tools
   ];
 }
 

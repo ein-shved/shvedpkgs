@@ -1,5 +1,4 @@
 { pkgs, ... }:
-with pkgs;
 let
   bbname = "BluePill";
   bmonster = "bmonster";
@@ -53,6 +52,7 @@ let
     Example: "gpio all free" detach all non-blocked pins from their functions
     Example: "uart pin_a10 up" sets gpio pin pa10 up
   '';
+
   st-gpio = pkgs: pkgs.writeShellScriptBin "st-gpio" ''
     set -e
     legacy=0
@@ -78,14 +78,15 @@ let
 
     ${pkgs.coreutils}/bin/stty -F "$dev"  115200 -icrnl && exec echo "$prefix""$@" > $dev
   '';
+
 in
 {
   config = {
     nixpkgs.overlays = [(self: super: { st-gpio = st-gpio self; })];
-    environment.systemPackages = [
-        stm32cubemx
-        stlink
-        pkgs.st-gpio
+    environment.systemPackages = with pkgs; [
+      stm32cubemx
+      stlink
+      pkgs.st-gpio
     ];
     services.udev.extraRules = ''
       # ST-LINK V2
@@ -136,4 +137,6 @@ in
       LABEL="bb_serial_monster_end"
     '';
   };
+
 }
+

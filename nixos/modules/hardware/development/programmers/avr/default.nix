@@ -13,10 +13,12 @@ let
     ATTRS{idProduct}=="${prog.pid}", \
     GROUP="dialout"
   '';
-  collectRules = progs: builtins.map formUdevRule progs;
+  collectRules = progs:
+    builtins.foldl' (all: prog: all + formUdevRule prog) "" progs;
 in
 {
   config = {
-    local.udev.extraRules = collectRules programmers;
+    services.udev.extraRules = collectRules programmers;
   };
 }
+
