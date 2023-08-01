@@ -4,7 +4,7 @@
     environment.systemPackages = with pkgs; [
       ack
     ];
-    local.home.file = {
+    home.home.file = {
       ".ackrc".text = ''
         --type-set=nix:ext:nix
         --type-set=cin:is:Config.in
@@ -12,3 +12,4 @@
     };
   };
 }
+

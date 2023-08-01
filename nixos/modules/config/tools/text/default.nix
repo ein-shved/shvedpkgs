@@ -1,8 +1,6 @@
 { ... }:
 {
   imports = [
-    ./security
-    ./text
+    ./ack
   ];
 }
-
