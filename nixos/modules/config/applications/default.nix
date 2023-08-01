@@ -1,6 +1,7 @@
 { ... }:
 {
   imports = [
+    ./editors
     ./emulators
     ./misc
     ./networking
