@@ -1,7 +1,8 @@
 { ... }:
 {
-  imports = [
+ imports = [
     ./networking
     ./archivers
+    ./misc
   ];
 }

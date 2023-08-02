@@ -19,6 +19,7 @@
       dconf
       discord
       docker
+      dowork
       evince
       fontconfig.lib
       gdb
