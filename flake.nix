@@ -81,6 +81,10 @@
               mail = "bob@example.com";
             };
             environment.printing3d.enable = true;
+            services.cntlm-gss = {
+              enable = true;
+              proxy = [ "proxy.example.com:81" ];
+            };
           }
         ];
       };

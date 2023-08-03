@@ -1,0 +1,6 @@
+{ ... }:
+{
+  imports = [
+    ./cntlm-gss
+  ];
+}

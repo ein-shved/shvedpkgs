@@ -91,7 +91,7 @@ in
     };
 
     user = mkOption {
-      default = null;
+      default = config.user.name;
       type = types.nullOr types.str;
       description = lib.mdDoc "Username for daemon.";
     };
