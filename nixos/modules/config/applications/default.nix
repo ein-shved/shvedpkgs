@@ -7,6 +7,7 @@
     ./networking
     ./terminal-emulator
     ./version-management
+    ./virtualization
   ];
   config = {
     nixpkgs.config.allowUnfree = true;
