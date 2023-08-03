@@ -7,5 +7,6 @@
     ./desktop
     ./media
     ./tools
+    ./services
   ];
 }
