@@ -2,5 +2,6 @@
 {
   imports = [
     ./cntlm-gss
+    ./dhcps
   ];
 }

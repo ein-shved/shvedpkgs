@@ -17,6 +17,7 @@
       cdrkit
       cifs-utils
       dconf
+      dhcps
       discord
       docker
       dowork
