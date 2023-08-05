@@ -82,7 +82,7 @@
             };
             environment.printing3d.enable = true;
             services.cntlm-gss = {
-              enable = true;
+              enable = false;
               proxy = [ "proxy.example.com:81" ];
             };
           }

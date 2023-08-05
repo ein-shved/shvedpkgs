@@ -1,7 +1,6 @@
 { ... }:
 {
   imports = [
-    ./browsers
-    ./p2p
+    ./transmission
   ];
 }
