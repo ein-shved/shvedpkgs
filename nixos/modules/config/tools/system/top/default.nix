@@ -1,8 +1,9 @@
-{ config, pkgs, ... }:
+{ ... }:
 {
   config = {
-    local.home.file = {
+    home.home.file = {
       ".toprc".source = ./toprc;
     };
   };
 }
+
