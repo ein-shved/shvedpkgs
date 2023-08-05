@@ -7,8 +7,8 @@
       };
     };
     programs.ssh.startAgent = true;
-    local = {
-      extras = (pkgs.mkLocalExtra "programs" {
+    home = {
+      extras = (lib.mkHmExtra "programs" {
         ssh = {
           enable = true;
           controlMaster = "yes";
