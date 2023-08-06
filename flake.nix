@@ -17,6 +17,7 @@
   outputs = { self, nixpkgs, flake-utils, hasp, ... } @ attrs:
     let
       _modules = [
+        ./nixos/config
         ./nixos/modules
         ./nixos/pkgs
       ];

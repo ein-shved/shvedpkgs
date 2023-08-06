@@ -2,7 +2,6 @@
 {
   imports = [
     ./applications
-    ./config
     ./hardware
     ./home
     ./os-specific
