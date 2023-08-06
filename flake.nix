@@ -79,13 +79,13 @@
               name = "bob";
               humanName = "Bob";
               password = "bob";
-              mail = "bob@example.com";
             };
             environment.printing3d.enable = true;
             services.cntlm-gss = {
               enable = false;
               proxy = [ "proxy.example.com:81" ];
             };
+            kl.enable = true;
           }
         ];
       };

@@ -2,6 +2,7 @@
 {
   imports = [
     ./applications
+    ./employment
     ./hardware
     ./home
     ./os-specific
