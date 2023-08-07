@@ -3,9 +3,8 @@ let
   cfg = config.user;
   mkDomainName = name: hasNs:
     let
-      sName = lib.splitString " " name;
-      fname = builtins.elemAt sName 0;
-      sname = builtins.elemAt sName 1;
+      fname = lib.getFirstName name;
+      sname = lib.getSirname name;
       fn = builtins.elemAt (lib.stringToCharacters fname) 0;
     in
     if hasNs then sname + "_" + fn else sname;
