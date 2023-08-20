@@ -23,5 +23,6 @@ in
 
   imports = [
     ./domain
+    ./remote
   ];
 }

@@ -64,10 +64,10 @@
           {
             user = {
               name = "alice";
-              humanName = "Alice";
+              humanName = "Alice Cooper";
               password = "alice";
-              mail = "alice@example.com";
             };
+            kl.remote.enable = true;
           }
         ];
       };
@@ -85,7 +85,7 @@
               enable = false;
               proxy = [ "proxy.example.com:81" ];
             };
-            kl.enable = true;
+            kl.domain.enable = true;
           }
         ];
       };
