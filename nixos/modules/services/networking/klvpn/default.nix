@@ -19,18 +19,24 @@ in
     services.pcscd = {
       enable = true;
       # TODO(Shvedov) safenet driver uses outdated OPENSSL_1_1
-      # TODO(Shvedov) fresh safenet lacks of aladdin usb token support.
-      # Need to write derivation for pcsc-safenet-legasy. See
-      # https://aur.archlinux.org/packages/sac-core-legacy
-      plugins = [ pkgs.pcsc-safenet ];
+      plugins = with pkgs; [
+        pcsc-safenet
+        pcsc-safenet-legacy
+      ];
     };
     programs.gnupg.agent = {
       enable = true;
       pinentryFlavor = "gnome3";
     };
-    environment.etc."pkcs11/modules/libeToken.module" = {
-      text = "module: ${pkgs.pcsc-safenet}/lib/libeToken.so";
-      mode = "0644";
+    environment.etc = with pkgs; {
+      "pkcs11/modules/libeToken.module" = {
+        text = "module: ${pcsc-safenet}/lib/libeToken.so";
+        mode = "0644";
+      };
+      "pkcs11/modules/libeTokenLegacy.module" = {
+        text = "module: ${pcsc-safenet-legacy}/lib/libeToken.so";
+        mode = "0644";
+      };
     };
     programs.fuse.userAllowOther = true;
     #Allow to use token by non-root user

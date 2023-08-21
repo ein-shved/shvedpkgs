@@ -4,5 +4,6 @@
     ./archivers
     ./misc
     ./networking
+    ./security
   ];
 }
