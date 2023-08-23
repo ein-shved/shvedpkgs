@@ -17,14 +17,14 @@
   outputs = { self, nixpkgs, flake-utils, hasp, ... } @ attrs:
     let
       _modules = [
-        ./nixos/config
-        ./nixos/modules
-        ./nixos/pkgs
+        ./config
+        ./modules
+        ./pkgs
       ];
       mkConfigs = hosts: flake-utils.lib.eachDefaultSystem (system:
         let
           pkgs = import nixpkgs { inherit system; };
-          _lib = pkgs.callPackage ./nixos/lib { };
+          _lib = pkgs.callPackage ./lib { };
           mkConfig =
             { hostname
             , specialArgs ? { }
