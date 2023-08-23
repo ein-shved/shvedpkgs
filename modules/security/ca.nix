@@ -37,12 +37,11 @@ in
             ${certutil} -A -t "C,," -i "$crtf" -n "$crtn"
         done
       '';
-#      Temporary disable beckause of openssl_1_1 issue
-#      installNssDbKeys = ''
-#        echo | ${modutil} -delete eToken || true;
-#        echo | ${modutil} -add eToken -libfile                     \
-#               ${pcsc-safenet}/lib/libeToken.so || exit 1;
-#      '';
+      installNssDbKeys = ''
+        echo | ${modutil} -delete eToken || true;
+        echo | ${modutil} -add eToken -libfile                     \
+               ${pcsc-safenet}/lib/libeToken.so || exit 1;
+      '';
     };
   };
 }
