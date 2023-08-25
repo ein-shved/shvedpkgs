@@ -53,41 +53,79 @@
         { hostname
         , ...
         } @ attrs: mkConfigs { ${hostname} = attrs; };
+
+      extend = self: { modules ? [ ]
+                     , specialArgs ? { }
+                     , prefix ? [ ]
+                     , hosts ? { }
+                     , ...
+                     }@extraArgs:
+        let
+          mapConfigurations = configurations:
+            builtins.mapAttrs
+              (
+                name: config:
+                  let
+                    globalExtended = config.extendModules {
+                      inherit modules specialArgs prefix;
+                    };
+                    localExtended = globalExtended.extendModules
+                      (if hosts ? ${name} then hosts.${name} else { });
+                  in
+                  localExtended
+              )
+              configurations;
+          mapSystems = systems:
+            builtins.mapAttrs
+              (name: system:
+                {
+                  nixosConfigurations = mapConfigurations system.nixosConfigurations;
+                })
+              systems;
+          updModules = self.modules ++ modules;
+          updSelf = self // {
+            packages = mapSystems self.packages;
+            extend = extend updSelf;
+            modules = updModules;
+            inherit mkConfig;
+          } // extraArgs;
+        in
+        updSelf;
+
+      allConfigurations = mkConfigs {
+        testA = {
+          modules = [
+            ./test/vm/configuration.nix
+            {
+              user = {
+                name = "alice";
+                humanName = "Alice Cooper";
+                password = "alice";
+              };
+              kl.remote.enable = true;
+            }
+          ];
+        };
+        testB = {
+          modules = [
+            ./test/vm/configuration.nix
+            {
+              user = {
+                name = "bob";
+                humanName = "Bob";
+                password = "bob";
+              };
+              environment.printing3d.enable = true;
+              services.cntlm-gss = {
+                enable = false;
+                proxy = [ "proxy.example.com:81" ];
+              };
+              kl.domain.enable = true;
+            }
+          ];
+        };
+      };
+
     in
-    {
-      modules = _modules;
-      inherit mkConfig;
-    } // mkConfigs {
-      testA = {
-        modules = [
-          ./test/vm/configuration.nix
-          {
-            user = {
-              name = "alice";
-              humanName = "Alice Cooper";
-              password = "alice";
-            };
-            kl.remote.enable = true;
-          }
-        ];
-      };
-      testB = {
-        modules = [
-          ./test/vm/configuration.nix
-          {
-            user = {
-              name = "bob";
-              humanName = "Bob";
-              password = "bob";
-            };
-            environment.printing3d.enable = true;
-            services.cntlm-gss = {
-              enable = false;
-              proxy = [ "proxy.example.com:81" ];
-            };
-            kl.domain.enable = true;
-          }
-        ];
-      };
-    };
+    extend ({ modules = _modules; } // allConfigurations) { };
 }
