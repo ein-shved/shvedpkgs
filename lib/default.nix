@@ -1,6 +1,12 @@
 { pkgs, lib, ... }:
 let
-  splitNameAt = name: index: builtins.elemAt (lib.splitString " " name) index;
+  splitNameAt = name: index: let
+    splitted = lib.splitString " " name;
+    hasIndex = index < builtins.length splitted;
+  in
+    if hasIndex
+      then builtins.elemAt splitted index
+      else "";
 in
 {
   mkHmExtra = section: value: [{ inherit section value; }];

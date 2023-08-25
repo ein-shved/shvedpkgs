@@ -4,7 +4,7 @@ let
   mkDomainName = name: hasNs:
     let
       fname = lib.getFirstName name;
-      sname = lib.getSirname name;
+      sname = lib.getSurname name;
       fn = builtins.elemAt (lib.stringToCharacters fname) 0;
     in
     if hasNs then sname + "_" + fn else sname;
@@ -52,7 +52,7 @@ in
       domainName = mkOption {
         description = "User login in domain";
         type = str;
-        default = mkDomainName cfg.name cfg.hasNamesake;
+        default = mkDomainName cfg.humanName cfg.hasNamesake;
       };
 
       extraGroups = mkOption {
