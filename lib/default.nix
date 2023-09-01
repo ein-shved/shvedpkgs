@@ -11,6 +11,7 @@ in
 {
   mkHmExtra = section: value: [{ inherit section value; }];
   mkOverlay = fn: { nixpkgs.overlays = [ (self: super: fn super) ]; };
+  mkOverlaySelf = fn: { nixpkgs.overlays = [ (self: super: fn self) ]; };
   getFirstName = name: splitNameAt name 0;
   getSurname = name: splitNameAt name 1;
 }
