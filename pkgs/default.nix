@@ -2,7 +2,8 @@
 {
   imports = [
     ./applications
-    ./tools
     ./data
+    ./development
+    ./tools
   ];
 }
