@@ -116,10 +116,6 @@
                 password = "bob";
               };
               environment.printing3d.enable = true;
-              services.cntlm-gss = {
-                enable = false;
-                proxy = [ "proxy.example.com:81" ];
-              };
               kl.domain.enable = true;
             }
           ];
