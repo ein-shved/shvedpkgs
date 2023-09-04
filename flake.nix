@@ -92,35 +92,38 @@
         in
         updSelf;
 
-      allConfigurations = mkConfigs {
-        testA = {
-          modules = [
-            ./test/vm/configuration.nix
-            {
-              user = {
-                name = "alice";
-                humanName = "Alice Cooper";
-                password = "alice";
-              };
-              kl.remote.enable = true;
-            }
-          ];
-        };
-        testB = {
-          modules = [
-            ./test/vm/configuration.nix
-            {
-              user = {
-                name = "bob";
-                humanName = "Bob";
-                password = "bob";
-              };
-              environment.printing3d.enable = true;
-              kl.domain.enable = true;
-            }
-          ];
-        };
-      };
+      allConfigurations = mkConfigs (
+        {
+          testA = {
+            modules = [
+              ./test/vm/configuration.nix
+              {
+                user = {
+                  name = "alice";
+                  humanName = "Alice Cooper";
+                  password = "alice";
+                };
+                kl.remote.enable = true;
+              }
+            ];
+          };
+          testB = {
+            modules = [
+              ./test/vm/configuration.nix
+              {
+                user = {
+                  name = "bob";
+                  humanName = "Bob";
+                  password = "bob";
+                };
+                environment.printing3d.enable = true;
+                kl.domain.enable = true;
+              }
+            ];
+          };
+        }
+        // import ./hosts
+      );
 
     in
     extend ({ modules = _modules; } // allConfigurations) { };
