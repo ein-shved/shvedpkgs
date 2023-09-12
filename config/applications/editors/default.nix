@@ -1,7 +1,8 @@
-{ pkgs, ... }:
+{ ... }:
 {
   imports = [
     ./vim
+    ./neovim
   ];
 }
 

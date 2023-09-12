@@ -13,6 +13,13 @@
         flake-utils.follows = "flake-utils";
       };
     };
+    nvchad = {
+      url = github:ein-shved/NvChad/v2.0;
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
   outputs = { self, nixpkgs, flake-utils, hasp, ... } @ attrs:
     let

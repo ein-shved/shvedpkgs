@@ -27,7 +27,6 @@ in
     };
     programs.vim = {
       package = vim;
-      defaultEditor = true;
       clangd.query_driver = default_query_driver;
     };
   };
