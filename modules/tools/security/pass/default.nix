@@ -18,9 +18,11 @@ in
       };
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = let
+      passExt = pkgs.pass.withExtensions (exts: [ exts.pass-otp ]);
+  in lib.mkIf cfg.enable {
     environment.systemPackages = [
-      pkgs.pass
+      passExt
     ];
     home.activations =
       let
