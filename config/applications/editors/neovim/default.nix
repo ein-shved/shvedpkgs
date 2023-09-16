@@ -13,6 +13,12 @@
           ctags
           cscope
           clang-tools
+          rnix-lsp
+          lua-language-server
+          # TODO(Shvedov) use neocmakelsp after 23.11
+          #neocmakelsp
+          cmake-language-server
+          nodePackages.bash-language-server
         ];
       };
     };

@@ -1,4 +1,4 @@
-opts = {
+local opts = {
   number = false,
   wrap = false,
 
@@ -20,6 +20,8 @@ opts = {
   shiftwidth = 4,
 
   formatoptions = "croql",
+
+  hidden = false,
 }
 
 for n, v in pairs(opts) do
