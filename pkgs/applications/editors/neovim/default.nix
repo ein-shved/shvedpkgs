@@ -1,9 +1,6 @@
 { ... }:
 {
   imports = [
-    ./ide
-    ./neovim
+    ./neovide
   ];
 }
-
-
