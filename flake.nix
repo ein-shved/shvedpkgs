@@ -49,12 +49,19 @@
                 ++ modules;
             };
         in
-        {
-          packages = rec {
+        rec {
+          packages = {
             nixosConfigurations = builtins.mapAttrs
               (hostname: v: mkConfig (v // { inherit hostname; }))
               hosts;
           };
+          devShells = builtins.mapAttrs
+            (
+              hostname: system: pkgs.mkShell {
+                buildInputs = system.config.environment.systemPackages;
+              }
+            )
+            packages.nixosConfigurations;
         });
       mkConfig =
         { hostname
