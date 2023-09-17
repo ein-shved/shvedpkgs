@@ -82,6 +82,10 @@ local plugins = {
       })
     end,
   },
+  {
+    "figsoda/nix-develop.nvim",
+    cmd = { "NixDevelop", "NixShell", "RiffShell" },
+  },
 }
 
 return plugins
