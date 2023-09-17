@@ -39,6 +39,7 @@
       mpv
       nix-bash-completions
       nix-index
+      nixos
       nixos-option
       pdftk
       pinta
