@@ -16,4 +16,13 @@ in
       }
     ];
   };
+  Shvedov = {
+    modules = [
+      ./Shvedov/configuration.nix
+      userconfig
+      {
+        kl.domain.enable = true;
+      }
+    ];
+  };
 }
