@@ -55,7 +55,13 @@ local plugins = {
   },
   {
     "f-person/git-blame.nvim",
-    lazy = false
+    lazy = false,
+    dependencies = {
+      "NvChad/base46"
+    },
+    config = function()
+      vim.g.gitblame_highlight_group = "GitBlame"
+    end,
   },
   {
     "Shatur/neovim-session-manager",
