@@ -22,7 +22,21 @@ local opts = {
   formatoptions = "croql",
 
   hidden = false,
+  langmap = "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ," ..
+      "фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz",
 }
+
+local function langmap(from, to)
+  opts.langmap = opts.langmap .. "," .. from .. ";" .. to;
+end
+
+langmap("Жж", "\\:\\;")
+langmap("Ээ", "\\\"\\'")
+langmap("Хх", "\\{\\[")
+langmap("Ъъ", "\\}\\]")
+langmap("Ёё", "\\~\\`")
+langmap("Бб", "\\<\\,")
+langmap("Юю", "\\>\\.")
 
 for n, v in pairs(opts) do
   vim.opt[n] = v
