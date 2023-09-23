@@ -7,12 +7,27 @@ local servers = {
   "rnix",
   "rust_analyzer",
   "bashls",
-  "cmake"
+  "cmake",
 }
+
+local on_attach = require("plugins.configs.lspconfig").on_attach
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
-    on_attach = require("plugins.configs.lspconfig").on_attach,
+    on_attach = function(client, bufnr)
+      -- Presave and restore formating capabilities of servers after NvChad
+      -- changes them
+      local formattingProvider =
+          client.server_capabilities.documentFormattingProvider;
+      local rangeFormattingProvider =
+          client.server_capabilities.documentRangeFormattingProvider;
+
+      on_attach(client, bufnr)
+
+      client.server_capabilities.documentFormattingProvider = formattingProvider;
+      client.server_capabilities.documentRangeFormattingProvider = rangeFormattingProvider;
+    end,
+
     capabilities = require("plugins.configs.lspconfig").capabilities,
   }
 end

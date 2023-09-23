@@ -8,7 +8,7 @@ local opts = {
   laststatus = 2,
 
   list = true,
-  listchars = 'tab:→\\ ,nbsp:␣,trail:•,precedes:«,extends:»',
+  listchars = 'tab:→ ,nbsp:␣,trail:•,precedes:«,extends:»',
 
   tw = 80,
   colorcolumn = "81",
