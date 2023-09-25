@@ -1,13 +1,14 @@
-{ config, ... }:
+{ config, lib, ... }:
 {
   imports = [
     ./allowance.nix
     ./applications
     ./bashrc
     ./desktop
+    ./exceptions
     ./media
-    ./tools
     ./services
+    ./tools
   ];
   config = {
     services = {
@@ -33,14 +34,5 @@
     nix.extraOptions = ''
       experimental-features = nix-command flakes
     '';
-    nixpkgs.config.permittedInsecurePackages = [
-      # TODO remove this after getting rid of outdated packages.
-      # Known packages are:
-      # pcsc-safenet
-      # pcsc-safenet-legacy
-      # pcsclite
-      "openssl-1.1.1u"
-      "openssl-1.1.1v"
-    ];
   };
 }
