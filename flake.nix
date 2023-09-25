@@ -20,13 +20,22 @@
         flake-utils.follows = "flake-utils";
       };
     };
+    agenix = {
+      url = github:ryantm/agenix/0.14.0;
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
+      };
+    };
   };
-  outputs = { self, nixpkgs, flake-utils, hasp, ... } @ attrs:
+  outputs = { self, nixpkgs, flake-utils, hasp, agenix, ... } @ attrs:
     let
       _modules = [
         ./config
         ./modules
         ./pkgs
+        agenix.nixosModules.default
+        { nixpkgs.overlays = [ agenix.overlays.default ]; }
       ];
       mkConfigs = hosts: flake-utils.lib.eachDefaultSystem (system:
         let
