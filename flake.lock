@@ -1,0 +1,193 @@
+{
+  "nodes": {
+    "agenix": {
+      "inputs": {
+        "darwin": "darwin",
+        "home-manager": [
+          "home-manager"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1694733633,
+        "narHash": "sha256-/o/OubAsPMbxqru59tLlWzUI7LBNDaoW4rFwQ2Smxcg=",
+        "owner": "ryantm",
+        "repo": "agenix",
+        "rev": "54693c91d923fecb4cf04c4535e3d84f8dec7919",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ryantm",
+        "ref": "0.14.0",
+        "repo": "agenix",
+        "type": "github"
+      }
+    },
+    "aksusbd_vlib": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-Nge/e5d/DuooS67pyUtReX5DtzD0QWZdHdVO+497uf4=",
+        "type": "tarball",
+        "url": "https://sd7.ascon.ru/Public/Utils/Sentinel%20HASP/Linux_driver/aksusbd_vlib46707.tar"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://sd7.ascon.ru/Public/Utils/Sentinel%20HASP/Linux_driver/aksusbd_vlib46707.tar"
+      }
+    },
+    "darwin": {
+      "inputs": {
+        "nixpkgs": [
+          "agenix",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1673295039,
+        "narHash": "sha256-AsdYgE8/GPwcelGgrntlijMg4t3hLFJFCRF3tL5WVjA=",
+        "owner": "lnl7",
+        "repo": "nix-darwin",
+        "rev": "87b9d090ad39b25b2400029c64825fc2a8868943",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lnl7",
+        "ref": "master",
+        "repo": "nix-darwin",
+        "type": "github"
+      }
+    },
+    "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1694529238,
+        "narHash": "sha256-zsNZZGTGnMOf9YpHKJqMSsa0dXbfmxeoJ7xHlrt+xmY=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "ff7b65b44d01cf9ba6a71320833626af21126384",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "hasp": {
+      "inputs": {
+        "aksusbd_vlib": "aksusbd_vlib",
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1681406120,
+        "narHash": "sha256-uMzpdV0ARj5CgKsw+asACBB0t3Bno+O49A5dcbA0/uE=",
+        "owner": "ein-shved",
+        "repo": "SentinelHasp.nix",
+        "rev": "d42a07373a2aec93d949818735a0d5ce6a849949",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ein-shved",
+        "repo": "SentinelHasp.nix",
+        "type": "github"
+      }
+    },
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1695108154,
+        "narHash": "sha256-gSg7UTVtls2yO9lKtP0yb66XBHT1Fx5qZSZbGMpSn2c=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "07682fff75d41f18327a871088d20af2710d4744",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "ref": "release-23.05",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1695559356,
+        "narHash": "sha256-kXZ1pUoImD9OEbPCwpTz4tHsNTr4CIyIfXb3ocuR8sI=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "261abe8a44a7e8392598d038d2e01f7b33cf26d0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-23.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nvchad": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1694943186,
+        "narHash": "sha256-AR8VwbYk3qJyT4vR/H9zgyLaJ+ZjhY6+zpE9CQ6jERc=",
+        "owner": "ein-shved",
+        "repo": "NvChad",
+        "rev": "8524b04d0603e2cd905b589b77ea8b5057bd3c22",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ein-shved",
+        "ref": "v2.0",
+        "repo": "NvChad",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "agenix": "agenix",
+        "flake-utils": "flake-utils",
+        "hasp": "hasp",
+        "home-manager": "home-manager",
+        "nixpkgs": "nixpkgs",
+        "nvchad": "nvchad"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
