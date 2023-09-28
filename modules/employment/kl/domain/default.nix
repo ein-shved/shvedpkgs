@@ -7,7 +7,12 @@
         host =  mkOption {
           description = "Address of host inside kl domain if any";
           type = types.nullOr types.str;
-          default = config.user.domainName + ".avp.ru";
+          default = config.kl.domain.hostname + ".avp.ru";
+        };
+        hostname =  mkOption {
+          description = "Name of host inside kl domain if any";
+          type = types.nullOr types.str;
+          default = config.user.domainName;
         };
       };
     };
