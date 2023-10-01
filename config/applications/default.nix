@@ -28,7 +28,7 @@
       gimp
       gnome.eog
       gnome.gnome-calculator
-      ide
+      ide-manager
       inotify-tools
       killall
       libreoffice

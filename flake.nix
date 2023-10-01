@@ -27,6 +27,12 @@
         home-manager.follows = "home-manager";
       };
     };
+    ide-manager = {
+      url = github:ein-shved/ide;
+      inputs = {
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
   outputs = { self, nixpkgs, flake-utils, hasp, agenix, ... } @ attrs:
     let
@@ -50,6 +56,7 @@
               inherit system;
               specialArgs = {
                 lib = pkgs.lib // _lib;
+                inherit system;
               } // attrs // specialArgs;
               modules = _modules ++
                 [
