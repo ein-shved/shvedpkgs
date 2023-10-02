@@ -29,7 +29,6 @@
     "cryptd"
   ];
   boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/35165691-e221-4a66-b4d9-863e3b8557b4";
-  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   nix.settings.sandbox = false;
 
