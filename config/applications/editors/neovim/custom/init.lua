@@ -24,6 +24,8 @@ local opts = {
   hidden = false,
   langmap = "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ," ..
       "фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz",
+
+  spell = true;
 }
 
 local function langmap(from, to)
