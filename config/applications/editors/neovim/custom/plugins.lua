@@ -51,15 +51,15 @@ local plugins = {
   {
     "neovim/nvim-lspconfig",
     config = function()
-      require "plugins.configs.lspconfig"
-      require "custom.configs.lspconfig"
+      require("plugins.configs.lspconfig")
+      require("custom.configs.lspconfig")
     end,
   },
   {
     "f-person/git-blame.nvim",
     lazy = false,
     dependencies = {
-      "NvChad/base46"
+      "NvChad/base46",
     },
     config = function()
       vim.g.gitblame_highlight_group = "GitBlame"
@@ -68,6 +68,7 @@ local plugins = {
   {
     "Shatur/neovim-session-manager",
     lazy = false,
+    enabled = vim.g.neovide and true or false,
     opts = function()
       local config = require("session_manager.config")
       return {
@@ -78,11 +79,12 @@ local plugins = {
     config = function(_, opts)
       local session_manager = require("session_manager")
       session_manager.setup(opts)
-      vim.api.nvim_create_autocmd("VimLeavePre", {
+      vim.api.nvim_create_autocmd("BufWritePost", {
         callback = function()
-          if vim.bo.filetype ~= 'git'
-              and not vim.bo.filetype ~= 'gitcommit'
-              and not vim.bo.filetype ~= 'gitrebase'
+          if
+            vim.bo.filetype ~= "git"
+            and not vim.bo.filetype ~= "gitcommit"
+            and not vim.bo.filetype ~= "gitrebase"
           then
             session_manager.save_current_session()
           end
@@ -100,18 +102,18 @@ local plugins = {
     dependencies = {
       "jose-elias-alvarez/null-ls.nvim",
       config = function()
-        require "custom.configs.null-ls"
+        require("custom.configs.null-ls")
       end,
     },
 
     config = function()
-      require "plugins.configs.lspconfig"
-      require "custom.configs.lspconfig"
+      require("plugins.configs.lspconfig")
+      require("custom.configs.lspconfig")
     end,
   },
   {
-    "uga-rosa/utf8.nvim"
-  }
+    "uga-rosa/utf8.nvim",
+  },
 }
 
 return plugins

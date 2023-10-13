@@ -24,19 +24,6 @@
           shfmt
           shellcheck
         ];
-        # TODO (Shvedov) Then nix-develop.nvim package does not affects the
-        # environment of lspconfig module. So apply devshell automatically on
-        # startup. Remove this upon fixing the nix-develop.nvim and lspconfig
-        # co-existance.
-        # TODO (Shvedov) UPD. This leads to unexpected behaviour. Run devshell
-        # manually for awhile.
-        #extraMakeWrapperArgs =
-        #  let
-        #    loadDevshell = pkgs.writeShellScript "loadDevshell" ''
-        #      nix print-dev-env 2>/dev/null || echo -n
-        #    '';
-        #  in
-        #  ''--run 'eval "$(${loadDevshell})"' '';
       };
     };
     environment.systemPackages = with pkgs; [
