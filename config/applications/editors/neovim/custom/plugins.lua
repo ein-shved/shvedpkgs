@@ -108,6 +108,9 @@ local plugins = {
       require "plugins.configs.lspconfig"
       require "custom.configs.lspconfig"
     end,
+  },
+  {
+    "uga-rosa/utf8.nvim"
   }
 }
 

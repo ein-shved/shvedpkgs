@@ -32,5 +32,6 @@ M.hl_add = {
   GitBlame = { fg = "#404050" },
 }
 
+M.statusline = require("custom.statusline")
 
 return M
