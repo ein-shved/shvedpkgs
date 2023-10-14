@@ -1,6 +1,9 @@
 { config, pkgs, lib, ... }:
 with pkgs;
 {
+  imports = [
+    ./xdg
+  ];
   config = {
     services.xserver = {
       enable = true;
