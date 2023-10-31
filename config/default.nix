@@ -30,9 +30,9 @@
       binfmt.emulatedSystems = [ "aarch64-linux" ];
     };
     systemd.services.nix-daemon.environment.TMPDIR = "/home/.nix-build";
-    nix.settings.auto-optimise-store = true;
-    nix.extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
+    nix.settings = {
+      auto-optimise-store = true;
+      experimental-features = [ "nix-command" "flakes" ];
+    };
   };
 }
