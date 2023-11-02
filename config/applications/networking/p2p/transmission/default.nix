@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   cfg = config.user;
   homeDir = cfg.home;
@@ -9,7 +9,7 @@ let
   '';
 in
 {
-  config = {
+  config = lib.mkIf (!config.kl.domain.enable) {
 # Sometimes we need to download Linux images from official torrents
     services.transmission = {
       enable = true;
