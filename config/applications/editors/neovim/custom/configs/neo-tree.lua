@@ -44,7 +44,7 @@ local config = {
   sort_case_insensitive = false, -- used when sorting files and directories in the tree
   sort_function = nil , -- uses a custom function for sorting files and directories in the tree
   use_popups_for_input = true, -- If false, inputs will use vim.ui.input() instead of custom floats.
-  use_default_mappings = true,
+  use_default_mappings = false,
   -- source_selector provides clickable tabs to switch between sources.
   source_selector = {
     winbar = false, -- toggle to show selector on winbar
@@ -406,8 +406,8 @@ local config = {
     window = {
       mappings = {
         ["H"] = "toggle_hidden",
-        ["/"] = "fuzzy_finder",
-        ["D"] = "fuzzy_finder_directory",
+        --["/"] = "fuzzy_finder",
+        --["D"] = "fuzzy_finder_directory",
         --["/"] = "filter_as_you_type", -- this was the default until v1.28
         ["#"] = "fuzzy_sorter", -- fuzzy sorting using the fzy algorithm
         -- ["D"] = "fuzzy_sorter_directory",
@@ -607,7 +607,7 @@ local config = {
         ["c"] = "noop",
         ["m"] = "noop",
         ["a"] = "noop",
-        ["/"] = "filter",
+        --["/"] = "filter",
         ["f"] = "filter_on_submit",
       },
     },
