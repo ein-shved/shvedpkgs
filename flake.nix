@@ -28,7 +28,7 @@
       };
     };
     ide-manager = {
-      url = github:ein-shved/ide;
+      url = github:ein-shved/ide/v0.3.0;
       inputs = {
         flake-utils.follows = "flake-utils";
       };
