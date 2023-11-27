@@ -35,16 +35,19 @@ end
 
 local function override_fileInfo(orig, space)
   local icon = " 󰈚 "
-  local filename = fn.expand("#" .. stbufnr())
+  local filename = tostring(fn.expand("#" .. stbufnr()))
   local utf8 = require("utf8")
 
   if filename == "" then
     filename = "Empty"
   end
 
-  if filename ~= "Empty " then
+  if filename ~= "Empty" then
     local devicons_present, devicons = pcall(require, "nvim-web-devicons")
-    filename = fn.fnamemodify(filename, ":p:~:.")
+    local filenamem = fn.fnamemodify(filename, ":p:~:.")
+    if filenamem ~= "" then
+      filename = filenamem
+    end
     local fnlen = utf8.len(filename)
     local splited = splitpath(filename)
     local shorted = false
