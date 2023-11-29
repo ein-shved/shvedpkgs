@@ -97,6 +97,10 @@ local plugins = {
     cmd = { "NixDevelop", "NixShell", "RiffShell" },
   },
   {
+    "windwp/nvim-autopairs",
+    enabled = false,
+  },
+  {
     "neovim/nvim-lspconfig",
 
     dependencies = {
