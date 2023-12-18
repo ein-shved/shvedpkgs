@@ -4,6 +4,7 @@
     services = {
       openssh = {
         enable = true;
+        settings.X11Forwarding = true;
       };
     };
     programs.ssh.startAgent = true;
