@@ -16,7 +16,7 @@ with pkgs;
       };
       layout = "us,ru";
     };
-    fonts.fonts = [
+    fonts.packages = [
       jetbrains-mono
       nerdfonts
     ];

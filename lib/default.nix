@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ lib }:
 let
   splitNameAt = name: index: let
     splitted = lib.splitString " " name;

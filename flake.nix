@@ -1,8 +1,8 @@
 {
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-23.05;
+    nixpkgs.url = github:NixOS/nixpkgs/nixos-23.11;
     home-manager = {
-      url = github:nix-community/home-manager/release-23.05;
+      url = github:nix-community/home-manager/release-23.11;
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils.url = github:numtide/flake-utils;
@@ -30,6 +30,7 @@
     ide-manager = {
       url = github:ein-shved/ide/v0.3.0;
       inputs = {
+        nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
       };
     };
@@ -46,7 +47,7 @@
       mkConfigs = hosts: flake-utils.lib.eachDefaultSystem (system:
         let
           pkgs = import nixpkgs { inherit system; };
-          _lib = pkgs.callPackage ./lib { };
+          _lib = import ./lib { lib = pkgs.lib; };
           mkConfig =
             { hostname
             , specialArgs ? { }
