@@ -8,16 +8,12 @@ stdenv.mkDerivation rec {
   pname = "afflib";
 
   src = fetchFromGitHub {
-    owner = "Velocidex";
+    owner = "ein-shved";
     repo = "c-aff4";
-    rev = "v${version}";
-    sha256 = "1yyypga2pjars63n06khnbm61pj58cb7ix90fgh7s8h4b9clc594";
+    rev = "master";
+    sha256 = "TtH7wzqiVTERBVGS0lkP/trGOR9BiKb6iwKX6UyfdT8=";
     fetchSubmodules = false;
   };
-
-  patches = [
-    ./0001-Compile-with-spdlog-v1.11.patch
-  ];
 
   nativeBuildInputs = [ autoreconfHook  pkg-config ];
   buildInputs = [ librdf_raptor2 zlib snappy lz4 tclap uriparser libuuid spdlog ];
