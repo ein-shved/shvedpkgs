@@ -22,7 +22,6 @@
     efiSupport = true;
     enableCryptodisk = true;
   };
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   boot.initrd.availableKernelModules = [
     "aesni_intel"
