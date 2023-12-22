@@ -23,6 +23,7 @@
       docker
       dowork
       evince
+      file
       fontconfig.lib
       gdb
       gimp
