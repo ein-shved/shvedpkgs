@@ -6,13 +6,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils.url = github:numtide/flake-utils;
-    hasp = {
-      url = github:ein-shved/SentinelHasp.nix;
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
-    };
     nvchad = {
       url = github:ein-shved/NvChad/v2.0;
       inputs = {
@@ -34,8 +27,15 @@
         flake-utils.follows = "flake-utils";
       };
     };
+    kompas3d = {
+      url = github:ein-shved/nix-kompas3d;
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
-  outputs = { self, nixpkgs, flake-utils, hasp, agenix, ... } @ attrs:
+  outputs = { self, nixpkgs, flake-utils, agenix, kompas3d, ... } @ attrs:
     let
       _modules = [
         ./config
@@ -43,7 +43,7 @@
         ./pkgs
         agenix.nixosModules.default
         { nixpkgs.overlays = [ agenix.overlays.default ]; }
-      ];
+      ] ++ kompas3d.modules;
       mkConfigs = hosts: flake-utils.lib.eachDefaultSystem (system:
         let
           pkgs = import nixpkgs { inherit system; };
@@ -59,11 +59,7 @@
                 lib = pkgs.lib // _lib;
                 inherit system;
               } // attrs // specialArgs;
-              modules = _modules ++
-                [
-                  hasp.packages.${system}.module
-                ]
-                ++ modules;
+              modules = _modules ++ modules;
             };
         in
         rec {

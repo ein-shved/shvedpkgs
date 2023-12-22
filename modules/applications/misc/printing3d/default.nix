@@ -9,9 +9,9 @@ in
     '';
   };
   config = lib.mkIf cfg.enable {
-    services.hasplmd.enable = true;
     environment.systemPackages = [
       pkgs.prusa-slicer
+      pkgs.kompas3d
     ];
   };
 }
