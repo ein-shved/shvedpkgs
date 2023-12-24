@@ -49,15 +49,16 @@ in
             ${keyHash}
 
             u="${cfg.giturl}"
-            r="$(${pass} git remote -v)" && exit 0;
-            ${pass} init "$k"
-            ${pass} git init -b master
-            ${pass} git checkout -b _stash
-            ${pass} git commit -m _stash
-            ${pass} git remote add origin "$u"
-            ${pass} git checkout master
-            ${pass} git branch --set-upstream-to origin/master
-            ${pass} git pull --rebase=true origin master
+            if ! r="$(${pass} git remote -v)"; then
+              ${pass} init "$k"
+              ${pass} git init -b master
+              ${pass} git checkout -b _stash
+              ${pass} git commit -m _stash
+              ${pass} git remote add origin "$u"
+              ${pass} git checkout master
+              ${pass} git branch --set-upstream-to origin/master
+              ${pass} git pull --rebase=true origin master
+            fi
           '';
         };
       };
