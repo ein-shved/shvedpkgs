@@ -34,8 +34,23 @@
         flake-utils.follows = "flake-utils";
       };
     };
+    gitwatch = {
+      url = github:ein-shved/gitwatch;
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
-  outputs = { self, nixpkgs, flake-utils, agenix, kompas3d, ... } @ attrs:
+  outputs =
+    { self
+    , nixpkgs
+    , flake-utils
+    , agenix
+    , kompas3d
+    , gitwatch
+    , ...
+    } @ attrs:
     let
       _modules = [
         ./config
@@ -43,7 +58,9 @@
         ./pkgs
         agenix.nixosModules.default
         { nixpkgs.overlays = [ agenix.overlays.default ]; }
-      ] ++ kompas3d.modules;
+      ]
+      ++ kompas3d.modules
+      ++ gitwatch.modules;
       mkConfigs = hosts: flake-utils.lib.eachDefaultSystem (system:
         let
           pkgs = import nixpkgs { inherit system; };

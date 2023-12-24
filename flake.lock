@@ -25,18 +25,6 @@
         "type": "github"
       }
     },
-    "aksusbd_vlib": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-Nge/e5d/DuooS67pyUtReX5DtzD0QWZdHdVO+497uf4=",
-        "type": "tarball",
-        "url": "https://sd7.ascon.ru/Public/Utils/Sentinel%20HASP/Linux_driver/aksusbd_vlib46707.tar"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://sd7.ascon.ru/Public/Utils/Sentinel%20HASP/Linux_driver/aksusbd_vlib46707.tar"
-      }
-    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -77,9 +65,8 @@
         "type": "github"
       }
     },
-    "hasp": {
+    "gitwatch": {
       "inputs": {
-        "aksusbd_vlib": "aksusbd_vlib",
         "flake-utils": [
           "flake-utils"
         ],
@@ -88,16 +75,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1681406120,
-        "narHash": "sha256-uMzpdV0ARj5CgKsw+asACBB0t3Bno+O49A5dcbA0/uE=",
+        "lastModified": 1703441749,
+        "narHash": "sha256-0j1akFFrI7A0v0F87QUFCBCO2fS7Jb+GLrOtpFRxj7I=",
         "owner": "ein-shved",
-        "repo": "SentinelHasp.nix",
-        "rev": "d42a07373a2aec93d949818735a0d5ce6a849949",
+        "repo": "gitwatch",
+        "rev": "68deddcea045f7af681daa226bfe0a3d97daa193",
         "type": "github"
       },
       "original": {
         "owner": "ein-shved",
-        "repo": "SentinelHasp.nix",
+        "repo": "gitwatch",
         "type": "github"
       }
     },
@@ -147,19 +134,43 @@
         "type": "github"
       }
     },
-    "nixpkgs": {
+    "kompas3d": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1702780907,
-        "narHash": "sha256-blbrBBXjjZt6OKTcYX1jpe9SRof2P9ZYWPzq22tzXAA=",
-        "ref": "refs/heads/nixos-23.11",
-        "rev": "1e2e384c5b7c50dbf8e9c441a9e58d85f408b01f",
-        "revCount": 553366,
-        "type": "git",
-        "url": "file:/home/shved/Projects/nix/nixpkgs"
+        "lastModified": 1703244670,
+        "narHash": "sha256-ZQpQXWZ96VSOLj84CpmBLYDntr3C5F9sF3ZAX4beUb4=",
+        "owner": "ein-shved",
+        "repo": "nix-kompas3d",
+        "rev": "7d6445ddac5826d02246589ff9960705c07da236",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:/home/shved/Projects/nix/nixpkgs"
+        "owner": "ein-shved",
+        "repo": "nix-kompas3d",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1703992652,
+        "narHash": "sha256-C0o8AUyu8xYgJ36kOxJfXIroy9if/G6aJbNOpA5W0+M=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "32f63574c85fbc80e4ba1fbb932cde9619bad25e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-23.11",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "nvchad": {
@@ -172,11 +183,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1694943186,
-        "narHash": "sha256-AR8VwbYk3qJyT4vR/H9zgyLaJ+ZjhY6+zpE9CQ6jERc=",
+        "lastModified": 1704915228,
+        "narHash": "sha256-NIuKED6j75O0LQHa9gQWU9GS8FuGfVUUG+OJ2nwulD0=",
         "owner": "ein-shved",
         "repo": "NvChad",
-        "rev": "8524b04d0603e2cd905b589b77ea8b5057bd3c22",
+        "rev": "b25cf4807134b8795d51d46e90df5f0f3af080aa",
         "type": "github"
       },
       "original": {
@@ -190,9 +201,10 @@
       "inputs": {
         "agenix": "agenix",
         "flake-utils": "flake-utils",
-        "hasp": "hasp",
+        "gitwatch": "gitwatch",
         "home-manager": "home-manager",
         "ide-manager": "ide-manager",
+        "kompas3d": "kompas3d",
         "nixpkgs": "nixpkgs",
         "nvchad": "nvchad"
       }
