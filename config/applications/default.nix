@@ -57,6 +57,7 @@
       usbutils
       wget
       xclip
+      yandex-music
       zstd
     ];
     programs = {

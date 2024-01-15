@@ -41,6 +41,13 @@
         flake-utils.follows = "flake-utils";
       };
     };
+    yandex-music = {
+      url = github:cucumber-sp/yandex-music-linux;
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
   outputs =
     { self
@@ -49,6 +56,7 @@
     , agenix
     , kompas3d
     , gitwatch
+    , yandex-music
     , ...
     } @ attrs:
     let
@@ -60,8 +68,8 @@
         { nixpkgs.overlays = [ agenix.overlays.default ]; }
       ]
       ++ kompas3d.modules
-      ++ gitwatch.modules;
-
+      ++ gitwatch.modules
+      ++ yandex-music.modules;
       mkConfigs = hosts: flake-utils.lib.eachDefaultSystem (system:
         let
           pkgs = import nixpkgs { inherit system; };
