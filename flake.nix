@@ -61,10 +61,23 @@
       ]
       ++ kompas3d.modules
       ++ gitwatch.modules;
+
       mkConfigs = hosts: flake-utils.lib.eachDefaultSystem (system:
         let
           pkgs = import nixpkgs { inherit system; };
           _lib = import ./lib { lib = pkgs.lib; };
+
+          mkDevShellFor = config: name: pkgs.mkShell {
+            packages = builtins.filter
+              (pkg: pkgs.lib.getName pkg.name == name)
+              config.environment.systemPackages;
+          };
+
+          mkDevShellsFor = with builtins; config: names:
+            listToAttrs (map
+              (name: { inherit name; value = mkDevShellFor config name; })
+              names);
+
           mkConfig =
             { hostname
             , specialArgs ? { }
@@ -85,14 +98,10 @@
               (hostname: v: mkConfig (v // { inherit hostname; }))
               hosts;
           };
-          devShells = builtins.mapAttrs
-            (
-              hostname: system: pkgs.mkShell {
-                buildInputs = system.config.environment.systemPackages;
-              }
-            )
-            packages.nixosConfigurations;
+          devShells = mkDevShellsFor
+            packages.nixosConfigurations.generic.config [ "neovim" ];
         });
+
       mkConfig =
         { hostname
         , ...
@@ -138,6 +147,11 @@
 
       allConfigurations = mkConfigs (
         {
+          generic = {
+            modules = [{
+              user.name = "NixOS";
+            }];
+          };
           testA = {
             modules = [
               ./test/vm/configuration.nix

@@ -30,6 +30,9 @@ M.hl_override = {
 
 M.hl_add = {
   GitBlame = { fg = "#404050" },
+  DapBreakpoint = { fg = '#993939', },
+  DapLogPoint = { fg = '#61afef',  },
+  DapStopped = { fg = '#98c379',  },
 }
 
 M.statusline = require("custom.statusline")

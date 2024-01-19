@@ -2,6 +2,7 @@
 {
   imports = [
     ./submake
+    ./codelldb
   ];
 }
 

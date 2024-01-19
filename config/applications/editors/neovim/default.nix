@@ -23,6 +23,7 @@
           nodePackages.bash-language-server
           shfmt
           shellcheck
+          codelldb
         ];
       };
     };

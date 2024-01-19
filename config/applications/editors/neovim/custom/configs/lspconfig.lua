@@ -41,15 +41,6 @@ local servers = {
       "--header-insertion=never",
     },
   },
-  rust_analyzer = {
-    settings = {
-      ["rust-analyzer"] = {
-        diagnostics = {
-          enable = true,
-        },
-      },
-    },
-  },
 }
 
 local on_attach_orig = require("plugins.configs.lspconfig").on_attach

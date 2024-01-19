@@ -82,9 +82,9 @@ local plugins = {
       vim.api.nvim_create_autocmd("BufWritePost", {
         callback = function()
           if
-            vim.bo.filetype ~= "git"
-            and not vim.bo.filetype ~= "gitcommit"
-            and not vim.bo.filetype ~= "gitrebase"
+              vim.bo.filetype ~= "git"
+              and not vim.bo.filetype ~= "gitcommit"
+              and not vim.bo.filetype ~= "gitrebase"
           then
             session_manager.save_current_session()
           end
@@ -118,6 +118,29 @@ local plugins = {
   {
     "uga-rosa/utf8.nvim",
   },
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      "NvChad/base46",
+    },
+    config = function()
+      require("custom.configs.dap")
+    end,
+  },
+  {
+    "rcarriga/nvim-dap-ui",
+    dependencies = {
+      "mfussenegger/nvim-dap",
+    },
+  },
+  {
+    'mrcjkb/rustaceanvim',
+    dependencies = {
+      "mfussenegger/nvim-dap",
+    },
+    version = '^3',
+    ft = { 'rust' },
+  }
 }
 
 return plugins
