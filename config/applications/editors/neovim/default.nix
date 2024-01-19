@@ -17,9 +17,7 @@
           nixpkgs-fmt
           lua-language-server
           stylua
-          # TODO(Shvedov) use neocmakelsp after 23.11
-          #neocmakelsp
-          cmake-language-server
+          neocmakelsp
           nodePackages.bash-language-server
           shfmt
           shellcheck
