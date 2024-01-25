@@ -22,6 +22,8 @@
           shfmt
           shellcheck
           codelldb
+          pylint
+          pyright
         ];
       };
     };

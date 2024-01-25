@@ -41,6 +41,7 @@ local servers = {
       "--header-insertion=never",
     },
   },
+  "pyright",
 }
 
 local on_attach_orig = require("plugins.configs.lspconfig").on_attach

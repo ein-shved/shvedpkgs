@@ -13,7 +13,8 @@ local sources = {
 
   lint.shellcheck,
 
-  ca.statix
+  ca.statix,
+  null_ls.builtins.diagnostics.pylint,
 }
 
 null_ls.setup {
