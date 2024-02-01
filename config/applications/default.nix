@@ -12,6 +12,8 @@
   config = {
     nixpkgs.config.allowUnfree = true;
     environment.systemPackages = with pkgs; [
+      (yandexmusic.override { fixQuit = false; })
+
       ascii
       bash-completion
       bear
@@ -57,7 +59,7 @@
       usbutils
       wget
       xclip
-      yandex-music
+      xdotool
       zstd
     ];
     programs = {
