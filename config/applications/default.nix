@@ -61,6 +61,7 @@
       xclip
       xdotool
       zstd
+      playerctl
     ];
     programs = {
       adb.enable = true;
