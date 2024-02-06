@@ -97,10 +97,6 @@ local plugins = {
     cmd = { "NixDevelop", "NixShell", "RiffShell" },
   },
   {
-    "windwp/nvim-autopairs",
-    enabled = false,
-  },
-  {
     "neovim/nvim-lspconfig",
 
     dependencies = {
@@ -140,7 +136,45 @@ local plugins = {
     },
     version = '^3',
     ft = { 'rust' },
-  }
+  },
+  {
+    "L3MON4D3/LuaSnip",
+    opts = { history = true,},
+    config = function(_, opts)
+      require("luasnip").config.set_config(opts)
+
+      -- lua format
+      require("luasnip.loaders.from_lua").load()
+      require("luasnip.loaders.from_lua").lazy_load { paths = vim.g.lua_snippets_path or "" }
+
+      vim.api.nvim_create_autocmd("InsertLeave", {
+        callback = function()
+          if
+              require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()]
+              and not require("luasnip").session.jump_active
+          then
+            require("luasnip").unlink_current()
+          end
+        end,
+      })
+    end,
+  },
+  {
+    "hrsh7th/nvim-cmp",
+    opts = function()
+      local opts = require "plugins.configs.cmp"
+      opts.completion.autocomplete = false
+      vim.keymap.set('i', '<C-n>', function() require('cmp').complete() end, {})
+    end,
+  },
+  {
+    "windwp/nvim-autopairs",
+    enabled = false,
+  },
+  {
+    "rafamadriz/friendly-snippets",
+    enabled = false,
+  },
 }
 
 return plugins

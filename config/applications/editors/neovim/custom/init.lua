@@ -26,6 +26,7 @@ local opts = {
       "фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz",
 
   spell = true;
+  spelllang = "en,ru";
 }
 
 local function langmap(from, to)
