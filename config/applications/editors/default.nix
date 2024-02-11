@@ -1,7 +1,8 @@
 { ... }:
 {
   imports = [
-    ./vim
+#   Disable vim as it not used
+#    ./vim
     ./neovim
   ];
 }

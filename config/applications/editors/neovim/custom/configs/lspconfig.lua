@@ -2,9 +2,9 @@ local lspconfig = require("lspconfig")
 
 -- if you just want default config for the servers then put them in a table
 local servers = {
-  "rnix",
   "bashls",
   "cmake",
+  "nixd",
   lua_ls = {
     settings = {
 -- Took from https://github.com/neovim/neovim/issues/21686

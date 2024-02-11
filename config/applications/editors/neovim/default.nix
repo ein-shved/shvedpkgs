@@ -13,7 +13,7 @@
           ctags
           cscope
           clang-tools
-          rnix-lsp
+          nixd
           nixpkgs-fmt
           lua-language-server
           stylua
