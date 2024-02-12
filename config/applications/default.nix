@@ -12,8 +12,6 @@
   config = {
     nixpkgs.config.allowUnfree = true;
     environment.systemPackages = with pkgs; [
-      (yandexmusic.override { fixQuit = false; })
-
       ascii
       bash-completion
       bear
@@ -46,6 +44,7 @@
       nixos-option
       pdftk
       pinta
+      playerctl
       psmisc
       remmina
       screen
@@ -60,8 +59,8 @@
       wget
       xclip
       xdotool
+      yandexmusic
       zstd
-      playerctl
     ];
     programs = {
       adb.enable = true;
