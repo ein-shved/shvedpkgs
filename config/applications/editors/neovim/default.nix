@@ -12,7 +12,7 @@
         runtimeInputs = with pkgs; [
           ctags
           cscope
-          clang-tools
+          llvmPackages.clang-unwrapped
           nixd
           nixpkgs-fmt
           lua-language-server
