@@ -59,7 +59,7 @@
       wget
       xclip
       xdotool
-      yandexmusic
+      yandex-music
       zstd
     ];
     programs = {
