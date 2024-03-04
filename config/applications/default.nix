@@ -15,6 +15,7 @@
       ascii
       bash-completion
       bear
+      binutils
       cdrkit
       cifs-utils
       dconf
@@ -22,6 +23,7 @@
       discord
       docker
       dowork
+      drawio
       evince
       file
       fontconfig.lib
