@@ -7,19 +7,8 @@ lib.mkOverlay (
       name = "nixos";
       runtimeInputs = [ nixos-rebuild jq ];
       text = ''
-        UPDATE=""
-        if [ "$#" -gt 0 ] && [ "$1" == "-u" ]; then
-          UPDATE="1";
-          shift
-          if [ "$#" -gt 0 ] && [ "$1" == "--" ]; then
-            shift
-          fi
-        fi
-
-        if [ -n "$UPDATE" ]; then
-          cd /etc/nixos/
-          nix flake update
-        fi
+        cd /etc/nixos/
+        nix flake update
 
         REMOTE_SUDO=()
         if [ "$UID" != 0 ]; then
