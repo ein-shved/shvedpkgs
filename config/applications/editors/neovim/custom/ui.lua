@@ -15,6 +15,7 @@ M.changed_themes = {
     },
     base_16 = {
       base0E = "#8080f0",
+      base02 = "#584838",
     },
   },
 }

@@ -82,6 +82,7 @@ M.general = {
     },
   },
 }
+vim.keymap.set('!', '<S-Insert>', '<MiddleMouse>')
 
 M.dap = dap_mappings()
 return M
