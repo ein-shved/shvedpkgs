@@ -19,8 +19,8 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       pkgs.prusa-slicer
-      pkgs.kompas3d
     ];
+    services.kompas3d.enable = true;
     home.activations = {
       prusaConfig = if cfg.prusaConfig == null then "true" else ''
         configDir=$HOME/.config/PrusaSlicer
@@ -38,6 +38,14 @@ in
           echo "$configDir already exists"
         fi
       '';
+    };
+    services.gitwatch = {
+      modeling3d = {
+        enable = true;
+        user = config.user.name;
+        remote = "git@github.com:ein-shved/3D.git";
+        path = "${config.user.home}/Projects/3D";
+      };
     };
   };
 }

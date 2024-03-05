@@ -144,11 +144,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1703244670,
-        "narHash": "sha256-ZQpQXWZ96VSOLj84CpmBLYDntr3C5F9sF3ZAX4beUb4=",
+        "lastModified": 1709615595,
+        "narHash": "sha256-NCsNTCQOqSM+w9gRBlrBSxz+GT6YiN8+d7yMATIw8yE=",
         "owner": "ein-shved",
         "repo": "nix-kompas3d",
-        "rev": "7d6445ddac5826d02246589ff9960705c07da236",
+        "rev": "bb0f8ad8e77bf1898edfeb15fc2ea7a5d2c19955",
         "type": "github"
       },
       "original": {
