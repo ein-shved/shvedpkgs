@@ -66,10 +66,10 @@
         ./pkgs
         agenix.nixosModules.default
         kompas3d.nixosModules.default
+        yandex-music.nixosModules.default
         { nixpkgs.overlays = [ agenix.overlays.default ]; }
       ]
-      ++ gitwatch.modules
-      ++ yandex-music.modules;
+      ++ gitwatch.modules;
       mkConfigs = hosts: flake-utils.lib.eachDefaultSystem (system:
         let
           pkgs = import nixpkgs { inherit system; };
