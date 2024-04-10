@@ -21,6 +21,10 @@ with pkgs;
       nerdfonts
     ];
     time.timeZone = "Europe/Moscow";
+    i18n.extraLocaleSettings = {
+      LC_MESSAGES = "en_US.UTF-8";
+      LC_TIME = "ru_RU.UTF-8";
+    };
     qt = {
       enable = true;
       platformTheme = "gnome";
