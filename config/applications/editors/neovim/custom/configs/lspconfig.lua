@@ -3,7 +3,7 @@ local lspconfig = require("lspconfig")
 -- if you just want default config for the servers then put them in a table
 local servers = {
   "bashls",
-  "cmake",
+  "neocmake",
   "nixd",
   lua_ls = {
     settings = {
