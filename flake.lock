@@ -75,11 +75,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1703441749,
-        "narHash": "sha256-0j1akFFrI7A0v0F87QUFCBCO2fS7Jb+GLrOtpFRxj7I=",
+        "lastModified": 1714554248,
+        "narHash": "sha256-f0eWh45bHD1TwJVUN/TP1XSQrf8XsXlhkRqs+LQDOZo=",
         "owner": "ein-shved",
         "repo": "gitwatch",
-        "rev": "68deddcea045f7af681daa226bfe0a3d97daa193",
+        "rev": "8529c7ffa779b3b749d3d1b38d93b21544628cdb",
         "type": "github"
       },
       "original": {
@@ -261,11 +261,11 @@
         "ymExe": "ymExe"
       },
       "locked": {
-        "lastModified": 1712730624,
-        "narHash": "sha256-IaQtAPzm5VBlj9nlMqBKzNnAbckLde8mxUcB00DfTsk=",
+        "lastModified": 1716424457,
+        "narHash": "sha256-9GyBG5Bvf67CoPI3YGDHSLFbicCf2KYX70bawKh334I=",
         "owner": "cucumber-sp",
         "repo": "yandex-music-linux",
-        "rev": "467a1c967b31864d6201f275e4dce00ecad63ef5",
+        "rev": "4454bf0c609b6e07b29b6d761a370f3a22fe8a02",
         "type": "github"
       },
       "original": {
@@ -277,13 +277,13 @@
     "ymExe": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-kjPMSRZY9VTZCYXGwXAu3fIuErLWAll0bcIlbejuoZM=",
+        "narHash": "sha256-YqVVIpJeo8j0G8/zVaqYdZaynhvIem7FGcDbEwItlEg=",
         "type": "file",
-        "url": "https://music-desktop-application.s3.yandex.net/stable/Yandex_Music_x64_5.0.19.exe"
+        "url": "https://music-desktop-application.s3.yandex.net/stable/Yandex_Music_x64_5.2.2.exe"
       },
       "original": {
         "type": "file",
-        "url": "https://music-desktop-application.s3.yandex.net/stable/Yandex_Music_x64_5.0.19.exe"
+        "url": "https://music-desktop-application.s3.yandex.net/stable/Yandex_Music_x64_5.2.2.exe"
       }
     }
   },

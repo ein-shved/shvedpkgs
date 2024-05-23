@@ -61,11 +61,14 @@
       wget
       xclip
       xdotool
-      yandex-music
       zstd
     ];
     programs = {
       adb.enable = true;
+      yandex-music = {
+        enable = true;
+        tray.enable = true;
+      };
     };
   };
 }
