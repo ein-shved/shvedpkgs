@@ -3,6 +3,7 @@ with pkgs;
 {
   imports = [
     ./xdg
+    ./hyprland
   ];
   config = {
     programs.hyprland.enable = true;
