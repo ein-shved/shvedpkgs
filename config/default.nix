@@ -29,7 +29,6 @@
       supportedFilesystems = [ "ntfs" ];
       binfmt.emulatedSystems = [ "aarch64-linux" ];
     };
-    systemd.services.nix-daemon.environment.TMPDIR = "/home/.nix-build";
     nix.sshServe.enable = true;
     nix.settings = {
       auto-optimise-store = true;
@@ -38,6 +37,16 @@
     documentation.nixos = {
       includeAllModules = true;
       options.warningsAreErrors = false;
+    };
+    systemd.services = {
+      nix-daemon.environment.TMPDIR = "/home/.nix-build";
+      make-nix-build = {
+        script = ''
+          mkdir -p /home/.nix-build
+        '';
+        wantedBy = [ "nix-daemon.service" ];
+        before = [ "nix-daemon.service" ];
+      };
     };
   };
 }
