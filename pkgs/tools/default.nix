@@ -5,5 +5,6 @@
     ./misc
     ./networking
     ./security
+    ./text
   ];
 }
