@@ -30,6 +30,7 @@
       binfmt.emulatedSystems = [ "aarch64-linux" ];
     };
     systemd.services.nix-daemon.environment.TMPDIR = "/home/.nix-build";
+    nix.sshServe.enable = true;
     nix.settings = {
       auto-optimise-store = true;
       experimental-features = [ "nix-command" "flakes" ];
