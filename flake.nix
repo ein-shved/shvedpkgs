@@ -48,6 +48,14 @@
         flake-utils.follows = "flake-utils";
       };
     };
+    hyprland-flake = {
+      url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+    };
+
+    hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins";
+      inputs.hyprland.follows = "hyprland-flake";
+    };
   };
   outputs =
     { self
