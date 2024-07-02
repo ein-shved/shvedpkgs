@@ -26,7 +26,7 @@ in
     };
     programs.gnupg.agent = {
       enable = true;
-      pinentryFlavor = "gnome3";
+      pinentryPackage = pkgs.pinentry-gnome3;
     };
     environment.etc = with pkgs; {
       "pkcs11/modules/libeToken.module" = {
