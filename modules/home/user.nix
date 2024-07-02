@@ -74,6 +74,7 @@ in
   ## Configurations #######################################
 
   config = {
+    nix.settings.trusted-users = [ cfg.name ];
     users.users = {
       ${cfg.name} = {
         inherit (cfg) home name password;
