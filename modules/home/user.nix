@@ -88,6 +88,7 @@ in
           "audio" # Allow pulseaudio control
           "adbusers" # Can start adb daemon
           "docker" # Can interact with docker containers
+          "input" # Access to input devices
         ] ++ cfg.extraGroups;
       };
     };
