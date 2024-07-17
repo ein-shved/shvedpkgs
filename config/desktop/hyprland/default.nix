@@ -5,6 +5,7 @@ let
 in
 {
   imports = [
+    ./anyrun.nix
     ./hypridle.nix
     ./hyprland.nix
     ./hyprlock.nix
