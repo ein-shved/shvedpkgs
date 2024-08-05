@@ -1,5 +1,4 @@
 { config, pkgs, lib, ... }:
-with pkgs;
 {
   imports = [
     ./xdg
@@ -16,7 +15,7 @@ with pkgs;
         wayland = true;
       };
     };
-    fonts.packages = [
+    fonts.packages = with pkgs; [
       jetbrains-mono
       nerdfonts
     ];

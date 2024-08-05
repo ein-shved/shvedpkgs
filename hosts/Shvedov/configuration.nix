@@ -3,6 +3,7 @@
   imports =
     [
       ./hardware-configuration.nix
+      ./desktop
     ];
 
   # Use the systemd-boot EFI boot loader.
