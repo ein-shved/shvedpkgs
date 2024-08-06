@@ -6,6 +6,8 @@
       ./desktop
     ];
 
+  hardware.isLaptop = true;
+
   kl = {
     enable = true;
     remote.enable = true;

@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, pkgs, ... }:
 {
   programs.hyprland.hyprconfig.hypridle = {
     text = ''
@@ -31,10 +31,11 @@
           on-resume = hyprctl dispatch dpms on          # screen on when activity is detected after timeout has fired.
       }
 
+    '' + (lib.optionalString pkgs.isLaptop ''
       listener {
           timeout = 1800                                # 30min
           on-timeout = systemctl suspend                # suspend pc
       }
-    '';
+    '');
   };
 }
