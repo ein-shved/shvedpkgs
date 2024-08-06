@@ -2,6 +2,7 @@
 {
   imports = [
     ./development
+    ./hosts
     ./power
   ];
 }
