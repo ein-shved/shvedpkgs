@@ -22,6 +22,7 @@ in
       kitty
       pavucontrol
       waybar
+      wl-clipboard
     ];
 
     home-manager.users.${user} = {
@@ -156,14 +157,13 @@ in
 
             # See https://wiki.hyprland.org/Configuring/Keywords/ for more
             $mainMod = SUPER
+            $altMod  = CTRL ALT
 
             # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
             bind = $mainMod, Q, exec, kitty
             bind = $mainMod, C, killactive,
             bind = $mainMod, M, exit,
-            bind = $mainMod, E, exec, dolphin
             bind = $mainMod, V, togglefloating,
-            bind = $mainMod, R, exec, wofi --show drun
             bind = $mainMod, P, pseudo, # dwindle
             bind = $mainMod, J, togglesplit, # dwindle
             bind = $mainMod, L, exec, loginctl lock-session
@@ -186,6 +186,10 @@ in
             bind = $mainMod, 9, workspace, 9
             bind = $mainMod, 0, workspace, 10
 
+            # Switch workspaces with altMod + arrows
+            bind = $altMod, left,  workspace, m-1
+            bind = $altMod, right, workspace, m+1
+
 
             # Move active window to a workspace with mainMod + SHIFT + [0-9]
             bind = $mainMod SHIFT, 1, movetoworkspace, 1
@@ -199,9 +203,9 @@ in
             bind = $mainMod SHIFT, 9, movetoworkspace, 9
             bind = $mainMod SHIFT, 0, movetoworkspace, 10
 
-            # Example special workspace (scratchpad)
-            bind = $mainMod, S, togglespecialworkspace, magic
-            bind = $mainMod SHIFT, S, movetoworkspace, special:magic
+            # Move active window to a workspace with altMod + arrows
+            bind = $altMod SHIFT, left,  movetoworkspace, m-1
+            bind = $altMod SHIFT, right, movetoworkspace, m+1
 
             # Scroll through existing workspaces with mainMod + scroll
             bind = $mainMod, mouse_down, workspace, e+1
@@ -215,6 +219,21 @@ in
             bind = $mainMod, t, exec, hdrop telegram-desktop
             bind = ALT, f3, exec, anyrun
             bind = ALT, f2, exec, anyrun
+            bind = $mainMod, f3, exec, anyrun
+            bind = $mainMod, f2, exec, anyrun
+
+            bind = ALT, f4, killactive
+
+            bindle=, XF86AudioRaiseVolume, exec, amixer set Master 10%+
+            bindle=, XF86AudioLowerVolume, exec, amixer set Master 10%-
+            bindle=, XF86MonBrightnessUp, exec, brightnessctl set 10%+
+            bindle=, XF86MonBrightnessDown, exec, brightnessctl set 10%-
+            bindl=, XF86AudioMute, exec, amixer set Master toggle
+            bindl=, XF86AudioPlay, exec, playerctl play-pause
+            bind = ALT, 7, exec, playerctl play-pause
+            bindl=, XF86AudioNext, exec, playerctl next
+            bindl=, XF86AudioPrev, exec, playerctl previous
+
           '';
       };
     };
