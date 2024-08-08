@@ -10,6 +10,7 @@ in
     ./hyprland.nix
     ./hyprlock.nix
     ./hyprpaper.nix
+    ./kitty.nix
     ./waybar
   ];
 
