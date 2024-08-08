@@ -95,6 +95,5 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ wldhx ];
   };
 }

@@ -41,6 +41,10 @@ in
         echo | ${modutil} -delete eToken || true;
         echo | ${modutil} -add eToken -libfile                     \
                ${pcsc-safenet}/lib/libeToken.so || exit 1;
+        echo | ${modutil} -add eTokenLegacy -libfile               \
+               ${pcsc-safenet-legacy}/lib/libeToken.so || exit 1;
+        echo | ${modutil} -add rtpkcs11ecp -libfile                \
+               ${rtpkcs11ecp}/lib/librtpkcs11ecp.so || exit 1;
       '';
     };
   };
