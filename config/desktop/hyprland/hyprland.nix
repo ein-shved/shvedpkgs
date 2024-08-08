@@ -203,9 +203,12 @@ in
             bind = $mainMod SHIFT, 9, movetoworkspace, 9
             bind = $mainMod SHIFT, 0, movetoworkspace, 10
 
-            # Move active window to a workspace with altMod + arrows
-            bind = $altMod SHIFT, left,  movetoworkspace, m-1
-            bind = $altMod SHIFT, right, movetoworkspace, m+1
+            # Move workspace to a monitor with altMod SHIFT + arrows
+            bind = $mainMod SHIFT, left,  movecurrentworkspacetomonitor, l
+            bind = $mainMod SHIFT, right, movecurrentworkspacetomonitor, r
+            bind = $mainMod SHIFT, up,  movecurrentworkspacetomonitor, u
+            bind = $mainMod SHIFT, down, movecurrentworkspacetomonitor, d
+
 
             # Scroll through existing workspaces with mainMod + scroll
             bind = $mainMod, mouse_down, workspace, e+1
