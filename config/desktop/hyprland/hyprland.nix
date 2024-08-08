@@ -229,11 +229,10 @@ in
             bindle=, XF86MonBrightnessUp, exec, brightnessctl set 10%+
             bindle=, XF86MonBrightnessDown, exec, brightnessctl set 10%-
             bindl=, XF86AudioMute, exec, amixer set Master toggle
-            bindl=, XF86AudioPlay, exec, playerctl play-pause
+            bindl=, XF86AudioPlay, exec, playerctl -a play-pause
             bind = ALT, 7, exec, playerctl play-pause
             bindl=, XF86AudioNext, exec, playerctl next
             bindl=, XF86AudioPrev, exec, playerctl previous
-
           '';
       };
     };

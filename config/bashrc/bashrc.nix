@@ -123,6 +123,13 @@ let
   prompt2 = simplescript ''
     ${ansiecho} green bold -- -n '> '
   '';
+  kittyssh = pkgs.writeShellScript "kittyssh" ''
+    if kitten ssh --help 2>/dev/null >/dev/null; then
+      exec kitten ssh "$@"
+    else
+      exec ssh "$@"
+    fi
+  '';
 in
 {
   options = {
@@ -143,6 +150,10 @@ in
           source ${nix_index}
           source ${bash_completion}
           source ${completions}
+
+          if [ -n "$KITTY_INSTALLATION_DIR" ]; then
+              source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
+          fi
         '';
         enableLsColors = true;
         shellAliases = {
@@ -157,6 +168,8 @@ in
           grh = "git rebase -i HEAD";
           gt = "git checkout";
           gsh = "git show";
+          icat = "kitten icat";
+          ssh = kittyssh;
         };
         undistractMe = {
           enable = true;
