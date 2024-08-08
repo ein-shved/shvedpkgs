@@ -37,6 +37,10 @@ in
         text = "module: ${pcsc-safenet-legacy}/lib/libeToken.so";
         mode = "0644";
       };
+      "pkcs11/modules/rutoken.module" = {
+        text = "module: ${rtpkcs11ecp}/lib/librtpkcs11ecp.so";
+        mode = "0644";
+      };
     };
     programs.fuse.userAllowOther = true;
     #Allow to use token by non-root user

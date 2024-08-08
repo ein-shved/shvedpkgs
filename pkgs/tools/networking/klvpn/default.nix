@@ -18,7 +18,7 @@ lib.mkOverlay (
         [ $UID  != 0 ] && SUDO=sudo
 
         url="$(p11tool --list-token-urls |\
-             grep -m1 -o '^.*model=eToken.*$' || echo)"
+             grep -m1 -o '^.*model=\(eToken\|Rutoken\).*$' || echo)"
 
         if [ -z "$url" ]; then
             echo "No matching token found"
