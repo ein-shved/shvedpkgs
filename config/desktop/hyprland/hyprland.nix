@@ -19,6 +19,7 @@ in
       hyprland-per-window-layout
       hyprlock
       hyprpaper
+      hyprshot
       kitty
       pavucontrol
       waybar
@@ -26,6 +27,32 @@ in
     ];
 
     home-manager.users.${user} = {
+      home.pointerCursor = {
+        gtk.enable = true;
+        # x11.enable = true;
+        package = pkgs.bibata-cursors;
+        name = "Bibata-Modern-Classic";
+        size = 16;
+      };
+
+      gtk = {
+        enable = true;
+
+        theme = {
+          package = pkgs.flat-remix-gtk;
+          name = "Flat-Remix-GTK-Grey-Darkest";
+        };
+
+        iconTheme = {
+          package = pkgs.gnome.adwaita-icon-theme;
+          name = "Adwaita";
+        };
+
+        font = {
+          name = "Sans";
+          size = 11;
+        };
+      };
       wayland.windowManager.hyprland = {
         enable = true;
         systemd.enable = true;
@@ -39,6 +66,7 @@ in
               monitors;
           in
           ''
+            exec-once = systemctl --user import-environment QT_QPA_PLATFORMTHEME
             #
             # Based on basic auto-generated hyprland configuration
             #
@@ -236,6 +264,13 @@ in
             bind = ALT, 7, exec, playerctl play-pause
             bindl=, XF86AudioNext, exec, playerctl next
             bindl=, XF86AudioPrev, exec, playerctl previous
+
+            $hyprshotHk = hyprshot -o "$HOME/Pictures/Screenshots"
+
+            bindl=, Print, exec, $hyprshotHk -m output
+            bindl=SHIFT, Print, exec, $hyprshotHk -m region
+            bindl=$mainMod, Print, exec, $hyprshotHk -m output -- pinta
+            bindl=SHIFT $mainMod, Print, exec, $hyprshotHk -m region -- pinta
           '';
       };
     };

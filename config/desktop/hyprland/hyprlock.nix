@@ -6,7 +6,8 @@ in
   config.programs.hyprland.hyprconfig.hyprlock = {
     text =
       let
-        mkMonitor = name: lib.optionalString (name != "default") name;
+        mkMonitorName = name: lib.strings.removePrefix "desc:" name;
+        mkMonitor = name: lib.optionalString (name != "default") (mkMonitorName name);
         mkBackground = name: value: ''
           background {
             monitor = ${mkMonitor name}

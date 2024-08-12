@@ -3,6 +3,7 @@
 {
   imports = [
    ./pulseaudio
+   ./pipewire
    ./mpv
    ./camera
   ];

@@ -14,6 +14,8 @@
 
         # Reset SHLVL. For example, with hdrop SHLVL starts from 2.
         env                           SHLVL=0
+
+        enabled_layouts horizontal
       '';
     };
   };
