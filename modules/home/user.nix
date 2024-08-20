@@ -89,6 +89,7 @@ in
           "adbusers" # Can start adb daemon
           "docker" # Can interact with docker containers
           "input" # Access to input devices
+          "nixbld" # Access to nix build files
         ] ++ cfg.extraGroups;
       };
     };
