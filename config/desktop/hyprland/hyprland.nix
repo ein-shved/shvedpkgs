@@ -22,6 +22,7 @@ in
       hyprshot
       kitty
       pavucontrol
+      udiskie
       waybar
       wl-clipboard
     ];
@@ -77,6 +78,7 @@ in
             exec-once = waybar
             exec-once = hypridle
             exec-once = hyprpaper
+            exec-once = udiskie
 
             # Source a file (multi-file configs)
             # source = ~/.config/hypr/myColors.conf
