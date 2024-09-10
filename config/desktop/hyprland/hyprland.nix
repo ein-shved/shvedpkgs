@@ -273,6 +273,13 @@ in
             bindl=SHIFT, Print, exec, $hyprshotHk -m region
             bindl=$mainMod, Print, exec, $hyprshotHk -m output -- pinta
             bindl=SHIFT $mainMod, Print, exec, $hyprshotHk -m region -- pinta
+
+
+            # Window rules
+            ## Chrome
+
+            windowrule = float, ^(Google-chrome)$
+            windowrule = float, ^(org.gnome.Calculator)$
           '';
       };
     };
