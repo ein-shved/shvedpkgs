@@ -280,6 +280,9 @@ in
 
             windowrule = float, ^(Google-chrome)$
             windowrule = float, ^(org.gnome.Calculator)$
+            windowrule = float, title:^(Sign in to Security Device)$
+            windowrule = float, ^(YandexMusic)$
+            windowrule = float, ^(pavucontrol)$
           '';
       };
     };
