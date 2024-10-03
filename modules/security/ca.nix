@@ -17,6 +17,10 @@ in
     security.pki.certificateFiles = [
       "${klcertsBundle}"
     ];
+
+    environment.sessionVariables = {
+      CURL_CA_BUNDLE="/etc/ssl/certs/ca-bundle.crt";
+    };
     home.activations = with pkgs; let
       dbpath = "$HOME/.pki/nssdb";
       db = "sql:${dbpath}";
