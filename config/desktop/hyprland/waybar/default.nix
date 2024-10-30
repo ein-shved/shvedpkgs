@@ -164,9 +164,6 @@ in
         #};
         "hyprland/workspaces" = {
           format = "{icon}";
-          format-icons = {
-            active = "";
-          };
         };
         "hyprland/language" = {
           format = "{}";

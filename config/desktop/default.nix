@@ -29,6 +29,9 @@
       style = "adwaita-dark";
     };
     programs.nm-applet.enable = true;
+    environment.systemPackages = with pkgs; [
+      networkmanagerapplet
+    ];
     environment.sessionVariables = {
       GTK_THEME = "Adwaita:dark";
     };
