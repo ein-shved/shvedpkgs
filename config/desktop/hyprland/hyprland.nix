@@ -25,6 +25,7 @@ in
       udiskie
       waybar
       wl-clipboard
+      swaynotificationcenter
     ];
 
     home-manager.users.${user} = {
@@ -79,6 +80,7 @@ in
             exec-once = hypridle
             exec-once = hyprpaper
             exec-once = udiskie
+            exec-once = swaync
 
             # Source a file (multi-file configs)
             # source = ~/.config/hypr/myColors.conf
