@@ -2,7 +2,7 @@
 {
   config = {
     environment.systemPackages = [
-      pkgs.google-chrome
+      pkgs.brave
     ];
     programs.chromium = {
       enable = true;
