@@ -115,9 +115,6 @@ in
         tab_bar_min_tabs              1
         tab_bar_style                 powerline
 
-        # Reset SHLVL. For example, with hdrop SHLVL starts from 2.
-        env                           SHLVL=0
-
         enabled_layouts               horizontal
 
         allow_remote_control          yes
