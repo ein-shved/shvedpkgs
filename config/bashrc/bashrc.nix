@@ -26,8 +26,13 @@ in
       bash = {
         blesh.enable = true;
         enableCompletion = true;
-        interactiveShellInit = ''
+        interactiveShellInit = let
+          kitty-installation-dir = "${pkgs.kitty}/lib/kitty";
+        in ''
           if [ -n "$KITTY_INSTALLATION_DIR" ]; then
+              export KITTY_INSTALLATION_DIR="${kitty-installation-dir}"
+          fi
+          if [ -d "$KITTY_INSTALLATION_DIR" ]; then
               source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
           fi
         '';
