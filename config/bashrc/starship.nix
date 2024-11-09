@@ -14,6 +14,13 @@
         diverged = "<>";
         up_to_date = "=";
       };
+      python = {
+        format = "[\${symbol}]($style)";
+        symbol = "";
+      };
+      cmake = {
+        format = "[$symbol]($style)";
+      };
     };
   };
 }
