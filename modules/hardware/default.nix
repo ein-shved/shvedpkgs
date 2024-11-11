@@ -4,5 +4,6 @@
     ./development
     ./hosts
     ./power
+    ./crypto
   ];
 }
