@@ -48,6 +48,14 @@
         flake-utils.follows = "flake-utils";
       };
     };
+    vim = {
+      url = "github:ein-shved/vim";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+        home-manager.follows = "home-manager";
+      };
+    };
   };
   outputs =
     { self
@@ -57,6 +65,7 @@
     , kompas3d
     , gitwatch
     , yandex-music
+    , vim
     , ...
     } @ attrs:
     let
@@ -67,6 +76,7 @@
         agenix.nixosModules.default
         kompas3d.nixosModules.default
         yandex-music.nixosModules.default
+        vim.nixosModules.default
         { nixpkgs.overlays = [ agenix.overlays.default ]; }
       ]
       ++ gitwatch.modules;
