@@ -1,13 +1,4 @@
 { lib, pkgs, config, ... }:
-let
-  kittyssh = pkgs.writeShellScript "kittyssh" ''
-    if kitten ssh --help 2>/dev/null >/dev/null; then
-      exec kitten ssh "$@"
-    else
-      exec ssh "$@"
-    fi
-  '';
-in
 {
   options = {
     programs.bash.extraCompletions = with lib; with types; mkOption {
@@ -26,16 +17,6 @@ in
       bash = {
         blesh.enable = true;
         enableCompletion = true;
-        interactiveShellInit = let
-          kitty-installation-dir = "${pkgs.kitty}/lib/kitty";
-        in ''
-          if [ -n "$KITTY_INSTALLATION_DIR" ]; then
-              export KITTY_INSTALLATION_DIR="${kitty-installation-dir}"
-          fi
-          if [ -d "$KITTY_INSTALLATION_DIR" ]; then
-              source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
-          fi
-        '';
         enableLsColors = true;
         shellAliases = {
           grep = "grep --colour=auto";
@@ -50,7 +31,6 @@ in
           gt = "git checkout";
           gsh = "git show";
           icat = "kitten icat";
-          ssh = kittyssh;
         };
         undistractMe = {
           enable = false;

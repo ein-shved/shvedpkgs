@@ -20,7 +20,6 @@ in
       hyprlock
       hyprpaper
       hyprshot
-      kitty
       pavucontrol
       udiskie
       waybar

@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 let
   notify_timeout = 10;
-  pythonEnv = pkgs.python311.withPackages (ps: with ps; [desktop-notifier]);
+  pythonEnv = pkgs.python311.withPackages (ps: with ps; [ desktop-notifier ]);
   watcher = pkgs.writers.writePython3 "kitty-watcher" { } ''
     import sys
     import asyncio
@@ -101,27 +101,42 @@ let
                 cmd = data.get('cmdline', None)
                 windows.notify_end(window.id, cmd, time, boss, window)
   '';
+  user = config.user.name;
 in
 {
-  programs.hyprland.hyprconfig = {
-    "kitty/kitty.conf" = {
-      hypr = false;
-      text = ''
-        background_opacity            0.7
+  home-manager.users.${user} =
+    let
+      inherit (pkgs) kitty;
+      kitty-installation-dir = "${pkgs.kitty}/lib/kitty";
+    in
+    {
+      programs.bash = {
+        enable = true;
+        bashrcExtra = ''
+          if [ -z "$KITTY_INSTALLATION_DIR" ]; then
+              export KITTY_INSTALLATION_DIR="${kitty-installation-dir}"
+          fi
+        '';
+      };
+      programs.kitty = {
+        enable = true;
+        package = kitty;
+        shellIntegration = {
+          mode = "enabled";
+          enableBashIntegration = true;
+        };
+        settings = {
+          background_opacity = "0.7";
+          scrollback_lines = 200000;
+          scrollback_pager_history_size = 1024;
+          tab_bar_min_tabs = 1;
+          tab_bar_style = "powerline";
+          enabled_layouts = "horizontal";
+          allow_remote_control = "yes";
 
-        scrollback_lines              200000
-        scrollback_pager_history_size 1024
-
-        tab_bar_min_tabs              1
-        tab_bar_style                 powerline
-
-        enabled_layouts               horizontal
-
-        allow_remote_control          yes
-
-        watcher                       ${watcher}
-      '';
+          watcher = "${watcher}";
+        };
+      };
     };
-  };
 }
 
