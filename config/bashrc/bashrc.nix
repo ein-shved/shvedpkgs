@@ -15,7 +15,6 @@
         enableBashIntegration = true;
       };
       bash = {
-        blesh.enable = true;
         enableCompletion = true;
         enableLsColors = true;
         shellAliases = {
