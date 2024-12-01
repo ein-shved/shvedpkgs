@@ -7,7 +7,7 @@
   config = {
     services.xserver = {
       enable = true;
-      layout = "us,ru";
+      xkb.layout = "us,ru";
       displayManager.gdm = {
         enable = true;
         debug = true;

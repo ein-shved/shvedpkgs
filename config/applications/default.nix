@@ -20,19 +20,18 @@
       cifs-utils
       dconf
       dhcps
-      discord
       docker
       dowork
       drawio
+      eog
       evince
       file
       fontconfig.lib
       gdb
       gimp
-      gnome.eog
-      gnome.gnome-calculator
-      ide-manager
+      gnome-calculator
       inotify-tools
+      jq
       killall
       libreoffice
       man
@@ -61,15 +60,14 @@
       wget
       xclip
       xdotool
+      yandex-music
       zstd
+
+      # Unavailable
+      # discord
     ];
     programs = {
       adb.enable = true;
-      yandex-music = {
-        enable = true;
-        tray.enable = true;
-      };
     };
   };
 }
-

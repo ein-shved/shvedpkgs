@@ -1,47 +1,54 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
 
   cfg = config.services.cntlm-gss;
-  configFile = if cfg.configText != "" then
-    pkgs.writeText "cntlm.conf" ''
-      ${cfg.configText}
-    ''
+  configFile =
+    if cfg.configText != "" then
+      pkgs.writeText "cntlm.conf" ''
+        ${cfg.configText}
+      ''
     else
-    pkgs.writeText "cntlm.conf" ''
-      # Cntlm GSS Authentication Proxy Configuration
-      Username
-      Domain
-      Password
-      ${optionalString (cfg.netbios_hostname != "") "Workstation ${cfg.netbios_hostname}"}
-      ${concatMapStrings (entry: "Proxy ${entry}\n") cfg.proxy}
-      ${concatMapStrings (entry: "Listen ${entry}\n") cfg.listen}
-      ${concatMapStrings (entry: "NoProxy ${entry}\n") cfg.noproxy}
-      ${concatMapStrings (entry: "${entry}\n") cfg.allowdeny}
-      ${cfg.extraConfig}
-    '';
+      pkgs.writeText "cntlm.conf" ''
+        # Cntlm GSS Authentication Proxy Configuration
+        Username
+        Domain
+        Password
+        ${optionalString (
+          cfg.netbios_hostname != ""
+        ) "Workstation ${cfg.netbios_hostname}"}
+        ${concatMapStrings (entry: "Proxy ${entry}\n") cfg.proxy}
+        ${concatMapStrings (entry: "Listen ${entry}\n") cfg.listen}
+        ${concatMapStrings (entry: "NoProxy ${entry}\n") cfg.noproxy}
+        ${concatMapStrings (entry: "${entry}\n") cfg.allowdeny}
+        ${cfg.extraConfig}
+      '';
   user = if (cfg.user != null) then cfg.user else "cntlm";
 in
 {
 
   options.services.cntlm-gss = {
 
-    enable = mkEnableOption (lib.mdDoc "cntlm-gss, which starts a local proxy");
-
+    enable = mkEnableOption "cntlm-gss, which starts a local proxy";
 
     netbios_hostname = mkOption {
       type = types.str;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         The hostname of your machine.
       '';
     };
 
     proxy = mkOption {
       type = types.listOf types.str;
-      description = lib.mdDoc ''
+      description = ''
         A list of NTLM/NTLMv2 authenticating HTTP proxies.
         Parent proxy, which requires authentication. The same as proxy on the command-line, can be used more than  once  to  specify  unlimited
         number  of  proxies.  Should  one proxy fail, cntlm automatically moves on to the next one. The connect request fails only if the whole
@@ -51,12 +58,15 @@ in
     };
 
     noproxy = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         A list of domains where the proxy is skipped.
       '';
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
-      example = [ "*.example.com" "example.com" ];
+      example = [
+        "*.example.com"
+        "example.com"
+      ];
     };
 
     listen = mkOption {
@@ -81,19 +91,19 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc "Additional config appended to the end of the generated {file}`cntlm.conf`.";
+      description = "Additional config appended to the end of the generated {file}`cntlm.conf`.";
     };
 
     configText = mkOption {
-       type = types.lines;
-       default = "";
-       description = lib.mdDoc "Verbatim contents of {file}`cntlm.conf`.";
+      type = types.lines;
+      default = "";
+      description = "Verbatim contents of {file}`cntlm.conf`.";
     };
 
     user = mkOption {
       default = config.user.name;
       type = types.nullOr types.str;
-      description = lib.mdDoc "Username for daemon.";
+      description = "Username for daemon.";
     };
 
   };
@@ -125,7 +135,7 @@ in
         isSystemUser = true;
         group = "cntlm";
       };
-      groups.cntlm = {};
+      groups.cntlm = { };
     };
   };
 }

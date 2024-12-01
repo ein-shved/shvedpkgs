@@ -1,48 +1,27 @@
 {
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-24.05;
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     home-manager = {
-      url = github:nix-community/home-manager/release-24.05;
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    flake-utils.url = github:numtide/flake-utils;
-    nvchad = {
-      url = github:ein-shved/NvChad/v2.0;
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
-    };
+    flake-utils.url = "github:numtide/flake-utils";
     agenix = {
-      url = github:ryantm/agenix/0.14.0;
+      url = "github:ryantm/agenix/0.14.0";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
       };
     };
     ide-manager = {
-      url = github:ein-shved/ide/v0.3.0;
+      url = "github:ein-shved/ide/v0.3.0";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
       };
     };
     kompas3d = {
-      url = github:ein-shved/nix-kompas3d;
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
-    };
-    gitwatch = {
-      url = github:ein-shved/gitwatch;
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
-    };
-    yandex-music = {
-      url = github:cucumber-sp/yandex-music-linux;
+      url = "github:ein-shved/nix-kompas3d";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
@@ -58,16 +37,14 @@
     };
   };
   outputs =
-    { self
-    , nixpkgs
-    , flake-utils
-    , agenix
-    , kompas3d
-    , gitwatch
-    , yandex-music
-    , vim
-    , ...
-    } @ attrs:
+    {
+      nixpkgs,
+      flake-utils,
+      agenix,
+      kompas3d,
+      vim,
+      ...
+    }@attrs:
     let
       _modules = [
         ./config
@@ -75,100 +52,107 @@
         ./pkgs
         agenix.nixosModules.default
         kompas3d.nixosModules.default
-        yandex-music.nixosModules.default
         vim.nixosModules.default
         { nixpkgs.overlays = [ agenix.overlays.default ]; }
-      ]
-      ++ gitwatch.modules;
-      mkConfigs = hosts: flake-utils.lib.eachDefaultSystem (system:
-        let
-          pkgs = import nixpkgs { inherit system; };
-          _lib = import ./lib { lib = pkgs.lib; };
+      ];
+      mkConfigs =
+        hosts:
+        flake-utils.lib.eachDefaultSystem (
+          system:
+          let
+            pkgs = import nixpkgs { inherit system; };
+            _lib = import ./lib { lib = pkgs.lib; };
 
-          mkDevShellFor = config: name: pkgs.mkShell {
-            packages = builtins.filter
-              (pkg: pkgs.lib.getName pkg.name == name)
-              config.environment.systemPackages;
-          };
+            mkDevShellFor =
+              config: name:
+              pkgs.mkShell {
+                packages = builtins.filter (
+                  pkg: pkgs.lib.getName pkg.name == name
+                ) config.environment.systemPackages;
+              };
 
-          mkDevShellsFor = with builtins; config: names:
-            listToAttrs (map
-              (name: { inherit name; value = mkDevShellFor config name; })
-              names);
+            mkDevShellsFor =
+              config: names:
+              builtins.listToAttrs (
+                map (name: {
+                  inherit name;
+                  value = mkDevShellFor config name;
+                }) names
+              );
 
-          mkConfig =
-            { hostname
-            , specialArgs ? { }
-            , modules ? [ ]
-            ,
-            }: nixpkgs.lib.nixosSystem {
-              inherit system;
-              specialArgs = {
-                lib = pkgs.lib // _lib;
+            mkConfig =
+              {
+                hostname,
+                specialArgs ? { },
+                modules ? [ ],
+              }:
+              nixpkgs.lib.nixosSystem {
                 inherit system;
-              } // attrs // specialArgs;
-              modules = _modules ++ modules;
+                specialArgs = {
+                  lib = pkgs.lib // _lib;
+                  inherit system;
+                } // attrs // specialArgs;
+                modules = _modules ++ modules;
+              };
+          in
+          rec {
+            packages = {
+              nixosConfigurations = builtins.mapAttrs (
+                hostname: v: mkConfig (v // { inherit hostname; })
+              ) hosts;
             };
-        in
-        rec {
-          packages = {
-            nixosConfigurations = builtins.mapAttrs
-              (hostname: v: mkConfig (v // { inherit hostname; }))
-              hosts;
-          };
-          devShells = mkDevShellsFor
-            packages.nixosConfigurations.generic.config [ "neovim" ];
-        });
+            devShells = mkDevShellsFor packages.nixosConfigurations.generic.config [
+              "neovim"
+            ];
+          }
+        );
 
-      mkConfig =
-        { hostname
-        , ...
-        } @ attrs: mkConfigs { ${hostname} = attrs; };
+      mkConfig = { hostname, ... }@attrs: mkConfigs { ${hostname} = attrs; };
 
-      extend = self: { modules ? [ ]
-                     , specialArgs ? { }
-                     , prefix ? [ ]
-                     , hosts ? { }
-                     , ...
-                     }@extraArgs:
+      extend =
+        self:
+        {
+          modules ? [ ],
+          specialArgs ? { },
+          prefix ? [ ],
+          hosts ? { },
+          ...
+        }@extraArgs:
         let
-          mapConfigurations = configurations:
-            builtins.mapAttrs
-              (
-                name: config:
-                  let
-                    globalExtended = config.extendModules {
-                      inherit modules specialArgs prefix;
-                    };
-                    localExtended = globalExtended.extendModules
-                      (if hosts ? ${name} then hosts.${name} else { });
-                  in
-                  localExtended
-              )
-              configurations;
-          mapSystems = systems:
-            builtins.mapAttrs
-              (name: system:
-                {
-                  nixosConfigurations = mapConfigurations system.nixosConfigurations;
-                })
-              systems;
+          mapConfigurations =
+            configurations:
+            builtins.mapAttrs (
+              name: config:
+              let
+                globalExtended = config.extendModules { inherit modules specialArgs prefix; };
+                localExtended = globalExtended.extendModules (
+                  if hosts ? ${name} then hosts.${name} else { }
+                );
+              in
+              localExtended
+            ) configurations;
+          mapSystems =
+            systems:
+            builtins.mapAttrs (name: system: {
+              nixosConfigurations = mapConfigurations system.nixosConfigurations;
+            }) systems;
           updModules = self.modules ++ modules;
-          updSelf = self // {
-            packages = mapSystems self.packages;
-            extend = extend updSelf;
-            modules = updModules;
-            inherit mkConfig;
-          } // extraArgs;
+          updSelf =
+            self
+            // {
+              packages = mapSystems self.packages;
+              extend = extend updSelf;
+              modules = updModules;
+              inherit mkConfig;
+            }
+            // extraArgs;
         in
         updSelf;
 
       allConfigurations = mkConfigs (
         {
           generic = {
-            modules = [{
-              user.name = "NixOS";
-            }];
+            modules = [ { user.name = "NixOS"; } ];
           };
           # Run with
           # nixos-rebuild build-vm --flake .#testA && \

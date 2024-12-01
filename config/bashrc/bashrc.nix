@@ -15,7 +15,7 @@
         enableBashIntegration = true;
       };
       bash = {
-        enableCompletion = true;
+        completion.enable = true;
         enableLsColors = true;
         shellAliases = {
           grep = "grep --colour=auto";
