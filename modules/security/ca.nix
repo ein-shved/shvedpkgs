@@ -46,10 +46,9 @@ in
         echo | ${modutil} -add eToken -libfile                     \
                ${pcsc-safenet}/lib/libeToken.so || exit 1;
 
-        # TODO(Shvedov): Rotoken does not works for modutil yet
-        # echo | ${modutil} -delete "Rutoken PKCS11" || true;
-        # echo | ${modutil} -add "Rutoken PKCS11" -libfile                \
-        #        ${rtpkcs11ecp}/lib/librtpkcs11ecp.so || exit 1;
+        echo | ${modutil} -delete "Rutoken PKCS11" || true;
+        echo | ${modutil} -add "Rutoken PKCS11" -libfile                \
+               ${rtpkcs11ecp}/lib/librtpkcs11ecp.so || exit 1;
       '';
     };
   };
