@@ -7,8 +7,7 @@ lib.mkOverlay (
       name = "nixos";
       runtimeInputs = [ nixos-rebuild jq ];
       text = ''
-        cd /etc/nixos/
-        nix flake update
+        rm -f /etc/nixos/flake.lock
 
         REMOTE_SUDO=()
         if [ "$UID" != 0 ]; then
