@@ -1,6 +1,6 @@
 {
   imports = [
-    ./translate-shell
     ./prusa-slicer
+    ./translate-shell
   ];
 }

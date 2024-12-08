@@ -1,8 +1,14 @@
-{ lib, config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.environment.printing3d;
 in
 {
+  imports = [ ./freecad ];
   options.environment.printing3d = {
     enable = lib.mkEnableOption ''
       Is current system used for 3D modelling and printing
@@ -20,24 +26,27 @@ in
     environment.systemPackages = [
       pkgs.prusa-slicer
     ];
-    services.kompas3d.enable = true;
     home.activations = {
-      prusaConfig = if cfg.prusaConfig == null then "true" else ''
-        configDir=$HOME/.config/PrusaSlicer
-        if ! [ -d "$configDir" ]; then
-          echo "Copy ${cfg.prusaConfig} to $configDir"
-          mkdir -p "$(dirname "$configDir")"
-          set -x
-          ${pkgs.rsync}/bin/rsync -r \
-            --mkpath \
-            --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r \
-            ${cfg.prusaConfig}/* \
-            $configDir
-          set +x
+      prusaConfig =
+        if cfg.prusaConfig == null then
+          "true"
         else
-          echo "$configDir already exists"
-        fi
-      '';
+          ''
+            configDir=$HOME/.config/PrusaSlicer
+            if ! [ -d "$configDir" ]; then
+              echo "Copy ${cfg.prusaConfig} to $configDir"
+              mkdir -p "$(dirname "$configDir")"
+              set -x
+              ${pkgs.rsync}/bin/rsync -r \
+                --mkpath \
+                --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r \
+                ${cfg.prusaConfig}/* \
+                $configDir
+              set +x
+            else
+              echo "$configDir already exists"
+            fi
+          '';
     };
     services.gitwatch = {
       modeling3d = {
@@ -49,4 +58,3 @@ in
     };
   };
 }
-
