@@ -7,7 +7,9 @@
     ./anyrun
     ./hyprland
     ./kitty
+    ./niri
     ./waybar
+    ./wpaperd
     ./xdg
   ];
   config = {

@@ -8,7 +8,8 @@ let
   user = config.user.name;
   monitors = config.hardware.aliasedMonitors;
 
-  hyprlandEnabled = true;
+  # Disabling due to switching to niri
+  hyprlandEnabled = false;
 in
 {
   config = {

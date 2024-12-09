@@ -1,0 +1,227 @@
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  inherit (lib)
+    elemAt
+    splitString
+    removePrefix
+    mapAttrs
+    mapAttrs'
+    nameValuePair
+    map
+    toList
+    length
+    toInt
+    ;
+  user = config.user.name;
+  nirilib = config.home-manager.users.${user}.lib.niri;
+  monitors = config.hardware.aliasedMonitors;
+  mkOutput =
+    name: monitor:
+    let
+      optionalAttr = pred: val: if pred then val else null;
+      optionalIntAttr =
+        name: optionalAttr (monitor ? "${name}") (toInt monitor."${name}");
+      name' = removePrefix "desc:" name;
+      position =
+        let
+          splitted = splitString "x" monitor.position;
+        in
+        optionalAttr (monitor ? position && length splitted > 1) {
+          x = toInt (elemAt splitted 0);
+          y = toInt (elemAt splitted 1);
+        };
+      mode =
+        let
+          splitted = splitString "x" monitor.resolution;
+        in
+        optionalAttr (monitor ? resolution && length splitted > 1) {
+          width = toInt (elemAt splitted 0);
+          height = toInt (elemAt splitted 1);
+          # TODO(Shvedov): parse refresh
+        };
+      scale = optionalIntAttr "scale";
+      transform = monitor.transform or { };
+      output = {
+        inherit
+          position
+          mode
+          scale
+          transform
+          ;
+      };
+    in
+    nameValuePair name' output;
+  outputs = mapAttrs' mkOutput monitors;
+in
+{
+  programs.niri = {
+    enable = true;
+  };
+  home-manager.users.${user}.programs.niri.settings = {
+    inherit outputs;
+
+    input.keyboard = {
+      xkb = {
+        layout = "us,ru";
+        options = "grp:alt_shift_toggle,ctrl:nocaps";
+      };
+      track-layout = "window";
+    };
+
+    layout = {
+      gaps = 8;
+      center-focused-column = "never";
+      default-column-width.proportion = 0.5;
+    };
+
+    window-rules = [
+      {
+        geometry-corner-radius = {
+          bottom-left = 6.;
+          bottom-right = 6.;
+          top-left = 6.;
+          top-right = 6.;
+        };
+        clip-to-geometry = true;
+      }
+      {
+        matches = [
+          { is-focused = false; }
+        ];
+        opacity = 0.8;
+      }
+    ];
+    prefer-no-csd = true;
+
+    spawn-at-startup =
+      let
+        spawns = map (spawnie: {
+          command = toList spawnie;
+        });
+      in
+      spawns [
+        "waybar"
+        "hypridle"
+        "wpaperd"
+        "swaync"
+        "udiskie"
+      ];
+
+    binds =
+      let
+        inherit (nirilib) actions;
+        spawns = mapAttrs (name: spawnie: { action.spawn = spawnie; });
+        acts = mapAttrs (name: actie: { action = actie; });
+      in
+      (acts (
+        with actions;
+        {
+          "Mod+Shift+Slash" = show-hotkey-overlay;
+          "Mod+Shift+E" = quit;
+
+          "Mod+Q" = close-window;
+          "Mod+C" = close-window;
+          "Alt+F4" = close-window;
+
+          "Mod+Up" = focus-window-or-workspace-up;
+          "Mod+Down" = focus-window-or-workspace-down;
+          "Mod+Left" = focus-column-left;
+          "Mod+Right" = focus-column-right;
+
+          "Mod+Shift+Up" = move-window-up-or-to-workspace-up;
+          "Mod+Shift+Down" = move-window-down-or-to-workspace-down;
+          "Mod+Shift+Left" = move-column-left;
+          "Mod+Shift+Right" = move-column-right;
+
+          "Mod+Ctrl+Up" = focus-monitor-up;
+          "Mod+Ctrl+Down" = focus-monitor-down;
+          "Mod+Ctrl+Left" = focus-monitor-left;
+          "Mod+Ctrl+Right" = focus-monitor-right;
+
+          "Mod+Shift+Ctrl+Up" = move-window-to-monitor-up;
+          "Mod+Shift+Ctrl+Down" = move-window-to-monitor-down;
+          "Mod+Shift+Ctrl+Left" = move-window-to-monitor-left;
+          "Mod+Shift+Ctrl+Right" = move-window-to-monitor-right;
+
+          "Shift+Print" = screenshot;
+          "Print" = screenshot-screen;
+        }
+      ))
+      // (spawns {
+        "Mod+T" = "kitty";
+        "F12" = "kitty";
+
+        "Alt+F2" = "anyrun";
+        "Alt+F3" = "anyrun";
+        "Mod+D" = "anyrun";
+        "Mod+L" = "hyprlock";
+
+        "XF86AudioRaiseVolume" = [
+          "amixer"
+          "set"
+          "Master"
+          "10%+"
+        ];
+        "XF86AudioLowerVolume" = [
+          "amixer"
+          "set"
+          "Master"
+          "10%-"
+        ];
+        "XF86MonBrightnessUp" = [
+          "brightnessctl"
+          "set"
+          "10%+"
+        ];
+        "XF86MonBrightnessDown" = [
+          "brightnessctl"
+          "set"
+          "10%-"
+        ];
+        "XF86AudioMute" = [
+          "amixer"
+          "set"
+          "Master"
+          "toggle"
+        ];
+        "XF86AudioPlay" = [
+          "playerctl"
+          "-a"
+          "play-pause"
+        ];
+        "ALT+7" = [
+          "playerctl"
+          "-a"
+          "play-pause"
+        ];
+        "XF86AudioNext" = [
+          "playerctl"
+          "next"
+        ];
+        "XF86AudioPrev" = [
+          "playerctl"
+          "previous"
+        ];
+
+        # Open notifications panel
+        "Mod+N" = [
+          "swaync-client"
+          "-t"
+        ];
+        # Clear notifications and close panel
+        "Mod+Shift+N" =
+          let
+            clear-close = pkgs.writers.writeBash "clear-close-swaync" ''
+              swaync-client -C
+              swaync-client -cp
+            '';
+          in
+          "${clear-close}";
+      });
+  };
+}
