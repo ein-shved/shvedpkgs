@@ -10,6 +10,7 @@
       brightnessctl
       hypridle
       hyprlock
+      niri-launch-terminal
       pavucontrol
       swaynotificationcenter
       udiskie
