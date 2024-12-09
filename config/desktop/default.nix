@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  pkgs,
+  ...
+}:
 {
   imports = [
-    ./xdg
+    ./anyrun
     ./hyprland
+    ./kitty
+    ./waybar
+    ./xdg
   ];
   config = {
     services.xserver = {
@@ -37,4 +43,3 @@
     };
   };
 }
-

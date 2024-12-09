@@ -1,11 +1,6 @@
-{ config
-, ...
-}:
-let
-  user = config.user.name;
-in
+{ ... }:
 {
-  home-manager.users.${user}.programs.waybar = {
+  home.programs.waybar = {
     enable = true;
     style = ./style.css;
     settings = {
@@ -78,7 +73,11 @@ in
           critical-threshold = 80;
           # "format-critical": "{temperatureC}°C {icon}"
           format = "{temperatureC}°C {icon}";
-          format-icons = [ "" "" "" ];
+          format-icons = [
+            ""
+            ""
+            ""
+          ];
         };
         battery = {
           states = {
@@ -93,7 +92,13 @@ in
           format-alt = "{time} {icon}";
           # "format-good": "" # An empty format will hide the module
           # "format-full": ""
-          format-icons = [ " " " " " " " " " " ];
+          format-icons = [
+            " "
+            " "
+            " "
+            " "
+            " "
+          ];
         };
         power-profiles-daemon = {
           format = "{icon}";
@@ -134,7 +139,11 @@ in
             phone = "";
             portable = "";
             car = "";
-            default = [ "" "" "" ];
+            default = [
+              ""
+              ""
+              ""
+            ];
           };
           on-click = "pavucontrol";
         };

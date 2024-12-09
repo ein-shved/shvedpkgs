@@ -4,18 +4,14 @@
   ...
 }:
 let
-  user = config.user.name;
   cfg = config.programs.hyprland;
 in
 {
   imports = [
-    ./anyrun.nix
     ./hypridle.nix
     ./hyprland.nix
     ./hyprlock.nix
     ./hyprpaper.nix
-    ./kitty.nix
-    ./waybar
   ];
 
   options.programs.hyprland =
@@ -50,7 +46,7 @@ in
     };
 
   config = {
-    home-manager.users.${user}.xdg.configFile = lib.concatMapAttrs (
+    home.xdg.configFile = lib.concatMapAttrs (
       name: value:
       let
         hyprPart = str: lib.optionalString value.hypr str;

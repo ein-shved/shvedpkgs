@@ -1,15 +1,12 @@
-{ config, pkgs, ... }:
-let
-  user = config.user.name;
-in
+{ pkgs, ... }:
 {
-  home-manager.users.${user} =
+  home.programs =
     let
       inherit (pkgs) kitty;
-      kitty-installation-dir = "${pkgs.kitty}/lib/kitty";
+      kitty-installation-dir = "${kitty}/lib/kitty";
     in
     {
-      programs.bash = {
+      bash = {
         enable = true;
         bashrcExtra = ''
           if [ -z "$KITTY_INSTALLATION_DIR" ]; then
@@ -17,7 +14,7 @@ in
           fi
         '';
       };
-      programs.kitty = {
+      kitty = {
         enable = true;
         package = kitty;
         shellIntegration = {
@@ -38,4 +35,3 @@ in
       };
     };
 }
-

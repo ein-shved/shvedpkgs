@@ -1,8 +1,7 @@
 { ... }:
 {
-  programs.hyprland.hyprconfig = {
+  home.xdg.configFile = {
     "anyrun/config.ron" = {
-      hypr = false;
       text = ''
         Config(
           // Position/size fields use an enum for the value, it can be either:
@@ -52,7 +51,6 @@
       '';
     };
     "anyrun/shell.ron" = {
-      hypr = false;
       text = ''
         Config(
           prefix: "!",
@@ -61,7 +59,6 @@
       '';
     };
     "anyrun/style.css" = {
-      hypr = false;
       text = ''
         * {
             border:        none;

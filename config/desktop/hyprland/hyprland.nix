@@ -7,13 +7,15 @@
 let
   user = config.user.name;
   monitors = config.hardware.aliasedMonitors;
+
+  hyprlandEnabled = true;
 in
 {
   config = {
     # Enable hyprland both from nixos and from home-manager. First will enable
     # required system options. The second - will enable configuration.
     programs.hyprland = {
-      enable = true;
+      enable = hyprlandEnabled;
     };
 
     environment.systemPackages = with pkgs; [
@@ -60,7 +62,7 @@ in
         };
       };
       wayland.windowManager.hyprland = {
-        enable = true;
+        enable = hyprlandEnabled;
         systemd.enable = true;
         extraConfig =
           let
