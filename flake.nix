@@ -35,6 +35,12 @@
         home-manager.follows = "home-manager";
       };
     };
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs = {
+        nixpkgs-stable.follows = "nixpkgs";
+      };
+    };
   };
   outputs =
     {
@@ -43,6 +49,7 @@
       agenix,
       kompas3d,
       vim,
+      niri,
       ...
     }@attrs:
     let
@@ -54,6 +61,7 @@
         kompas3d.nixosModules.default
         vim.nixosModules.default
         { nixpkgs.overlays = [ agenix.overlays.default ]; }
+        niri.nixosModules.niri
       ];
       mkConfigs =
         hosts:
