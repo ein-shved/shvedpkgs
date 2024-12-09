@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -50,6 +51,7 @@
       kompas3d,
       vim,
       niri,
+      nixpkgs-unstable,
       ...
     }@attrs:
     let
@@ -99,6 +101,7 @@
                 specialArgs = {
                   lib = pkgs.lib // _lib;
                   inherit system;
+                  pkgs-unstable = import nixpkgs-unstable { inherit system; };
                 } // attrs // specialArgs;
                 modules = _modules ++ modules;
               };
