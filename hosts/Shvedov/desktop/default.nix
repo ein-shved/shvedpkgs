@@ -1,5 +1,5 @@
 {
-  programs.hyprland.monitors = {
+  hardware.monitors = {
     DP-1 = {
       position = "0x0";
       scale = "1";

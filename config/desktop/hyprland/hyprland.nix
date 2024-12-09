@@ -1,7 +1,12 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   user = config.user.name;
-  monitors = config.programs.hyprland.monitors;
+  monitors = config.hardware.aliasedMonitors;
 in
 {
   config = {
@@ -60,11 +65,13 @@ in
         extraConfig =
           let
             monName = name: lib.optionalString (name != "default") name;
-            mkMonitor = name: value:
+            mkMonitor =
+              name: value:
               "monitor = ${monName name}, ${value.resolution}, ${value.position}, ${value.scale}";
-            monitors' = lib.foldlAttrs
-              (acc: name: value: acc + "\n${mkMonitor name value}") ""
-              monitors;
+            monitors' = lib.foldlAttrs (
+              acc: name: value:
+              acc + "\n${mkMonitor name value}"
+            ) "" monitors;
           in
           ''
             exec-once = systemctl --user import-environment QT_QPA_PLATFORMTHEME
@@ -298,4 +305,3 @@ in
     };
   };
 }
-

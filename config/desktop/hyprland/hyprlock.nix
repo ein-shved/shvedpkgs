@@ -1,6 +1,6 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 let
-  monitors = config.programs.hyprland.monitors;
+  monitors = config.hardware.aliasedMonitors;
 in
 {
   config.programs.hyprland.hyprconfig.hyprlock = {
@@ -15,12 +15,18 @@ in
             blur_passes = 1
           }
         '';
-        backgrounds = lib.foldlAttrs
-          (acc: name: value: acc + (mkBackground name value))
-          ""
-          (lib.filterAttrs
-            (name: value: value ? wallpaper && value.wallpaper != null)
-            monitors);
+        backgrounds =
+          lib.foldlAttrs
+            (
+              acc: name: value:
+              acc + (mkBackground name value)
+            )
+            ""
+            (
+              lib.filterAttrs (
+                name: value: value ? wallpaper && value.wallpaper != null
+              ) monitors
+            );
 
       in
       ''
@@ -88,4 +94,3 @@ in
       '';
   };
 }
-

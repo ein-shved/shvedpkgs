@@ -1,9 +1,10 @@
 { ... }:
 {
   imports = [
+    ./crypto
     ./development
     ./hosts
+    ./monitors
     ./power
-    ./crypto
   ];
 }
