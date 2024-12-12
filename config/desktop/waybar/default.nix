@@ -1,4 +1,14 @@
 { ... }:
+let
+  language = {
+    format = "{}";
+    format-en = "EN";
+    format-ru = "RU";
+  };
+  workspaces = {
+    format = "{icon}";
+  };
+in
 {
   home.programs.waybar = {
     enable = true;
@@ -14,10 +24,12 @@
         # Choose the order of the modules
         modules-left = [
           "hyprland/workspaces"
+          "niri/workspaces"
           # "custom/media"
         ];
         modules-center = [
           "hyprland/window"
+          "niri/window"
         ];
         modules-right = [
           "idle_inhibitor"
@@ -30,8 +42,9 @@
           #"keyboard-state"
           "battery"
           "clock"
-          "hyprland/language"
           "tray"
+          "hyprland/language"
+          "niri/language"
           #"custom/power"
           "custom/notification"
         ];
@@ -172,14 +185,12 @@
         #    hibernate = "systemctl hibernate";
         #  };
         #};
-        "hyprland/workspaces" = {
-          format = "{icon}";
-        };
-        "hyprland/language" = {
-          format = "{}";
-          format-en = "EN";
-          format-ru = "RU";
-        };
+        "hyprland/workspaces" = workspaces;
+        "niri/workspaces" = workspaces;
+
+        "hyprland/language" = language;
+        "niri/language" = language;
+
         "custom/notification" = {
           tooltip = false;
           format = "{icon}  ";
