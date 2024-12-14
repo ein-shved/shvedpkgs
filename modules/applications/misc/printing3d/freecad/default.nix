@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (pkgs) fetchFromGitHub freecad;
+  inherit (pkgs) fetchFromGitHub freecad-wayland;
   inherit (lib) mkIf;
   cfg = config.environment;
 
@@ -16,7 +16,7 @@ let
     hash = "sha256-NgrBvP+wRNED3JI8zG9JMT//xfZfivQC8yy4m2GsujM=";
   };
 
-  freecad-customized = freecad.customize {
+  freecad-customized = freecad-wayland.customize {
     modules = [
       open-theme
     ];
