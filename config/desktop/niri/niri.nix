@@ -77,6 +77,10 @@ in
       gaps = 8;
       center-focused-column = "never";
       default-column-width.proportion = 0.5;
+      preset-column-widths = [
+        { proportion = 1. / 2.; }
+        { proportion = 1.; }
+      ];
     };
 
     window-rules = [
@@ -147,6 +151,8 @@ in
           "Mod+Shift+Ctrl+Down" = move-window-to-monitor-down;
           "Mod+Shift+Ctrl+Left" = move-window-to-monitor-left;
           "Mod+Shift+Ctrl+Right" = move-window-to-monitor-right;
+
+          "Mod+F" = switch-preset-column-width;
 
           "Shift+Print" = screenshot;
           "Print" = screenshot-screen;
