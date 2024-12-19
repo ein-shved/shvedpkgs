@@ -52,6 +52,9 @@ in
       gcmnu
       gitupdate
       git-review
+
+      libclang.python #For git format-patch
+      clang-tools
     ];
   };
 }
