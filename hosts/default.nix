@@ -25,4 +25,10 @@ in
       }
     ];
   };
+  ShvedLaptop = {
+    modules = [
+      ./ShvedLaptop/configuration.nix
+      userconfig
+    ];
+  };
 }
