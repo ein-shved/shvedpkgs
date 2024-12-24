@@ -121,6 +121,13 @@ in
         inherit (nirilib) actions;
         spawns = mapAttrs (name: spawnie: { action.spawn = spawnie; });
         acts = mapAttrs (name: actie: { action = actie; });
+        focus-workspace-at = key: ws: {
+          "Mod+${builtins.toString key}".action.focus-workspace = ws;
+        };
+        focus-workspace =
+          ws: if ws == 10 then focus-workspace-at 0 ws else focus-workspace-at ws ws;
+        focus-workspaces =
+          workspaces: lib.foldl' (all: ws: all // focus-workspace ws) {} workspaces;
       in
       (acts (
         with actions;
@@ -228,6 +235,7 @@ in
             '';
           in
           "${clear-close}";
-      });
+      })
+      // (focus-workspaces (lib.genList (x: x + 1) 10));
   };
 }
