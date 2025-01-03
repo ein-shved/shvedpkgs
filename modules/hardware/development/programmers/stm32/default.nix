@@ -84,7 +84,6 @@ in
   config = {
     nixpkgs.overlays = [(self: super: { st-gpio = st-gpio self; })];
     environment.systemPackages = with pkgs; [
-      stm32cubemx
       stlink
       pkgs.st-gpio
     ];
