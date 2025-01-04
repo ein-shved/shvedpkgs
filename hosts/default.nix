@@ -31,4 +31,10 @@ in
       userconfig
     ];
   };
+  ShvedGaming = {
+    modules = [
+      ./ShvedGaming/configuration.nix
+      userconfig
+    ];
+  };
 }
