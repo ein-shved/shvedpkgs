@@ -15,6 +15,7 @@ let
     path
     listOf
     anything
+    bool
     ;
 
   cfg = config.hardware.monitors;
@@ -47,6 +48,11 @@ in
       '';
       type = attrsOf (submodule {
         options = {
+          enable = mkOption {
+            description = "Whenether to enable monitor";
+            default = true;
+            type = bool;
+          };
           resolution = mkOption {
             description = "Resolution for monitor";
             default = "preferred";

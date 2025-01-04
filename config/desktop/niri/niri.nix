@@ -53,6 +53,7 @@ let
           scale
           transform
           ;
+        inherit (monitor) enable;
       };
     in
     nameValuePair name' output;
