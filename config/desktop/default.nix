@@ -40,9 +40,5 @@
     environment.systemPackages = with pkgs; [
       networkmanagerapplet
     ];
-    environment.sessionVariables = {
-      GTK_THEME = "Adwaita:dark";
-      NIXOS_OZONE_WL = "1";
-    };
   };
 }

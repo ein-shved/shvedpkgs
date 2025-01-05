@@ -115,7 +115,18 @@ in
         "wpaperd"
         "swaync"
         "udiskie"
+        [
+          "xwayland-satellite"
+          ":0"
+        ]
       ];
+
+    environment = {
+      GTK_THEME = "Adwaita:dark";
+      QT_QPA_PLATFROM = "wayland";
+      NIXOS_OZONE_WL = "1";
+      DISPLAY = ":0"; # We run xwayland-satellite
+    };
 
     binds =
       let
@@ -128,7 +139,7 @@ in
         focus-workspace =
           ws: if ws == 10 then focus-workspace-at 0 ws else focus-workspace-at ws ws;
         focus-workspaces =
-          workspaces: lib.foldl' (all: ws: all // focus-workspace ws) {} workspaces;
+          workspaces: lib.foldl' (all: ws: all // focus-workspace ws) { } workspaces;
       in
       (acts (
         with actions;

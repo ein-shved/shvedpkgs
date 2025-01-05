@@ -17,6 +17,7 @@
       waybar
       wl-clipboard
       wpaperd
+      xwayland-satellite
     ];
   };
 }
