@@ -1,5 +1,5 @@
 
-{ pkgs, config, ... }:
+{ ... }:
 {
   imports = [
    ./pulseaudio
@@ -9,10 +9,5 @@
   ];
   config = {
     documentation.man.generateCaches = true;
-    programs.steam = {
-      enable = true;
-      remotePlay.openFirewall = true;
-      dedicatedServer.openFirewall = true;
-    };
   };
 }

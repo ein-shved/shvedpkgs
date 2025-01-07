@@ -1,8 +1,9 @@
 { ... }:
 {
   imports = [
-    ./translate-shell
+    ./gaming
     ./printing3d
+    ./translate-shell
   ];
 }
 
