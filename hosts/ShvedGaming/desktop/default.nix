@@ -1,4 +1,5 @@
 {
+  hardware.singleOutput.enable = true;
   hardware.monitors = {
     "desc:XMI Mi Monitor 0000000000000" = {
       resolution = "3440x1440";

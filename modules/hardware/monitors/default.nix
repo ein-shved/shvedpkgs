@@ -2,6 +2,7 @@
 let
   inherit (lib)
     mkOption
+    mkEnableOption
     concatMapAttrs
     unique
     map
@@ -30,12 +31,13 @@ let
       aliasedList = map mkMon aliases;
     in
     # Fold list to one set
-    foldl' (res: v: res // v) {} aliasedList
+    foldl' (res: v: res // v) { } aliasedList
   ) cfg;
 
 in
 {
   options.hardware = {
+    singleOutput.enable = mkEnableOption "this setup is used with single output";
     monitors = mkOption {
       description = ''
         The per-monitor configuration for hyprland, hyprpaper and hyprlock.

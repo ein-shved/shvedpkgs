@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
+let
+  singleOutput = config.hardware.singleOutput;
+in
 {
   imports = [
     ./niri.nix
@@ -18,6 +21,6 @@
       wl-clipboard
       wpaperd
       xwayland-satellite
-    ];
+    ] ++ (lib.optional singleOutput.enable niri-single-output);
   };
 }

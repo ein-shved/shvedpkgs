@@ -16,6 +16,8 @@ let
     toList
     length
     toInt
+    optional
+    optionalAttrs
     ;
   user = config.user.name;
   nirilib = config.home-manager.users.${user}.lib.niri;
@@ -58,6 +60,7 @@ let
     in
     nameValuePair name' output;
   outputs = mapAttrs' mkOutput monitors;
+  singleOutput = config.hardware.singleOutput;
 in
 {
   programs.niri = {
@@ -109,17 +112,23 @@ in
           command = toList spawnie;
         });
       in
-      spawns [
-        "waybar"
-        "hypridle"
-        "wpaperd"
-        "swaync"
-        "udiskie"
-        [
-          "xwayland-satellite"
-          ":0"
+      spawns (
+        (optional singleOutput.enable [
+          "niri-single-output"
+          "init"
+        ])
+        ++ [
+          "waybar"
+          "hypridle"
+          "wpaperd"
+          "swaync"
+          "udiskie"
+          [
+            "xwayland-satellite"
+            ":0"
+          ]
         ]
-      ];
+      );
 
     environment = {
       GTK_THEME = "Adwaita:dark";
@@ -177,77 +186,85 @@ in
           "Print" = screenshot-screen;
         }
       ))
-      // (spawns {
-        "Mod+T" = "kitty";
-        "F12" = "niri-launch-terminal";
+      // (spawns (
+        {
+          "Mod+T" = "kitty";
+          "F12" = "niri-launch-terminal";
 
-        "Alt+F2" = "anyrun";
-        "Alt+F3" = "anyrun";
-        "Mod+D" = "anyrun";
-        "Mod+L" = "hyprlock";
+          "Alt+F2" = "anyrun";
+          "Alt+F3" = "anyrun";
+          "Mod+D" = "anyrun";
+          "Mod+L" = "hyprlock";
 
-        "XF86AudioRaiseVolume" = [
-          "amixer"
-          "set"
-          "Master"
-          "10%+"
-        ];
-        "XF86AudioLowerVolume" = [
-          "amixer"
-          "set"
-          "Master"
-          "10%-"
-        ];
-        "XF86MonBrightnessUp" = [
-          "brightnessctl"
-          "set"
-          "10%+"
-        ];
-        "XF86MonBrightnessDown" = [
-          "brightnessctl"
-          "set"
-          "10%-"
-        ];
-        "XF86AudioMute" = [
-          "amixer"
-          "set"
-          "Master"
-          "toggle"
-        ];
-        "XF86AudioPlay" = [
-          "playerctl"
-          "-a"
-          "play-pause"
-        ];
-        "ALT+7" = [
-          "playerctl"
-          "-a"
-          "play-pause"
-        ];
-        "XF86AudioNext" = [
-          "playerctl"
-          "next"
-        ];
-        "XF86AudioPrev" = [
-          "playerctl"
-          "previous"
-        ];
+          "XF86AudioRaiseVolume" = [
+            "amixer"
+            "set"
+            "Master"
+            "10%+"
+          ];
+          "XF86AudioLowerVolume" = [
+            "amixer"
+            "set"
+            "Master"
+            "10%-"
+          ];
+          "XF86MonBrightnessUp" = [
+            "brightnessctl"
+            "set"
+            "10%+"
+          ];
+          "XF86MonBrightnessDown" = [
+            "brightnessctl"
+            "set"
+            "10%-"
+          ];
+          "XF86AudioMute" = [
+            "amixer"
+            "set"
+            "Master"
+            "toggle"
+          ];
+          "XF86AudioPlay" = [
+            "playerctl"
+            "-a"
+            "play-pause"
+          ];
+          "ALT+7" = [
+            "playerctl"
+            "-a"
+            "play-pause"
+          ];
+          "XF86AudioNext" = [
+            "playerctl"
+            "next"
+          ];
+          "XF86AudioPrev" = [
+            "playerctl"
+            "previous"
+          ];
 
-        # Open notifications panel
-        "Mod+N" = [
-          "swaync-client"
-          "-t"
-        ];
-        # Clear notifications and close panel
-        "Mod+Shift+N" =
-          let
-            clear-close = pkgs.writers.writeBash "clear-close-swaync" ''
-              swaync-client -C
-              swaync-client -cp
-            '';
-          in
-          "${clear-close}";
-      })
+          # Open notifications panel
+          "Mod+N" = [
+            "swaync-client"
+            "-t"
+          ];
+          # Clear notifications and close panel
+          "Mod+Shift+N" =
+            let
+              clear-close = pkgs.writers.writeBash "clear-close-swaync" ''
+                swaync-client -C
+                swaync-client -cp
+              '';
+            in
+            "${clear-close}";
+        }
+        // optionalAttrs singleOutput.enable {
+          "Mod+O" = [
+            "niri-single-output"
+            "next"
+          ];
+        }
+      ))
       // (focus-workspaces (lib.genList (x: x + 1) 10));
   };
 }
