@@ -102,6 +102,7 @@
                   lib = pkgs.lib // _lib;
                   inherit system;
                   pkgs-unstable = import nixpkgs-unstable { inherit system; };
+                  inherit (pkgs) path;
                 } // attrs // specialArgs;
                 modules = _modules ++ modules;
               };
