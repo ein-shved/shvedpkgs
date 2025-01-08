@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   ...
 }:
 {
@@ -13,13 +14,16 @@
     ./xdg
   ];
   config = {
-    services.xserver = {
+    services.displayManager = {
       enable = true;
-      xkb.layout = "us,ru";
-      displayManager.gdm = {
+      autoLogin = {
         enable = true;
-        debug = true;
-        wayland = true;
+        user = config.user.name;
+      };
+      defaultSession = "niri";
+      sddm = {
+        enable = true;
+        wayland.enable = true;
       };
     };
     fonts.packages = with pkgs; [

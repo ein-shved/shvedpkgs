@@ -118,6 +118,7 @@ in
           "init"
         ])
         ++ [
+          "hyprlock"
           "waybar"
           "hypridle"
           "wpaperd"
