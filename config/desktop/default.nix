@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }:
 {
@@ -26,6 +27,7 @@
         wayland.enable = true;
       };
     };
+    services.gnome.gnome-keyring.enable = lib.mkForce false;
     fonts.packages = with pkgs; [
       jetbrains-mono
       nerdfonts
