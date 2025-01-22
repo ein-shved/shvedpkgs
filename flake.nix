@@ -40,6 +40,7 @@
       url = "github:sodiboo/niri-flake";
       inputs = {
         nixpkgs-stable.follows = "nixpkgs";
+        nixpkgs.follows = "nixpkgs-unstable";
       };
     };
   };
