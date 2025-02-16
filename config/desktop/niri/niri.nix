@@ -192,7 +192,10 @@ in
       ))
       // (spawns (
         {
-          "Mod+T" = "kitty";
+          "Mod+T" = [
+            "niri-launcher"
+            "kitty"
+          ];
           "F12" = "niri-launch-terminal";
 
           "Alt+F2" = "anyrun";

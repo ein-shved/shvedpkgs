@@ -14,6 +14,7 @@ in
       hypridle
       hyprlock
       niri-launch-terminal
+      niri-launcher
       pavucontrol
       swaynotificationcenter
       udiskie

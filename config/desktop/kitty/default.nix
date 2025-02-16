@@ -29,6 +29,7 @@
           tab_bar_style = "powerline";
           enabled_layouts = "horizontal";
           allow_remote_control = "yes";
+          listen_on = ''unix:''${XDG_RUNTIME_DIR}/kitty-{kitty_pid}'';
 
           notify_on_cmd_finish = "unfocused 10.0";
         };
