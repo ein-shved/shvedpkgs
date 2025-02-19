@@ -8,7 +8,7 @@
     };
     flake-utils.url = "github:numtide/flake-utils";
     agenix = {
-      url = "github:ryantm/agenix/0.14.0";
+      url = "github:ryantm/agenix/0.15.0";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
