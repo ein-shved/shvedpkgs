@@ -8,6 +8,9 @@
 
   hardware.isLaptop = false;
 
+  # Need to develop some holders for job
+  environment.printing3d.enable = true;
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
