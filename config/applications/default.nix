@@ -30,6 +30,8 @@
       gdb
       gimp
       gnome-calculator
+      hunspellDicts.en-us
+      hunspellDicts.ru-ru
       inotify-tools
       jq
       killall
