@@ -184,7 +184,8 @@ in
           "Mod+F" = switch-preset-column-width;
 
           "Shift+Print" = screenshot;
-          "Print" = screenshot-screen;
+          # TODO(Shvedov): This action was deprecated. Find replacement
+          # "Print" = screenshot-screen;
 
           "Mod+H" = switch-focus-between-floating-and-tiling;
           "Mod+Shift+H" = toggle-window-floating;
