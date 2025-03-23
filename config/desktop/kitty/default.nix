@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
   home.programs =
     let
@@ -15,7 +15,7 @@
         '';
       };
       kitty = {
-        enable = true;
+        enable = config.hardware.needGraphic;
         package = kitty;
         shellIntegration = {
           mode = "enabled";

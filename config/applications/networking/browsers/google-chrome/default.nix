@@ -1,11 +1,11 @@
-{ lib, config, pkgs, ... }:
+{ pkgs, config, ... }:
 {
   config = {
-    environment.systemPackages = [
+    environment.graphicPackages = [
       pkgs.brave
     ];
     programs.chromium = {
-      enable = true;
+      enable = config.hardware.needGraphic;
       defaultSearchProviderSearchURL = ''
         https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}
       '';
@@ -15,7 +15,10 @@
       extraOpts = {
         "PasswordManagerEnabled" = false;
         "SpellcheckEnabled" = true;
-        "SpellcheckLanguage" = [ "ru-RU" "en-US" ];
+        "SpellcheckLanguage" = [
+          "ru-RU"
+          "en-US"
+        ];
       };
     };
   };

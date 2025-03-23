@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   config = {
-    environment.systemPackages = with pkgs; [
+    environment.graphicPackages = with pkgs; [
       wineWowPackages.stable
       winetricks
     ];
