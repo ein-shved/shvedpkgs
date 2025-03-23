@@ -64,7 +64,7 @@ let
 in
 {
   programs.niri = {
-    enable = true;
+    enable = config.hardware.needGraphic;
   };
   home-manager.users.${user}.programs.niri.settings = {
     inherit outputs;

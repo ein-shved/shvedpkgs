@@ -1,7 +1,7 @@
-{ ... }:
+{ config, ... }:
 {
   services.pipewire = {
-    enable = true;
+    enable = config.hardware.needGraphic;
     # TODO(Shvedov): Switch to pipewire fully
     audio.enable = false;
     pulse.enable = false;

@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 let
   language = {
     format = "{}";
@@ -11,7 +11,7 @@ let
 in
 {
   home.programs.waybar = {
-    enable = true;
+    enable = config.hardware.needGraphic;
     style = ./style.css;
     settings = {
       topBar = {
