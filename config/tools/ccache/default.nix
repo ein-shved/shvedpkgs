@@ -4,7 +4,7 @@ let
 in
 {
   programs.ccache = {
-    enable = true;
+    enable = config.hardware.development;
     cacheDir = "/nix/var/cache/ccache";
   };
   nixpkgs.overlays = [

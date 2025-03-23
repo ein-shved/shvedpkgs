@@ -28,7 +28,9 @@
       plymouth.enable = true;
       kernelParams = [ "quiet" ];
       supportedFilesystems = [ "ntfs" ];
-      binfmt.emulatedSystems = [ "aarch64-linux" ];
+      binfmt.emulatedSystems = lib.optionals config.hardware.development [
+        "aarch64-linux"
+      ];
     };
     documentation.nixos = {
       includeAllModules = true;

@@ -4,6 +4,9 @@
   lib,
   ...
 }:
+let
+  inherit (config.hardware) needGraphic;
+in
 {
   imports = [
     ./anyrun
@@ -16,14 +19,14 @@
   ];
   config = {
     services.displayManager = {
-      enable = true;
+      enable = needGraphic;
       autoLogin = {
         enable = true;
         user = config.user.name;
       };
       defaultSession = "niri";
       sddm = {
-        enable = true;
+        enable = needGraphic;
         wayland.enable = true;
       };
     };
@@ -42,8 +45,8 @@
       platformTheme = "gnome";
       style = "adwaita-dark";
     };
-    programs.nm-applet.enable = true;
-    environment.systemPackages = with pkgs; [
+    programs.nm-applet.enable = needGraphic;
+    environment.graphicPackages = with pkgs;  [
       networkmanagerapplet
     ];
   };
