@@ -181,6 +181,14 @@ in
           "Mod+Shift+Ctrl+Left" = move-window-to-monitor-left;
           "Mod+Shift+Ctrl+Right" = move-window-to-monitor-right;
 
+          "Mod+Alt+Up" = move-workspace-up;
+          "Mod+Alt+Down" = move-workspace-down;
+
+          "Mod+Alt+Ctrl+Up" = move-workspace-to-monitor-up;
+          "Mod+Alt+Ctrl+Down" = move-workspace-to-monitor-down;
+          "Mod+Alt+Ctrl+Left" = move-workspace-to-monitor-left;
+          "Mod+Alt+Ctrl+Right" = move-workspace-to-monitor-right;
+
           "Mod+F" = switch-preset-column-width;
 
           "Shift+Print" = screenshot;
