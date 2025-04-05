@@ -1,10 +1,13 @@
-{ config, pkgs, ... }:
+{ config, system, ... }:
+let
+  domainHost = config.kl.domain.host;
+  userName = config.user.name;
+in
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-      ./desktop
-    ];
+  imports = [
+    ./hardware-configuration.nix
+    ./desktop
+  ];
 
   hardware.isLaptop = true;
 
@@ -30,9 +33,6 @@
     "aesni_intel"
     "cryptd"
   ];
-
-  nix.settings.sandbox = false;
-
 
   networking.hostName = "Shvedov-NB"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -63,6 +63,28 @@
     powerOnBoot = true;
   };
 
+  # This is low-perf laptop - so ship build tasks to my high-perf domain host.
+  nix = {
+    settings.sandbox = false;
+    settings.substituters = [
+      "ssh://${userName}@${domainHost}"
+    ];
+    buildMachines = [
+      {
+        hostName = domainHost;
+        sshUser = userName;
+        inherit system;
+        supportedFeatures = [
+          "nixos-test"
+          "kvm"
+          "big-parallel"
+        ];
+        speedFactor = 4;
+        maxJobs = 24;
+      }
+    ];
+  };
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
@@ -72,4 +94,3 @@
   system.stateVersion = "23.05"; # Did you read the comment?
 
 }
-
