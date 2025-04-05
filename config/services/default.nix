@@ -1,6 +1,7 @@
 { ... }:
 {
   imports = [
+    ./nas
     ./networking
     ./printing
   ];
