@@ -1,16 +1,17 @@
 { config, pkgs, ... }:
+let
+  gamingHost = "192.168.92.201";
+  userName = config.user.name;
+in
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-      ./desktop
-    ];
+  imports = [
+    ./hardware-configuration.nix
+    ./desktop
+  ];
 
   hardware.isLaptop = true;
 
-  kl = {
-    enable = false;
-  };
+  kl.enable = false;
   environment.printing3d.enable = true;
 
   # Use the systemd-boot EFI boot loader.
@@ -21,9 +22,6 @@
     "aesni_intel"
     "cryptd"
   ];
-
-  nix.settings.sandbox = false;
-
 
   networking.hostName = "ShvedLaptop"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -51,6 +49,32 @@
     powerOnBoot = true;
   };
 
+  # This is ancient slow laptop - so ship build tasks to my high-perf
+  # gaming host.
+  nix = {
+    settings.sandbox = false;
+    settings.substituters = [
+      "ssh://${userName}@${gamingHost}"
+    ];
+    settings.trusted-public-keys = [
+      "ShvedGaming-1:jGkcyY1EtcKsPrXiHnagfrYR8knXQY/FJ+w6yVdn/gw="
+    ];
+    buildMachines = [
+      {
+        hostName = gamingHost;
+        sshUser = userName;
+        inherit (pkgs.stdenv) system;
+        supportedFeatures = [
+          "nixos-test"
+          "kvm"
+          "big-parallel"
+        ];
+        speedFactor = 4;
+        maxJobs = 24;
+      }
+    ];
+  };
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
@@ -60,4 +84,3 @@
   system.stateVersion = "21.11"; # Did you read the comment?
 
 }
-
