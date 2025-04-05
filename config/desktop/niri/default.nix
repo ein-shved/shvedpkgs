@@ -11,7 +11,6 @@ in
       alsa-utils
       anyrun
       brightnessctl
-      hypridle
       hyprlock
       niri-launch-terminal
       niri-launcher
@@ -19,6 +18,7 @@ in
       swaynotificationcenter
       udiskie
       waybar
+      wayidle
       wl-clipboard
       wpaperd
       xwayland-satellite

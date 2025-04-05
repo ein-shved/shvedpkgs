@@ -111,6 +111,7 @@ in
         spawns = map (spawnie: {
           command = toList spawnie;
         });
+        locker = "hyprlock";
       in
       spawns (
         (optional singleOutput.enable [
@@ -118,9 +119,14 @@ in
           "init"
         ])
         ++ [
-          "hyprlock"
+          locker
           "waybar"
-          "hypridle"
+          [
+            "wayidle"
+            "--timeout"
+            "600"
+            locker
+          ]
           "wpaperd"
           "swaync"
           "udiskie"
