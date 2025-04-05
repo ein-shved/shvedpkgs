@@ -197,6 +197,19 @@
               }
             ];
           };
+          testNas = {
+            modules = [
+              ./test/vm/configuration.nix
+              {
+                user = {
+                  name = "nas";
+                  humanName = "Nas";
+                  password = "nas";
+                };
+                hardware.isNas = true;
+              }
+            ];
+          };
         }
         // import ./hosts
       );
