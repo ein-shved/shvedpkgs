@@ -8,6 +8,12 @@
 
   hardware.isLaptop = false;
 
+  kl = {
+    enable = true;
+    remote.enable = false;
+    domain.enable = true;
+  };
+
   # Need to develop some holders for job
   environment.printing3d.enable = true;
 

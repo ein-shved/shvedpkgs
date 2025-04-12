@@ -5,36 +5,19 @@ let
       humanName = "Yury Shvedov";
     };
   };
+  mkHost = name: {
+    "${name}" = {
+      modules = [
+        (./. + "/${name}/configuration.nix")
+        userconfig
+      ];
+    };
+  };
+  mkHosts = names: builtins.foldl' (res: name: res // mkHost name) { } names;
 in
-{
-  Shvedov-NB = {
-    modules = [
-      ./Shvedov-NB/configuration.nix
-      userconfig
-      {
-        kl.remote.enable = true;
-      }
-    ];
-  };
-  Shvedov = {
-    modules = [
-      ./Shvedov/configuration.nix
-      userconfig
-      {
-        kl.domain.enable = true;
-      }
-    ];
-  };
-  ShvedLaptop = {
-    modules = [
-      ./ShvedLaptop/configuration.nix
-      userconfig
-    ];
-  };
-  ShvedGaming = {
-    modules = [
-      ./ShvedGaming/configuration.nix
-      userconfig
-    ];
-  };
-}
+mkHosts [
+  "Shvedov-NB"
+  "Shvedov"
+  "ShvedLaptop"
+  "ShvedGaming"
+]
