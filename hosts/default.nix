@@ -20,4 +20,5 @@ mkHosts [
   "Shvedov"
   "ShvedLaptop"
   "ShvedGaming"
+  "ShvedMedia"
 ]
