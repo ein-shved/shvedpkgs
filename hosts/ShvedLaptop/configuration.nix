@@ -9,11 +9,10 @@ in
     ./desktop
   ];
 
-  #hardware.isLaptop = true;
-  hardware.isNas = true;
-  # environment.printing3d.enable = true;
+  hardware.isLaptop = true;
 
   kl.enable = false;
+  environment.printing3d.enable = true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
