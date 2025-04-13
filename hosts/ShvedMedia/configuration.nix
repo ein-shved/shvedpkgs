@@ -1,13 +1,18 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   gamingHost = "192.168.92.201";
   userName = config.user.name;
 in
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   hardware.isNas = true;
 
@@ -19,6 +24,26 @@ in
 
   time.timeZone = "Europe/Moscow";
 
+  # Disable all drives ins standby mode. All of hard drives of my NAS are too
+  # loud
+  hardware.drives =
+    let
+      drives = [
+        "/dev/sda"
+        "/dev/sdb"
+        "/dev/sdc"
+      ];
+    in
+    lib.foldl' (
+      res: drive:
+      res
+      // {
+        "${drive}".standby = {
+          enable = true;
+          timeout = 10;
+        };
+      }
+    ) {} drives;
 
   # This is low-perf NAS server based on integrated board for media tasks - so
   # ship build tasks to my high-perf gaming host.
@@ -68,4 +93,3 @@ in
   system.stateVersion = "24.11"; # Did you read the comment?
 
 }
-
