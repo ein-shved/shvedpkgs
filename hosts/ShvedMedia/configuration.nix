@@ -45,6 +45,17 @@ in
       }
     ) {} drives;
 
+  # When transmission is seeding - it keeps drives busy, so schedule it to
+  # disable seeding at night.
+  services.transmission.settings = {
+    alt-speed-down = 1048576; # Allow downloads anyway
+    alt-speed-up = 0;
+    alt-speed-time-enabled = true;
+    alt-speed-time-begin = 20 * 60; # 20:00
+    alt-speed-time-end = 10 * 60; # 10:00
+    alt-speed-time-day = 127;
+  };
+
   # This is low-perf NAS server based on integrated board for media tasks - so
   # ship build tasks to my high-perf gaming host.
   nix = {
