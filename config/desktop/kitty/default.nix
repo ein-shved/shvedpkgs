@@ -15,7 +15,9 @@
         '';
       };
       kitty = {
-        enable = config.hardware.needGraphic;
+        # Enable kitty independently on graphic requirements, because we need
+        # for kitten on remote machines.
+        enable = true;
         package = kitty;
         shellIntegration = {
           mode = "enabled";
