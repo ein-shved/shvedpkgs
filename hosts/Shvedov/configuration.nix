@@ -14,6 +14,11 @@
     domain.enable = true;
   };
 
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+
   # Need to develop some holders for job
   environment.printing3d.enable = true;
 
