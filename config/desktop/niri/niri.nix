@@ -61,6 +61,13 @@ let
     nameValuePair name' output;
   outputs = mapAttrs' mkOutput monitors;
   singleOutput = config.hardware.singleOutput;
+
+  locker = toString (
+    pkgs.writeShellScript "lock-session" ''
+      playerctl -a pause
+      hyprlock
+    ''
+  );
 in
 {
   programs.niri = {
@@ -111,7 +118,6 @@ in
         spawns = map (spawnie: {
           command = toList spawnie;
         });
-        locker = "hyprlock";
       in
       spawns (
         (optional singleOutput.enable [
@@ -216,7 +222,7 @@ in
           "Alt+F2" = "anyrun";
           "Alt+F3" = "anyrun";
           "Mod+D" = "anyrun";
-          "Mod+L" = "hyprlock";
+          "Mod+L" = locker;
 
           "XF86AudioRaiseVolume" = [
             "amixer"
