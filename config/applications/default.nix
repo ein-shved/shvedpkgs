@@ -71,6 +71,8 @@
       man
       man-pages
       man-pages-posix
+      niv
+      nix-tree
       shunit2
     ];
 
