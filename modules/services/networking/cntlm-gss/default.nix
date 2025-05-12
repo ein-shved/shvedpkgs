@@ -5,9 +5,17 @@
   ...
 }:
 
-with lib;
-
 let
+
+  inherit (lib)
+    optionalString
+    concatMapStrings
+    concatStringsSep
+    types
+    mkOption
+    mkEnableOption
+    mkIf
+    ;
 
   cfg = config.services.cntlm-gss;
   configFile =
@@ -125,7 +133,7 @@ in
 
     networking.proxy = {
       default = "http://127.0.0.1:3128/";
-      noProxy = concatMapStrings (entry: "${entry},") cfg.noproxy;
+      noProxy = concatStringsSep "," cfg.noproxy;
     };
 
     users = mkIf (cfg.user == null) {

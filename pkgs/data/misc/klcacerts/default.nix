@@ -7,7 +7,7 @@ lib.mkOverlay (
         name = "kl-certificates";
         src = fetchurl {
           url = "https://vpnhelp.kaspersky.com/applications/certificates.zip";
-          sha256 = "sha256-ppgMGO1dXHrPO1XiNVld9neA8aqbE6h7lsAZ7V0G794";
+          hash = "sha256-ppgMGO1dXHrPO1XiNVld9neA8aqbE6h7lsAZ7V0G794=";
         };
 
         nativeBuildInputs = [ unzip file openssl ];
