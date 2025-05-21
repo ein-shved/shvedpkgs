@@ -11,6 +11,7 @@ let
     mkOption
     nameValuePair
     replaceStrings
+    removePrefix
     ;
   inherit (lib.types) ints submodule attrsOf;
   drive = {
@@ -24,6 +25,16 @@ let
       };
     };
   };
+
+  mkServiceName =
+    name:
+    "hard-drive-standby-${replaceStrings [ "/" ] [ "-" ] (removePrefix "/" name)}";
+
+  mkDrives =
+    foo:
+    mapAttrs' (
+      name: value: nameValuePair (mkServiceName name) (foo name value)
+    ) config.hardware.drives;
 in
 {
   options = {
@@ -32,15 +43,27 @@ in
       default = { };
     };
   };
-  config.systemd.services = mapAttrs' (
-    name: value:
-    nameValuePair "hard-drive-standby-${replaceStrings [ "/" ] [ "-" ] name}" {
-      enable = value.standby.enable;
-      script = ''
-        ${pkgs.hdparm}/bin/hdparm -S ${builtins.toString value.standby.timeout} ${name}
-      '';
-      after = [ "nix-store.mount" ];
-      wantedBy = [ "multi-user.target" ];
-    }
-  ) config.hardware.drives;
+  config.systemd = {
+    services = mkDrives (
+      name: value: {
+        script = ''
+          ${pkgs.hdparm}/bin/hdparm -S ${builtins.toString value.standby.timeout} ${name}
+        '';
+        serviceConfig.Type = "oneshot";
+      }
+    );
+    timers = mkDrives (
+      name: value: {
+        wantedBy = [ "timers.target" ];
+        enable = value.standby.enable;
+        # Periodically refresh configuration, because usage shows that this
+        # configuration can be disabled somehow.
+        timerConfig = {
+          Persistent = true;
+          OnCalendar = "*-*-* 16:00:00";
+          Unite = mkServiceName name;
+        };
+      }
+    );
+  };
 }

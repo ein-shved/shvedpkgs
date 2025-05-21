@@ -40,7 +40,7 @@ in
       // {
         "${drive}".standby = {
           enable = true;
-          timeout = 10;
+          timeout = 240; # 20 minutes
         };
       }
     ) {} drives;
