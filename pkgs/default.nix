@@ -1,7 +1,6 @@
 { lib, ... }:
 {
   imports = [
-    ./applications
     ./data
     ./development
     ./os-specific

@@ -49,9 +49,7 @@ in
       lfs.enable = true;
     };
     environment.systemPackages = with pkgs; [
-      gcmu
-      gcmnu
-      gitupdate
+      gitaliases
       git-review
       git-autofixup
 
