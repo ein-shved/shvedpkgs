@@ -1,9 +1,20 @@
-{ lib, stdenv,
-  fetchFromGitHub, autoreconfHook, autoconf, automake,  pkg-config,
-  librdf_raptor2, zlib, snappy, lz4, tclap, uriparser, libuuid, spdlog
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  librdf_raptor2,
+  zlib,
+  snappy,
+  lz4,
+  tclap,
+  uriparser,
+  libuuid,
+  spdlog,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "3.3.rc3";
   pname = "afflib";
 
@@ -15,10 +26,22 @@ stdenv.mkDerivation rec {
     fetchSubmodules = false;
   };
 
-  nativeBuildInputs = [ autoreconfHook  pkg-config ];
-  buildInputs = [ librdf_raptor2 zlib snappy lz4 tclap uriparser libuuid spdlog ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    librdf_raptor2
+    zlib
+    snappy
+    lz4
+    tclap
+    uriparser
+    libuuid
+    spdlog
+  ];
 
-  NIX_CFLAGS_COMPILE=[ "-DSPDLOG_FMT_EXTERNAL=ON" ];
+  NIX_CFLAGS_COMPILE = [ "-DSPDLOG_FMT_EXTERNAL=ON" ];
 
   meta = {
     homepage = "https://github.com/Velocidex/c-aff4";
@@ -27,4 +50,3 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
   };
 }
-
