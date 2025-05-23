@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   # https://aur.archlinux.org/packages/sac-core/
   # The specified source of distribution was suddenly down. Put the deb with
-  # sorce right here.
+  # source right here.
   #src = fetchurl {
   #  url = "https://storage.spidlas.cz/public/soft/safenet/SafenetAuthenticationClient-core-${version}_amd64.deb";
   #  sha256 = "1r9739bhal7ramj1rpawaqvik45xbs1c756l1da96din638gzy5l";
@@ -97,3 +97,4 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
   };
 }
+

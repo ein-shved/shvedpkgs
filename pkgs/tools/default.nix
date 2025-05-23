@@ -1,8 +1,0 @@
-{ ... }:
-{
-  imports = [
-    ./security
-    ./text
-    ./wayland
-  ];
-}
