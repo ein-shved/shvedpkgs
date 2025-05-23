@@ -1,11 +1,11 @@
-{ ... }:
+{ lib, ... }:
 {
   imports = [
     ./applications
-    ./by-name-overlay.nix
     ./data
     ./development
     ./os-specific
     ./tools
+    (lib.mkBynameOverlayModule ./by-name)
   ];
 }
