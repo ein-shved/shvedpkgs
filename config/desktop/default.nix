@@ -33,7 +33,7 @@ in
     services.gnome.gnome-keyring.enable = lib.mkForce false;
     fonts.packages = with pkgs; [
       jetbrains-mono
-      nerdfonts
+      nerd-fonts.jetbrains-mono
     ];
     time.timeZone = "Europe/Moscow";
     i18n.extraLocaleSettings = {

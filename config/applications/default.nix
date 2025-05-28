@@ -43,7 +43,8 @@
 
     environment.graphicPackages = with pkgs; [
       cdrkit
-      drawio
+      # TODO(Shvedov) Disabled while swiching to 25.05. Enable it back
+      # drawio
       eog
       evince
       gimp

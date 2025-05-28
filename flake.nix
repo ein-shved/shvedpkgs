@@ -1,9 +1,8 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils.url = "github:numtide/flake-utils";
@@ -14,33 +13,17 @@
         home-manager.follows = "home-manager";
       };
     };
-    ide-manager = {
-      url = "github:ein-shved/ide/v0.3.0";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
-    };
-    kompas3d = {
-      url = "github:ein-shved/nix-kompas3d";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
-    };
     vim = {
       url = "github:ein-shved/vim";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
-        home-manager.follows = "home-manager";
       };
     };
     niri = {
       url = "github:sodiboo/niri-flake";
       inputs = {
         nixpkgs-stable.follows = "nixpkgs";
-        nixpkgs.follows = "nixpkgs-unstable";
       };
     };
   };
@@ -49,10 +32,8 @@
       nixpkgs,
       flake-utils,
       agenix,
-      kompas3d,
       vim,
       niri,
-      nixpkgs-unstable,
       ...
     }@attrs:
     let
@@ -61,7 +42,6 @@
         ./modules
         ./pkgs
         agenix.nixosModules.default
-        kompas3d.nixosModules.default
         vim.nixosModules.default
         { nixpkgs.overlays = [ agenix.overlays.default ]; }
         niri.nixosModules.niri
@@ -102,7 +82,6 @@
                 specialArgs = {
                   lib = pkgs.lib // _lib;
                   inherit system;
-                  pkgs-unstable = import nixpkgs-unstable { inherit system; };
                   inherit (pkgs) path;
                 } // attrs // specialArgs;
                 modules = _modules ++ modules;

@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
     ln -sf libAksIfdh.so.10.0 libAksIfdh.so.10
 
     ln -sf ${lib.getLib openssl}/lib/libcrypto.so $out/lib/libcrypto.so.1.0.0
+    rm -r $out/etc/rc.d
   '';
 
   dontAutoPatchelf = true;
