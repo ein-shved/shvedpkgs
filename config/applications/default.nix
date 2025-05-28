@@ -3,6 +3,7 @@
   imports = [
     ./editors
     ./emulators
+    ./media
     ./misc
     ./networking
     ./version-management
@@ -58,7 +59,6 @@
       thunderbird
       xclip
       xdotool
-      yandex-music
 
       # Unavailable
       # discord

@@ -1,0 +1,5 @@
+{
+  imports = [
+    ./yandex-music.nix
+  ];
+}
