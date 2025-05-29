@@ -294,5 +294,6 @@ in
         }
       ))
       // (focus-workspaces (lib.genList (x: x + 1) 10));
+      cursor.hide-when-typing = true;
   };
 }
