@@ -160,9 +160,7 @@
       "inputs": {
         "niri-stable": "niri-stable",
         "niri-unstable": "niri-unstable",
-        "nixpkgs": [
-          "nixpkgs-unstable"
-        ],
+        "nixpkgs": "nixpkgs",
         "nixpkgs-stable": [
           "nixpkgs"
         ],
@@ -218,6 +216,22 @@
     },
     "nixpkgs": {
       "locked": {
+        "lastModified": 1748693115,
+        "narHash": "sha256-StSrWhklmDuXT93yc3GrTlb0cKSS0agTAxMGjLKAsY8=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "910796cabe436259a29a72e8d3f5e180fc6dfacc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
         "lastModified": 1748162331,
         "narHash": "sha256-rqc2RKYTxP3tbjA+PB3VMRQNnjesrT0pEofXQTrMsS8=",
         "owner": "NixOS",
@@ -228,22 +242,6 @@
       "original": {
         "owner": "NixOS",
         "ref": "nixos-25.05",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-unstable": {
-      "locked": {
-        "lastModified": 1748190013,
-        "narHash": "sha256-R5HJFflOfsP5FBtk+zE8FpL8uqE7n62jqOsADvVshhE=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "62b852f6c6742134ade1abdd2a21685fd617a291",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -303,8 +301,7 @@
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
         "niri": "niri",
-        "nixpkgs": "nixpkgs",
-        "nixpkgs-unstable": "nixpkgs-unstable",
+        "nixpkgs": "nixpkgs_2",
         "vim": "vim"
       }
     },
@@ -364,11 +361,11 @@
         "nixvim": "nixvim"
       },
       "locked": {
-        "lastModified": 1748414218,
-        "narHash": "sha256-w0cyKVJSOOFmvxadhaPMCeIQnpkY558b89tjzywz0Q8=",
+        "lastModified": 1749120237,
+        "narHash": "sha256-oipz50UOfFMEo5/WO4KIGxzUvhvrwo1g4toiKxqkkZs=",
         "owner": "ein-shved",
         "repo": "vim",
-        "rev": "a31830b2153837c3e938402ae55b3cc4bd072e66",
+        "rev": "86934bf69dcf76d09b112e1ce8b41a6d9c41c8ee",
         "type": "github"
       },
       "original": {
