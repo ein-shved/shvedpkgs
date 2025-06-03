@@ -46,8 +46,11 @@ in
   config.systemd = {
     services = mkDrives (
       name: value: {
+        path = with pkgs; [ hdparm ];
         script = ''
-          ${pkgs.hdparm}/bin/hdparm -S ${builtins.toString value.standby.timeout} ${name}
+          if ! hdparm -C ${name} | grep -q 'standby\|unknown'; then
+            hdparm -S ${builtins.toString value.standby.timeout} ${name}
+          fi
         '';
         serviceConfig.Type = "oneshot";
       }
@@ -58,11 +61,16 @@ in
         enable = value.standby.enable;
         # Periodically refresh configuration, because usage shows that this
         # configuration can be disabled somehow.
-        timerConfig = {
-          Persistent = true;
-          OnCalendar = "*-*-* 16:00:00";
-          Unite = mkServiceName name;
-        };
+        timerConfig =
+          let
+            secs = value.standby.timeout * 5;
+          in
+          {
+            Persistent = true;
+            OnBootSec = secs;
+            OnUnitActiveSec = secs;
+            Unite = mkServiceName name;
+          };
       }
     );
   };
