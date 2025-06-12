@@ -72,6 +72,7 @@ in
 {
   programs.niri = {
     enable = config.hardware.needGraphic;
+    package = pkgs.niri;
   };
   home-manager.users.${user}.programs.niri.settings = {
     inherit outputs;
@@ -162,6 +163,11 @@ in
           ws: if ws == 10 then focus-workspace-at 0 ws else focus-workspace-at ws ws;
         focus-workspaces =
           workspaces: lib.foldl' (all: ws: all // focus-workspace ws) { } workspaces;
+        toggle-play = [
+            "playerctl"
+            "-a"
+            "play-pause"
+          ];
       in
       (acts (
         with actions;
@@ -209,6 +215,7 @@ in
 
           "Mod+H" = switch-focus-between-floating-and-tiling;
           "Mod+Shift+H" = toggle-window-floating;
+          "Mod+P" = toggle-overview;
         }
       ))
       // (spawns (
@@ -252,16 +259,9 @@ in
             "Master"
             "toggle"
           ];
-          "XF86AudioPlay" = [
-            "playerctl"
-            "-a"
-            "play-pause"
-          ];
-          "ALT+7" = [
-            "playerctl"
-            "-a"
-            "play-pause"
-          ];
+          "XF86AudioPlay" = toggle-play;
+          "ALT+7" = toggle-play;
+          "Mod+7" = toggle-play;
           "XF86AudioNext" = [
             "playerctl"
             "next"
@@ -292,8 +292,8 @@ in
             "next"
           ];
         }
-      ))
-      // (focus-workspaces (lib.genList (x: x + 1) 10));
-      cursor.hide-when-typing = true;
+      ));
+    cursor.hide-when-typing = true;
+    gestures.hot-corners.enable = false;
   };
 }
