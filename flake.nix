@@ -20,7 +20,7 @@
         flake-utils.follows = "flake-utils";
       };
     };
-    niri = {
+    niri-flake = {
       url = "github:sodiboo/niri-flake";
       inputs = {
         nixpkgs-stable.follows = "nixpkgs";
@@ -33,7 +33,7 @@
       flake-utils,
       agenix,
       vim,
-      niri,
+      niri-flake,
       ...
     }@attrs:
     let
@@ -44,7 +44,7 @@
         agenix.nixosModules.default
         vim.nixosModules.default
         { nixpkgs.overlays = [ agenix.overlays.default ]; }
-        niri.nixosModules.niri
+        niri-flake.nixosModules.niri
       ];
       mkConfigs =
         hosts:
