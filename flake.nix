@@ -14,7 +14,7 @@
       };
     };
     vim = {
-      url = "github:ein-shved/vim";
+      url = "github:ein-shved/vim/niri-integration";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";

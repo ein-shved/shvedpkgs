@@ -20,7 +20,7 @@ in
         brightnessctl
         hyprlock
         niri-launch-terminal
-        niri-launcher
+        niri-integration
         pavucontrol
         swaynotificationcenter
         udiskie

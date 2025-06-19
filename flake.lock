@@ -100,6 +100,23 @@
         "type": "github"
       },
       "original": {
+        "id": "flake-utils",
+        "type": "indirect"
+      }
+    },
+    "flake-utils_3": {
+      "inputs": {
+        "systems": "systems_3"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
         "owner": "numtide",
         "repo": "flake-utils",
         "type": "github"
@@ -165,11 +182,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1750104926,
-        "narHash": "sha256-Jj8zGWhVPGUl0ddAMd+RQH72HkL42Bk62q74/7yagf8=",
+        "lastModified": 1750185747,
+        "narHash": "sha256-7TvJhkIWKMDeA4q81ycF+sq6wfGVZp0CTqCZY0to67M=",
         "owner": "ein-shved",
         "repo": "niri",
-        "rev": "8319f2690d4c0a54668337a8eea42366a7fff55e",
+        "rev": "ed6a0f916dabffb6f8031126b2cd095462cba700",
         "type": "github"
       },
       "original": {
@@ -201,6 +218,26 @@
       "original": {
         "owner": "sodiboo",
         "repo": "niri-flake",
+        "type": "github"
+      }
+    },
+    "niri-integration": {
+      "inputs": {
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1750364794,
+        "narHash": "sha256-RJg23GMkJTaSvWsP634+oLYpG/OaVfX4vEuVCYhLPTM=",
+        "owner": "ein-shved",
+        "repo": "niri-integration",
+        "rev": "736de71324b044ba0dec89e8444bd103b2d90658",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ein-shved",
+        "ref": "vim",
+        "repo": "niri-integration",
         "type": "github"
       }
     },
@@ -284,6 +321,22 @@
         "type": "github"
       }
     },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1749727998,
+        "narHash": "sha256-mHv/yeUbmL91/TvV95p+mBVahm9mdQMJoqaTVTALaFw=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "fd487183437963a59ba763c0cc4f27e3447dd6dd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-25.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixvim": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -292,7 +345,7 @@
           "nixpkgs"
         ],
         "nuschtosSearch": "nuschtosSearch",
-        "systems": "systems_3"
+        "systems": "systems_4"
       },
       "locked": {
         "lastModified": 1748197635,
@@ -311,7 +364,7 @@
     },
     "nuschtosSearch": {
       "inputs": {
-        "flake-utils": "flake-utils_2",
+        "flake-utils": "flake-utils_3",
         "ixx": "ixx",
         "nixpkgs": [
           "vim",
@@ -410,26 +463,43 @@
         "type": "github"
       }
     },
+    "systems_4": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
     "vim": {
       "inputs": {
         "flake-utils": [
           "flake-utils"
         ],
+        "niri-integration": "niri-integration",
         "nixpkgs": [
           "nixpkgs"
         ],
         "nixvim": "nixvim"
       },
       "locked": {
-        "lastModified": 1749120237,
-        "narHash": "sha256-oipz50UOfFMEo5/WO4KIGxzUvhvrwo1g4toiKxqkkZs=",
+        "lastModified": 1750366629,
+        "narHash": "sha256-AWLXtYp/Dzy9hf3HSBItlYxTaVJqRRBMvhY20/AseVI=",
         "owner": "ein-shved",
         "repo": "vim",
-        "rev": "86934bf69dcf76d09b112e1ce8b41a6d9c41c8ee",
+        "rev": "774785c7bb82c9418766c5751fd5310b2204506e",
         "type": "github"
       },
       "original": {
         "owner": "ein-shved",
+        "ref": "niri-integration",
         "repo": "vim",
         "type": "github"
       }

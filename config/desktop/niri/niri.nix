@@ -221,7 +221,7 @@ in
       // (spawns (
         {
           "Mod+T" = [
-            "niri-launcher"
+            "niri-integration"
             "kitty"
           ];
           "F12" = "niri-launch-terminal";
