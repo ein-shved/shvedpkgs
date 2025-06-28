@@ -168,6 +168,11 @@ in
             "-a"
             "play-pause"
           ];
+        focus-direction = direction: [
+          "niri-integration"
+          "switch"
+          direction
+        ];
       in
       (acts (
         with actions;
@@ -178,11 +183,6 @@ in
           "Mod+Q" = close-window;
           "Mod+C" = close-window;
           "Alt+F4" = close-window;
-
-          "Mod+Up" = focus-window-or-workspace-up;
-          "Mod+Down" = focus-window-or-workspace-down;
-          "Mod+Left" = focus-column-left;
-          "Mod+Right" = focus-column-right;
 
           "Mod+Shift+Up" = move-window-up-or-to-workspace-up;
           "Mod+Shift+Down" = move-window-down-or-to-workspace-down;
@@ -220,6 +220,11 @@ in
       ))
       // (spawns (
         {
+          "Mod+Up" = focus-direction "up";
+          "Mod+Down" = focus-direction "down";
+          "Mod+Left" = focus-direction "left";
+          "Mod+Right" = focus-direction "right";
+
           "Mod+T" = [
             "niri-integration"
             "kitty"
