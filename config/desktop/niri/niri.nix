@@ -164,15 +164,17 @@ in
         focus-workspaces =
           workspaces: lib.foldl' (all: ws: all // focus-workspace ws) { } workspaces;
         toggle-play = [
-            "playerctl"
-            "-a"
-            "play-pause"
-          ];
-        focus-direction = direction: [
+          "playerctl"
+          "-a"
+          "play-pause"
+        ];
+        action-direction = action: direction: [
           "niri-integration"
-          "switch"
+          action
           direction
         ];
+        focus-direction = action-direction "switch";
+        move-direction = action-direction "move";
       in
       (acts (
         with actions;
@@ -181,13 +183,7 @@ in
           "Mod+Shift+E" = quit;
 
           "Mod+Q" = close-window;
-          "Mod+C" = close-window;
           "Alt+F4" = close-window;
-
-          "Mod+Shift+Up" = move-window-up-or-to-workspace-up;
-          "Mod+Shift+Down" = move-window-down-or-to-workspace-down;
-          "Mod+Shift+Left" = move-column-left;
-          "Mod+Shift+Right" = move-column-right;
 
           "Mod+Ctrl+Up" = focus-monitor-up;
           "Mod+Ctrl+Down" = focus-monitor-down;
@@ -225,8 +221,29 @@ in
           "Mod+Left" = focus-direction "left";
           "Mod+Right" = focus-direction "right";
 
+          "Mod+Shift+Up" = move-direction "up";
+          "Mod+Shift+Down" = move-direction "down";
+          "Mod+Shift+Left" = move-direction "left";
+          "Mod+Shift+Right" = move-direction "right";
+
+          "Mod+C" = [
+            "niri-integration"
+            "close"
+          ];
+
+          "Mod+E" = [
+            "niri-integration"
+            "vim"
+            "run"
+          ];
+
           "Mod+T" = [
             "niri-integration"
+            "kitty"
+          ];
+          "Mod+Shift+T" = [
+            "niri-integration"
+            "--fresh"
             "kitty"
           ];
           "F12" = "niri-launch-terminal";
