@@ -227,11 +227,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1751143849,
-        "narHash": "sha256-yrRUIQnFBmkk4dtKIHK8bVqMey4iVzD2cI42aDM7DeI=",
+        "lastModified": 1751205623,
+        "narHash": "sha256-XLVC5aeiV9j3u3KDzQM0D+THM/g/FAZBgPsS0wrJSRM=",
         "owner": "ein-shved",
         "repo": "niri-integration",
-        "rev": "fd28fdb67294c6b6058605b97da1144d0b97be4d",
+        "rev": "810ad02e731780b7b3408086c24ce3bcc4a5be6a",
         "type": "github"
       },
       "original": {
@@ -490,11 +490,11 @@
         "nixvim": "nixvim"
       },
       "locked": {
-        "lastModified": 1751145105,
-        "narHash": "sha256-EaaqjjcfgcZye8H8eg3FZ3EtFB663+tbAIzrc0/3TeE=",
+        "lastModified": 1751205714,
+        "narHash": "sha256-YLeu9YT35h9S1gmn9sAbhCeohKhvbtnhUTRr52JuWus=",
         "owner": "ein-shved",
         "repo": "vim",
-        "rev": "377358595ff98b220675fc9e510b513c58e7f979",
+        "rev": "d2c262b01d4d697851d2d1b81aabfe93b621685b",
         "type": "github"
       },
       "original": {
