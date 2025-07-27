@@ -14,7 +14,7 @@
       };
     };
     vim = {
-      url = "github:ein-shved/vim";
+      url = "github:ein-shved/vim/niri-integration";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
@@ -26,6 +26,12 @@
         nixpkgs-stable.follows = "nixpkgs";
       };
     };
+    niri = {
+      url = "github:ein-shved/niri/view_offset";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
   };
   outputs =
     {
@@ -34,6 +40,7 @@
       agenix,
       vim,
       niri-flake,
+      niri,
       ...
     }@attrs:
     let
@@ -43,8 +50,13 @@
         ./pkgs
         agenix.nixosModules.default
         vim.nixosModules.default
-        { nixpkgs.overlays = [ agenix.overlays.default ]; }
         niri-flake.nixosModules.niri
+        {
+          nixpkgs.overlays = [
+            agenix.overlays.default
+            niri.overlays.default
+          ];
+        }
       ];
       mkConfigs =
         hosts:
@@ -79,11 +91,14 @@
               }:
               nixpkgs.lib.nixosSystem {
                 inherit system;
-                specialArgs = {
-                  lib = pkgs.lib // _lib;
-                  inherit system;
-                  inherit (pkgs) path;
-                } // attrs // specialArgs;
+                specialArgs =
+                  {
+                    lib = pkgs.lib // _lib;
+                    inherit system;
+                    inherit (pkgs) path;
+                  }
+                  // attrs
+                  // specialArgs;
                 modules = _modules ++ modules;
               };
           in

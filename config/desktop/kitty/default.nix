@@ -34,6 +34,7 @@
           listen_on = ''unix:''${XDG_RUNTIME_DIR}/kitty-{kitty_pid}'';
 
           notify_on_cmd_finish = "unfocused 10.0";
+          env = "SHLVL=0";
         };
       };
     };
