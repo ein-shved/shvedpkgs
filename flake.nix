@@ -5,6 +5,7 @@
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     agenix = {
       url = "github:ryantm/agenix/0.15.0";
@@ -14,7 +15,7 @@
       };
     };
     vim = {
-      url = "github:ein-shved/vim/niri-integration";
+      url = "github:ein-shved/vim";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
@@ -41,6 +42,7 @@
       vim,
       niri-flake,
       niri,
+      unstable,
       ...
     }@attrs:
     let
@@ -96,6 +98,7 @@
                     lib = pkgs.lib // _lib;
                     inherit system;
                     inherit (pkgs) path;
+                    pkgsUnstable = import unstable { inherit system; };
                   }
                   // attrs
                   // specialArgs;
