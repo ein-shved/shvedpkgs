@@ -33,6 +33,10 @@
         nixpkgs.follows = "nixpkgs";
       };
     };
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
@@ -43,6 +47,7 @@
       niri-flake,
       niri,
       unstable,
+      nix-index-database,
       ...
     }@attrs:
     let
@@ -53,6 +58,7 @@
         agenix.nixosModules.default
         vim.nixosModules.default
         niri-flake.nixosModules.niri
+        nix-index-database.nixosModules.nix-index
         {
           nixpkgs.overlays = [
             agenix.overlays.default
@@ -93,23 +99,20 @@
               }:
               nixpkgs.lib.nixosSystem {
                 inherit system;
-                specialArgs =
-                  {
-                    lib = pkgs.lib // _lib;
-                    inherit system;
-                    inherit (pkgs) path;
-                    pkgsUnstable = import unstable { inherit system; };
-                  }
-                  // attrs
-                  // specialArgs;
+                specialArgs = {
+                  lib = pkgs.lib // _lib;
+                  inherit system;
+                  inherit (pkgs) path;
+                  pkgsUnstable = import unstable { inherit system; };
+                }
+                // attrs
+                // specialArgs;
                 modules = _modules ++ modules;
               };
           in
           rec {
             packages = {
-              nixosConfigurations = builtins.mapAttrs (
-                hostname: v: mkConfig (v // { inherit hostname; })
-              ) hosts;
+              nixosConfigurations = builtins.mapAttrs (hostname: v: mkConfig (v // { inherit hostname; })) hosts;
             };
             devShells = mkDevShellsFor packages.nixosConfigurations.generic.config [
               "neovim"
@@ -135,9 +138,7 @@
               name: config:
               let
                 globalExtended = config.extendModules { inherit modules specialArgs prefix; };
-                localExtended = globalExtended.extendModules (
-                  if hosts ? ${name} then hosts.${name} else { }
-                );
+                localExtended = globalExtended.extendModules (if hosts ? ${name} then hosts.${name} else { });
               in
               localExtended
             ) configurations;

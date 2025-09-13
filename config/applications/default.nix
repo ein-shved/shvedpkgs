@@ -27,7 +27,6 @@
       killall
       minicom
       nix-bash-completions
-      nix-index
       nixos
       nixos-option
       pdftk
