@@ -17,7 +17,7 @@
         media_dir = [
           "V,${mediaStore}/Videos/Movies"
           "V,${mediaStore}/Videos/Cartoon_Movies"
-          "V,${mediaStore}/Videos/TV"
+          "V,${mediaStore}/Videos/TV_Series"
           "V,${mediaStore}/Videos/Cartoon_Series"
           "A,${mediaStore}/Music"
           "P,${mediaStore}/Photos"
