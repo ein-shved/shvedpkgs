@@ -69,6 +69,9 @@ in
     settings.substituters = [
       "ssh://${userName}@${domainHost}"
     ];
+    settings.trusted-public-keys = [
+      "Shvedov-1:QBukW9vSF9MfT8wE5WJ57iAD3ITvLXIFmGw6vDGfRRA="
+    ];
     buildMachines = [
       {
         hostName = domainHost;
