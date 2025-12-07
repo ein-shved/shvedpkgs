@@ -205,8 +205,8 @@ in
 
           "Mod+F" = switch-preset-column-width;
 
-          "Shift+Print" = screenshot;
-          # TODO(Shvedov): This action was deprecated. Find replacement
+          # TODO(Shvedov): This actions was deprecated. Find replacement
+          # "Shift+Print" = screenshot;
           # "Print" = screenshot-screen;
 
           "Mod+H" = switch-focus-between-floating-and-tiling;

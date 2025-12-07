@@ -54,7 +54,7 @@
       pinta
       playerctl
       remmina
-      tdesktop
+      telegram-desktop
       thunderbird
       xclip
       xdotool
