@@ -68,6 +68,12 @@ let
       hyprlock
     ''
   );
+  anyrun = toString (
+    pkgs.writeShellScript "anyrun" ''
+      pkill anyrun
+      anyrun
+    ''
+  );
 in
 {
   programs.niri = {
@@ -175,6 +181,7 @@ in
         ];
         focus-direction = action-direction "switch";
         move-direction = action-direction "move";
+        niri-msg-action = action: [ "niri" "msg" "action" ] ++ lib.toList action;
       in
       (acts (
         with actions;
@@ -204,10 +211,6 @@ in
           "Mod+Alt+Ctrl+Right" = move-workspace-to-monitor-right;
 
           "Mod+F" = switch-preset-column-width;
-
-          # TODO(Shvedov): This actions was deprecated. Find replacement
-          # "Shift+Print" = screenshot;
-          # "Print" = screenshot-screen;
 
           "Mod+H" = switch-focus-between-floating-and-tiling;
           "Mod+Shift+H" = toggle-window-floating;
@@ -248,9 +251,9 @@ in
           ];
           "F12" = "niri-launch-terminal";
 
-          "Alt+F2" = "anyrun";
-          "Alt+F3" = "anyrun";
-          "Mod+D" = "anyrun";
+          "Alt+F2" = anyrun;
+          "Alt+F3" = anyrun;
+          "Mod+D" = anyrun;
           "Mod+L" = locker;
 
           "XF86AudioRaiseVolume" = [
@@ -307,6 +310,8 @@ in
               '';
             in
             "${clear-close}";
+           "Shift+Print" = niri-msg-action "screenshot";
+           "Print" = niri-msg-action "screenshot-screen";
         }
         // optionalAttrs singleOutput.enable {
           "Mod+O" = [

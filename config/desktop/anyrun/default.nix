@@ -1,120 +1,132 @@
-{ ... }:
+{ pkgs, ... }:
 {
-  home.xdg.configFile = {
-    "anyrun/config.ron" = {
-      text = ''
-        Config(
-          // Position/size fields use an enum for the value, it can be either:
-          // Absolute(n): The absolute value in pixels
-          // Fraction(n): A fraction of the width or height of the full screen (depends on exclusive zones and the settings related to them) window respectively
+  home.programs.anyrun = {
+    enable = true;
+    config = {
+      x = {
+        fraction = 0.5;
+      };
 
-          // The horizontal position, adjusted so that Relative(0.5) always centers the runner
-          x: Fraction(0.5),
+      y = {
+        absolute = 0;
+      };
 
-          // The vertical position, works the same as `x`
-          y: Absolute(0),
+      width = {
+        absolute = 800;
+      };
 
-          // The width of the runner
-          width: Absolute(800),
+      hideIcons = false;
 
-          // The minimum height of the runner, the runner will expand to fit all the entries
-          height: Absolute(0),
+      ignoreExclusiveZones = false;
 
-          // Hide match and plugin info icons
-          hide_icons: false,
+      layer = "overlay";
 
-          // ignore exclusive zones, f.e. Waybar
-          ignore_exclusive_zones: false,
+      hidePluginInfo = false;
 
-          // Layer shell layer: Background, Bottom, Top, Overlay
-          layer: Overlay,
+      closeOnClick = true;
+      showResultsImmediately = false;
+      maxEntries = null;
 
-          // Hide the plugin info panel
-          hide_plugin_info: false,
+      plugins = [
+        "${pkgs.anyrun}/lib/libapplications.so"
+        "${pkgs.anyrun}/lib/libshell.so"
+        "${pkgs.anyrun}/lib/libnix_run.so"
+        "${pkgs.anyrun}/lib/libniri_focus.so"
+      ];
 
-          // Close window when a click outside the main box is received
-          close_on_click: false,
-
-          // Show search results immediately when Anyrun starts
-          show_results_immediately: false,
-
-          // Limit amount of entries shown in total
-          max_entries: None,
-
-          // List of plugins to be loaded by default, can be specified with a relative path to be loaded from the
-          // `<anyrun config dir>/plugins` directory or with an absolute path to just load the file the path points to.
-          plugins: [
-            "libapplications.so",
-            "libshell.so",
-         ],
-        )
-      '';
     };
-    "anyrun/shell.ron" = {
-      text = ''
-        Config(
-          prefix: "!",
-          shell: None,
-        )
-      '';
-    };
-    "anyrun/style.css" = {
-      text = ''
-        * {
-            border:        none;
-            border-radius: 0;
-            font-family:   "JetBrainsMono Nerd Font";
-            font-weight:   bold;
-            font-size:     15px;
-            box-shadow:    none;
-            text-shadow:   none;
-            transition-duration: 0s;
+    extraConfigFiles."shell.ron".text = ''
+      Config(
+        prefix: "!",
+        shell: None,
+      )
+    '';
+    extraConfigFiles."nix-run.ron".text = ''
+      Config(
+        prefix: ":nr",
+        allow_unfree: false,
+        channel: "nixpkgs",
+        max_entries: 3,
+      )
+    '';
+    extraCss = ''
+      @define-color accent #5599d2;
+      @define-color bg-color alpha(#030303, 0.8);
+      @define-color fg-color #eeeeee;
+      @define-color desc-color #cccccc;
+
+      window {
+        background: transparent;
+      }
+
+      box.main {
+        padding: 5px;
+        margin: 10px;
+        border-radius: 10px;
+        border: 4px solid @accent;
+        background-color: @bg-color;
+        box-shadow: 0 0 5px black;
+      }
+
+
+      text {
+        min-height: 30px;
+        padding: 5px;
+        border-radius: 5px;
+        color: @fg-color;
+      }
+
+      .matches {
+        background-color: rgba(0, 0, 0, 0);
+        border-radius: 10px;
+      }
+
+      box.plugin:first-child {
+        margin-top: 5px;
+      }
+
+      box.plugin.info {
+        min-width: 200px;
+      }
+
+      list.plugin {
+        background-color: rgba(0, 0, 0, 0);
+      }
+
+      label.match {
+        color: @fg-color;
+      }
+
+      label.match.description {
+        font-size: 10px;
+        color: @desc-color;
+      }
+
+      label.plugin.info {
+        font-size: 14px;
+        color: @fg-color;
+      }
+
+      .match {
+        background: transparent;
+      }
+
+      .match:selected {
+        border: 4px solid @accent;
+        border-radius: 6px;
+        background: transparent;
+        animation: fade 0.1s linear;
+      }
+
+      @keyframes fade {
+        0% {
+          opacity: 0;
         }
 
-        #window,
-        #match,
-        #entry,
-        #plugin,
-        #main {
-          background: transparent;
+        100% {
+          opacity: 1;
         }
-
-        #match.activatable {
-          border-radius: 8px;
-          margin: 4px 0;
-          padding: 4px;
-          transition: 100ms ease-out;
-        }
-        #match.activatable:first-child {
-          margin-top: 12px;
-        }
-        #match.activatable:last-child {
-          margin-bottom: 0;
-        }
-
-        #match:hover {
-          background: rgba(255, 255, 255, 0.05);
-        }
-        #match:selected {
-          background: rgba(255, 255, 255, 0.1);
-        }
-
-        #entry {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 8px;
-          padding: 4px 8px;
-        }
-
-        box#main {
-          background: rgba(0, 0, 0, 0.5);
-          box-shadow:
-            inset 0 0 0 1px rgba(255, 255, 255, 0.1),
-            0 30px 30px 15px rgba(0, 0, 0, 0.5);
-          border-radius: 20px;
-          padding: 12px;
-        }
-      '';
-    };
+      }
+    '';
   };
 }
