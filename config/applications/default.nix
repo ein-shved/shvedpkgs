@@ -74,6 +74,8 @@
       niv
       nix-tree
       shunit2
+      nixpkgs-review
+      gh
     ];
 
     programs = {
