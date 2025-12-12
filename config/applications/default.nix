@@ -27,7 +27,7 @@
       killall
       minicom
       nix-bash-completions
-      nixos
+      nixos-script
       nixos-option
       pdftk
       psmisc
