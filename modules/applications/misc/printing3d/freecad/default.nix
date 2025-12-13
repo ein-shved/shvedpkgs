@@ -33,6 +33,9 @@ let
       "--set-default"
       "QT_FONT_DPI"
       "80"
+      "--set-default"
+      "QT_QPA_PLATFORM"
+      "xcb"
     ];
     userCfg = ./user.cfg;
   };
