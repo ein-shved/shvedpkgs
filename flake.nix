@@ -6,7 +6,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
     agenix = {
       url = "github:ryantm/agenix/0.15.0";
       inputs = {
@@ -18,7 +17,6 @@
       url = "github:ein-shved/vim";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
       };
     };
     niri-flake = {
@@ -41,7 +39,6 @@
   outputs =
     {
       nixpkgs,
-      flake-utils,
       agenix,
       vim,
       niri-flake,
@@ -51,6 +48,7 @@
       ...
     }@attrs:
     let
+      _defaultSystem = "x86_64-linux";
       _modules = [
         ./config
         ./modules
@@ -68,59 +66,30 @@
       ];
       mkConfigs =
         hosts:
-        flake-utils.lib.eachDefaultSystem (
-          system:
-          let
-            pkgs = import nixpkgs { inherit system; };
-            _lib = import ./lib { lib = pkgs.lib; };
-
-            mkDevShellFor =
-              config: name:
-              pkgs.mkShell {
-                packages = builtins.filter (
-                  pkg: pkgs.lib.getName pkg.name == name
-                ) config.environment.systemPackages;
-              };
-
-            mkDevShellsFor =
-              config: names:
-              builtins.listToAttrs (
-                map (name: {
-                  inherit name;
-                  value = mkDevShellFor config name;
-                }) names
-              );
-
-            mkConfig =
-              {
-                hostname,
-                specialArgs ? { },
-                modules ? [ ],
-              }:
-              nixpkgs.lib.nixosSystem {
+        let
+          mkConfig =
+            {
+              system ? _defaultSystem,
+              pkgs ? nixpkgs.legacyPackages.${system},
+              specialArgs ? { },
+              modules ? [ ],
+            }:
+            nixpkgs.lib.nixosSystem {
+              inherit system;
+              specialArgs = {
+                lib = pkgs.lib // (import ./lib { lib = pkgs.lib; });
                 inherit system;
-                specialArgs = {
-                  lib = pkgs.lib // _lib;
-                  inherit system;
-                  inherit (pkgs) path;
-                  pkgsUnstable = import unstable { inherit system; };
-                }
-                // attrs
-                // specialArgs;
-                modules = _modules ++ modules;
-              };
-          in
-          rec {
-            packages = {
-              nixosConfigurations = builtins.mapAttrs (hostname: v: mkConfig (v // { inherit hostname; })) hosts;
+                inherit (pkgs) path;
+                pkgsUnstable = import unstable { inherit system; };
+              }
+              // attrs
+              // specialArgs;
+              modules = _modules ++ modules;
             };
-            devShells = mkDevShellsFor packages.nixosConfigurations.generic.config [
-              "neovim"
-            ];
-          }
-        );
-
-      mkConfig = { hostname, ... }@attrs: mkConfigs { ${hostname} = attrs; };
+        in
+        {
+          nixosConfigurations = builtins.mapAttrs (_: v: mkConfig v) hosts;
+        };
 
       extend =
         self:
@@ -142,19 +111,13 @@
               in
               localExtended
             ) configurations;
-          mapSystems =
-            systems:
-            builtins.mapAttrs (name: system: {
-              nixosConfigurations = mapConfigurations system.nixosConfigurations;
-            }) systems;
           updModules = self.modules ++ modules;
           updSelf =
             self
             // {
-              packages = mapSystems self.packages;
+              nixosConfigurations = mapConfigurations self.nixosConfigurations;
               extend = extend updSelf;
               modules = updModules;
-              inherit mkConfig;
             }
             // extraArgs;
         in
