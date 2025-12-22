@@ -1,19 +1,19 @@
-{ pkgs, ... }:
 {
-  config.environment.etc.inputrc = {
-    text = ''
-      "\e[A": history-search-backward
-      "\e[B": history-search-forward
-
-      set bell-style none
-      set colored-stats on
-      set completion-ignore-case on
-      set completion-prefix-display-length 3
-      set mark-symlinked-directories on
-      set show-all-if-ambiguous on
-      set show-all-if-unmodified on
-      set visible-stats on
-    '';
-    mode = "0644";
+  programs.readline = {
+    enable = true;
+    bindings = {
+      "\\e[A" = "history-search-backward";
+      "\\e[B" = "history-search-forward";
+    };
+    variables = {
+      bell-style = false;
+      colored-stats = true;
+      completion-ignore-case = true;
+      completion-prefix-display-length = 3;
+      mark-symlinked-directories = true;
+      show-all-if-ambiguous = true;
+      show-all-if-unmodified = true;
+      visible-stats = true;
+    };
   };
 }

@@ -45,13 +45,14 @@
       niri,
       unstable,
       nix-index-database,
+      home-manager,
       ...
-    }@attrs:
+    }@flake-inputs:
     let
       _defaultSystem = "x86_64-linux";
-      _modules = [
-        ./config
-        ./modules
+      nixosModules = [
+        ./config/nixos.nix
+        ./modules/nixos.nix
         ./pkgs
         agenix.nixosModules.default
         vim.nixosModules.default
@@ -64,31 +65,69 @@
           ];
         }
       ];
+      homeModules = [
+        ./config/home.nix
+        ./modules/home.nix
+        ./pkgs
+        # agenix.homeManagerModules.default
+        vim.nixosModules.default
+        niri-flake.homeModules.niri
+        nix-index-database.homeModules.nix-index
+        {
+          nixpkgs.overlays = [
+            # agenix.overlays.default
+            niri.overlays.default
+          ];
+        }
+      ];
       mkConfigs =
         hosts:
         let
-          mkConfig =
+          mkExtras =
+            baseExtras:
             {
               system ? _defaultSystem,
               pkgs ? nixpkgs.legacyPackages.${system},
               specialArgs ? { },
-              modules ? [ ],
+              ...
             }:
+            baseExtras
+            // {
+              inherit system;
+              inherit (pkgs) path;
+              pkgsUnstable = import unstable { inherit system; };
+              mkBynameOverlayModule = import ./lib/mk-by-name-overlay.nix;
+              inherit flake-inputs;
+            }
+            // specialArgs;
+
+          mkNixosConfig =
+            {
+              system ? _defaultSystem,
+              modules ? [ ],
+              ...
+            }@attrs:
             nixpkgs.lib.nixosSystem {
               inherit system;
-              specialArgs = {
-                lib = pkgs.lib // (import ./lib { lib = pkgs.lib; });
-                inherit system;
-                inherit (pkgs) path;
-                pkgsUnstable = import unstable { inherit system; };
-              }
-              // attrs
-              // specialArgs;
-              modules = _modules ++ modules;
+              specialArgs = mkExtras { isHomeManager = false; } attrs;
+              modules = nixosModules ++ modules;
+            };
+          mkHomeConfig =
+            {
+              system ? _defaultSystem,
+              pkgs ? nixpkgs.legacyPackages.${system},
+              modules ? [ ],
+              ...
+            }@attrs:
+            home-manager.lib.homeManagerConfiguration {
+              inherit pkgs;
+              extraSpecialArgs = mkExtras { isHomeManager = true; } attrs;
+              modules = homeModules ++ modules;
             };
         in
         {
-          nixosConfigurations = builtins.mapAttrs (_: v: mkConfig v) hosts;
+          nixosConfigurations = builtins.mapAttrs (_: v: mkNixosConfig v) hosts;
+          homeConfigurations = builtins.mapAttrs (_: v: mkHomeConfig v) hosts;
         };
 
       extend =
@@ -116,6 +155,7 @@
             self
             // {
               nixosConfigurations = mapConfigurations self.nixosConfigurations;
+              homeConfigurations = mapConfigurations self.homeConfigurations;
               extend = extend updSelf;
               modules = updModules;
             }
@@ -176,5 +216,5 @@
       );
 
     in
-    extend ({ modules = _modules; } // allConfigurations) { };
+    extend ({ modules = nixosModules; } // allConfigurations) { };
 }

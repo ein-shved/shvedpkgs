@@ -1,8 +1,8 @@
 let
-  userconfig = {
+  userconfig = {lib, ...}: {
     user = {
-      name = "shved";
-      humanName = "Yury Shvedov";
+      name = lib.mkDefault "shved";
+      humanName = lib.mkDefault "Yury Shvedov";
     };
   };
   mkHost = name: {
@@ -21,4 +21,5 @@ mkHosts [
   "ShvedLaptop"
   "ShvedGaming"
   "ShvedMedia"
+  "y.shvedov@corp.1440.space"
 ]

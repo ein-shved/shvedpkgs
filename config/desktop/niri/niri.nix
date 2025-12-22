@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  isHomeManager,
   ...
 }:
 let
@@ -17,17 +18,18 @@ let
     length
     toInt
     optional
+    optionals
     optionalAttrs
     ;
   user = config.user.name;
-  nirilib = config.home-manager.users.${user}.lib.niri;
+  homeconfig = if isHomeManager then config else config.home-manager.users.${user};
+  nirilib = homeconfig.lib.niri;
   monitors = config.hardware.aliasedMonitors;
   mkOutput =
     name: monitor:
     let
       optionalAttr = pred: val: if pred then val else null;
-      optionalIntAttr =
-        name: optionalAttr (monitor ? "${name}") (toInt monitor."${name}");
+      optionalIntAttr = name: optionalAttr (monitor ? "${name}") (toInt monitor."${name}");
       name' = removePrefix "desc:" name;
       position =
         let
@@ -74,13 +76,7 @@ let
       anyrun
     ''
   );
-in
-{
-  programs.niri = {
-    enable = config.hardware.needGraphic;
-    package = pkgs.niri;
-  };
-  home-manager.users.${user}.programs.niri.settings = {
+  niriconfig = {
     inherit outputs;
 
     input.keyboard = {
@@ -131,15 +127,17 @@ in
           "niri-single-output"
           "init"
         ])
-        ++ [
+        ++ optionals (!isHomeManager) [
           locker
-          "waybar"
           [
             "wayidle"
             "--timeout"
             "600"
             locker
           ]
+        ]
+        ++ [
+          "waybar"
           "wpaperd"
           "swaync"
           "udiskie"
@@ -165,10 +163,8 @@ in
         focus-workspace-at = key: ws: {
           "Mod+${builtins.toString key}".action.focus-workspace = ws;
         };
-        focus-workspace =
-          ws: if ws == 10 then focus-workspace-at 0 ws else focus-workspace-at ws ws;
-        focus-workspaces =
-          workspaces: lib.foldl' (all: ws: all // focus-workspace ws) { } workspaces;
+        focus-workspace = ws: if ws == 10 then focus-workspace-at 0 ws else focus-workspace-at ws ws;
+        focus-workspaces = workspaces: lib.foldl' (all: ws: all // focus-workspace ws) { } workspaces;
         toggle-play = [
           "playerctl"
           "-a"
@@ -181,7 +177,14 @@ in
         ];
         focus-direction = action-direction "switch";
         move-direction = action-direction "move";
-        niri-msg-action = action: [ "niri" "msg" "action" ] ++ lib.toList action;
+        niri-msg-action =
+          action:
+          [
+            "niri"
+            "msg"
+            "action"
+          ]
+          ++ lib.toList action;
       in
       (acts (
         with actions;
@@ -310,8 +313,8 @@ in
               '';
             in
             "${clear-close}";
-           "Shift+Print" = niri-msg-action "screenshot";
-           "Print" = niri-msg-action "screenshot-screen";
+          "Shift+Print" = niri-msg-action "screenshot";
+          "Print" = niri-msg-action "screenshot-screen";
         }
         // optionalAttrs singleOutput.enable {
           "Mod+O" = [
@@ -323,4 +326,22 @@ in
     cursor.hide-when-typing = true;
     gestures.hot-corners.enable = false;
   };
-}
+in
+
+if isHomeManager then
+  {
+    programs.niri = {
+      enable = config.hardware.needGraphic;
+      package = pkgs.niri;
+      settings = niriconfig;
+    };
+  }
+else
+  {
+    programs.niri = {
+      enable = config.hardware.needGraphic;
+      package = pkgs.niri;
+    };
+
+    home-manager.users.${user}.programs.niri.settings = niriconfig;
+  }

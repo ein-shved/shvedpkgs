@@ -15,8 +15,8 @@
         enableBashIntegration = true;
       };
       bash = {
-        completion.enable = true;
-        enableLsColors = true;
+        enableCompletion = true;
+        # enableLsColors = true;
         shellAliases = {
           grep = "grep --colour=auto";
           gtree = "git log --oneline --graph";
@@ -31,12 +31,7 @@
           gsh = "git show";
           icat = "kitten icat";
         };
-        undistractMe = {
-          enable = false;
-          playSound = true;
-          timeout = 10;
-        };
-        vteIntegration = true;
+        enableVteIntegration = true;
       };
     };
   };

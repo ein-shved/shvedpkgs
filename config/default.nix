@@ -1,16 +1,5 @@
 { config, lib, ... }:
 {
-  imports = [
-    ./allowance.nix
-    ./applications
-    ./bashrc
-    ./desktop
-    ./exceptions
-    ./media
-    ./services
-    ./tools
-    ./nix
-  ];
   config = {
     services = {
       blueman.enable = config.hardware.bluetooth.enable;

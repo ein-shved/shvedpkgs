@@ -8,9 +8,6 @@ let
   singleOutput = config.hardware.singleOutput;
 in
 {
-  imports = [
-    ./niri.nix
-  ];
   config = {
     environment.graphicPackages =
       with pkgs;

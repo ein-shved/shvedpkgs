@@ -1,6 +1,6 @@
-{ lib, ... }:
+{ mkBynameOverlayModule, ... }:
 {
   imports = [
-    (lib.mkBynameOverlayModule ./by-name)
+    (mkBynameOverlayModule ./by-name)
   ];
 }

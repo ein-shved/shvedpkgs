@@ -1,23 +1,13 @@
 { pkgs, ... }:
 {
-  imports = [
-    ./editors
-    ./emulators
-    ./media
-    ./misc
-    ./networking
-    ./version-management
-    ./virtualization
-  ];
   config = {
-    nixpkgs.config.allowUnfree = true;
     environment.systemPackages = with pkgs; [
       ascii
       bash-completion
       binutils
       cifs-utils
       dconf
-      dhcps
+      # dhcps
       file
       fontconfig.lib
       hunspellDicts.en-us
@@ -66,7 +56,7 @@
     environment.developmentPackages = with pkgs; [
       bear
       docker
-      dowork
+      # dowork
       gdb
       man
       man-pages
@@ -77,9 +67,5 @@
       nixpkgs-review
       gh
     ];
-
-    programs = {
-      adb.enable = true;
-    };
   };
 }

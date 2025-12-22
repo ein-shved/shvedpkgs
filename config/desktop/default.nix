@@ -2,22 +2,39 @@
   pkgs,
   config,
   lib,
+  isHomeManager,
   ...
 }:
 let
   inherit (config.hardware) needGraphic;
 in
 {
-  imports = [
-    ./anyrun
-    ./hyprland
-    ./kitty
-    ./niri
-    ./waybar
-    ./wpaperd
-    ./xdg
-  ];
   config = {
+    qt = {
+      enable = true;
+      platformTheme = "gnome";
+      style.name = "adwaita-dark";
+    };
+    environment.graphicPackages = with pkgs;  [
+      networkmanagerapplet
+    ];
+  } // (if isHomeManager then {
+    fonts.fontconfig.enable = true;
+    home.packages = [
+      pkgs.nerd-fonts.jetbrains-mono
+    ];
+  } else {
+    time.timeZone = "Europe/Moscow";
+    services.gnome.gnome-keyring.enable = lib.mkForce false;
+    i18n.extraLocaleSettings = {
+      LC_MESSAGES = "en_US.UTF-8";
+      LC_TIME = "ru_RU.UTF-8";
+    };
+    fonts.packages = with pkgs; [
+      jetbrains-mono
+      nerd-fonts.jetbrains-mono
+    ];
+    programs.nm-applet.enable = needGraphic;
     services.displayManager = {
       enable = needGraphic;
       autoLogin = {
@@ -30,24 +47,5 @@ in
         wayland.enable = true;
       };
     };
-    services.gnome.gnome-keyring.enable = lib.mkForce false;
-    fonts.packages = with pkgs; [
-      jetbrains-mono
-      nerd-fonts.jetbrains-mono
-    ];
-    time.timeZone = "Europe/Moscow";
-    i18n.extraLocaleSettings = {
-      LC_MESSAGES = "en_US.UTF-8";
-      LC_TIME = "ru_RU.UTF-8";
-    };
-    qt = {
-      enable = true;
-      platformTheme = "gnome";
-      style = "adwaita-dark";
-    };
-    programs.nm-applet.enable = needGraphic;
-    environment.graphicPackages = with pkgs;  [
-      networkmanagerapplet
-    ];
-  };
+  });
 }

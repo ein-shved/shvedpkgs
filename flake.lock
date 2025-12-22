@@ -340,7 +340,6 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
-        "flake-utils": "flake-utils",
         "home-manager": "home-manager",
         "niri": "niri",
         "niri-flake": "niri-flake",
@@ -434,9 +433,7 @@
     },
     "vim": {
       "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ],
+        "flake-utils": "flake-utils",
         "nixpkgs": [
           "nixpkgs"
         ],
