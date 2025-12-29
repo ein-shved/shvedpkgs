@@ -56,7 +56,7 @@
     environment.developmentPackages = with pkgs; [
       bear
       docker
-      # dowork
+      dowork
       gdb
       man
       man-pages

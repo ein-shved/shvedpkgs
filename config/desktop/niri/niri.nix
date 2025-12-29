@@ -67,7 +67,7 @@ let
   locker = toString (
     pkgs.writeShellScript "lock-session" ''
       playerctl -a pause
-      hyprlock
+      swaylock
     ''
   );
   anyrun = toString (
@@ -129,14 +129,14 @@ let
         ])
         ++ optionals (!isHomeManager) [
           locker
+        ]
+        ++ [
           [
             "wayidle"
             "--timeout"
             "600"
             locker
           ]
-        ]
-        ++ [
           "waybar"
           "wpaperd"
           "swaync"

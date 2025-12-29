@@ -1,11 +1,19 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 {
   options = {
-    programs.bash.extraCompletions = with lib; with types; mkOption {
-      description = "Add your bash-completion script bpdy here";
-      type = listOf str;
-      default = [ ];
-    };
+    programs.bash.extraCompletions =
+      with lib;
+      with types;
+      mkOption {
+        description = "Add your bash-completion script bpdy here";
+        type = listOf str;
+        default = [ ];
+      };
   };
   config = {
     programs = {
@@ -30,6 +38,7 @@
           gt = "git checkout";
           gsh = "git show";
           icat = "kitten icat";
+          ls = "ls --color=auto";
         };
         enableVteIntegration = true;
       };

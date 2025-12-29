@@ -15,7 +15,8 @@
     ./desktop/hyprland
     # ./desktop/hyprland/hypridle.nix
     # ./desktop/hyprland/hyprland.nix
-    ./desktop/hyprland/hyprlock.nix
+    # ./desktop/hyprland/hyprlock.nix
+    ./desktop/swaylock
     # ./desktop/hyprland/hyprpaper.nix
     ./desktop/kitty
     ./desktop/niri
