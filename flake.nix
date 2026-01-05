@@ -50,7 +50,7 @@
     let
       _defaultSystem = "x86_64-linux";
       nixosModules = [
-        ./config
+        ./config/nixos.nix
         ./modules/nixos.nix
         ./pkgs
         agenix.nixosModules.default

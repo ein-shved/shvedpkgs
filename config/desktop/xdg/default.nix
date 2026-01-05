@@ -1,8 +1,5 @@
 { config, pkgs, ... }:
 {
-  imports = [
-    ./mime
-  ];
   config = {
     xdg.portal.enable = config.hardware.needGraphic;
     xdg.portal.extraPortals = with pkgs; [

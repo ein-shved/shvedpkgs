@@ -1,5 +1,0 @@
-{
-  imports = [
-    ./yandex-music.nix
-  ];
-}

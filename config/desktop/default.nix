@@ -8,15 +8,6 @@ let
   inherit (config.hardware) needGraphic;
 in
 {
-  imports = [
-    ./anyrun
-    ./hyprland
-    ./kitty
-    ./niri
-    ./waybar
-    ./wpaperd
-    ./xdg
-  ];
   config = {
     services.displayManager = {
       enable = needGraphic;
@@ -46,7 +37,7 @@ in
       style = "adwaita-dark";
     };
     programs.nm-applet.enable = needGraphic;
-    environment.graphicPackages = with pkgs;  [
+    environment.graphicPackages = with pkgs; [
       networkmanagerapplet
     ];
   };

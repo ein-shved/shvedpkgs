@@ -1,16 +1,6 @@
 { pkgs, ... }:
 {
-  imports = [
-    ./editors
-    ./emulators
-    ./media
-    ./misc
-    ./networking
-    ./version-management
-    ./virtualization
-  ];
   config = {
-    nixpkgs.config.allowUnfree = true;
     environment.systemPackages = with pkgs; [
       ascii
       bash-completion

@@ -7,13 +7,6 @@ let
   cfg = config.programs.hyprland;
 in
 {
-  imports = [
-    ./hypridle.nix
-    ./hyprland.nix
-    ./hyprlock.nix
-    ./hyprpaper.nix
-  ];
-
   options.programs.hyprland =
     with lib;
     with types;
