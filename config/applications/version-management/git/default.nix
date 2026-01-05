@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   gitignore = pkgs.writeText "gitignore" ''
     .Session.vim
@@ -12,14 +17,14 @@ let
 in
 {
   config = {
-    home.extras = (lib.mkHmExtra "programs" {
-      git = lib.mkIf (config.user.mail != null) {
-        enable = true;
-        lfs.enable = true;
-        package = pkgs.gitFull;
-        userName = config.user.humanName;
-        userEmail = config.user.mail;
-        includes = [{
+    home.programs.git = lib.mkIf (config.user.mail != null) {
+      enable = true;
+      lfs.enable = true;
+      package = pkgs.gitFull;
+      userName = config.user.humanName;
+      userEmail = config.user.mail;
+      includes = [
+        {
           contents = {
             pull = {
               rebase = true;
@@ -41,9 +46,9 @@ in
               autosquash = "!git autofixup && git rebase --autosquash";
             };
           };
-        }];
-      };
-    });
+        }
+      ];
+    };
     programs.git = {
       enable = true;
       lfs.enable = true;
@@ -53,7 +58,7 @@ in
       git-review
       git-autofixup
 
-      libclang.python #For git format-patch
+      libclang.python # For git format-patch
       clang-tools
     ];
   };

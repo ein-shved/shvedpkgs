@@ -1,16 +1,22 @@
-{ home-manager, lib, ... }:
+{ lib, ... }:
 let
-  setApplicationFor = app: types: with builtins; listToAttrs (
-    map (type: { name = type; value = app; }) types
-  );
-  setApplicationsFor = cfg: with builtins;
+  setApplicationFor =
+    app: types:
+    with builtins;
+    listToAttrs (
+      map (type: {
+        name = type;
+        value = app;
+      }) types
+    );
+  setApplicationsFor =
+    cfg:
+    with builtins;
     let
-      appsList = mapAttrs (
-        app: types: setApplicationFor [ app ] (lib.lists.toList types)
-      ) cfg;
+      appsList = mapAttrs (app: types: setApplicationFor [ app ] (lib.lists.toList types)) cfg;
       values = attrValues appsList;
     in
-      foldl' (all: v: all // v) {} values;
+    foldl' (all: v: all // v) { } values;
 in
 {
   config.home.xdg.mimeApps = {

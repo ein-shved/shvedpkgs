@@ -80,7 +80,7 @@ in
     enable = config.hardware.needGraphic;
     package = pkgs.niri;
   };
-  home-manager.users.${user}.programs.niri.settings = {
+  home.programs.niri.settings = {
     inherit outputs;
 
     input.keyboard = {
