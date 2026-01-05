@@ -123,58 +123,7 @@
         in
         updSelf;
 
-      allConfigurations = mkConfigs (
-        {
-          generic = {
-            modules = [ { user.name = "NixOS"; } ];
-          };
-          # Run with
-          # nixos-rebuild build-vm --flake .#testA && \
-          # QEMU_NET_OPTS="hostfwd=tcp::2221-:22" ./result/bin/run-nixos-vm
-          testA = {
-            modules = [
-              ./test/vm/configuration.nix
-              {
-                user = {
-                  name = "alice";
-                  humanName = "Alice Cooper";
-                  password = "alice";
-                };
-                kl.remote.enable = true;
-              }
-            ];
-          };
-          testB = {
-            modules = [
-              ./test/vm/configuration.nix
-              {
-                user = {
-                  name = "bob";
-                  humanName = "Bob";
-                  password = "bob";
-                };
-                environment.printing3d.enable = true;
-                kl.domain.enable = true;
-              }
-            ];
-          };
-          testNas = {
-            modules = [
-              ./test/vm/configuration.nix
-              {
-                user = {
-                  name = "nas";
-                  humanName = "Nas";
-                  password = "nas";
-                };
-                hardware.isNas = true;
-              }
-            ];
-          };
-        }
-        // import ./hosts
-      );
-
+      allConfigurations = mkConfigs (import ./hosts);
     in
     extend ({ modules = nixosModules; } // allConfigurations) { };
 }

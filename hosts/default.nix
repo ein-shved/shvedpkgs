@@ -14,8 +14,15 @@ let
     };
   };
   mkHosts = names: builtins.foldl' (res: name: res // mkHost name) { } names;
+  tests = import ./tests;
 in
-mkHosts [
+tests
+// {
+  generic = {
+    modules = [ { user.name = "NixOS"; } ];
+  };
+}
+// mkHosts [
   "Shvedov-NB"
   "Shvedov"
   "ShvedLaptop"
