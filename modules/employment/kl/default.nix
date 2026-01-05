@@ -20,9 +20,4 @@ in
   config = lib.mkIf cfg.enable {
     user.mail = cfg.mail;
   };
-
-  imports = [
-    ./domain
-    ./remote
-  ];
 }

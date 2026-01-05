@@ -8,7 +8,6 @@ let
   cfg = config.environment.printing3d;
 in
 {
-  imports = [ ./freecad ];
   options.environment.printing3d = {
     enable = lib.mkEnableOption ''
       Is current system used for 3D modelling and printing

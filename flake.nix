@@ -49,9 +49,9 @@
     }@attrs:
     let
       _defaultSystem = "x86_64-linux";
-      _modules = [
+      nixosModules = [
         ./config
-        ./modules
+        ./modules/nixos.nix
         ./pkgs
         agenix.nixosModules.default
         vim.nixosModules.default
@@ -84,7 +84,7 @@
               }
               // attrs
               // specialArgs;
-              modules = _modules ++ modules;
+              modules = nixosModules ++ modules;
             };
         in
         {
@@ -176,5 +176,5 @@
       );
 
     in
-    extend ({ modules = _modules; } // allConfigurations) { };
+    extend ({ modules = nixosModules; } // allConfigurations) { };
 }

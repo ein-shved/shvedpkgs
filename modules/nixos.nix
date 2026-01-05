@@ -1,0 +1,27 @@
+{
+  imports = [
+    ./applications/misc/gaming
+    ./applications/misc/printing3d
+    ./applications/misc/printing3d/freecad
+    ./applications/misc/translate-shell
+    ./applications/networking
+    ./employment/kl
+    ./employment/kl/domain
+    ./employment/kl/remote
+    ./hardware/crypto
+    ./hardware/development/programmers/avr
+    ./hardware/development/programmers/stm32
+    ./hardware/hdparm
+    ./hardware/hosts
+    ./hardware/monitors
+    ./hardware/power
+    ./home/homedir.nix
+    ./home/user.nix
+    ./media
+    ./os-specific/linux/keyutils
+    ./security/ca.nix
+    ./services/networking/cntlm-gss
+    ./services/networking/klvpn
+    ./tools/security/pass
+  ];
+}

@@ -1,7 +1,0 @@
-{ ... }:
-{
-  imports = [
-    ./cntlm-gss
-    ./klvpn
-  ];
-}
