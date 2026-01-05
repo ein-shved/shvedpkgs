@@ -1,12 +1,11 @@
-{ ... }:
 {
   config = {
     services = {
-      logind = {
+      logind.settings.Login = {
         # Suspend on pressing power key
-        powerKey = "suspend";
+        HandlePowerKey = "suspend";
         # Ignore lid switch
-        lidSwitch = "ignore";
+        HandleLidSwitch = "ignore";
       };
     };
     systemd.services.wakeOnPowerButtonOnly = {

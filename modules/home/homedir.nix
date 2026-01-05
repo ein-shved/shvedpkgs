@@ -1,9 +1,9 @@
-{ config, pkgs, home-manager, ... }:
+{ config, pkgs, flake-inputs, ... }:
 with pkgs.lib;
 let
   cfg = config.home;
   name = config.user.name;
-  hm = home-manager.lib.hm;
+  hm = flake-inputs.home-manager.lib.hm;
 
   actSubmodule = with types; {
     options = {
@@ -52,7 +52,6 @@ let
 
 in
 {
-
   options = {
     home = {
       activations = mkOption {
@@ -99,7 +98,6 @@ in
   };
 
   imports = [
-    home-manager.nixosModules.default
+    flake-inputs.home-manager.nixosModules.default
   ];
-
 }

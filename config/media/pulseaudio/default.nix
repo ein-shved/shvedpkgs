@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 {
   config = {
-    hardware.pulseaudio = {
+    services.pulseaudio = {
       enable = config.hardware.needGraphic;
       package = pkgs.pulseaudioFull;
       extraConfig = ''

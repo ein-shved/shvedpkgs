@@ -46,7 +46,7 @@
       unstable,
       nix-index-database,
       ...
-    }@attrs:
+    }@flake-inputs:
     let
       _defaultSystem = "x86_64-linux";
       nixosModules = [
@@ -64,25 +64,30 @@
           ];
         }
       ];
+      loadPkgsFrom =
+        input: system:
+        import input {
+          inherit system;
+        };
+      loadPkgs = loadPkgsFrom nixpkgs;
+      loadPkgsUnstable = loadPkgsFrom unstable;
       mkConfigs =
         hosts:
         let
           mkConfig =
             {
               system ? _defaultSystem,
-              pkgs ? nixpkgs.legacyPackages.${system},
+              pkgs ? loadPkgs system,
               specialArgs ? { },
               modules ? [ ],
             }:
             nixpkgs.lib.nixosSystem {
               inherit system;
               specialArgs = {
-                lib = pkgs.lib // (import ./lib { lib = pkgs.lib; });
-                inherit system;
-                inherit (pkgs) path;
-                pkgsUnstable = import unstable { inherit system; };
+                inherit flake-inputs;
+                lib = pkgs.lib // (import ./lib { inherit (pkgs) lib path; });
+                pkgsUnstable = loadPkgsUnstable system;
               }
-              // attrs
               // specialArgs;
               modules = nixosModules ++ modules;
             };

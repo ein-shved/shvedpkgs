@@ -12,7 +12,7 @@ writeShellApplication {
 
     REMOTE_SUDO=()
     if [ "$UID" != 0 ]; then
-      REMOTE_SUDO=("--use-remote-sudo")
+      REMOTE_SUDO=("--sudo")
     fi
 
     exec nixos-rebuild "''${REMOTE_SUDO[@]}" "$@"

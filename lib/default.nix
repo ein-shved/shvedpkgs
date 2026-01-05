@@ -1,4 +1,4 @@
-{ lib }:
+{ lib, path }:
 let
   splitNameAt =
     name: index:
@@ -16,7 +16,6 @@ in
   getSurname = name: splitNameAt name 1;
   mkBynameOverlayModule =
     root:
-    { path, ... }:
     let
       by-name-overlay = import "${path}/pkgs/top-level/by-name-overlay.nix";
     in
