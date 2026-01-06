@@ -17,11 +17,6 @@
     ./bashrc/starship.nix
     ./desktop
     ./desktop/anyrun
-    ./desktop/hyprland
-    ./desktop/hyprland/hypridle.nix
-    ./desktop/hyprland/hyprland.nix
-    ./desktop/hyprland/hyprlock.nix
-    ./desktop/hyprland/hyprpaper.nix
     ./desktop/kitty
     ./desktop/niri
     ./desktop/niri/niri.nix
