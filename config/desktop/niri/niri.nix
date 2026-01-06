@@ -65,7 +65,7 @@ let
   locker = toString (
     pkgs.writeShellScript "lock-session" ''
       playerctl -a pause
-      hyprlock
+      swaylock
     ''
   );
   anyrun = toString (

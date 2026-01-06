@@ -15,7 +15,6 @@ in
         alsa-utils
         anyrun
         brightnessctl
-        hyprlock
         niri-launch-terminal
         niri-integration
         pavucontrol
