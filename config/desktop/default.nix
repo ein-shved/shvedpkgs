@@ -6,6 +6,18 @@
 }:
 let
   inherit (config.hardware) needGraphic;
+  themes = pkgs.symlinkJoin {
+    name = "AllThemes";
+    paths = with pkgs; [
+      bibata-cursors
+      nordic
+      reversal-icon-theme
+      papirus-icon-theme
+      zafiro-icons
+      ubuntu-themes
+      gnome-themes-extra
+    ];
+  };
 in
 {
   config = {
@@ -44,7 +56,7 @@ in
       home.pointerCursor = {
         gtk.enable = true;
         # x11.enable = true;
-        package = pkgs.bibata-cursors;
+        package = themes;
         name = "Bibata-Modern-Classic";
         size = 16;
       };
@@ -53,20 +65,27 @@ in
         enable = true;
 
         theme = {
-          package = pkgs.flat-remix-gtk;
-          name = "Flat-Remix-GTK-Grey-Darkest";
+          package = themes;
+          name = "Nordic-darker";
         };
 
         iconTheme = {
-          package = pkgs.adwaita-icon-theme;
-          name = "Adwaita";
+          package = themes;
+          name = "Nordic-darker";
         };
 
         font = {
           name = "Sans";
           size = 11;
         };
+
+        gtk3 = {
+          extraConfig = {
+            gtk-application-prefer-dark-theme = 1;
+          };
+        };
       };
+      dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
     };
   };
 }
