@@ -9,18 +9,6 @@ let
 in
 {
   config = {
-    services.displayManager = {
-      enable = needGraphic;
-      autoLogin = {
-        enable = true;
-        user = config.user.name;
-      };
-      defaultSession = "niri";
-      sddm = {
-        enable = needGraphic;
-        wayland.enable = true;
-      };
-    };
     services.gnome.gnome-keyring.enable = lib.mkForce false;
     fonts.packages = with pkgs; [
       jetbrains-mono

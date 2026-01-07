@@ -72,7 +72,7 @@ in
 {
   programs.niri = {
     enable = config.hardware.needGraphic;
-    package = pkgs.niri;
+    package = pkgs.niri-lightdm-wa;
   };
   home.programs.niri.settings = {
     inherit outputs;
@@ -126,7 +126,6 @@ in
           "init"
         ])
         ++ [
-          locker
           "waybar"
           [
             "wayidle"
@@ -159,10 +158,8 @@ in
         focus-workspace-at = key: ws: {
           "Mod+${builtins.toString key}".action.focus-workspace = ws;
         };
-        focus-workspace =
-          ws: if ws == 10 then focus-workspace-at 0 ws else focus-workspace-at ws ws;
-        focus-workspaces =
-          workspaces: lib.foldl' (all: ws: all // focus-workspace ws) { } workspaces;
+        focus-workspace = ws: if ws == 10 then focus-workspace-at 0 ws else focus-workspace-at ws ws;
+        focus-workspaces = workspaces: lib.foldl' (all: ws: all // focus-workspace ws) { } workspaces;
         toggle-play = [
           "playerctl"
           "-a"
@@ -175,7 +172,14 @@ in
         ];
         focus-direction = action-direction "switch";
         move-direction = action-direction "move";
-        niri-msg-action = action: [ "niri" "msg" "action" ] ++ lib.toList action;
+        niri-msg-action =
+          action:
+          [
+            "niri"
+            "msg"
+            "action"
+          ]
+          ++ lib.toList action;
       in
       (acts (
         with actions;
@@ -304,8 +308,8 @@ in
               '';
             in
             "${clear-close}";
-           "Shift+Print" = niri-msg-action "screenshot";
-           "Print" = niri-msg-action "screenshot-screen";
+          "Shift+Print" = niri-msg-action "screenshot";
+          "Print" = niri-msg-action "screenshot-screen";
         }
         // optionalAttrs singleOutput.enable {
           "Mod+O" = [

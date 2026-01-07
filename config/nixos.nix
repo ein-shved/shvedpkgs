@@ -17,6 +17,7 @@
     ./bashrc/starship.nix
     ./desktop
     ./desktop/anyrun
+    ./desktop/dm
     ./desktop/kitty
     ./desktop/niri
     ./desktop/niri/niri.nix
