@@ -12,6 +12,8 @@ in
 {
   home.programs.waybar = {
     enable = config.hardware.needGraphic;
+    systemd.enable = true;
+    systemd.target = "niri.service";
     style = ./style.css;
     settings = {
       topBar = {

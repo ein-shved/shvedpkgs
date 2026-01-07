@@ -1,14 +1,17 @@
 { config, pkgs, ... }:
 {
-  config = {
-    xdg.portal.enable = config.hardware.needGraphic;
-    xdg.portal.extraPortals = with pkgs; [
-      xdg-desktop-portal-wlr
-      xdg-desktop-portal-gtk
-      xdg-desktop-portal-gnome
-    ];
-    xdg.portal.config = {
-      niri = {
+  xdg.portal =
+    let
+      inherit (config.hardware) needGraphic;
+    in
+    {
+      enable = needGraphic;
+      wlr.enable = needGraphic;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-gtk
+        xdg-desktop-portal-gnome
+      ];
+      config.niri = {
         default = [
           "wlr"
           "gtk"
@@ -61,5 +64,7 @@
         # "org.freedesktop.impl.portal.Wallpaper" = "gnome";
       };
     };
+  systemd.user.services.xdg-desktop-portal-gtk = {
+    after = [ "niri.service" ];
   };
 }

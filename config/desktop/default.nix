@@ -1,12 +1,8 @@
 {
   pkgs,
-  config,
   lib,
   ...
 }:
-let
-  inherit (config.hardware) needGraphic;
-in
 {
   config = {
     services.gnome.gnome-keyring.enable = lib.mkForce false;
@@ -24,14 +20,12 @@ in
       platformTheme = "gnome";
       style = "adwaita-dark";
     };
-    programs.nm-applet.enable = needGraphic;
     environment.graphicPackages = with pkgs; [
       networkmanagerapplet
     ];
     home = {
       home.pointerCursor = {
         gtk.enable = true;
-        # x11.enable = true;
         package = pkgs.all-themes;
         name = "Bibata-Modern-Classic";
         size = 16;
