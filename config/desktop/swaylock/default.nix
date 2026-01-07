@@ -5,8 +5,7 @@
   ...
 }:
 let
-  mkMonitorName = name: lib.strings.removePrefix "desc:" name;
-  mkMonitor = name: lib.optionalString (name != "default" && name != null) "${mkMonitorName name}:";
+  mkMonitor = name: lib.optionalString (name != "default" && name != null) "${name}:";
   mkBlurOutput =
     output:
     pkgs.mkblur {
@@ -16,10 +15,7 @@ let
   mkImage =
     name: output:
     lib.optionalString ((output.wallpaper or null) != null) "${mkMonitor name}${mkBlurOutput output}";
-  filteredMonitors = lib.filterAttrs (
-    name: value: value ? wallpaper && value.wallpaper != null
-  ) config.hardware.aliasedMonitors;
-  images = lib.mapAttrsToList mkImage filteredMonitors;
+  images = lib.mapAttrsToList mkImage config.hardware.wallpaperMonitors;
 
   # Home manager does not support multiple image specifying with config. So wrap
   # application with arguments provided

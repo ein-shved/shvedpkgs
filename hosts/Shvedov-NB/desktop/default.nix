@@ -11,14 +11,14 @@
       wallpaper = ./wallpapers/RoR2.jpg;
     };
     # Found out that description of this monitor changes
-    "desc:XMI Mi Monitor 0000000000000" = {
+    "XMI Mi Monitor 0000000000000" = {
       resolution = "3440x1440";
       position = "-760x1080";
       scale = "1";
       wallpaper = ./wallpapers/OuterWilds.png;
       aliases = [
-        "desc:Xiaomi Corporation Mi Monitor 0000000000000"
-        "desc:Xiaomi Corporation - Mi Monitor - DP-1"
+        "Xiaomi Corporation Mi Monitor 0000000000000"
+        "Xiaomi Corporation - Mi Monitor - DP-1"
       ];
     };
   };

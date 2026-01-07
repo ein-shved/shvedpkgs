@@ -1,27 +1,22 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
-let
-  inherit (lib) mapAttrs' nameValuePair removePrefix;
-  inherit (pkgs.formats) toml;
-
-  toToml = (toml { }).generate "wpaperd";
-
-  monitors = config.hardware.aliasedMonitors;
-  wallpaperMons = lib.filterAttrs (
-    name: value: value ? wallpaper && value.wallpaper != null
-  ) monitors;
-  mkMonitor = name: monitor: let
-    name' = removePrefix "desc:" name;
-    monitor' = { path = monitor.wallpaper; };
-  in nameValuePair name' monitor';
-  wallpapers = mapAttrs' mkMonitor wallpaperMons;
-in
 {
-  home.xdg.configFile."wpaperd/config.toml" = {
-    source = toToml wallpapers;
+  home.services.wpaperd = {
+    enable = config.hardware.needGraphic;
+    settings = lib.mapAttrs (_: mon: {
+      path = mon.wallpaper;
+    }) config.hardware.wallpaperMonitors;
+  };
+  home-manager.users.${config.user.name}.systemd.user.services.wpaperd = {
+    Unit.After = [ "niri.service" ];
+    Unit.ConditionEnvironment = lib.mkForce "";
+
+    Service = {
+      Restart = lib.mkForce "on-failure";
+      RestartSec = lib.mkForce "100ms";
+    };
   };
 }

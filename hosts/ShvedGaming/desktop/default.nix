@@ -1,16 +1,21 @@
 {
   hardware.singleOutput.enable = true;
   hardware.monitors = {
-    "desc:XMI Mi Monitor 0000000000000" = {
+    "XMI Mi Monitor 0000000000000" = {
       resolution = "3440x1440";
       position = "0x0";
       scale = "1";
       aliases = [
-        "desc:Xiaomi Corporation Mi Monitor 0000000000000"
-        "desc:Xiaomi Corporation - Mi Monitor - DP-1"
-        "desc:Xiaomi Corporation - Mi Monitor - DP-3"
-        "desc:Xiaomi Corporation Mi Monitor Unknown"
+        "Xiaomi Corporation Mi Monitor 0000000000000"
+        "Xiaomi Corporation Mi Monitor Unknown"
+        "DP-0"
+        "DP-1"
+        "DP-2"
+        "DP-3"
+        "DP-4"
+        "DP-5"
       ];
+      isDefault = true;
     };
     default = {
       enable = false;

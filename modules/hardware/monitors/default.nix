@@ -34,19 +34,17 @@ let
     foldl' (res: v: res // v) { } aliasedList
   ) cfg;
 
+  wallpaperMonitors = lib.filterAttrs (
+    name: value: value ? wallpaper && value.wallpaper != null
+  ) config.hardware.aliasedMonitors;
 in
 {
   options.hardware = {
     singleOutput.enable = mkEnableOption "this setup is used with single output";
     monitors = mkOption {
       description = ''
-        The per-monitor configuration for hyprland, hyprpaper and hyprlock.
-        The 'default' field will be applyied as default.
-        You can use 'desc:My Monitor' format as monitor names.
-        See details at manuals of
-        [hyprland](https://wiki.hyprland.org/Configuring/Monitors/),
-        [hyprpaper](https://wiki.hyprland.org/Hypr-Ecosystem/hyprpaper/) and
-        [hyprlock](https://wiki.hyprland.org/Hypr-Ecosystem/hyprlock/)
+        The per-monitor configuration for display manager, desktop manager, lock
+        screens and etc. The 'default' field will be applyied as default.
       '';
       type = attrsOf (submodule {
         options = {
@@ -80,6 +78,7 @@ in
             default = [ ];
             type = listOf str;
           };
+          isDefault = mkEnableOption "treating this monitor as default";
         };
       });
       default = { };
@@ -90,6 +89,13 @@ in
       readOnly = true;
       internal = true;
       default = aliasedMonitors;
+    };
+    wallpaperMonitors = mkOption {
+      description = "Helper option with resolved monitors with wallpapers configured";
+      type = anything;
+      readOnly = true;
+      internal = true;
+      default = wallpaperMonitors;
     };
   };
 }

@@ -8,10 +8,7 @@ let
   inherit (lib)
     elemAt
     splitString
-    removePrefix
     mapAttrs
-    mapAttrs'
-    nameValuePair
     map
     toList
     length
@@ -26,9 +23,7 @@ let
     name: monitor:
     let
       optionalAttr = pred: val: if pred then val else null;
-      optionalIntAttr =
-        name: optionalAttr (monitor ? "${name}") (toInt monitor."${name}");
-      name' = removePrefix "desc:" name;
+      optionalIntAttr = name: optionalAttr (monitor ? "${name}") (toInt monitor."${name}");
       position =
         let
           splitted = splitString "x" monitor.position;
@@ -48,18 +43,17 @@ let
         };
       scale = optionalIntAttr "scale";
       transform = monitor.transform or { };
-      output = {
-        inherit
-          position
-          mode
-          scale
-          transform
-          ;
-        inherit (monitor) enable;
-      };
     in
-    nameValuePair name' output;
-  outputs = mapAttrs' mkOutput monitors;
+    {
+      inherit
+        position
+        mode
+        scale
+        transform
+        ;
+      inherit (monitor) enable;
+    };
+  outputs = mapAttrs mkOutput monitors;
   singleOutput = config.hardware.singleOutput;
 
   locker = toString (
