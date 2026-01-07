@@ -6,18 +6,6 @@
 }:
 let
   inherit (config.hardware) needGraphic;
-  themes = pkgs.symlinkJoin {
-    name = "AllThemes";
-    paths = with pkgs; [
-      bibata-cursors
-      nordic
-      reversal-icon-theme
-      papirus-icon-theme
-      zafiro-icons
-      ubuntu-themes
-      gnome-themes-extra
-    ];
-  };
 in
 {
   config = {
@@ -56,7 +44,7 @@ in
       home.pointerCursor = {
         gtk.enable = true;
         # x11.enable = true;
-        package = themes;
+        package = pkgs.all-themes;
         name = "Bibata-Modern-Classic";
         size = 16;
       };
@@ -65,12 +53,12 @@ in
         enable = true;
 
         theme = {
-          package = themes;
+          package = pkgs.all-themes;
           name = "Nordic-darker";
         };
 
         iconTheme = {
-          package = themes;
+          package = pkgs.all-themes;
           name = "Nordic-darker";
         };
 
