@@ -1,4 +1,4 @@
-{ lib, path }:
+{ lib, path, flake-inputs }:
 let
   splitNameAt =
     name: index:
@@ -9,6 +9,7 @@ let
     if hasIndex then builtins.elemAt splitted index else "";
 in
 {
+  hm = flake-inputs.home-manager.lib.hm;
   mkHmExtra = section: value: [ { inherit section value; } ];
   mkOverlay = fn: { nixpkgs.overlays = [ (self: super: fn super) ]; };
   mkOverlaySelf = fn: { nixpkgs.overlays = [ (self: super: fn self) ]; };

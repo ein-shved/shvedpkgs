@@ -85,7 +85,12 @@
               inherit system;
               specialArgs = {
                 inherit flake-inputs;
-                lib = pkgs.lib // (import ./lib { inherit (pkgs) lib path; });
+                lib =
+                  pkgs.lib
+                  // (import ./lib {
+                    inherit (pkgs) lib path;
+                    inherit flake-inputs;
+                  });
                 pkgsUnstable = loadPkgsUnstable system;
               }
               // specialArgs;

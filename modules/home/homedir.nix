@@ -2,11 +2,12 @@
   config,
   lib,
   flake-inputs,
+  pkgs,
   ...
 }:
 let
   name = config.user.name;
-  hm = flake-inputs.home-manager.lib.hm;
+  cfg = config.home-manager.users.${name}.home;
 
   actSubmodule = with lib.types; {
     options = {
@@ -27,9 +28,24 @@ let
   activationMapper =
     name: act:
     if builtins.isString act then
-      hm.dag.entryAfter [ "writeBoundary" ] act
+      lib.hm.dag.entryAfter [ "writeBoundary" ] act
     else
-      hm.dag.entryAfter (lib.toList act.after) act.script;
+      lib.hm.dag.entryAfter (lib.toList act.after) act.script;
+
+  # This will force HM to use modern approach of profile configuration on clean
+  # systems
+  initial =
+    let
+      dummy = pkgs.runCommand "dummy" { } "mkdir $out";
+    in
+    {
+      home.activation.preInstallPackages = lib.hm.dag.entryBefore [ "installPackages" ] ''
+        if [ ! -e "${cfg.profileDirectory}/manifest.json" ]; then
+          nix profile add ${dummy}
+          nix profile remove ${dummy}
+        fi
+      '';
+    };
 in
 {
   options = {
@@ -53,6 +69,7 @@ in
       users.${name} = lib.mkMerge [
         (lib.removeAttrs config.home [ "activations" ])
         { home.activation = lib.mapAttrs activationMapper config.home.activations; }
+        initial
       ];
     };
     home-activations = config.home.activations;
