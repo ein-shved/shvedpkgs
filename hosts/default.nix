@@ -1,10 +1,13 @@
 let
-  userconfig = {
-    user = {
-      name = "shved";
-      humanName = "Yury Shvedov";
+  userconfig =
+    { lib, ... }:
+    {
+      user = {
+        name = lib.mkDefault "shved";
+        humanName = lib.mkDefault "Yury Shvedov";
+        mail = lib.mkDefault "mestofel13@gmail.com";
+      };
     };
-  };
   mkHost = name: {
     "${name}" = {
       modules = [
