@@ -1,6 +1,6 @@
 { pkgs, ... }:
 {
-  home.programs.anyrun = {
+  hm.programs.anyrun = {
     enable = true;
     config = {
       x = {

@@ -1,7 +1,7 @@
 { ... }:
 {
   config = {
-    home.home.file = {
+    hm.home.file = {
       ".toprc".source = ./toprc;
     };
   };

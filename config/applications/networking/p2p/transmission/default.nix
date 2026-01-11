@@ -53,7 +53,7 @@ in
     ];
     system.activationScripts.transmission-daemon = lib.mkForce "";
 
-    home.home.activation.transmission-daemon = lib.hm.dag.entryAfter [ "writeBoundary" ] (
+    hm.home.activation.transmission-daemon = lib.hm.dag.entryAfter [ "writeBoundary" ] (
       ''
         install -d -m 700 -o '${cfg.user}' -g '${cfg.group}' '${cfg.home}/${settingsDir}'
       ''

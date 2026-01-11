@@ -19,7 +19,7 @@ let
     foldl' (all: v: all // v) { } values;
 in
 {
-  config.home.xdg.mimeApps = {
+  hm.xdg.mimeApps = {
     enable = true;
     defaultApplications = setApplicationsFor {
       "org.gnome.Evince.desktop" = "application/pdf";

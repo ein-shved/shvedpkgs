@@ -4,13 +4,13 @@
   ...
 }:
 {
-  home.services.wpaperd = {
+  hm.services.wpaperd = {
     enable = config.hardware.needGraphic;
     settings = lib.mapAttrs (_: mon: {
       path = mon.wallpaper;
     }) config.hardware.wallpaperMonitors;
   };
-  home-manager.users.${config.user.name}.systemd.user.services.wpaperd = {
+  hm.systemd.user.services.wpaperd = {
     Unit.After = [ "niri.service" ];
     Unit.ConditionEnvironment = lib.mkForce "";
 

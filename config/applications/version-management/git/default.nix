@@ -17,7 +17,7 @@ let
 in
 {
   config = {
-    home.programs.git = {
+    hm.programs.git = {
       enable = true;
       lfs.enable = true;
       package = pkgs.gitFull;

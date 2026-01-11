@@ -1,6 +1,6 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 {
-  home.programs =
+  hm.programs =
     let
       inherit (pkgs) kitty;
       kitty-installation-dir = "${kitty}/lib/kitty";

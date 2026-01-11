@@ -25,28 +25,24 @@ in
     environment.systemPackages = [
       pkgs.prusa-slicer
     ];
-    home.activations = {
-      prusaConfig =
-        if cfg.prusaConfig == null then
-          "true"
+    hm.home.activation.prusaConfig = lib.mkIf (cfg.prusaConfig != null) (
+      lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        configDir=$HOME/.config/PrusaSlicer
+        if ! [ -d "$configDir" ]; then
+          echo "Copy ${cfg.prusaConfig} to $configDir"
+          mkdir -p "$(dirname "$configDir")"
+          set -x
+          ${pkgs.rsync}/bin/rsync -r \
+            --mkpath \
+            --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r \
+            ${cfg.prusaConfig}/* \
+            $configDir
+          set +x
         else
-          ''
-            configDir=$HOME/.config/PrusaSlicer
-            if ! [ -d "$configDir" ]; then
-              echo "Copy ${cfg.prusaConfig} to $configDir"
-              mkdir -p "$(dirname "$configDir")"
-              set -x
-              ${pkgs.rsync}/bin/rsync -r \
-                --mkpath \
-                --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r \
-                ${cfg.prusaConfig}/* \
-                $configDir
-              set +x
-            else
-              echo "$configDir already exists"
-            fi
-          '';
-    };
+          echo "$configDir already exists"
+        fi
+      ''
+    );
     services.gitwatch = {
       modeling3d = {
         enable = true;

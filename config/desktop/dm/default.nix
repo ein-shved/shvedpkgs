@@ -34,9 +34,9 @@ in
       greeters.gtk = {
         enable = true;
         cursorTheme = {
-          inherit (config.home.home.pointerCursor) package name size;
+          inherit (config.hm.home.pointerCursor) package name size;
         };
-        inherit (config.home.gtk) theme iconTheme;
+        inherit (config.hm.gtk) theme iconTheme;
         extraConfig = ''
           [greeter]
           xft-dpi = 144

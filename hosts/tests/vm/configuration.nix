@@ -1,6 +1,11 @@
-{ config, lib, pkgs, modulesPath, ... }: {
-# TODO(Shvedov): Remove affter https://github.com/NixOS/nixpkgs/issues/59219
-# resolution
+{
+  pkgs,
+  modulesPath,
+  ...
+}:
+{
+  # TODO(Shvedov): Remove affter https://github.com/NixOS/nixpkgs/issues/59219
+  # resolution
   imports = [
     "${modulesPath}/virtualisation/qemu-vm.nix"
   ];
@@ -33,4 +38,5 @@
   ];
 
   system.stateVersion = "23.05";
+  home.refresh-profile.enable = true;
 }

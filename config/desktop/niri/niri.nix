@@ -74,7 +74,7 @@ in
     enable = config.hardware.needGraphic;
     package = pkgs.niri-lightdm-wa;
   };
-  home.programs.niri.settings = {
+  hm.programs.niri.settings = {
     inherit outputs;
 
     input.keyboard = {

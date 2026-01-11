@@ -10,7 +10,7 @@ let
   };
 in
 {
-  home.programs.waybar = {
+  hm.programs.waybar = {
     enable = config.hardware.needGraphic;
     systemd.enable = true;
     systemd.target = "niri.service";

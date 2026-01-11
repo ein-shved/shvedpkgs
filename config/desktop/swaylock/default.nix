@@ -30,7 +30,7 @@ let
       '';
 in
 {
-  home.programs.swaylock = {
+  hm.programs.swaylock = {
     enable = true;
     settings = {
       color = "000000";

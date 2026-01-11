@@ -6,7 +6,7 @@
     };
   };
   programs.ssh.startAgent = true;
-  home.programs.ssh = {
+  hm.programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
     matchBlocks."*" = {

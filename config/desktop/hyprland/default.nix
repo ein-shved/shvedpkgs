@@ -39,7 +39,7 @@ in
     };
 
   config = {
-    home.xdg.configFile = lib.concatMapAttrs (
+    hm.xdg.configFile = lib.concatMapAttrs (
       name: value:
       let
         hyprPart = str: lib.optionalString value.hypr str;

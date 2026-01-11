@@ -23,7 +23,7 @@
     environment.graphicPackages = with pkgs; [
       networkmanagerapplet
     ];
-    home = {
+    hm = {
       home.pointerCursor = {
         gtk.enable = true;
         package = pkgs.all-themes;
