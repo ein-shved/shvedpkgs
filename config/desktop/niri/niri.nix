@@ -126,7 +126,6 @@ in
           "init"
         ])
         ++ [
-          "nm-applet"
           [
             "wayidle"
             "--timeout"

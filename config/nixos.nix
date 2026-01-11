@@ -21,6 +21,7 @@
     ./desktop/kitty
     ./desktop/niri
     ./desktop/niri/niri.nix
+    ./desktop/nm-applet
     ./desktop/swaylock/default.nix
     ./desktop/waybar
     ./desktop/wpaperd
