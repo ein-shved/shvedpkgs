@@ -17,12 +17,12 @@ let
 in
 {
   config = {
-    home.programs.git = lib.mkIf (config.user.mail != null) {
+    home.programs.git = {
       enable = true;
       lfs.enable = true;
       package = pkgs.gitFull;
-      userName = config.user.humanName;
-      userEmail = config.user.mail;
+      settings.user.name = lib.mkIf (config.user.humanName != null) config.user.humanName;
+      settings.user.email = lib.mkIf (config.user.mail != null) config.user.mail;
       includes = [
         {
           contents = {
@@ -48,10 +48,6 @@ in
           };
         }
       ];
-    };
-    programs.git = {
-      enable = true;
-      lfs.enable = true;
     };
     environment.systemPackages = with pkgs; [
       gitaliases
