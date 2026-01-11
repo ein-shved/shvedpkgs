@@ -1,21 +1,18 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 let
+  inherit (lib) mkOption types;
   cfg = config.user;
-  mkDomainName = name: hasNs:
-    let
-      fname = lib.getFirstName name;
-      sname = lib.getSurname name;
-      fn = builtins.elemAt (lib.stringToCharacters fname) 0;
-    in
-    if hasNs then sname + "_" + fn else sname;
 in
 {
 
   ## Options #######################################
 
   options = {
-    user = with pkgs.lib; with types; {
-
+    user = with types; {
       name = mkOption {
         description = "Default user login string";
         type = str;
@@ -43,16 +40,16 @@ in
         default = null;
       };
 
-      hasNamesake = mkOption {
-        type = bool;
-        description = "Does employee has surnamesake";
-        default = false;
-      };
-
       domainName = mkOption {
         description = "User login in domain";
         type = str;
-        default = mkDomainName cfg.humanName cfg.hasNamesake;
+        default = cfg.domainNameMaker cfg.humanName;
+      };
+
+      domainNameMaker = mkOption {
+        description = "Function which makes domain name from human name";
+        type = functionTo str;
+        default = name: lib.getSurname (lib.toLower name);
       };
 
       extraGroups = mkOption {
@@ -70,7 +67,6 @@ in
     };
   };
 
-
   ## Configurations #######################################
 
   config = {
@@ -79,6 +75,7 @@ in
         inherit (cfg) home name password;
         createHome = true;
         isNormalUser = true;
+        description = cfg.humanName;
         extraGroups = [
           "wheel" # Admin
           "tty" # Can configure tty devices
@@ -89,7 +86,8 @@ in
           "docker" # Can interact with docker containers
           "input" # Access to input devices
           "nixbld" # Access to nix build files
-        ] ++ cfg.extraGroups;
+        ]
+        ++ cfg.extraGroups;
       };
     };
   };
