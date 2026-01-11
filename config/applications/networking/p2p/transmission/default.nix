@@ -5,59 +5,68 @@
   ...
 }:
 let
-  inherit (config.services.transmission.settings)
-    download-dir
-    watch-dir
-    incomplete-dir
-    ;
   inherit (config.services) mediaStore;
   inherit (config.hardware) isNas;
-  cfg = config.user;
-  homeDir = cfg.home;
-  transmissionPrepare = pkgs.writeShellScript "transmissionPrepare" ''
-    mkdir -p ${download-dir}
-    mkdir -p ${watch-dir}
-    mkdir -p ${incomplete-dir}
-  '';
+  inherit (lib) mkIf optionalAttrs optionalString;
+  cfg = config.services.transmission;
+  user = config.user;
+  settingsDir = ".config/transmission-daemon";
+
 in
 {
-  config = lib.mkIf (!config.kl.domain.enable) {
+  config = mkIf (!config.kl.domain.enable) {
     # Sometimes we need to download Linux images from official torrents
     services.transmission = {
       enable = true;
-      user = cfg.name;
-      home = "${homeDir}";
+      user = user.name;
+      home = "${user.home}";
       package = pkgs.transmission_4;
+      downloadDirPermissions = "770";
       settings = {
         watch-dir = mediaStore;
         download-dir = mediaStore;
         incomplete-dir = "${mediaStore}/.incomplete";
         watch-dir-enabled = false;
       }
-      // lib.optionalAttrs (!isNas) {
+      // optionalAttrs (!isNas) {
         rpc-whitelist = "127.0.0.1";
         rpc-bind-address = "127.0.0.1";
       }
-      // lib.optionalAttrs isNas {
+      // optionalAttrs isNas {
         rpc-bind-address = "0.0.0.0";
         rpc-whitelist-enabled = false;
       };
     }
-    // lib.optionalAttrs isNas {
+    // optionalAttrs isNas {
       openFirewall = true;
       openRPCPort = true;
     };
     environment.graphicPackages = [
       pkgs.transmission-remote-gtk
     ];
-    systemd.services.transmissionPrepare = lib.mkIf (!config.services.transmission.enable) {
-      description = "Workaround for transmission directories creation";
-      wantedBy = [ "transmission.service" ];
-      serviceConfig = {
-        Type = "oneshot";
-        User = cfg.name;
-        ExecStart = transmissionPrepare;
-      };
+    systemd.services.transmission = {
+      after = [ "home-manager-${user.name}.service" ];
     };
+
+    user.extraGroups = [
+      cfg.group
+    ];
+    system.activationScripts.transmission-daemon = lib.mkForce "";
+
+    home.home.activation.transmission-daemon = lib.hm.dag.entryAfter [ "writeBoundary" ] (
+      ''
+        install -d -m 700 -o '${cfg.user}' -g '${cfg.group}' '${cfg.home}/${settingsDir}'
+      ''
+      + optionalString (cfg.downloadDirPermissions != null) ''
+        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.download-dir}'
+
+        ${optionalString cfg.settings.incomplete-dir-enabled ''
+          install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.incomplete-dir}'
+        ''}
+        ${optionalString cfg.settings.watch-dir-enabled ''
+          install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.watch-dir}'
+        ''}
+      ''
+    );
   };
 }
