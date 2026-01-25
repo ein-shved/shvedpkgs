@@ -20,6 +20,7 @@
     ./media
     ./os-specific/linux/keyutils
     ./security/ca.nix
+    ./services/gerrit
     ./services/networking/cntlm-gss
     ./services/networking/klvpn
     ./services/vps
