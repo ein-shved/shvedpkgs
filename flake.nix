@@ -134,6 +134,10 @@
         updSelf;
 
       allConfigurations = mkConfigs (import ./hosts);
+      allNixos = extend ({ modules = nixosModules; } // allConfigurations) { };
     in
-    extend ({ modules = nixosModules; } // allConfigurations) { };
+    allNixos
+    // {
+      packages.${_defaultSystem} = allNixos.nixosConfigurations.generic.pkgs;
+    };
 }
