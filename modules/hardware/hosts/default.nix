@@ -16,6 +16,20 @@
         default = false;
         type = lib.types.bool;
       };
+      isVps = lib.mkOption {
+        description = ''
+          Whenether this host is vps server.
+        '';
+        default = false;
+        type = lib.types.bool;
+      };
+      isVpsClient = lib.mkOption {
+        description = ''
+          Whenether this host is attendend to interract with vps.
+        '';
+        default = false;
+        type = lib.types.bool;
+      };
       needGraphic = lib.mkOption {
         description = ''
           Whenether this host does not need graphics.
@@ -54,6 +68,13 @@
         default = [ ];
         type = lib.types.listOf lib.types.package;
       };
+      vpsPackages = lib.mkOption {
+        description = ''
+          Set of packages which enabled only when `haedware.isVps` is enabled
+        '';
+        default = [ ];
+        type = lib.types.listOf lib.types.package;
+      };
     };
   };
 
@@ -62,14 +83,17 @@
       (final: prev: {
         isLaptop = config.hardware.isLaptop;
         isNas = config.hardware.isNas;
+        isVps = config.hardware.isVps;
+        isVpsClient = config.hardware.isVpsClient;
         isDesktop = (!final.isLaptop) && (!final.isNas);
       })
     ];
     environment.systemPackages =
       lib.optionals config.hardware.needGraphic config.environment.graphicPackages
       ++ lib.optionals config.hardware.needGraphic config.environment.developmentPackages
-      ++ lib.optionals config.hardware.isNas config.environment.nasPackages;
-    hardware = lib.mkIf config.hardware.isNas {
+      ++ lib.optionals config.hardware.isNas config.environment.nasPackages
+      ++ lib.optionals config.hardware.isNas config.environment.vpsPackages;
+    hardware = lib.mkIf (config.hardware.isNas || config.hardware.isVps) {
       needGraphic = false;
       development = false;
     };

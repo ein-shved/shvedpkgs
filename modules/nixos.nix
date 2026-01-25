@@ -22,6 +22,7 @@
     ./security/ca.nix
     ./services/networking/cntlm-gss
     ./services/networking/klvpn
+    ./services/vps
     ./tools/security/pass
   ];
 }

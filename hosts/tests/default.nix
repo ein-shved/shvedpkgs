@@ -42,4 +42,18 @@
       }
     ];
   };
+  testVps = {
+    modules = [
+      ./vm/configuration.nix
+      {
+        user = {
+          name = "vps";
+          humanName = "Vps";
+          password = "vps";
+        };
+        hardware.isVps = true;
+        services.gerrit.serverId = "24247d56-4f56-473f-99f0-6680a185b369";
+      }
+    ];
+  };
 }

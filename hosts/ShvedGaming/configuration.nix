@@ -6,6 +6,7 @@
   ];
 
   hardware.isLaptop = false;
+  hardware.isVpsClient = true;
 
   kl.enable = false;
   environment = {
