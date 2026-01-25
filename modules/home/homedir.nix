@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  flake-inputs,
   pkgs,
   ...
 }:
@@ -33,7 +32,6 @@ in
   };
 
   imports = [
-    flake-inputs.home-manager.nixosModules.default
     (lib.mkAliasOptionModule [ "hm" ] [ "home-manager" "users" name ])
   ];
 }

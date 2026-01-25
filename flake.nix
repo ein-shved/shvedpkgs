@@ -35,6 +35,10 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
@@ -45,6 +49,8 @@
       niri,
       unstable,
       nix-index-database,
+      nixos-generators,
+      home-manager,
       ...
     }@flake-inputs:
     let
@@ -55,8 +61,10 @@
         ./pkgs
         agenix.nixosModules.default
         vim.nixosModules.default
+        home-manager.nixosModules.default
         niri-flake.nixosModules.niri
         nix-index-database.nixosModules.nix-index
+        nixos-generators.nixosModules.all-formats
         {
           nixpkgs.overlays = [
             agenix.overlays.default
@@ -135,9 +143,13 @@
 
       allConfigurations = mkConfigs (import ./hosts);
       allNixos = extend ({ modules = nixosModules; } // allConfigurations) { };
+      packages =
+        builtins.mapAttrs (_: host: host.pkgs // {
+          images = host.config.formats;
+        }) allNixos.nixosConfigurations;
     in
     allNixos
     // {
-      packages.${_defaultSystem} = allNixos.nixosConfigurations.generic.pkgs;
+      packages.${_defaultSystem} = packages  // packages.generic;
     };
 }
