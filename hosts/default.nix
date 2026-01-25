@@ -18,8 +18,10 @@ let
   };
   mkHosts = names: builtins.foldl' (res: name: res // mkHost name) { } names;
   tests = import ./tests;
+  boots = import ./boots;
 in
 tests
+// boots
 // {
   generic = {
     modules = [ { user.name = "NixOS"; } ];
