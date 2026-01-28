@@ -39,6 +39,10 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    disco = {
+      url = "github:nix-community/disko/latest";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
@@ -51,6 +55,7 @@
       nix-index-database,
       nixos-generators,
       home-manager,
+      disco,
       ...
     }@flake-inputs:
     let
@@ -65,6 +70,7 @@
         niri-flake.nixosModules.niri
         nix-index-database.nixosModules.nix-index
         nixos-generators.nixosModules.all-formats
+        disco.nixosModules.default
         {
           nixpkgs.overlays = [
             agenix.overlays.default
