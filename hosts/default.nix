@@ -33,4 +33,5 @@ tests
   "ShvedLaptop"
   "ShvedGaming"
   "ShvedMedia"
+  "gerrit"
 ]
