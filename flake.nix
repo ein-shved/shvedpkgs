@@ -7,7 +7,7 @@
     };
     unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     agenix = {
-      url = "github:ryantm/agenix/0.15.0";
+      url = "github:ryantm/agenix";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
