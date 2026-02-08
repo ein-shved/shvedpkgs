@@ -14,6 +14,15 @@ let
     cscope.out
     tags
   '';
+  templatedir =
+    pkgs.runCommandLocal "git_template"
+      {
+        commit_msg = lib.getExe pkgs.gerrit-commit-msg-hook;
+      }
+      ''
+        mkdir -p $out/hooks/
+        cp $commit_msg $out/hooks/commit-msg
+      '';
 in
 {
   config = {
@@ -44,6 +53,13 @@ in
             alias = {
               lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
               autosquash = "!git autofixup && git rebase --autosquash";
+            };
+            gitreview = {
+              username = "ein-shved";
+              hostname = "gerrit.shved.org";
+            };
+            init = {
+              inherit templatedir;
             };
           };
         }
