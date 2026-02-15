@@ -144,18 +144,22 @@
               modules = updModules;
             }
             // extraArgs;
+
+          packages = builtins.mapAttrs (
+            _: host:
+            host.pkgs
+            // {
+              images = host.config.formats;
+            }
+          ) updSelf.nixosConfigurations;
         in
-        updSelf;
+        updSelf
+        // {
+          packages.${_defaultSystem} = packages // packages.generic;
+        };
 
       allConfigurations = mkConfigs (import ./hosts);
       allNixos = extend ({ modules = nixosModules; } // allConfigurations) { };
-      packages =
-        builtins.mapAttrs (_: host: host.pkgs // {
-          images = host.config.formats;
-        }) allNixos.nixosConfigurations;
     in
-    allNixos
-    // {
-      packages.${_defaultSystem} = packages  // packages.generic;
-    };
+    allNixos;
 }
