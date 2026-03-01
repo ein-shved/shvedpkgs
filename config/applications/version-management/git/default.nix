@@ -69,7 +69,8 @@ in
       gitaliases
       git-review
       git-autofixup
-
+    ];
+    environment.developmentPackages = with pkgs; [
       libclang.python # For git format-patch
       clang-tools
     ];

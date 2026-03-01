@@ -13,18 +13,24 @@
         useTmpfs = true;
         cleanOnBoot = true;
       };
-      plymouth.enable = true;
+      plymouth.enable = config.hardware.needGraphic;
       kernelParams = [ "quiet" ];
-      supportedFilesystems = [ "ntfs" ];
+      supportedFilesystems = lib.mkIf config.hardware.needGraphic [ "ntfs" ];
       binfmt.emulatedSystems = lib.optionals config.hardware.development [
         "aarch64-linux"
       ];
     };
-    documentation.nixos = {
+    documentation = {
+      enable = config.hardware.development;
+      man.enable = config.hardware.development;
+      doc.enable = config.hardware.development;
+      info.enable = config.hardware.development;
+    };
+    documentation.nixos = lib.mkIf config.hardware.development {
       includeAllModules = true;
       options.warningsAreErrors = false;
     };
-    systemd.services = {
+    systemd.services = lib.mkIf config.hardware.development {
       nix-daemon.environment.TMPDIR = "/home/.nix-build";
       make-nix-build = {
         script = ''

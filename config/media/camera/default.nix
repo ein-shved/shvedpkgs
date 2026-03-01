@@ -1,6 +1,6 @@
 { pkgs, lib, config, ... }:
 {
-  config.services.udev = {
+  config.services.udev = lib.{
     extraRules = ''
       SUBSYSTEM=="usb", \
       ATTRS{idVendor}=="045e", \

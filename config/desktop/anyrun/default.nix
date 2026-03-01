@@ -1,6 +1,11 @@
-{ pkgs, ... }:
 {
-  hm.programs.anyrun = {
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+{
+  hm.programs.anyrun = lib.mkIf config.hardware.needGraphic {
     enable = true;
     config = {
       x = {

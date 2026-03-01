@@ -29,7 +29,6 @@
     ./desktop/xdg/mime
     ./exceptions
     ./media
-    ./media/camera
     ./media/mpv
     ./media/pipewire
     ./media/pulseaudio

@@ -1,7 +1,12 @@
-{ pkgs, pkgsUnstable, ... }:
+{
+  pkgs,
+  pkgsUnstable,
+  config,
+  ...
+}:
 {
   environment.systemPackages = with pkgs; [
-    vim-configured
+    (if config.hardware.development then vim-configured else vim-configured-nodev)
   ];
   environment.graphicPackages = with pkgsUnstable; [
     neovide

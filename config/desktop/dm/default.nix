@@ -26,33 +26,37 @@ let
   );
 in
 {
-  services.displayManager.defaultSession = "niri";
-  services.xserver.enable = true;
-  services.xserver.displayManager = {
-    lightdm = {
-      enable = needGraphic;
-      greeters.gtk = {
+  services = lib.mkIf needGraphic {
+    displayManager.defaultSession = "niri";
+    xserver.enable = true;
+    xserver.displayManager = {
+      lightdm = {
         enable = true;
-        cursorTheme = {
-          inherit (config.hm.home.pointerCursor) package name size;
+        # TODO: get rid of direct usage of other fields values: replace with extra
+        # options values
+        greeters.gtk = lib.optionalAttrs needGraphic {
+          enable = true;
+          cursorTheme = {
+            inherit (config.hm.home.pointerCursor) package name size;
+          };
+          inherit (config.hm.gtk) theme iconTheme;
+          extraConfig = ''
+            [greeter]
+            xft-dpi = 144
+          ''
+          + lib.concatStringsSep "\n" images;
         };
-        inherit (config.hm.gtk) theme iconTheme;
-        extraConfig = ''
-          [greeter]
-          xft-dpi = 144
-        ''
-        + lib.concatStringsSep "\n" images;
+        extraSeatDefaults = lib.mkIf config.hardware.singleOutput.enable ''
+          display-setup-script=${
+            lib.getExe (
+              pkgs.lightdm-single-output.override {
+                default-user = config.user.name;
+                inherit default-outputs;
+              }
+            )
+          }
+        '';
       };
-      extraSeatDefaults = lib.mkIf config.hardware.singleOutput.enable ''
-        display-setup-script=${
-          lib.getExe (
-            pkgs.lightdm-single-output.override {
-              default-user = config.user.name;
-              inherit default-outputs;
-            }
-          )
-        }
-      '';
     };
   };
 }

@@ -1,21 +1,27 @@
 {
+  config,
   pkgs,
   lib,
   ...
 }:
+let
+  mkGraphic = lib.mkIf config.hardware.needGraphic;
+in
 {
   config = {
     services.gnome.gnome-keyring.enable = lib.mkForce false;
-    fonts.packages = with pkgs; [
-      jetbrains-mono
-      nerd-fonts.jetbrains-mono
-    ];
+    fonts = mkGraphic {
+      packages = with pkgs; [
+        jetbrains-mono
+        nerd-fonts.jetbrains-mono
+      ];
+    };
     time.timeZone = "Europe/Moscow";
     i18n.extraLocaleSettings = {
       LC_MESSAGES = "en_US.UTF-8";
       LC_TIME = "ru_RU.UTF-8";
     };
-    qt = {
+    qt = mkGraphic {
       enable = true;
       platformTheme = "gnome";
       style = "adwaita-dark";
@@ -23,7 +29,7 @@
     environment.graphicPackages = with pkgs; [
       networkmanagerapplet
     ];
-    hm = {
+    hm = mkGraphic {
       home.pointerCursor = {
         gtk.enable = true;
         package = pkgs.all-themes;

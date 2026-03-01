@@ -1,17 +1,24 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  config,
+  ...
+}:
 {
   options = {
-    programs.bash.extraCompletions = with lib; with types; mkOption {
-      description = "Add your bash-completion script bpdy here";
-      type = listOf str;
-      default = [ ];
-    };
+    programs.bash.extraCompletions =
+      with lib;
+      with types;
+      mkOption {
+        description = "Add your bash-completion script bpdy here";
+        type = listOf str;
+        default = [ ];
+      };
   };
   config = {
     programs = {
       command-not-found.enable = false; # Use nix-index instead
       nix-index = {
-        enable = true;
+        enable = config.hardware.development;
         enableBashIntegration = true;
       };
       bash = {
