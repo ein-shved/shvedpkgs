@@ -63,9 +63,10 @@ in
     zigbee2mqtt = lib.mkIf isNas {
       enable = true;
       settings = {
-        homeassistant = config.services.home-assistant.enable;
+        homeassistant = lib.mkForce config.services.home-assistant.enable;
         permit_join = true;
-        serial.port = "/dev/ttyACM0";
+        serial.port = "/dev/serial/by-id/usb-1a86_USB_Single_Serial_58E9008153-if00";
+        serial.adapter = "zstack";
         mqtt.server = let
           inherit (listener) address port;
           listener = lib.elemAt services.mosquitto.listeners 0;
