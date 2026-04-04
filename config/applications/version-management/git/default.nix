@@ -41,6 +41,9 @@ in
             fetch = {
               prune = true;
             };
+            push = {
+              default = "current";
+            };
             diff = {
               colorMoved = "zebra";
             };
