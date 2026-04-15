@@ -57,15 +57,16 @@
       bear
       docker
       dowork
+      esp-config
       gdb
+      gh
       man
       man-pages
       man-pages-posix
       niv
       nix-tree
-      shunit2
       nixpkgs-review
-      gh
+      shunit2
     ];
 
     programs = {
