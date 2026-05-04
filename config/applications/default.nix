@@ -29,6 +29,7 @@
 
     environment.graphicPackages = with pkgs; [
       cdrkit
+      element-desktop
       eog
       evince
       fontconfig.lib
