@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 let
   cfg = config.services.matrix-continuwuity;
   domain = cfg.settings.global.server_name;
@@ -7,9 +7,17 @@ in
   config = lib.mkIf config.hardware.isNas {
     services.matrix-continuwuity = {
       enable = true;
+      package = pkgs.matrix-continuwuity_latest;
       settings = {
         global = {
           server_name = "matrix.shved.org";
+          new_user_displayname_suffix = "";
+          matrix_rtc.foci = [
+            {
+              type = "livekit";
+              livekit_service_url = "https://livekit.shved.org";
+            }
+          ];
         };
       };
     };
@@ -22,10 +30,22 @@ in
       };
     };
     services.nginx.proxies = {
-      ${cfg.settings.global.server_name} = {
+      ${domain} = {
         extraConfig = {
           forceSSL = true;
           useACMEHost = domain;
+          listen = [
+            {
+              addr = "0.0.0.0";
+              port = 8443;
+              ssl = true;
+            }
+            {
+              addr = "0.0.0.0";
+              port = 443;
+              ssl = true;
+            }
+          ];
         };
         locations."/".upstreamPort = lib.elemAt cfg.settings.global.port 0;
       };

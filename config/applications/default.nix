@@ -35,8 +35,10 @@ in
     environment.graphicPackages = with pkgs; [
       cdrkit
       dconf
+      element-desktop
       eog
       evince
+      feishin
       fontconfig.lib
       gimp
       gnome-calculator
@@ -52,7 +54,6 @@ in
       thunderbird
       xclip
       xdotool
-      feishin
 
       # Unavailable
       # discord

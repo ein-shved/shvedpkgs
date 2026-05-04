@@ -38,6 +38,8 @@
     ./services
     ./services/codex
     ./services/home-assistant
+    ./services/matrix/continuwuity
+    ./services/matrix/livekit
     ./services/nas/ftp
     ./services/nas/upnp
     ./services/navidrome
