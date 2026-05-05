@@ -18,6 +18,7 @@
     ./desktop
     ./desktop/anyrun
     ./desktop/dm
+    ./desktop/dm/select.nix
     ./desktop/kitty
     ./desktop/niri
     ./desktop/niri/niri.nix

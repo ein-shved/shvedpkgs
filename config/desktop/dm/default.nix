@@ -24,39 +24,48 @@ let
   default-outputs = builtins.attrNames (
     lib.filterAttrs (_: v: v.isDefault) config.hardware.aliasedMonitors
   );
+
+  lightdm = config.services.xserver.displayManager.lightdm.enable;
+  lemurs = config.services.displayManager.lemurs.enable;
 in
 {
   services = lib.mkIf needGraphic {
     displayManager.defaultSession = "niri";
-    xserver.enable = true;
-    xserver.displayManager = {
-      lightdm = {
-        enable = true;
-        # TODO: get rid of direct usage of other fields values: replace with extra
-        # options values
-        greeters.gtk = lib.optionalAttrs needGraphic {
-          enable = true;
-          cursorTheme = {
-            inherit (config.hm.home.pointerCursor) package name size;
+    displayManager.lemurs = {
+      enable = true;
+    };
+    xserver = lib.mkIf lightdm {
+      displayManager = {
+        lightdm = {
+          # TODO: get rid of direct usage of other fields values: replace with extra
+          # options values
+          greeters.gtk = lib.optionalAttrs needGraphic {
+            enable = true;
+            cursorTheme = {
+              inherit (config.hm.home.pointerCursor) package name size;
+            };
+            inherit (config.hm.gtk) theme iconTheme;
+            extraConfig = ''
+              [greeter]
+              xft-dpi = 144
+            ''
+            + lib.concatStringsSep "\n" images;
           };
-          inherit (config.hm.gtk) theme iconTheme;
-          extraConfig = ''
-            [greeter]
-            xft-dpi = 144
-          ''
-          + lib.concatStringsSep "\n" images;
+          extraSeatDefaults = lib.mkIf config.hardware.singleOutput.enable ''
+            display-setup-script=${
+              lib.getExe (
+                pkgs.lightdm-single-output.override {
+                  default-user = config.user.name;
+                  inherit default-outputs;
+                }
+              )
+            }
+          '';
         };
-        extraSeatDefaults = lib.mkIf config.hardware.singleOutput.enable ''
-          display-setup-script=${
-            lib.getExe (
-              pkgs.lightdm-single-output.override {
-                default-user = config.user.name;
-                inherit default-outputs;
-              }
-            )
-          }
-        '';
       };
     };
+    # TODO: configure lemurs
+    displayManager.lemurs = { };
   };
+  user.extraGroups = lib.mkIf lemurs [ "seat" ];
 }
