@@ -9,9 +9,6 @@
       dconf
       dhcps
       file
-      fontconfig.lib
-      hunspellDicts.en-us
-      hunspellDicts.ru-ru
       inotify-tools
       jq
       killall
@@ -19,7 +16,6 @@
       nix-bash-completions
       nixos-script
       nixos-option
-      pdftk
       psmisc
       screen
       sshfs
@@ -33,14 +29,16 @@
 
     environment.graphicPackages = with pkgs; [
       cdrkit
-      # TODO(Shvedov) Disabled while swiching to 25.05. Enable it back
-      # drawio
       eog
       evince
+      fontconfig.lib
       gimp
       gnome-calculator
+      hunspellDicts.en-us
+      hunspellDicts.ru-ru
       libreoffice
       mpv
+      pdftk
       pinta
       playerctl
       remmina
@@ -51,6 +49,8 @@
 
       # Unavailable
       # discord
+      # TODO(Shvedov) Disabled while swiching to 25.05. Enable it back
+      # drawio
     ];
 
     environment.developmentPackages = with pkgs; [
