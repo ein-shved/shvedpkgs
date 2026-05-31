@@ -17,6 +17,7 @@
     ./bashrc/starship.nix
     ./desktop
     ./desktop/anyrun
+    ./desktop/awww
     ./desktop/dm
     ./desktop/dm/select.nix
     ./desktop/kitty
@@ -25,7 +26,6 @@
     ./desktop/nm-applet
     ./desktop/swaylock/default.nix
     ./desktop/waybar
-    ./desktop/wpaperd
     ./desktop/xdg
     ./desktop/xdg/mime
     ./exceptions
