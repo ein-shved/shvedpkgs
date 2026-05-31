@@ -54,6 +54,7 @@
     ];
 
     environment.developmentPackages = with pkgs; [
+      android-tools
       bear
       docker
       dowork
@@ -68,9 +69,5 @@
       nixpkgs-review
       shunit2
     ];
-
-    programs = {
-      adb.enable = true;
-    };
   };
 }
