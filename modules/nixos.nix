@@ -22,6 +22,7 @@
     ./os-specific/linux/keyutils
     ./security/ca.nix
     ./services/gerrit
+    ./services/nginx/proxies
     ./services/networking/cntlm-gss
     ./services/networking/klvpn
     ./services/vps
