@@ -36,6 +36,7 @@
     ./nix
     ./services
     ./services/home-assistant
+    ./services/matrix/continuwuity
     ./services/nas/ftp
     ./services/nas/upnp
     ./services/networking/firewall.nix
