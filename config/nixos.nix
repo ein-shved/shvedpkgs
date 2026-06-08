@@ -36,7 +36,6 @@
     ./nix
     ./services
     ./services/home-assistant
-    ./services/matrix/continuwuity
     ./services/nas/ftp
     ./services/nas/upnp
     ./services/networking/firewall.nix
@@ -47,6 +46,8 @@
     ./tools/system/top
     ./tools/text/ripgrep
 
+    # Blocked
+    # ./services/matrix/continuwuity
     # Disable self-written neovim configuration as it not used
     # ./applications/editors/neovim
     # Disable vim as it not used
