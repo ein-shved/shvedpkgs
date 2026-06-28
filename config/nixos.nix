@@ -38,6 +38,7 @@
     ./services/home-assistant
     ./services/nas/ftp
     ./services/nas/upnp
+    ./services/navidrome
     ./services/networking/firewall.nix
     ./services/networking/ssh.nix
     ./services/printing

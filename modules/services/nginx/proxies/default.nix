@@ -52,7 +52,6 @@ in
     virtualHosts = lib.mapAttrs (
       domain: proxyCfg:
       {
-        forceSSL = true;
         locations = lib.mapAttrs (
           location: locationCfg:
           {
