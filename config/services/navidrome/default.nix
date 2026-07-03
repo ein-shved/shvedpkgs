@@ -5,6 +5,7 @@ let
   domain = "navidrome.shved.org";
 in
 {
+  imports = [ ./smartPlaylists.nix ];
   config = lib.mkIf config.hardware.isNas {
     services.navidrome = {
       enable = true;
@@ -12,6 +13,12 @@ in
       settings = {
         MusicFolder = "${mediaStore}/Music";
         EnableSharing = true;
+        Tags.Genre.Split = [
+          "|"
+          "/"
+          "&"
+          ","
+        ];
       };
     };
     systemd.services.navidrome.serviceConfig.EnvironmentFile = config.age.secrets.lastfm-navidrome.path;

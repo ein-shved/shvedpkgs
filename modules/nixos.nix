@@ -22,9 +22,10 @@
     ./os-specific/linux/keyutils
     ./security/ca.nix
     ./services/gerrit
-    ./services/nginx/proxies
+    ./services/navidrome
     ./services/networking/cntlm-gss
     ./services/networking/klvpn
+    ./services/nginx/proxies
     ./services/vps
     ./tools/security/pass
   ];
