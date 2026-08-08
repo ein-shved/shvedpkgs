@@ -1,9 +1,10 @@
 { pkgs, ... }:
 {
   config = {
-    environment.graphicPackages = with pkgs; [
-      wineWowPackages.stable
-      winetricks
-    ];
+    # Not needed anymore
+    # environment.graphicPackages = with pkgs; [
+    #    wineWowPackages.stable
+    #    winetricks
+    # ];
   };
 }
