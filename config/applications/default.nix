@@ -46,6 +46,7 @@
       thunderbird
       xclip
       xdotool
+      feishin
 
       # Unavailable
       # discord

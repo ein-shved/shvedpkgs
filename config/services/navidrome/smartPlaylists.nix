@@ -34,6 +34,7 @@ in
           "Symphonic Melodic Death Metal"
           "Technical Melodic Death Metal"
           "Dark Cabaret Metal"
+          "Folk Metal"
         ];
     death =
       mkGenres
@@ -121,17 +122,6 @@ in
           "Power Metal"
           "Progressive Metal"
           "Thrash Metal"
-        ];
-
-    all_death =
-      mkUnion
-        {
-          name = "All Death Metal";
-          public = true;
-        }
-        [
-          "mdm"
-          "death"
         ];
   };
 }
