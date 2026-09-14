@@ -57,7 +57,7 @@ behavioral changes.
     resulting machine actually works.
   - Examples to consider later: service health, network reachability, desktop
     session startup, GPU acceleration, NAS media sharing, Gerrit availability,
-    VPN/smart-card workflow, distributed builds.
+    Matrix/LiveKit availability, VPN/smart-card workflow, distributed builds.
 - Define validation scope per host class.
   - Active hosts: `ShvedGaming`, `ShvedMedia`, `gerrit`.
   - Inactive hosts: `Shvedov`, `Shvedov-NB`, `ShvedLaptop`.

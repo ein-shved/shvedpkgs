@@ -218,6 +218,12 @@ Important active areas:
   - Enables Navidrome on NAS hosts.
   - Uses `services.mediaStore`.
   - Configures ACME/nginx for `navidrome.shved.org`.
+- `config/services/matrix/continuwuity/default.nix`
+  - Enables Matrix Continuwuity on NAS hosts.
+  - Configures ACME/nginx for `matrix.shved.org`.
+- `config/services/matrix/livekit/default.nix`
+  - Enables LiveKit and `lk-jwt-service` when Matrix Continuwuity is enabled.
+  - Configures ACME/nginx for `livekit.shved.org`.
 - `config/services/nas/ftp/default.nix`
   - Enables vsftpd on NAS hosts.
 - `config/services/nas/upnp/default.nix`
@@ -242,7 +248,7 @@ Local packages currently present under `pkgs/by-name` include:
   `cntlm-gss`, `pcsc-safenet-legacy`, `rtpkcs11ecp`
 - Gerrit tooling/plugins: `gerrit-commit-msg-hook`,
   `gerrit-admin-console-plugin`, `gerrit-oauth-plugin`
-- Other packages: `all-themes`, `aff4`, `esp-config`
+- Other packages: `all-themes`, `aff4`, `esp-config`, `lk-jwt-service`
 
 ### `lib/`
 
@@ -279,6 +285,7 @@ The repository uses secret-dependent configuration:
 - Some service configs reference `config.age.secrets.*`, including:
   - `lastfm-navidrome`
   - `cloudflare`
+  - `livekit`
 - KL-related modules depend on local/company artifacts and smart-card tooling.
 - Some hosts depend on reachable build machines over SSH.
 
