@@ -145,7 +145,9 @@ Important modules:
     - `environment.nasPackages`
     - `environment.vpsPackages`
   - Adds overlay flags into `pkgs`: `isLaptop`, `isNas`, `isVps`,
-    `isVpsClient`, `isDesktop`.
+    `isVpsClient`, and legacy `isDesktop`.
+    - `isDesktop` is marked for removal by
+      `spec/adr/0002-remove-pkgs-isdesktop.md`.
   - For NAS/VPS hosts, sets `hardware.needGraphic = false` and
     `hardware.development = false`.
 - `modules/hardware/monitors/default.nix`
