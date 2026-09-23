@@ -58,3 +58,48 @@ Source plan: [`PLAN-001`](plan.md#plan-001-align-host-classification-and-provide
 
   Update `spec/context.md` to reflect any current-state information made stale
   by the completed implementation.
+
+## PLAN-002: Add Validation Configurations With Test Stubs
+
+Source plan: [`PLAN-002`](plan.md#plan-002-add-validation-configurations-with-test-stubs)
+
+- [ ] Add private-value validation stubs.
+
+  Add a test-only NixOS module under
+  `tests/modules/stubs/private-values/default.nix`.
+
+  Add placeholder age files under
+  `tests/modules/stubs/private-values/secrets/` for the currently observed
+  secret-dependent validation blockers.
+
+  The stubs must use normal module interfaces, including
+  `age.secrets.<name>.file`, and must contain only non-secret test data.
+
+  Completion criteria: verify that the placeholder files are clearly test-only
+  and contain no real credentials, private domains, private keys, or
+  machine-local secret material.
+
+- [ ] Expose and validate validation NixOS configurations.
+
+  Update the extendable system-set implementation so it derives validation
+  NixOS configurations from the same hosts and base modules, with the
+  private-value validation stub module appended through validation-only module
+  inputs.
+
+  Expose the resulting NixOS configuration objects through the project-specific
+  output `nixosValidationConfigurations`.
+
+  Completion criteria: `nixosConfigurations`, `packages`, and `extend` keep
+  their existing top-level behavior; validation configurations are not exposed
+  as deployable production host configurations; `ShvedMedia` and `gerrit`
+  validation configurations produce `config.system.build.toplevel.drvPath` and
+  can be build-planned with `nix build --dry-run --no-link`; the validation
+  output exposes the expected host names; and, in the public checkout without
+  private values, the normal deployable outputs still fail for the same
+  missing private-value reasons observed before this change.
+
+- [ ] Update context after validation infrastructure implementation.
+
+  Update `spec/context.md` if implementation changes make the current context
+  stale, especially around test support layout, secret-dependent validation, or
+  active-host validation workflow.
