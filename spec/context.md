@@ -287,6 +287,21 @@ The repository uses secret-dependent configuration:
 Specs and tests should separate pure evaluation/build behavior from behavior
 that requires secrets, hardware tokens, network access, or private hosts.
 
+## Test Support Direction
+
+The repository is expected to move toward a shared top-level `tests/`
+structure for test and validation support:
+
+- `tests/hosts/` for host-oriented test profiles;
+- `tests/modules/` for test-only NixOS modules and module fixtures;
+- `tests/pkgs/` for package-oriented test support.
+
+The existing `hosts/tests/` directory currently contains VM/test host profiles.
+It should be migrated to `tests/hosts/` as a separate cleanup after the test
+infrastructure layout is specified. New validation stubs should use the future
+test-support shape, for example `tests/modules/stubs/private-values/`, rather
+than adding another root-level test namespace.
+
 ## SDD Notes For Future Work
 
 - Treat this file as context, not as a requirements spec.
