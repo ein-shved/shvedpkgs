@@ -19,6 +19,16 @@ Source plan: [`PLAN-001`](plan.md#plan-001-align-host-classification-and-provide
   `gerrit` before implementation changes. Use the validation commands from
   `PLAN-001`.
 
+  Progress:
+
+  - `ShvedGaming` baseline captured:
+    `/nix/store/p24w3jhj5ysix9flygddis7wxqjw793j-nixos-system-ShvedGaming-26.05.20260806.445d861.drv`
+  - `ShvedMedia` baseline is blocked in this repository state because
+    evaluating `config.system.build.toplevel.drvPath` requires
+    `config.age.secrets.cloudflare`.
+  - `gerrit` baseline is blocked in this repository state because evaluating
+    `config.system.build.toplevel.drvPath` requires `services.vps.domain`.
+
 - [ ] Migrate host classification to the explicit model.
 
   Update `modules/hardware/hosts/default.nix` so classification flags default
