@@ -199,3 +199,173 @@ unless a change is required by the new classification design or by adding
   bucket gates are part of the host classification contract.
 - `pkgs.isDesktop` removal can break downstream package expressions, including
   private extensions not visible in this repository.
+
+## PLAN-002: Add Validation Configurations With Test Stubs
+
+Status: Draft
+
+Related artifacts:
+
+- Requirement:
+  [`REQ-002: Validate Secret-Dependent Hosts Without Private Material`](requirements.md#req-002-validate-secret-dependent-hosts-without-private-material)
+- Specification:
+  [`Validation Configurations`](system.md#validation-configurations)
+
+### Goal
+
+Add a repository-owned validation path that can evaluate and build-plan
+secret-dependent hosts without requiring private material, while keeping normal
+deployable host outputs unchanged.
+
+The immediate validation targets are:
+
+- `ShvedMedia`, which currently needs `age.secrets.cloudflare` and
+  `age.secrets.lastfm-navidrome` for full toplevel evaluation.
+- `gerrit`, which currently needs `services.vps.domain` for full toplevel
+  evaluation.
+
+### Research Findings
+
+A temporary local spike validated this mechanism:
+
+- adding a test-only NixOS module to the host module stack can satisfy the
+  missing private values without changing production `nixosConfigurations`;
+- `age.secrets.<name>.file` is a suitable module-level interface for age secret
+  placeholders;
+- `services.vps.domain = lib.mkDefault "validation.invalid"` is sufficient for
+  Gerrit toplevel evaluation when no private domain is present;
+- separate validation outputs can expose full NixOS configuration objects that
+  are usable with `nix eval`;
+- production `nixosConfigurations.ShvedMedia` and `nixosConfigurations.gerrit`
+  still fail without the private values, confirming that the validation stubs
+  do not leak into deployable outputs.
+
+The spike successfully evaluated:
+
+```sh
+nix eval --raw .#nixosValidationConfigurations.ShvedMedia.config.system.build.toplevel.drvPath
+nix eval --raw .#nixosValidationConfigurations.gerrit.config.system.build.toplevel.drvPath
+```
+
+and successfully build-planned:
+
+```sh
+nix build --dry-run --no-link .#nixosValidationConfigurations.ShvedMedia.config.system.build.toplevel
+nix build --dry-run --no-link .#nixosValidationConfigurations.gerrit.config.system.build.toplevel
+```
+
+### Output Shape
+
+Expose validation configurations as a project-specific flake output:
+
+```nix
+nixosValidationConfigurations.<host>
+```
+
+This output is intentionally separate from `nixosConfigurations` so validation
+hosts are not presented as deployable production systems.
+
+The output is project-specific rather than a standard flake output. This is an
+accepted tradeoff for now because it provides direct `config.*` introspection,
+which is useful for SDD validation commands. Standard `checks` integration can
+be added later if the repository decides to make broad `nix flake check`
+behavior part of the validation contract.
+
+### Minimal Change Set
+
+1. Add a validation stub module under
+   `tests/modules/stubs/private-values/default.nix`.
+2. Add placeholder age files under
+   `tests/modules/stubs/private-values/secrets/`.
+3. In the validation stub module:
+   - set `age.secrets.cloudflare.file` to the Cloudflare placeholder file;
+   - set `age.secrets.lastfm-navidrome.file` to the Last.fm placeholder file;
+   - set `services.vps.domain = lib.mkDefault "validation.invalid"`.
+4. Update `lib/system.nix` so `mkExtendableSystems` accepts
+   `validationModules`, defaults them to the repository private-value
+   validation stub module, and derives `nixosValidationConfigurations` from
+   the same extended hosts, base modules, `mkSystem`, `defaultSystem`, and
+   `defaultHost` as `nixosConfigurations`, with validation modules appended to
+   the validation module list only.
+5. Expose the validation NixOS configurations from the extendable system set as:
+
+   ```nix
+   nixosValidationConfigurations.<host>
+   ```
+
+6. Keep the existing top-level output behavior unchanged for
+   `nixosConfigurations`, `packages`, and `extend`.
+
+### Validation Plan
+
+1. Verify that validation configurations evaluate for the previously blocked
+   active hosts:
+
+   ```sh
+   nix eval --raw .#nixosValidationConfigurations.ShvedMedia.config.system.build.toplevel.drvPath
+   nix eval --raw .#nixosValidationConfigurations.gerrit.config.system.build.toplevel.drvPath
+   ```
+
+2. Verify that validation configurations can be build-planned:
+
+   ```sh
+   nix build --dry-run --no-link .#nixosValidationConfigurations.ShvedMedia.config.system.build.toplevel
+   nix build --dry-run --no-link .#nixosValidationConfigurations.gerrit.config.system.build.toplevel
+   ```
+
+3. Verify that production deployable outputs still do not receive validation
+   stubs implicitly:
+
+   ```sh
+   nix eval --raw .#nixosConfigurations.ShvedMedia.config.system.build.toplevel.drvPath
+   nix eval --raw .#nixosConfigurations.gerrit.config.system.build.toplevel.drvPath
+   ```
+
+   In the public checkout without private values, these commands are expected
+   to fail for the same missing-value reasons observed before this change.
+
+4. Verify that the validation output is structurally available:
+
+   ```sh
+   nix eval --json .#nixosValidationConfigurations --apply builtins.attrNames
+   ```
+
+5. Verify that the documented `extend` usage still works after introducing
+   validation configurations:
+
+   ```sh
+   nix eval --impure --json --expr 'let outputs = (builtins.getFlake (toString ./.)).outputs; extended = outputs.extend { hosts.newHost = { system = "aarch64-linux"; modules = [ ({ ... }: { user.name = "Validation"; }) ]; }; modules = [ ({ ... }: { }) ]; defaultHost = "newHost"; }; in { hostNames = builtins.attrNames extended.nixosConfigurations; validationHostNames = builtins.attrNames extended.nixosValidationConfigurations; hostSystem = extended.nixosConfigurations.newHost.pkgs.stdenv.hostPlatform.system; validationHostSystem = extended.nixosValidationConfigurations.newHost.pkgs.stdenv.hostPlatform.system; packageSystems = builtins.attrNames extended.packages; hasDefaultPackageSet = builtins.hasAttr "system" extended.packages.aarch64-linux; }'
+   ```
+
+   The result should include `newHost` in `hostNames` and
+   `validationHostNames`, `hostSystem = "aarch64-linux"`,
+   `validationHostSystem = "aarch64-linux"`, `aarch64-linux` in
+   `packageSystems`, and `hasDefaultPackageSet = true`.
+
+6. Verify that the placeholder files are non-secret test data:
+
+   ```sh
+   rg -n "validation|stub|dummy|invalid" tests/modules/stubs/private-values
+   ```
+
+### Out Of Scope
+
+- Do not redesign the private extension mechanism.
+- Do not add real secrets, encrypted production secrets, private domains, or
+  private machine-local values to this repository.
+- Do not move secret-consuming service configuration as part of this change.
+- Do not make `nix flake check` semantics part of this plan.
+- Do not remove the need for private material from real deployable host
+  configurations.
+
+### Review Notes
+
+- The main risk is accidentally making validation substitutes available to
+  production outputs. Keeping validation modules outside `nixosConfigurations`
+  is the primary guardrail.
+- The custom `nixosValidationConfigurations` output is intentionally a
+  repository API. It should be documented as validation-only and not used for
+  deployment.
+- If future validation needs grow, this mechanism can be extended with per-host
+  validation modules or a standard `checks.<system>.*` layer without changing
+  the deployable host contract.
