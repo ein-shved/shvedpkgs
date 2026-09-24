@@ -84,7 +84,7 @@ Source plan: [`PLAN-001`](plan.md#plan-001-align-host-classification-and-provide
     root file system and GRUB device settings; their classification options
     still evaluate as part of the all-output classification matrix check.
 
-- [ ] Add `codex` to development host tooling.
+- [x] Add `codex` to development host tooling.
 
   Add `codex` to the development package bucket using stable nixpkgs, without
   introducing a new package source, overlay, or wrapper.
@@ -92,6 +92,17 @@ Source plan: [`PLAN-001`](plan.md#plan-001-align-host-classification-and-provide
   Completion criteria: confirm that development hosts receive `codex` through
   evaluated system packages and that non-development hosts do not receive it
   through the development package bucket.
+
+  Progress:
+
+  - Added `codex` from stable nixpkgs to
+    `environment.developmentPackages`.
+  - Verified `pkgs.codex.name` evaluates to `codex-0.133.0`.
+  - Verified evaluated `environment.systemPackages` includes `codex` for
+    development hosts `ShvedGaming`, `Shvedov`, `ShvedLaptop`, and `testA`.
+  - Verified evaluated `environment.systemPackages` does not include `codex`
+    for non-development hosts `ShvedMedia`, `gerrit`, `testNas`, and
+    `testVps`.
 
 - [ ] Update context after implementation.
 
