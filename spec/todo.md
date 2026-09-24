@@ -37,6 +37,11 @@ behavioral changes.
 
 ## Validation Strategy
 
+- Add a formatter output to the flake.
+  - `nix fmt` currently fails because the flake does not expose
+    `formatter.x86_64-linux`.
+  - The repository should define its canonical formatter through the flake so
+    agents and contributors can format changes consistently.
 - Design the correct validation commands for this repository.
   - Do not treat `nix flake show --all-systems --no-write-lock-file` failure
     as a bug by itself: the project intentionally extends nixpkgs-like package

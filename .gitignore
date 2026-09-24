@@ -2,3 +2,6 @@ secrets/
 secrets.nix
 nda/
 nda.nix
+
+!tests/modules/stubs/private-values/secrets/
+!tests/modules/stubs/private-values/secrets/*.age

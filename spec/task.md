@@ -63,7 +63,7 @@ Source plan: [`PLAN-001`](plan.md#plan-001-align-host-classification-and-provide
 
 Source plan: [`PLAN-002`](plan.md#plan-002-add-validation-configurations-with-test-stubs)
 
-- [ ] Add private-value validation stubs.
+- [x] Add private-value validation stubs.
 
   Add a test-only NixOS module under
   `tests/modules/stubs/private-values/default.nix`.
@@ -78,6 +78,17 @@ Source plan: [`PLAN-002`](plan.md#plan-002-add-validation-configurations-with-te
   Completion criteria: verify that the placeholder files are clearly test-only
   and contain no real credentials, private domains, private keys, or
   machine-local secret material.
+
+  Progress:
+
+  - Added `tests/modules/stubs/private-values/default.nix`.
+  - Added test-only placeholder age files for `cloudflare` and
+    `lastfm-navidrome`.
+  - Added a narrow `.gitignore` exception so the test-only placeholder files
+    under `tests/modules/stubs/private-values/secrets/` are tracked despite the
+    repository-wide `secrets/` ignore rule.
+  - Verified the stub module evaluates locally and the placeholder files contain
+    only explicit non-secret validation stub text.
 
 - [ ] Expose and validate validation NixOS configurations.
 
