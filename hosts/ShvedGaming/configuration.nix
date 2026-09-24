@@ -5,8 +5,9 @@
     ./desktop
   ];
 
-  hardware.isLaptop = false;
   hardware.isVpsClient = true;
+  hardware.needGraphic = true;
+  hardware.development = true;
 
   kl.enable = false;
   environment = {

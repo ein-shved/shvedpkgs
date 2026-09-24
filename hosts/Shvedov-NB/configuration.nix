@@ -1,4 +1,4 @@
-{ config, system, ... }:
+{ config, pkgs, ... }:
 let
   domainHost = config.kl.domain.host;
   userName = config.user.name;
@@ -10,6 +10,8 @@ in
   ];
 
   hardware.isLaptop = true;
+  hardware.needGraphic = true;
+  hardware.development = true;
 
   kl = {
     enable = true;
@@ -76,7 +78,7 @@ in
       {
         hostName = domainHost;
         sshUser = userName;
-        inherit system;
+        inherit (pkgs.stdenv) system;
         supportedFeatures = [
           "nixos-test"
           "kvm"

@@ -35,7 +35,7 @@ Source plan: [`PLAN-001`](plan.md#plan-001-align-host-classification-and-provide
     because their deployable production outputs intentionally still require
     private values in the public checkout.
 
-- [ ] Migrate host classification to the explicit model.
+- [x] Migrate host classification to the explicit model.
 
   Update `modules/hardware/hosts/default.nix` so classification flags default
   to `false`, package buckets are gated by their matching classification flags,
@@ -50,6 +50,39 @@ Source plan: [`PLAN-001`](plan.md#plan-001-align-host-classification-and-provide
 
   Completion criteria: run the classification validation from `PLAN-001`,
   including active-host derivation comparison before `codex` is added.
+
+  Progress:
+
+  - Changed host classification defaults for `hardware.needGraphic` and
+    `hardware.development` to `false`.
+  - Removed the derived `pkgs.isDesktop` overlay attribute.
+  - Gated package buckets by their matching explicit classification flags:
+    graphics by `hardware.needGraphic`, development by
+    `hardware.development`, NAS by `hardware.isNas`, and VPS by
+    `hardware.isVps`.
+  - Applied the classification table to real hosts, inactive hosts, boot
+    profiles, test profiles, and `generic` by declaring only positive role
+    flags and relying on default `false` values for omitted roles.
+  - Fixed `Shvedov-NB` evaluation by deriving the build-machine `system` from
+    `pkgs.stdenv.system` instead of an unprovided module argument.
+  - Verified the evaluated classification matrix for all validation
+    configurations matches `PLAN-001`.
+  - Verified `pkgs.codex` remains available before package-bucket wiring, and
+    verified `pkgs.isDesktop` is absent from production and validation package
+    sets.
+  - Verified docs-disabled active-host derivation paths remain unchanged:
+    `ShvedGaming`,
+    `/nix/store/j21abnv26d31wlk74i0cjfiqmh037187-nixos-system-ShvedGaming-26.05.20260806.445d861.drv`;
+    `ShvedMedia`,
+    `/nix/store/0mxw4mgv20kpdgna39xi45nb0kq88rzp-nixos-system-ShvedMedia-26.05.20260806.445d861.drv`;
+    and `gerrit`,
+    `/nix/store/hm36fwjn91pn17x6dsr6zzz6r8k7sb9m-nixos-system-gerrit-26.05.20260806.445d861.drv`.
+  - Verified real and test validation configurations evaluate to toplevel
+    derivation paths after the migration. Full toplevel evaluation for
+    `bootWork`, `bootGaming`, `bootServer`, and `generic` remains blocked by
+    their pre-existing incomplete bootable-system definitions, namely missing
+    root file system and GRUB device settings; their classification options
+    still evaluate as part of the all-output classification matrix check.
 
 - [ ] Add `codex` to development host tooling.
 

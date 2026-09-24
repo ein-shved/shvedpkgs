@@ -6,7 +6,8 @@
       ./desktop
     ];
 
-  hardware.isLaptop = false;
+  hardware.needGraphic = true;
+  hardware.development = true;
 
   kl = {
     enable = true;
@@ -53,4 +54,3 @@
   system.stateVersion = "21.11"; # Did you read the comment?
 
 }
-

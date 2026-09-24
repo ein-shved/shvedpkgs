@@ -10,6 +10,8 @@ in
   ];
 
   hardware.isLaptop = true;
+  hardware.needGraphic = true;
+  hardware.development = true;
 
   kl.enable = false;
   environment.printing3d.enable = true;

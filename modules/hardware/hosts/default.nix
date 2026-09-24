@@ -34,14 +34,14 @@
         description = ''
           Whenether this host does not need graphics.
         '';
-        default = true;
+        default = false;
         type = lib.types.bool;
       };
       development = lib.mkOption {
         description = ''
           Whenether this host is used for development.
         '';
-        default = true;
+        default = false;
         type = lib.types.bool;
       };
     };
@@ -85,17 +85,12 @@
         isNas = config.hardware.isNas;
         isVps = config.hardware.isVps;
         isVpsClient = config.hardware.isVpsClient;
-        isDesktop = (!final.isLaptop) && (!final.isNas);
       })
     ];
     environment.systemPackages =
       lib.optionals config.hardware.needGraphic config.environment.graphicPackages
-      ++ lib.optionals config.hardware.needGraphic config.environment.developmentPackages
+      ++ lib.optionals config.hardware.development config.environment.developmentPackages
       ++ lib.optionals config.hardware.isNas config.environment.nasPackages
-      ++ lib.optionals config.hardware.isNas config.environment.vpsPackages;
-    hardware = lib.mkIf (config.hardware.isNas || config.hardware.isVps) {
-      needGraphic = false;
-      development = false;
-    };
+      ++ lib.optionals config.hardware.isVps config.environment.vpsPackages;
   };
 }
