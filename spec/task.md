@@ -13,7 +13,7 @@ one atomic self-contained commit or a chain of atomic self-contained commits.
 
 Source plan: [`PLAN-001`](plan.md#plan-001-align-host-classification-and-provide-codex)
 
-- [ ] Capture the pre-migration baseline for active hosts.
+- [x] Capture the pre-migration baseline for active hosts.
 
   Record OS build derivation paths for `ShvedGaming`, `ShvedMedia`, and
   `gerrit` before implementation changes. Use the validation commands from
@@ -21,13 +21,19 @@ Source plan: [`PLAN-001`](plan.md#plan-001-align-host-classification-and-provide
 
   Progress:
 
-  - `ShvedGaming` baseline captured:
-    `/nix/store/p24w3jhj5ysix9flygddis7wxqjw793j-nixos-system-ShvedGaming-26.05.20260806.445d861.drv`
-  - `ShvedMedia` baseline is blocked in this repository state because
-    evaluating `config.system.build.toplevel.drvPath` requires
-    `config.age.secrets.cloudflare`.
-  - `gerrit` baseline is blocked in this repository state because evaluating
-    `config.system.build.toplevel.drvPath` requires `services.vps.domain`.
+  - Captured docs-disabled `ShvedGaming` production baseline:
+    `/nix/store/j21abnv26d31wlk74i0cjfiqmh037187-nixos-system-ShvedGaming-26.05.20260806.445d861.drv`
+  - Captured docs-disabled `ShvedMedia` validation baseline:
+    `/nix/store/0mxw4mgv20kpdgna39xi45nb0kq88rzp-nixos-system-ShvedMedia-26.05.20260806.445d861.drv`
+  - Captured docs-disabled `gerrit` validation baseline:
+    `/nix/store/hm36fwjn91pn17x6dsr6zzz6r8k7sb9m-nixos-system-gerrit-26.05.20260806.445d861.drv`
+  - Baseline capture uses an `extend` module with
+    `documentation.nixos.enable = false` because generated documentation makes
+    the full toplevel derivation sensitive to unrelated flake source tree
+    changes.
+  - `ShvedMedia` and `gerrit` use validation configurations for this baseline
+    because their deployable production outputs intentionally still require
+    private values in the public checkout.
 
 - [ ] Migrate host classification to the explicit model.
 
