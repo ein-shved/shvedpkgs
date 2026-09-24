@@ -90,7 +90,7 @@ Source plan: [`PLAN-002`](plan.md#plan-002-add-validation-configurations-with-te
   - Verified the stub module evaluates locally and the placeholder files contain
     only explicit non-secret validation stub text.
 
-- [ ] Expose and validate validation NixOS configurations.
+- [x] Expose and validate validation NixOS configurations.
 
   Update the extendable system-set implementation so it derives validation
   NixOS configurations from the same hosts and base modules, with the
@@ -108,6 +108,23 @@ Source plan: [`PLAN-002`](plan.md#plan-002-add-validation-configurations-with-te
   output exposes the expected host names; and, in the public checkout without
   private values, the normal deployable outputs still fail for the same
   missing private-value reasons observed before this change.
+
+  Progress:
+
+  - Updated `lib/system.nix` so `mkExtendableSystems` accepts
+    `validationModules`, defaults them to the private-value validation stub
+    module, and derives `nixosValidationConfigurations` from the same extended
+    system set as `nixosConfigurations`.
+  - Verified `nixosValidationConfigurations` and `nixosConfigurations` expose
+    the expected host names, and `packages` still exposes `x86_64-linux`.
+  - Verified the documented `extend` usage with a synthetic `newHost`,
+    including host extension, `aarch64-linux` host system selection, and
+    `defaultHost` package-set behavior.
+  - Verified validation `drvPath` evaluation and dry-run build planning for
+    `ShvedMedia` and `gerrit`.
+  - Verified normal deployable outputs still fail without private values:
+    `ShvedMedia` on missing `age.secrets.cloudflare`, and `gerrit` on missing
+    `services.vps.domain`.
 
 - [ ] Update context after validation infrastructure implementation.
 
