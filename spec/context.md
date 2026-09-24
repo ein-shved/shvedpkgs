@@ -22,6 +22,8 @@ process.
 - Hosts are imported from `hosts/default.nix`.
 - `lib.mkExtendableSystems` builds `nixosConfigurations` and exposes an
   `extend` function for downstream extension.
+- `lib.mkExtendableSystems` also derives `nixosValidationConfigurations` from
+  the same host set plus validation-only modules for repository validation.
 
 The flake is based on:
 
@@ -144,12 +146,16 @@ Important modules:
     - `environment.developmentPackages`
     - `environment.nasPackages`
     - `environment.vpsPackages`
-  - Adds overlay flags into `pkgs`: `isLaptop`, `isNas`, `isVps`,
-    `isVpsClient`, and legacy `isDesktop`.
-    - `isDesktop` is marked for removal by
-      `spec/adr/0002-remove-pkgs-isdesktop.md`.
-  - For NAS/VPS hosts, sets `hardware.needGraphic = false` and
-    `hardware.development = false`.
+  - Host classification flags default to `false`; hosts and reusable profiles
+    set only the positive role flags they need.
+  - Merges package buckets into `environment.systemPackages` according to the
+    matching role flag:
+    - `graphicPackages` when `hardware.needGraphic` is true
+    - `developmentPackages` when `hardware.development` is true
+    - `nasPackages` when `hardware.isNas` is true
+    - `vpsPackages` when `hardware.isVps` is true
+  - Adds overlay flags into `pkgs`: `isLaptop`, `isNas`, `isVps`, and
+    `isVpsClient`.
 - `modules/hardware/monitors/default.nix`
   - Defines monitor metadata used by desktop modules.
 - `modules/hardware/hdparm/default.nix`
@@ -209,7 +215,7 @@ Important active areas:
 - `config/applications/default.nix`
   - Adds baseline system packages.
   - Adds graphical package bucket.
-  - Adds development package bucket.
+  - Adds development package bucket, including `codex` from stable nixpkgs.
 - `config/desktop/*`
   - Defines graphical desktop behavior around Niri, LightDM, Waybar, Kitty,
     AnyRun, XDG, wallpapers, swaylock/wpaperd/awww, and theme settings.
@@ -262,8 +268,8 @@ Custom library extensions:
   - `transformNixosPackages`
 
 `mkExtendableSystems` is central: it merges host definitions, global modules,
-special args and prefixes, then produces `nixosConfigurations`, `packages`,
-and recursive `extend`.
+special args and prefixes, then produces `nixosConfigurations`,
+`nixosValidationConfigurations`, `packages`, and recursive `extend`.
 
 Target machines may assemble the final configuration from this repository plus
 private extensions through `extend`. Those private extensions can include
@@ -301,6 +307,10 @@ It should be migrated to `tests/hosts/` as a separate cleanup after the test
 infrastructure layout is specified. New validation stubs should use the future
 test-support shape, for example `tests/modules/stubs/private-values/`, rather
 than adding another root-level test namespace.
+
+Current validation stubs live under
+`tests/modules/stubs/private-values/`. They provide non-secret placeholders for
+secret-dependent values needed by validation configurations.
 
 ## SDD Notes For Future Work
 

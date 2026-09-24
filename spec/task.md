@@ -104,10 +104,18 @@ Source plan: [`PLAN-001`](plan.md#plan-001-align-host-classification-and-provide
     for non-development hosts `ShvedMedia`, `gerrit`, `testNas`, and
     `testVps`.
 
-- [ ] Update context after implementation.
+- [x] Update context after implementation.
 
   Update `spec/context.md` to reflect any current-state information made stale
   by the completed implementation.
+
+  Progress:
+
+  - Updated context for validation configuration entry points.
+  - Updated context for explicit host classification defaults, package-bucket
+    gating, and the removal of `pkgs.isDesktop`.
+  - Updated context to record that the development package bucket includes
+    `codex` from stable nixpkgs.
 
 ## PLAN-002: Add Validation Configurations With Test Stubs
 
