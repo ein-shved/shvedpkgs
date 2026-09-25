@@ -184,8 +184,16 @@ Source plan: [`PLAN-002`](plan.md#plan-002-add-validation-configurations-with-te
     `ShvedMedia` on missing `age.secrets.cloudflare`, and `gerrit` on missing
     `services.vps.domain`.
 
-- [ ] Update context after validation infrastructure implementation.
+- [x] Update context after validation infrastructure implementation.
 
   Update `spec/context.md` if implementation changes make the current context
   stale, especially around test support layout, secret-dependent validation, or
   active-host validation workflow.
+
+  Progress:
+
+  - Added validation workflow context for `nixosValidationConfigurations`.
+  - Documented when active hosts should use validation outputs in the public
+    checkout.
+  - Documented the current private-value validation stubs and clarified that
+    deployable outputs still require real private values.

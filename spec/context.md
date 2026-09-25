@@ -293,6 +293,37 @@ The repository uses secret-dependent configuration:
 Specs and tests should separate pure evaluation/build behavior from behavior
 that requires secrets, hardware tokens, network access, or private hosts.
 
+## Validation Workflow
+
+The repository exposes validation-only NixOS configurations through:
+
+```nix
+nixosValidationConfigurations.<host>
+```
+
+These outputs are derived from the same hosts and base modules as
+`nixosConfigurations`, with validation-only modules appended through
+`lib.mkExtendableSystems`'s `validationModules` input. They are intended for
+repository validation and build planning in a public checkout, not for
+deployment.
+
+Use validation configurations when an active deployable host requires private
+values that are intentionally absent from the public checkout. Current active
+examples are:
+
+- `ShvedMedia`, whose deployable output requires `age.secrets.cloudflare`.
+- `gerrit`, whose deployable output requires `services.vps.domain`.
+
+The default validation modules live under
+`tests/modules/stubs/private-values/`. They currently provide:
+
+- non-secret placeholder age files for `cloudflare` and `lastfm-navidrome`;
+- `services.vps.domain = "validation.invalid"` through `lib.mkDefault`.
+
+Normal deployable outputs should still fail in the public checkout when they
+need private values. Validation configurations only replace those missing
+private inputs for evaluation and dry-run build planning.
+
 ## Test Support Direction
 
 The repository is expected to move toward a shared top-level `tests/`
@@ -308,9 +339,8 @@ infrastructure layout is specified. New validation stubs should use the future
 test-support shape, for example `tests/modules/stubs/private-values/`, rather
 than adding another root-level test namespace.
 
-Current validation stubs live under
-`tests/modules/stubs/private-values/`. They provide non-secret placeholders for
-secret-dependent values needed by validation configurations.
+Current validation stubs already use this layout under
+`tests/modules/stubs/private-values/`.
 
 ## SDD Notes For Future Work
 
