@@ -197,3 +197,28 @@ Source plan: [`PLAN-002`](plan.md#plan-002-add-validation-configurations-with-te
     checkout.
   - Documented the current private-value validation stubs and clarified that
     deployable outputs still require real private values.
+
+## PLAN-003: Provide Configured Ripgrep Without Overriding Package Set
+
+Source plan:
+[`PLAN-003`](plan.md#plan-003-provide-configured-ripgrep-without-overriding-package-set)
+
+- [ ] Move configured ripgrep to a module-local package override.
+
+  Stop exposing repository-specific ripgrep configuration as the global
+  `pkgs.ripgrep` package.
+
+  Update `config/tools/text/ripgrep/default.nix` so it installs a module-local
+  overridden ripgrep package based on stable `pkgs.ripgrep` through
+  `environment.systemPackages`. The overridden package must set
+  `RIPGREP_CONFIG_PATH` to a repository-owned configuration containing the
+  `cin` type and extended `cc` type definitions.
+
+  Completion criteria: run the validation plan from `PLAN-003`; ordinary
+  `pkgs.ripgrep` remains available for unrelated package-set consumers;
+  `codex` still evaluates from stable nixpkgs; the configured ripgrep package
+  is present in evaluated system packages; the configured package's effective
+  `rg --type-list` output includes the required `cin` and extended `cc` type
+  definitions; and
+  `nix build .#nixosConfigurations.ShvedGaming.config.system.build.toplevel --no-link`
+  succeeds.

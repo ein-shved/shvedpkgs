@@ -384,3 +384,128 @@ behavior part of the validation contract.
 - If future validation needs grow, this mechanism can be extended with per-host
   validation modules or a standard `checks.<system>.*` layer without changing
   the deployable host contract.
+
+## PLAN-003: Provide Configured Ripgrep Without Overriding Package Set
+
+Status: Draft
+
+Related artifacts:
+
+- Requirement:
+  [`REQ-003: Provide Configured Ripgrep`](requirements.md#req-003-provide-configured-ripgrep)
+- Specification:
+  [`Project Layers`](system.md#project-layers)
+- Specification:
+  [`Configured Ripgrep`](system.md#configured-ripgrep)
+
+### Goal
+
+Provide the primary user with a configured `rg` command that understands the
+repository's `cin` and extended `cc` file types, while keeping `pkgs.ripgrep`
+as the ordinary stable nixpkgs package for unrelated package-set consumers.
+
+### Problem Statement
+
+The current repository configuration gives the user a configured `rg` command
+by relying on a local `pkgs.ripgrep` package override. That crosses the
+package/configuration layer boundary: a user-facing tool policy leaks into the
+global package set.
+
+This became visible when `codex` entered the system closure. The upstream
+`codex` package depends on ordinary `pkgs.ripgrep`, so any repository-specific
+change to the global `pkgs.ripgrep` package can affect unrelated packages.
+
+### Assumptions
+
+- The stable nixpkgs package set provides a working `pkgs.ripgrep`.
+- The configured user-facing command can be implemented as a module-local
+  overridden package based on stable `pkgs.ripgrep`.
+- The repository's desired ripgrep configuration is limited to type
+  definitions and can be supplied through `RIPGREP_CONFIG_PATH`.
+
+### Constraints
+
+- Do not globally override `pkgs.ripgrep` to apply repository user
+  configuration.
+- Keep the configured command available through `environment.systemPackages`.
+- Keep the ordinary package-set `pkgs.ripgrep` usable by unrelated packages,
+  including `codex`.
+- Keep the implementation in the configuration layer unless a reusable module
+  interface becomes necessary.
+- Validation for this change must include a real affected-host build without
+  `--dry-run`.
+
+### Minimal Change Set
+
+1. Remove the local by-name package override for `ripgrep`, or otherwise stop
+   exposing repository-specific configured behavior as `pkgs.ripgrep`.
+2. Update `config/tools/text/ripgrep/default.nix` so it creates a module-local
+   overridden ripgrep package for the user-facing `rg` command.
+3. The overridden package should:
+   - use stable `pkgs.ripgrep` as the underlying implementation;
+   - provide a repository-owned ripgrep configuration containing:
+
+     ```text
+     --type-add=cin:Config.in
+     --type-add=cc:*.[chH], *.[chH].in, *.cats
+     ```
+
+   - set `RIPGREP_CONFIG_PATH` for its `rg` executable so it points at that
+     configuration;
+   - be installed through `environment.systemPackages`.
+
+### Validation Plan
+
+1. Verify that the ordinary package-set `ripgrep` remains available:
+
+   ```sh
+   nix eval --raw .#nixosConfigurations.ShvedGaming.pkgs.ripgrep.name
+   ```
+
+2. Verify that `codex` still evaluates against ordinary package-set
+   dependencies:
+
+   ```sh
+   nix eval --raw .#nixosConfigurations.ShvedGaming.pkgs.codex.name
+   ```
+
+3. Verify that the configured ripgrep package is present in the evaluated system
+   packages for `ShvedGaming`.
+
+   The exact command may depend on the package name chosen in implementation,
+   but it should inspect `config.environment.systemPackages` rather than only
+   checking package availability in `pkgs`.
+
+4. Verify the configured package behavior by building or running its `rg` and
+   checking that `rg --type-list` includes:
+
+   ```text
+   cin: Config.in
+   cc: *.[chH], *.[chH].in, *.cats
+   ```
+
+   The exact output formatting may differ; the validation should confirm the
+   effective type definitions, not only the presence of a package.
+
+5. Verify the affected active host with a real build, not only `drvPath`
+   evaluation or dry-run build planning:
+
+   ```sh
+   nix build .#nixosConfigurations.ShvedGaming.config.system.build.toplevel --no-link
+   ```
+
+### Out Of Scope
+
+- Do not change `codex` packaging.
+- Do not introduce a new host role or package bucket.
+- Do not redesign the repository package overlay mechanism.
+- Do not move the existing ripgrep module to a different directory as part of
+  this change.
+
+### Review Notes
+
+- The core design boundary is that `pkgs` provides packages, while `config`
+  applies user-facing repository policy.
+- Removing a by-name package override changes the package-set surface. Validate
+  against at least the affected active host because `codex` depends on
+  `pkgs.ripgrep`.
