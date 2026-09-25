@@ -203,7 +203,7 @@ Source plan: [`PLAN-002`](plan.md#plan-002-add-validation-configurations-with-te
 Source plan:
 [`PLAN-003`](plan.md#plan-003-provide-configured-ripgrep-without-overriding-package-set)
 
-- [ ] Move configured ripgrep to a module-local package override.
+- [x] Move configured ripgrep to a module-local package override.
 
   Stop exposing repository-specific ripgrep configuration as the global
   `pkgs.ripgrep` package.
@@ -222,3 +222,18 @@ Source plan:
   definitions; and
   `nix build .#nixosConfigurations.ShvedGaming.config.system.build.toplevel --no-link`
   succeeds.
+
+  Progress:
+
+  - Removed the local by-name `pkgs.ripgrep` override.
+  - Updated `config/tools/text/ripgrep/default.nix` to install a module-local
+    overridden ripgrep package through `environment.systemPackages`.
+  - Verified ordinary `pkgs.ripgrep` still evaluates to `ripgrep-15.1.0`.
+  - Verified `pkgs.codex.name` still evaluates to `codex-0.133.0`.
+  - Verified evaluated `ShvedGaming` system packages include
+    `ripgrep-configured` and `codex`.
+  - Verified the configured `rg --type-list` includes `cin: Config.in` and
+    `cc: *.[chH], *.[chH].in, *.cats`.
+  - Verified
+    `nix build .#nixosConfigurations.ShvedGaming.config.system.build.toplevel --no-link`
+    succeeds.
