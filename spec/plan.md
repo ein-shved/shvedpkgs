@@ -200,6 +200,21 @@ unless a change is required by the new classification design or by adding
 - `pkgs.isDesktop` removal can break downstream package expressions, including
   private extensions not visible in this repository.
 
+### Post-Implementation Validation Note
+
+The validation plan above was incomplete for package additions to system
+tooling. Evaluating `drvPath` and using `nix build --dry-run --no-link` did not
+force enough package derivation attributes to catch a local `ripgrep` package
+override failure introduced into the `codex` closure.
+
+Future validation for changes that add packages to host system tooling should
+include a real build without `--dry-run` for at least one affected active host,
+for example:
+
+```sh
+nix build .#nixosConfigurations.ShvedGaming.config.system.build.toplevel --no-link
+```
+
 ## PLAN-002: Add Validation Configurations With Test Stubs
 
 Status: Draft
