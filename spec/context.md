@@ -5,9 +5,10 @@ workstations, laptops, a NAS/media server, a VPS for Gerrit, bootable profiles,
 and VM-oriented test configurations.
 
 The existing `Readme.md` is intentionally not treated as a source of truth.
-This document captures the current context discovered from the flake and Nix
-entry points, and should be updated as the repository moves toward an SDD
-process.
+This document captures current context discovered from the flake and Nix entry
+points. It is a non-normative orientation aid, not a source of requirements or
+system guarantees. The repository SDD process is defined in
+[`spec/sdd-process.md`](sdd-process.md).
 
 ## Current Entry Points
 
@@ -342,14 +343,11 @@ than adding another root-level test namespace.
 Current validation stubs already use this layout under
 `tests/modules/stubs/private-values/`.
 
-## SDD Notes For Future Work
+## SDD Relationship
 
-- Treat this file as context, not as a requirements spec.
-- New behavior should be introduced through small specs under `spec/`.
-- Specs should name:
-  - affected host classes or concrete hosts
-  - intended module layer: `modules/`, `config/`, `hosts/`, or `pkgs/`
-  - validation command
-  - known dependencies on secrets, hardware, or external services
-- Before deleting or moving historical code, first add a spec describing the
-  intended architecture boundary and a validation plan for the active hosts.
+This file may be incomplete or temporarily stale. When it conflicts with
+normative artifacts, Requirements and System Specification take precedence.
+
+Do not preserve this file as a parallel current-system specification. If work
+makes it materially stale, either refresh the still-useful orientation, migrate
+durable knowledge to the proper owning artifact, or remove stale material.
