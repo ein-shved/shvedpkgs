@@ -284,7 +284,7 @@ Source plan:
     `nix build .#packages.x86_64-linux.specd.tests.vm --no-link`
     succeeds.
 
-- [ ] Add SpecD to development host tooling.
+- [x] Add SpecD to development host tooling.
 
   Add `specd` to the development package bucket so development hosts expose it
   through the primary user's command lookup path.
@@ -293,6 +293,17 @@ Source plan:
   packages; representative non-development hosts do not receive `specd` through
   the development package bucket; and the affected active development host
   `ShvedGaming` builds successfully.
+
+  Progress:
+
+  - Added `specd` to `environment.developmentPackages`.
+  - Verified evaluated system packages include `specd` for development hosts
+    `ShvedGaming` and `Shvedov`.
+  - Verified evaluated system packages do not include `specd` for
+    non-development hosts `ShvedMedia` and `gerrit`.
+  - Verified
+    `nix build .#nixosConfigurations.ShvedGaming.config.system.build.toplevel --no-link`
+    succeeds.
 
 - [ ] Update context after SpecD tooling implementation.
 

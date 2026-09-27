@@ -70,6 +70,7 @@
       nix-tree
       nixpkgs-review
       shunit2
+      specd
     ];
   };
 }
