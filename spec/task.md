@@ -305,8 +305,16 @@ Source plan:
     `nix build .#nixosConfigurations.ShvedGaming.config.system.build.toplevel --no-link`
     succeeds.
 
-- [ ] Update context after SpecD tooling implementation.
+- [x] Update context after SpecD tooling implementation.
 
   Update `spec/context.md` if implementation changes make the current project
   inventory stale, especially around local packages, test support, or
   development-host tooling.
+
+  Progress:
+
+  - Updated context for the development package bucket now including local
+    `specd`.
+  - Updated local package inventory for `pkgs.specd`.
+  - Documented the current `tests/pkgs/specd.nix` package-oriented VM test and
+    its `pkgs.specd.tests.vm` entry point.

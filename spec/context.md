@@ -216,7 +216,8 @@ Important active areas:
 - `config/applications/default.nix`
   - Adds baseline system packages.
   - Adds graphical package bucket.
-  - Adds development package bucket, including `codex` from stable nixpkgs.
+  - Adds development package bucket, including `codex` from stable nixpkgs and
+    the local `specd` package.
 - `config/desktop/*`
   - Defines graphical desktop behavior around Niri, LightDM, Waybar, Kitty,
     AnyRun, XDG, wallpapers, swaylock/wpaperd/awww, and theme settings.
@@ -246,7 +247,7 @@ Local packages currently present under `pkgs/by-name` include:
 - Niri helpers: `niri-single-output`, `niri-launch-terminal`,
   `niri-integration`, `niri-lightdm-wa`
 - System helpers: `nixos-script`, `dhcps`, `dowork`, `gitaliases`,
-  `ripgrep`, `mkblur`
+  `ripgrep`, `mkblur`, `specd`
 - KL/work tooling: `klcacerts`, `klvpn`, `klvpn_cert_chooser`,
   `cntlm-gss`, `pcsc-safenet-legacy`, `rtpkcs11ecp`
 - Gerrit tooling/plugins: `gerrit-commit-msg-hook`,
@@ -342,6 +343,12 @@ than adding another root-level test namespace.
 
 Current validation stubs already use this layout under
 `tests/modules/stubs/private-values/`.
+
+Current package-oriented test support includes:
+
+- `tests/pkgs/specd.nix`, exposed through `pkgs.specd.tests.vm`, which boots a
+  minimal NixOS VM and verifies the packaged `specd` command reports the
+  expected SpecD CLI/core version.
 
 ## SDD Relationship
 
