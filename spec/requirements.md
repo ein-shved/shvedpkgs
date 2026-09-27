@@ -96,3 +96,51 @@ users, not by changing the global `pkgs.ripgrep` package contract.
   consumers and is not globally overridden with repository configuration.
 - Adding another package that depends on `pkgs.ripgrep` does not force that
   package to consume the repository's configured ripgrep package.
+
+## REQ-004: Development Hosts Provide SpecD
+
+Hosts intended for development must provide the `specd` tool in the user
+environment. Here, `specd` refers to the genuine SpecD CLI from the
+`@specd/cli` project, rather than SpecDD, a stub, placeholder, or unrelated
+executable exposed under the `specd` command name.
+
+### Rationale
+
+- SpecD is being evaluated as candidate tooling for agent-assisted SDD in this
+  repository.
+- The evaluation should be reproducible across development machines, not tied
+  to one specific host.
+- Providing SpecD on development hosts allows the project to test whether the
+  tool can carry the current SDD artifacts, project state, and active work
+  without changing the SDD model defined by `spec/sdd-process.md`.
+
+### Validation scenarios
+
+The scenarios below are an experimental replacement for acceptance criteria in
+this requirement only. The project has not yet adopted scenarios as the general
+requirement validation model.
+
+#### Scenario: Development host can invoke SpecD
+
+- **WHERE** a host is classified as a development host.
+- **WHEN** the primary user runs the `specd` command with any valid arguments.
+- **THEN** the command resolves to the genuine SpecD CLI.
+- **AND** the result corresponds to the behavior of the genuine SpecD CLI.
+
+#### Scenario: SpecD can be used for repository evaluation
+
+- **WHERE** a development host has valid runtime prerequisites for SpecD.
+- **WHEN** the primary user runs the `specd` command against this repository
+  with any valid workflow arguments.
+- **THEN** SpecD performs the requested repository/specification workflow.
+- **AND** the result corresponds to the behavior of the genuine SpecD CLI.
+- **AND** the workflow does not rely on host-local manual installation outside
+  the evaluated system configuration.
+
+#### Scenario: Non-development hosts are not required to provide SpecD
+
+- **WHERE** a host is not intended for development.
+- **WHEN** that host is evaluated.
+- **THEN** the evaluated host configuration is not required to provide `specd`.
+- **AND** any absence of `specd` on that host does not violate this
+  requirement merely because development hosts provide it.

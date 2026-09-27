@@ -509,3 +509,134 @@ change to the global `pkgs.ripgrep` package can affect unrelated packages.
 - Removing a by-name package override changes the package-set surface. Validate
   against at least the affected active host because `codex` depends on
   `pkgs.ripgrep`.
+
+## PLAN-004: Provide SpecD On Development Hosts
+
+Status: Draft
+
+Related artifacts:
+
+- Requirement:
+  [`REQ-004: Development Hosts Provide SpecD`](requirements.md#req-004-development-hosts-provide-specd)
+- Specification:
+  [`Development Host Tooling`](system.md#development-host-tooling)
+- Specification:
+  [`SpecD CLI Package`](system.md#specd-cli-package)
+- Specification:
+  [`Project Layers`](system.md#project-layers)
+
+### Goal
+
+Make the genuine SpecD CLI available as `specd` on development hosts so the
+repository can evaluate SpecD as agent-assisted SDD tooling without relying on
+host-local manual installation.
+
+### Current Observation
+
+The current stable nixpkgs package set used by this repository does not expose
+`pkgs.specd`. The package must therefore be added under the repository `pkgs`
+layer before it can be installed through development host tooling.
+
+### Assumptions
+
+- The upstream SpecD CLI is distributed as the npm package `@specd/cli`.
+- The CLI command exposed by that package is `specd`.
+- Packaging the npm release is sufficient for the initial evaluation; no
+  repository-specific wrapper or configuration is required.
+
+### Constraints
+
+- Keep the SDD model defined by `spec/sdd-process.md`; this change only makes
+  the candidate tool available.
+- Keep package definition and host installation separate:
+  `pkgs.specd` belongs in `pkgs`, while development-host installation belongs
+  in `config`.
+- Do not install SpecD on non-development hosts through this requirement.
+- Do not initialize or migrate the repository to SpecD as part of this change.
+- Commit SDD artifacts before implementation changes.
+- If implementation work is committed, keep package, test, and configuration
+  changes in separate atomic commits.
+
+### Minimal Change Set
+
+1. Add `pkgs.specd` as a by-name package for the genuine `@specd/cli` release.
+2. Add a per-package NixOS test under `tests/pkgs/` that installs `pkgs.specd`
+   on a minimal machine and checks that running the `specd` command with valid
+   inspection arguments succeeds and reports behavior consistent with the
+   genuine SpecD CLI.
+3. Add `specd` to `environment.developmentPackages` so development hosts expose
+   the command through the primary user's lookup path.
+4. Update non-normative context if the current project inventory becomes stale.
+
+### Validation Plan
+
+1. Validate the package evaluates:
+
+   ```sh
+   nix eval --raw .#packages.x86_64-linux.specd.name
+   ```
+
+2. Build the package:
+
+   ```sh
+   nix build .#packages.x86_64-linux.specd --no-link
+   ```
+
+3. Run the package-level command inspection from the built package:
+
+   ```sh
+   nix run .#packages.x86_64-linux.specd -- --help
+   nix run .#packages.x86_64-linux.specd -- --version
+   ```
+
+4. Run the repository NixOS test for SpecD:
+
+   ```sh
+   nix build .#packages.x86_64-linux.specd.tests.vm --no-link
+   ```
+
+   The test must boot a NixOS VM and invoke the installed `specd` command
+   inside that VM.
+
+5. Verify that development hosts include `specd` in evaluated system packages:
+
+   ```sh
+   nix eval --json .#nixosConfigurations.<DevelopmentHost>.config.environment.systemPackages
+   ```
+
+6. Verify that representative non-development hosts do not receive `specd`
+   through the development package bucket:
+
+   ```sh
+   nix eval --json .#nixosConfigurations.<NonDevelopmentHost>.config.environment.systemPackages
+   ```
+
+7. Verify an affected active development host with a real build:
+
+   ```sh
+   nix build .#nixosConfigurations.ShvedGaming.config.system.build.toplevel --no-link
+   ```
+
+### Out Of Scope
+
+- Do not configure SpecD project state, schemas, skills, plugins, MCP servers,
+  or repository migration.
+- Do not add SpecDD or another similarly named SDD tool.
+- Do not change the existing SDD process beyond the experimental scenario
+  format already used by `REQ-004`.
+
+### Review Notes
+
+- The main correctness risk is accidentally packaging or installing a different
+  similarly named tool. Validation should inspect command behavior, not only
+  package existence.
+- Because `specd` is absent from stable nixpkgs, a NixOS VM test is required to
+  prove the packaged command works in an evaluated system, not only in the
+  build environment.
+- Generating the initial npm lock for `@specd/cli` exposed upstream audit
+  findings with no available npm fix at the time of planning: a critical
+  transitive `tar` advisory chain through `@specd/code-graph`, `lbug`, and
+  `cmake-js`, plus related high-severity findings. This does not change the
+  initial evaluation requirement, but it is a known risk for broader adoption
+  and should be reconsidered before treating SpecD as trusted project
+  infrastructure.

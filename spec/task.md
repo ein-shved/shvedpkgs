@@ -237,3 +237,43 @@ Source plan:
   - Verified
     `nix build .#nixosConfigurations.ShvedGaming.config.system.build.toplevel --no-link`
     succeeds.
+
+## PLAN-004: Provide SpecD On Development Hosts
+
+Source plan:
+[`PLAN-004`](plan.md#plan-004-provide-specd-on-development-hosts)
+
+- [ ] Add the `pkgs.specd` package.
+
+  Add a by-name package-set member for the genuine SpecD CLI from `@specd/cli`.
+  The package must expose the `specd` command and must not encode host-specific
+  installation policy.
+
+  Completion criteria: `pkgs.specd` evaluates, builds, and its command can be
+  invoked with valid inspection arguments from the built package.
+
+- [ ] Add a NixOS VM test for the SpecD package.
+
+  Add a per-package NixOS test under `tests/pkgs/` that installs `pkgs.specd`
+  on a minimal test machine, boots the VM, and verifies that invoking `specd`
+  with valid inspection arguments succeeds and reports behavior consistent with
+  the genuine SpecD CLI.
+
+  Completion criteria: `nix build .#packages.x86_64-linux.specd.tests.vm --no-link`
+  builds and runs the VM test successfully.
+
+- [ ] Add SpecD to development host tooling.
+
+  Add `specd` to the development package bucket so development hosts expose it
+  through the primary user's command lookup path.
+
+  Completion criteria: development hosts include `specd` in evaluated system
+  packages; representative non-development hosts do not receive `specd` through
+  the development package bucket; and the affected active development host
+  `ShvedGaming` builds successfully.
+
+- [ ] Update context after SpecD tooling implementation.
+
+  Update `spec/context.md` if implementation changes make the current project
+  inventory stale, especially around local packages, test support, or
+  development-host tooling.
