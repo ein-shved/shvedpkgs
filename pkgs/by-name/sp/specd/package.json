@@ -1,0 +1,46 @@
+{
+  "name": "@specd/cli",
+  "version": "0.2.0",
+  "license": "MIT",
+  "private": false,
+  "repository": "https://github.com/specd-sdd/SpecD",
+  "homepage": "https://getspecd.dev",
+  "files": [
+    "dist/"
+  ],
+  "type": "module",
+  "bin": {
+    "specd": "./dist/index.js"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.9.1",
+    "@toon-format/toon": "^2.1.0",
+    "boxen": "^8.0.1",
+    "chalk": "^5.6.2",
+    "commander": "^13.0.0",
+    "diff": "^8.0.4",
+    "figlet": "^1.10.0",
+    "nanospinner": "^1.2.2",
+    "yaml": "^2.0.0",
+    "@specd/code-graph": "0.1.0",
+    "@specd/plugin-agent-claude": "0.2.0",
+    "@specd/plugin-agent-codex": "0.2.0",
+    "@specd/plugin-agent-copilot": "0.2.0",
+    "@specd/plugin-agent-opencode": "0.0.3",
+    "@specd/plugin-agent-standard": "0.1.0",
+    "@specd/schema-std": "0.1.1",
+    "@specd/core": "0.2.0",
+    "@specd/plugin-manager": "0.2.0"
+  },
+  "devDependencies": {
+    "@types/diff": "^8.0.0",
+    "@types/figlet": "^1.7.0"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --clean",
+    "dev": "tsup src/index.ts --format esm --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "release:publish": "pnpm publish --access public"
+  }
+}

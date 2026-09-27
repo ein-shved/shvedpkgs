@@ -243,7 +243,7 @@ Source plan:
 Source plan:
 [`PLAN-004`](plan.md#plan-004-provide-specd-on-development-hosts)
 
-- [ ] Add the `pkgs.specd` package.
+- [x] Add the `pkgs.specd` package.
 
   Add a by-name package-set member for the genuine SpecD CLI from `@specd/cli`.
   The package must expose the `specd` command and must not encode host-specific
@@ -251,6 +251,19 @@ Source plan:
 
   Completion criteria: `pkgs.specd` evaluates, builds, and its command can be
   invoked with valid inspection arguments from the built package.
+
+  Progress:
+
+  - Added `pkgs.specd` as a by-name package for `@specd/cli` 0.2.0.
+  - Vendored the npm `package.json` and generated `package-lock.json` used by
+    `importNpmLock` for reproducible dependency resolution.
+  - Used `nodejs_22` for the package builder to avoid unnecessary default
+    Node.js source builds.
+  - Verified `nix eval --raw .#packages.x86_64-linux.specd.name` returns
+    `specd-0.2.0`.
+  - Verified `nix build .#packages.x86_64-linux.specd --no-link` succeeds.
+  - Verified `nix run .#packages.x86_64-linux.specd -- --help` identifies
+    SpecD CLI/core `v0.2.0`, and `--version` returns `0.2.0`.
 
 - [ ] Add a NixOS VM test for the SpecD package.
 
