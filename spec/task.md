@@ -265,7 +265,7 @@ Source plan:
   - Verified `nix run .#packages.x86_64-linux.specd -- --help` identifies
     SpecD CLI/core `v0.2.0`, and `--version` returns `0.2.0`.
 
-- [ ] Add a NixOS VM test for the SpecD package.
+- [x] Add a NixOS VM test for the SpecD package.
 
   Add a per-package NixOS test under `tests/pkgs/` that installs `pkgs.specd`
   on a minimal test machine, boots the VM, and verifies that invoking `specd`
@@ -274,6 +274,15 @@ Source plan:
 
   Completion criteria: `nix build .#packages.x86_64-linux.specd.tests.vm --no-link`
   builds and runs the VM test successfully.
+
+  Progress:
+
+  - Added `tests/pkgs/specd.nix` as a per-package NixOS test.
+  - Exposed the test as `pkgs.specd.tests.vm` through package passthru.
+  - Verified the test derivation evaluates to `vm-test-run-specd`.
+  - Verified
+    `nix build .#packages.x86_64-linux.specd.tests.vm --no-link`
+    succeeds.
 
 - [ ] Add SpecD to development host tooling.
 

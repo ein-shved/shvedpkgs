@@ -24,6 +24,10 @@
 
   dontNpmBuild = true;
 
+  passthru.tests.vm = callPackage ../../../../tests/pkgs/specd.nix {
+    specd = finalAttrs.finalPackage;
+  };
+
   meta = {
     description = "CLI for the SpecD spec-driven development platform";
     homepage = "https://getspecd.dev";
