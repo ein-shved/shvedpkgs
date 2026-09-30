@@ -1,0 +1,27 @@
+schema: "@specd/schema-std"
+workspaces:
+  default:
+    specs:
+      adapter: fs
+      fs:
+        path: specs/
+storage:
+  changes:
+    adapter: fs
+    fs:
+      path: .specd/changes/
+  drafts:
+    adapter: fs
+    fs:
+      path: .specd/drafts/
+  discarded:
+    adapter: fs
+    fs:
+      path: .specd/discarded/
+  archive:
+    adapter: fs
+    fs:
+      path: .specd/archive/
+plugins:
+  agents:
+    - name: "@specd/plugin-agent-codex"

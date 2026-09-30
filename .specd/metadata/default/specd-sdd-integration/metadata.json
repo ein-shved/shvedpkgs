@@ -1,0 +1,136 @@
+{
+  "title": "SpecD SDD Integration",
+  "description": "This spec defines how SpecD is used in this repository while the existing SDD\nprocess remains authoritative. SpecD is a tracking, validation, and context\ndelivery layer around the SDD artifacts, not a replacement for the process\ndefined in `spec/sdd-process.md`.",
+  "context": [
+    "This spec defines how SpecD is used in this repository while the existing SDD\nprocess remains authoritative. SpecD is a tracking, validation, and context\ndelivery layer around the SDD artifacts, not a replacement for the process\ndefined in `spec/sdd-process.md`."
+  ],
+  "rules": [
+    {
+      "requirement": "Existing SDD process remains authoritative",
+      "rules": [
+        "The repository MUST continue to treat `spec/sdd-process.md` as the normative\ndefinition of the SDD process unless a future accepted process change says\notherwise.\n\nSpecD artifacts MAY restate, index, or operationalize SDD content for agent\nworkflow purposes, but they MUST NOT silently redefine the responsibilities of\nRequirements, System Specification, Plans, Tasks, Implementation, Verification,\nContext, or ADRs."
+      ]
+    },
+    {
+      "requirement": "SpecD provides machine-readable workflow state",
+      "rules": [
+        "The repository MUST provide a SpecD project configuration that allows agents to\ndiscover project state, steady-state specs, active changes, lifecycle blockers,\nand next artifact instructions through the SpecD CLI."
+      ]
+    },
+    {
+      "requirement": "SpecD specs may mirror current SDD contracts",
+      "rules": [
+        "SpecD steady-state specs MAY mirror existing SDD requirements and system\nspecification contracts when doing so improves context delivery or validation.\n\nWhen mirrored content conflicts with normative SDD artifacts, the normative SDD\nartifact owns the correction and the SpecD mirror MUST be updated or removed."
+      ]
+    },
+    {
+      "requirement": "Changes that modify behavior pass through SpecD artifacts",
+      "rules": [
+        "Future repository changes that modify expected behavior SHOULD be represented as\nSpecD changes with proposal, spec, verification, design, and task artifacts\nbefore implementation proceeds.\n\nIf an existing steady-state SpecD spec already covers the behavior, the change\nSHOULD attach that spec and use deltas or no-op deltas as appropriate. If no\nSpecD spec covers the behavior, the change SHOULD introduce one."
+      ]
+    },
+    {
+      "requirement": "Requirement validation may use scenario-style checks",
+      "rules": [
+        "SpecD verification artifacts MAY use scenario-style checks to describe how a\nrequirement is validated. This does not by itself replace the acceptance\ncriteria model in the normative SDD process."
+      ]
+    }
+  ],
+  "constraints": [
+    "The default SpecD workspace path is specs/.",
+    "Active SpecD changes are stored under .specd/changes/.",
+    "SpecD adoption must not require committing private values or generated build\noutputs."
+  ],
+  "scenarios": [
+    {
+      "requirement": "Existing SDD process remains authoritative",
+      "name": "SpecD does not replace the SDD process",
+      "given": [
+        "spec/sdd-process.md defines the repository SDD process"
+      ],
+      "when": [
+        "SpecD artifacts are added to the repository"
+      ],
+      "then": [
+        "the SDD process document remains the authoritative process definition",
+        "AND SpecD artifacts do not silently redefine SDD artifact responsibilities"
+      ]
+    },
+    {
+      "requirement": "SpecD provides machine-readable workflow state",
+      "name": "Project status is discoverable",
+      "given": [
+        "the repository contains specd.yaml"
+      ],
+      "when": [
+        "an agent runs specd project status --context --graph --format toon"
+      ],
+      "then": [
+        "SpecD reports the configured workspace",
+        "AND SpecD reports available specs and changes",
+        "AND SpecD reports lifecycle context usable for the next action"
+      ]
+    },
+    {
+      "requirement": "SpecD provides machine-readable workflow state",
+      "name": "Change instructions are discoverable",
+      "given": [
+        "an active SpecD change exists"
+      ],
+      "when": [
+        "an agent runs specd changes artifact-instruction <change-id>"
+      ],
+      "then": [
+        "SpecD returns the next artifact to edit",
+        "AND the instruction includes the relevant artifact rules"
+      ]
+    },
+    {
+      "requirement": "SpecD specs may mirror current SDD contracts",
+      "name": "Mirrored content defers to normative SDD artifacts",
+      "given": [
+        "a SpecD steady-state spec mirrors content from spec/"
+      ],
+      "when": [
+        "the mirror conflicts with a normative SDD artifact"
+      ],
+      "then": [
+        "the normative SDD artifact owns the correction",
+        "AND the SpecD mirror is treated as stale until updated or removed"
+      ]
+    },
+    {
+      "requirement": "Changes that modify behavior pass through SpecD artifacts",
+      "name": "Behavior change has SpecD lifecycle artifacts",
+      "given": [
+        "a future change modifies expected repository behavior"
+      ],
+      "when": [
+        "the change is prepared through SpecD"
+      ],
+      "then": [
+        "the change has proposal, spec, verification, design, and task artifacts",
+        "AND implementation starts only after the relevant blockers are resolved"
+      ]
+    },
+    {
+      "requirement": "Requirement validation may use scenario-style checks",
+      "name": "Scenario checks are local to SpecD verification",
+      "given": [
+        "a SpecD verification artifact uses scenarios"
+      ],
+      "when": [
+        "the scenario is read alongside spec/sdd-process.md"
+      ],
+      "then": [
+        "the scenario is treated as a SpecD verification unit",
+        "AND it does not globally replace SDD acceptance criteria unless the SDD\nprocess is explicitly changed"
+      ]
+    }
+  ],
+  "contentHashes": {
+    "spec.md": "sha256:95af2f59980f1bc2a5937b86159d5bd42a17b1d0091f6bfee4a793fe71760c7c",
+    "verify.md": "sha256:1a177835727b6dacbf79652e80fc61059bd9ee1421f9a71c8c880b6d3e80e545"
+  },
+  "generatedBy": "core"
+}

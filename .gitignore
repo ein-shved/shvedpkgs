@@ -5,3 +5,6 @@ nda.nix
 
 !tests/modules/stubs/private-values/secrets/
 !tests/modules/stubs/private-values/secrets/*.age
+specd.local.yaml
+.specd/config/log/
+.specd/config/graph/
