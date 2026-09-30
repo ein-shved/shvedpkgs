@@ -9,7 +9,7 @@ Read @../\_specd-shared/shared.md before doing anything.
 
 ## What this does
 
-Implements the code described by the change's design and tasks artifacts.
+Implements the code described by the change's requirements, system, plan, and tasks artifacts.
 Works through tasks one by one and marks them done.
 
 ## Steps
@@ -110,12 +110,12 @@ about to write (see `shared.md` — "Processing `changes context` output").
 
 ### 4b. Check impact coverage
 
-Before coding, confirm the change-scoped design artifact already includes impact analysis for the files or
+Before coding, confirm the plan artifact already includes impact analysis for the files or
 symbols named by the tasks. Reuse that analysis as the implementation baseline.
 
 Run additional graph impact commands only when implementation discovers a target file
-or symbol that was not covered by the design artifact, when the task scope has changed, or when
-fresh status/context indicates the design may be stale:
+or symbol that was not covered by the plan artifact, when the task scope has changed, or when
+fresh status/context indicates the artifacts may be stale:
 
 ```bash
 specd graph impact --symbol "<name>" --direction dependents --format toon
@@ -159,7 +159,7 @@ a worktree (`isolation: "worktree"`) so file edits don't conflict.
 Each agent prompt must include:
 
 1. **The task** — the full checkbox line with its indented context
-2. **The design excerpt** — relevant design context
+2. **Artifact excerpts** — relevant requirements, system, plan, and verification context
 3. **The spec requirements** — relevant requirements and constraints
 4. **File paths** — exact files to create or modify
 5. **Instruction to mark done** — "After implementing, mark the checkbox done in
@@ -237,4 +237,3 @@ specd changes transition <name> designing --skip-hooks all
 - Never skip the pre-hook — it tells you what to read
 - Any time a fresh `changes status` shows `review: required: yes`, stop
   implementation and redirect to `$specd-design <name>`
-

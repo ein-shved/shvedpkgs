@@ -197,8 +197,8 @@ whether a delta preserves important existing text.
 After validation succeeds, review the content that matters for the current phase:
 
 - For spec/verify deltas, review the merged output, not only the raw delta.
-- For design/tasks, compare the artifact content against the latest user intent and
-  upstream artifacts.
+- For planning/tasks artifacts, compare the artifact content against the latest user intent
+  and upstream artifacts.
 - When overlap, drift, or stale-base risk exists, run:
 
 ```bash
@@ -211,7 +211,7 @@ delta outcome.
 Important scope rule:
 
 - `spec-preview` is for **spec-scoped** artifacts (for example `specs`, `verify`).
-- For **change-scoped** artifacts (for example `proposal`, `design`, `tasks`), do not
+- For **change-scoped** artifacts (for example `proposal`, `plan`, `tasks`), do not
   use `spec-preview` as a review step; validate and review the artifact file content
   directly.
 
@@ -500,7 +500,7 @@ Score = `(sameWsCallers × 3) + (crossWsCallers × 5) + fileImporters`.
 | `$specd-new`       | Proposing specs      | `graph impact --file`    | Assess which areas a file change would affect            |
 | `$specd-design`    | Before `ready`       | `graph impact --changes` | Check blast radius of planned implementation targets     |
 | `$specd-design`    | Loading context      | `graph search --specs`   | Find specs related to the artifact being written         |
-| `$specd-design`    | Writing design/tasks | `graph hotspots`         | Identify high-risk symbols the design should account for |
+| `$specd-design`    | Writing plan/tasks   | `graph hotspots`         | Identify high-risk symbols the artifacts should account for |
 | `$specd-implement` | Before coding        | `graph impact --symbol`  | Understand blast radius of symbols you'll modify         |
 | `$specd-implement` | Before coding        | `graph hotspots --file`  | Spot risky symbols in files you'll touch                 |
 

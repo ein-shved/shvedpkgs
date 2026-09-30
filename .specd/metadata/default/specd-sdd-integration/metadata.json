@@ -1,45 +1,45 @@
 {
-  "title": "SpecD SDD Integration",
-  "description": "This spec defines how SpecD is used in this repository while the existing SDD\nprocess remains authoritative. SpecD is a tracking, validation, and context\ndelivery layer around the SDD artifacts, not a replacement for the process\ndefined in `spec/sdd-process.md`.",
+  "title": "Requirements",
+  "description": "## Requirement: Existing SDD process remains authoritative\n\nThe repository must continue to treat `spec/sdd-process.md` as the normative\ndefinition of the SDD process unless a future accepted process change says\notherwise.\n\nSpecD artifacts may restate, index, or operationalize SDD content for agent\nworkflow purposes, but they must not silently redefine the responsibilities of\nRequirements, System Specification, Plans, Tasks, Implementation, Verification,\nContext, or ADRs.\n\n## Requirement: SpecD provides machine-readable workflow state\n\nThe repository must provide a SpecD project configuration that allows agents to\ndiscover project state, steady-state specs, active changes, lifecycle blockers,\nand next artifact instructions through the SpecD CLI.\n\n## Requirement: SpecD specs may mirror current SDD contracts\n\nSpecD steady-state specs may mirror existing SDD requirements and system\nspecification contracts when doing so improves context delivery or validation.\n\nWhen mirrored content conflicts with normative SDD artifacts, the normative SDD\nartifact owns the correction and the SpecD mirror must be updated or removed.\n\n## Requirement: Changes that modify behavior pass through SpecD artifacts\n\nFuture repository changes that modify expected behavior should be represented as\nSpecD changes with requirements, system, verification, plan, and task artifacts\nbefore implementation proceeds.\n\nIf an existing steady-state SpecD spec already covers the behavior, the change\nshould attach that spec and use deltas or no-op deltas as appropriate. If no\nSpecD spec covers the behavior, the change should introduce one.\n\n## Requirement: Requirement validation may use scenario-style checks\n\nSpecD verification artifacts may use scenario-style checks to describe how a\nrequirement is validated. This does not by itself replace the acceptance\ncriteria model in the normative SDD process.",
   "context": [
-    "This spec defines how SpecD is used in this repository while the existing SDD\nprocess remains authoritative. SpecD is a tracking, validation, and context\ndelivery layer around the SDD artifacts, not a replacement for the process\ndefined in `spec/sdd-process.md`."
+    "## Requirement: Existing SDD process remains authoritative\n\nThe repository must continue to treat `spec/sdd-process.md` as the normative\ndefinition of the SDD process unless a future accepted process change says\notherwise.\n\nSpecD artifacts may restate, index, or operationalize SDD content for agent\nworkflow purposes, but they must not silently redefine the responsibilities of\nRequirements, System Specification, Plans, Tasks, Implementation, Verification,\nContext, or ADRs.\n\n## Requirement: SpecD provides machine-readable workflow state\n\nThe repository must provide a SpecD project configuration that allows agents to\ndiscover project state, steady-state specs, active changes, lifecycle blockers,\nand next artifact instructions through the SpecD CLI.\n\n## Requirement: SpecD specs may mirror current SDD contracts\n\nSpecD steady-state specs may mirror existing SDD requirements and system\nspecification contracts when doing so improves context delivery or validation.\n\nWhen mirrored content conflicts with normative SDD artifacts, the normative SDD\nartifact owns the correction and the SpecD mirror must be updated or removed.\n\n## Requirement: Changes that modify behavior pass through SpecD artifacts\n\nFuture repository changes that modify expected behavior should be represented as\nSpecD changes with requirements, system, verification, plan, and task artifacts\nbefore implementation proceeds.\n\nIf an existing steady-state SpecD spec already covers the behavior, the change\nshould attach that spec and use deltas or no-op deltas as appropriate. If no\nSpecD spec covers the behavior, the change should introduce one.\n\n## Requirement: Requirement validation may use scenario-style checks\n\nSpecD verification artifacts may use scenario-style checks to describe how a\nrequirement is validated. This does not by itself replace the acceptance\ncriteria model in the normative SDD process."
   ],
   "rules": [
     {
-      "requirement": "Existing SDD process remains authoritative",
+      "requirement": "Requirement: Existing SDD process remains authoritative",
       "rules": [
-        "The repository MUST continue to treat `spec/sdd-process.md` as the normative\ndefinition of the SDD process unless a future accepted process change says\notherwise.\n\nSpecD artifacts MAY restate, index, or operationalize SDD content for agent\nworkflow purposes, but they MUST NOT silently redefine the responsibilities of\nRequirements, System Specification, Plans, Tasks, Implementation, Verification,\nContext, or ADRs."
+        "The repository must continue to treat `spec/sdd-process.md` as the normative\ndefinition of the SDD process unless a future accepted process change says\notherwise.\n\nSpecD artifacts may restate, index, or operationalize SDD content for agent\nworkflow purposes, but they must not silently redefine the responsibilities of\nRequirements, System Specification, Plans, Tasks, Implementation, Verification,\nContext, or ADRs."
       ]
     },
     {
-      "requirement": "SpecD provides machine-readable workflow state",
+      "requirement": "Requirement: SpecD provides machine-readable workflow state",
       "rules": [
-        "The repository MUST provide a SpecD project configuration that allows agents to\ndiscover project state, steady-state specs, active changes, lifecycle blockers,\nand next artifact instructions through the SpecD CLI."
+        "The repository must provide a SpecD project configuration that allows agents to\ndiscover project state, steady-state specs, active changes, lifecycle blockers,\nand next artifact instructions through the SpecD CLI."
       ]
     },
     {
-      "requirement": "SpecD specs may mirror current SDD contracts",
+      "requirement": "Requirement: SpecD specs may mirror current SDD contracts",
       "rules": [
-        "SpecD steady-state specs MAY mirror existing SDD requirements and system\nspecification contracts when doing so improves context delivery or validation.\n\nWhen mirrored content conflicts with normative SDD artifacts, the normative SDD\nartifact owns the correction and the SpecD mirror MUST be updated or removed."
+        "SpecD steady-state specs may mirror existing SDD requirements and system\nspecification contracts when doing so improves context delivery or validation.\n\nWhen mirrored content conflicts with normative SDD artifacts, the normative SDD\nartifact owns the correction and the SpecD mirror must be updated or removed."
       ]
     },
     {
-      "requirement": "Changes that modify behavior pass through SpecD artifacts",
+      "requirement": "Requirement: Changes that modify behavior pass through SpecD artifacts",
       "rules": [
-        "Future repository changes that modify expected behavior SHOULD be represented as\nSpecD changes with proposal, spec, verification, design, and task artifacts\nbefore implementation proceeds.\n\nIf an existing steady-state SpecD spec already covers the behavior, the change\nSHOULD attach that spec and use deltas or no-op deltas as appropriate. If no\nSpecD spec covers the behavior, the change SHOULD introduce one."
+        "Future repository changes that modify expected behavior should be represented as\nSpecD changes with requirements, system, verification, plan, and task artifacts\nbefore implementation proceeds.\n\nIf an existing steady-state SpecD spec already covers the behavior, the change\nshould attach that spec and use deltas or no-op deltas as appropriate. If no\nSpecD spec covers the behavior, the change should introduce one."
       ]
     },
     {
-      "requirement": "Requirement validation may use scenario-style checks",
+      "requirement": "Requirement: Requirement validation may use scenario-style checks",
       "rules": [
-        "SpecD verification artifacts MAY use scenario-style checks to describe how a\nrequirement is validated. This does not by itself replace the acceptance\ncriteria model in the normative SDD process."
+        "SpecD verification artifacts may use scenario-style checks to describe how a\nrequirement is validated. This does not by itself replace the acceptance\ncriteria model in the normative SDD process."
       ]
     }
   ],
   "constraints": [
-    "The default SpecD workspace path is specs/.",
-    "Active SpecD changes are stored under .specd/changes/.",
-    "SpecD adoption must not require committing private values or generated build\noutputs."
+    "spec/sdd-process.md remains the normative SDD process definition.",
+    "SpecD artifacts are allowed to provide machine-readable tracking and context\nwithout silently replacing the SDD process.",
+    "Runtime/generated SpecD graph and log files are not tracked as durable\nartifacts."
   ],
   "scenarios": [
     {
@@ -129,7 +129,8 @@
     }
   ],
   "contentHashes": {
-    "spec.md": "sha256:95af2f59980f1bc2a5937b86159d5bd42a17b1d0091f6bfee4a793fe71760c7c",
+    "requirements.md": "sha256:9a1809340ef09ccf98c14961629239bfbc4ceff146411ae510613b7787eea1e2",
+    "system.md": "sha256:a67266b3b3a7e1cf3252c0955451d21e9e8807d0c281f29ec2cadfb3a994aba8",
     "verify.md": "sha256:1a177835727b6dacbf79652e80fc61059bd9ee1421f9a71c8c880b6d3e80e545"
   },
   "generatedBy": "core"

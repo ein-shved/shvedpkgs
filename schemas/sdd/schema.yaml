@@ -1,0 +1,317 @@
+kind: schema
+name: sdd
+version: 1
+description: Repository SDD workflow — requirements → system → plan → tasks.
+
+artifacts:
+  - id: proposal
+    scope: change
+    output: proposal.md
+    description: Change proposal explaining why the work exists and which SDD artifacts it affects
+    template: templates/proposal.md
+    requires: []
+    instruction: |
+      Create the proposal document that establishes WHY this change is needed.
+
+      Preserve the repository SDD model:
+      - Requirements own needs and satisfaction conditions.
+      - System owns current system contracts and interfaces.
+      - Plan owns implementation strategy.
+      - Tasks own executable work.
+      - Context is non-normative orientation.
+      - ADRs own significant decisions and rationale.
+
+      Include:
+      - Motivation
+      - Current behaviour
+      - Proposed solution
+      - SDD artifacts affected
+      - Impact
+      - Technical context
+      - Open questions
+    rules:
+      post:
+        - id: resolve-open-questions
+          instruction: |
+            Review the "Open questions" section. Resolve any question that can
+            change requirements, system specification, plan, or task artifacts
+            before proceeding.
+
+  - id: requirements
+    scope: spec
+    output: requirements.md
+    description: SDD requirements describing needs, obligations, rationale, and satisfaction conditions
+    template: templates/requirements.md
+    requires:
+      - proposal
+    delta: true
+    instruction: |
+      Create or update the requirements artifact for every spec affected by the
+      proposal.
+
+      Requirements describe WHAT need or obligation the system must satisfy.
+      They do not own implementation files, package placement, migration steps,
+      internal module structure, or historical implementation notes.
+
+      Format requirements:
+      - Top-level heading: `# Requirements`
+      - Each requirement uses `## REQ-<n>: <name>` or
+        `## Requirement: <name>`.
+      - Include rationale where it helps future readers.
+      - Express satisfaction either as acceptance criteria or validation
+        scenarios. Prefer scenarios for new requirements in this experiment.
+    deltaInstruction: |
+      For modified requirements, write a delta file at
+      `{{change.path}}/deltas/<workspace>/<capability-path>/requirements.md.delta.yaml`.
+
+      Target whole requirement sections. Modified operations replace the body
+      under the existing heading. Added operations include the full requirement
+      heading and body.
+    validations:
+      - id: has-requirement
+        type: section
+        matches: '^(REQ-[0-9]+:|Requirement:)'
+        required: true
+
+  - id: system
+    scope: spec
+    output: system.md
+    description: SDD system specification describing current contracts, concepts, layers, and interfaces
+    template: templates/system.md
+    requires:
+      - requirements
+    delta: true
+    instruction: |
+      Create or update the system specification artifact for every affected
+      spec.
+
+      The system specification maps requirements to the current system model:
+      concepts, interfaces, invariants, layers, host classification, package
+      buckets, validation outputs, and other current contracts.
+
+      Do not put implementation sequencing or work checklist detail here; that
+      belongs in plan and tasks.
+    deltaInstruction: |
+      For modified system specification content, write a delta file at
+      `{{change.path}}/deltas/<workspace>/<capability-path>/system.md.delta.yaml`.
+
+      Target complete sections by heading. Keep the updated section complete
+      enough to remain correct after archive.
+    validations:
+      - id: has-system-heading
+        type: section
+        level: 1
+        required: true
+
+  - id: verify
+    scope: spec
+    output: verify.md
+    description: Verification scenarios for requirements and system contracts
+    template: templates/verify.md
+    requires:
+      - requirements
+      - system
+    delta: true
+    instruction: |
+      Create or update verification scenarios for the affected requirements and
+      system contracts.
+
+      Use scenario-style checks with WHERE/GIVEN, WHEN, THEN, and AND clauses.
+      Scenarios must be concrete enough for an agent to verify by inspecting
+      code and running commands.
+    deltaInstruction: |
+      For modified verification content, write a delta file at
+      `{{change.path}}/deltas/<workspace>/<capability-path>/verify.md.delta.yaml`.
+
+      Target requirement sections or scenario sections by exact heading.
+    validations:
+      - id: has-scenario
+        type: section
+        matches: '^Scenario:'
+        required: true
+
+  - id: plan
+    scope: change
+    output: plan.md
+    description: SDD implementation plan derived from requirements and system specification
+    template: templates/plan.md
+    requires:
+      - requirements
+      - system
+      - verify
+    instruction: |
+      Create the implementation plan for this change.
+
+      The plan owns implementation strategy, sequencing, assumptions,
+      constraints, validation commands, and explicit out-of-scope boundaries.
+      It must be concrete enough for tasks to be derived without inventing
+      design decisions.
+    rules:
+      post:
+        - id: upstream-coverage
+          instruction: |
+            Cross-check the plan against requirements, system, and verify
+            artifacts. Every requirement and scenario must have a path through
+            the plan.
+
+  - id: tasks
+    scope: change
+    hasTasks: true
+    output: tasks.md
+    description: SDD task checklist derived from the plan
+    template: templates/tasks.md
+    requires:
+      - plan
+    instruction: |
+      Create the executable task checklist derived from plan.md.
+
+      Tasks must be small, ordered by dependency, and specific about target
+      files or validation commands where relevant. Each task should be
+      independently checkable.
+    preHashCleanup:
+      - id: normalize-checkboxes
+        pattern: '^([ \t]*-\s+)\[x\]'
+        replacement: '$1[ ]'
+    taskCompletionCheck:
+      incompletePattern: '^\s*-\s+\[ \]'
+      completePattern: '^\s*-\s+\[x\]'
+
+  - id: context
+    scope: change
+    optional: true
+    output: context.md
+    description: Optional non-normative project or change orientation
+    template: templates/context.md
+    requires:
+      - proposal
+    instruction: |
+      Write context only when the change needs non-normative orientation that
+      does not belong in requirements, system specification, plan, tasks, or ADRs.
+
+  - id: adr
+    scope: change
+    optional: true
+    output: adr.md
+    description: Optional architecture decision record for significant decisions
+    template: templates/adr.md
+    requires:
+      - proposal
+    instruction: |
+      Write an ADR only when the change includes a significant decision whose
+      rationale must be preserved independently from the implementation plan.
+
+metadataExtraction:
+  title:
+    artifact: requirements
+    extractor:
+      selector: { type: section, level: 1 }
+      extract: label
+  description:
+    artifact: requirements
+    extractor:
+      selector: { type: section, level: 1 }
+      extract: content
+  rules:
+    - id: requirements
+      artifact: requirements
+      extractor:
+        selector:
+          type: section
+          matches: '^(REQ-[0-9]+:|Requirement:)'
+        groupBy: label
+        extract: content
+  constraints:
+    - id: system-constraints
+      artifact: system
+      extractor:
+        selector:
+          type: list-item
+          parent: { type: section, matches: '^Constraints$' }
+        extract: label
+  scenarios:
+    - id: verification-scenarios
+      artifact: verify
+      extractor:
+        selector:
+          type: section
+          matches: '^Scenario:'
+          parent: { type: section, matches: '^Requirement:' }
+        fields:
+          name: { from: label, strip: '^Scenario:\s*' }
+          requirement: { from: parentLabel, strip: '^Requirement:\s*' }
+          given:
+            childSelector: { type: list-item, matches: '^GIVEN\b' }
+            capture: '^GIVEN\s+(.+)'
+            followSiblings: '^(?:AND|OR)\b'
+          when:
+            childSelector: { type: list-item, matches: '^WHEN\b' }
+            capture: '^WHEN\s+(.+)'
+            followSiblings: '^(?:AND|OR)\b'
+          then:
+            childSelector: { type: list-item, matches: '^THEN\b' }
+            capture: '^THEN\s+(.+)'
+            followSiblings: '^(?:AND|OR)\b'
+  context:
+    - id: requirements-overview
+      artifact: requirements
+      extractor:
+        selector: { type: section, level: 1 }
+        extract: content
+
+workflow:
+  - step: designing
+    requires: []
+    hooks:
+      pre:
+        - id: designing-guidance
+          instruction: |
+            Preserve the SDD dependency direction:
+            requirements -> system -> plan -> tasks -> implementation.
+            Discovery may move upstream; corrections must propagate downstream.
+
+  - step: ready
+    requires: [proposal, requirements, system, verify, plan, tasks]
+    hooks:
+      pre:
+        - id: ready-guidance
+          instruction: |
+            Verify that requirements, system, verify, plan, and tasks are all
+            complete and aligned before implementation starts.
+
+  - step: implementing
+    requires: [proposal, requirements, system, verify, plan, tasks]
+    hooks:
+      pre:
+        - id: implementing-guidance
+          instruction: |
+            Read requirements, system, verify, plan, and tasks before coding.
+            Implement tasks in order and mark checkboxes complete as work is
+            done. If implementation reveals upstream defects, return to
+            designing and correct the earliest affected artifact.
+
+  - step: verifying
+    requires: [proposal, requirements, system, verify, plan, tasks]
+    requiresTaskCompletion: [tasks]
+    hooks:
+      pre:
+        - id: verifying-guidance
+          instruction: |
+            Verify every scenario against the implementation. If scenarios fail
+            because code is wrong, return to implementing. If scenarios fail
+            because artifacts are wrong, return to designing.
+
+  - step: archiving
+    requires: [proposal, requirements, system, verify, plan, tasks]
+    requiresTaskCompletion: [tasks]
+    hooks:
+      pre:
+        - id: archiving-guidance
+          instruction: |
+            Confirm archived requirements and system specification will match
+            the implemented behavior. Do not archive stale or incomplete
+            artifacts.
+      post:
+        - id: summarise-archive
+          instruction: |
+            Summarize the archived SDD artifacts and the requirements/system
+            contracts that changed.

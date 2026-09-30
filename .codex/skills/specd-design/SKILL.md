@@ -1,6 +1,6 @@
 ---
 name: "specd-design"
-description: "Write or revise specd design artifacts for an active change."
+description: "Write or revise specd artifacts for an active change."
 ---
 
 # specd-design — write artifacts
@@ -159,14 +159,14 @@ specd graph hotspots --format toon
 Graph search helps you discover specs you might need to load as context. Hotspots help
 you identify high-coupling symbols that the design should handle carefully.
 
-When writing the **design** or **tasks** artifact, if you know specific files or symbols
-that will be modified, check their dependent impact:
+When writing an implementation-planning artifact or the **tasks** artifact, if you know
+specific files or symbols that will be modified, check their dependent impact:
 
 ```bash
 specd graph impact --symbol "<name>" --direction dependents --format toon
 ```
 
-Include impact findings in the design artifact so the implementer knows what's at stake.
+Include impact findings in the relevant planning artifact so the implementer knows what's at stake.
 
 #### Load exploration context
 
@@ -293,7 +293,7 @@ artifact filter to avoid reading unrelated files:
 specd changes spec-preview <name> <specId> --artifact <artifactId> --format text
 ```
 
-Do not use `spec-preview` for change-scoped artifacts (`proposal`, `design`, `tasks`);
+Do not use `spec-preview` for change-scoped artifacts such as `proposal`, `plan`, and `tasks`;
 review those files directly in the change directory.
 
 **One-at-a-time mode:** show what was written, ask:
@@ -330,7 +330,7 @@ If risk is HIGH or CRITICAL, surface it to the user and confirm before continuin
 
 ### 10c. Implementation scope guard — mandatory before `ready`
 
-Before entering `ready`, verify that the implementation targets described by the design
+Before entering `ready`, verify that the implementation targets described by the artifacts
 stay inside the change's writable workspace code roots.
 
 Reload workspace config:
@@ -424,4 +424,3 @@ Follow the recommended repair command based on the target recommendation.
 - One spec at a time for `scope: spec` artifacts
 - Never guess spec IDs — look them up from `specs list --format text --summary`
 - If context is unclear, ask the user — don't guess
-

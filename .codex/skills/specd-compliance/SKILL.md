@@ -253,13 +253,13 @@ Each subagent MUST produce structured output in this exact format for each spec 
 
 | Dependency                  | Status                                 | Notes   |
 | --------------------------- | -------------------------------------- | ------- |
-| `specs/core/config/spec.md` | CONSISTENT / CONTRADICTS / BROKEN_LINK | details |
+| `specs/core/config/requirements.md` | CONSISTENT / CONTRADICTS / BROKEN_LINK | details |
 | ...                         | ...                                    | ...     |
 
 #### Cross-Spec Contradictions (if any)
 
 - **This spec says:** exact quote or summary
-- **Dependency `specs/X/spec.md` says:** contradicting quote or summary
+- **Dependency `specs/X/requirements.md` says:** contradicting quote or summary
 - **Impact:** what breaks or becomes ambiguous because of this contradiction
 - **Recommendation:** which spec should be corrected and why
 
@@ -412,4 +412,3 @@ When launching subagents, use these settings:
 - Use `specd graph` commands as the primary code navigation method; use `Grep` and `Glob` as fallback for things the graph doesn't cover (config files, static patterns, unindexed code)
 - If new spec directories or packages appear that you haven't seen before, handle them — do not ignore unknown areas
 - If code graph is stale, run `specd graph index` before starting the audit
-

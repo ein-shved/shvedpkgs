@@ -1,4 +1,9 @@
-schema: "@specd/schema-std"
+schema: "./schemas/sdd/schema.yaml"
+context:
+  - file: .specd/context.md
+contextIncludeSpecs:
+  - "default:*"
+contextMode: summary
 workspaces:
   default:
     specs:

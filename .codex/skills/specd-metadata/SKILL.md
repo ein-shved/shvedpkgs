@@ -272,9 +272,11 @@ Copy these fields exactly from the metadata — do NOT modify them:
 
 **Note on `contentHashes` format:** The CLI `specs metadata --format json` displays `contentHashes`
 as an expanded array with freshness info (`[{ filename, recorded, current, fresh }]`). However,
-the stored format is a simple map (`{ "spec.md": "sha256:..." }`). Your output must use the
-**map format**. To get the original map, use `specs generate-metadata <spec-id> --format json`
-which returns `{ metadata: { contentHashes: { "spec.md": "sha256:..." } } }` — copy the
+the stored format is a simple map keyed by artifact filenames, for example
+`{ "requirements.md": "sha256:...", "system.md": "sha256:...", "verify.md": "sha256:..." }`.
+Your output must use the **map format**. To get the original map, use
+`specs generate-metadata <spec-id> --format json`, which returns
+`{ metadata: { contentHashes: { "requirements.md": "sha256:..." } } }` — copy the
 `contentHashes` from there.
 
 Set `generatedBy` to `"agent"` (replacing `"core"` from the deterministic step).
@@ -296,7 +298,8 @@ Use `JSON.stringify`-compatible format: 2-space indentation, double-quoted keys 
   "keywords": ["<keyword>"],
   "dependsOn": ["<workspace:spec/path>"],
   "contentHashes": {
-    "spec.md": "sha256:<hex>",
+    "requirements.md": "sha256:<hex>",
+    "system.md": "sha256:<hex>",
     "verify.md": "sha256:<hex>"
   },
   "rules": [
@@ -360,4 +363,3 @@ process.stdin.on('end', () => {
 ```bash
 specd specs resolve-path <path> --format json
 ```
-
