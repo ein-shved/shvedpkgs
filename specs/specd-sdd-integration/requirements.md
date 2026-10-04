@@ -2,7 +2,7 @@
 
 ## Requirement: Existing SDD process remains authoritative
 
-The repository must continue to treat `spec/sdd-process.md` as the normative
+The repository must continue to treat `specs/sdd-process.md` as the normative
 definition of the SDD process unless a future accepted process change says
 otherwise.
 

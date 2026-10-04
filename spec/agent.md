@@ -23,8 +23,10 @@ inventory and repository map is
 
 ## Process Entry Points
 
-- [`spec/sdd-process.md`](sdd-process.md): authoritative SDD process.
-- [`spec/sdd-process.ru.md`](sdd-process.ru.md): Russian translation of
+- [`specs/sdd-process.md`](../specs/sdd-process.md):
+  authoritative SDD process.
+- [`specs/sdd-process.ru.md`](../specs/sdd-process.ru.md):
+  Russian translation of
   the process.
 - [`spec/requirements.md`](requirements.md): accepted or working
   project needs.
@@ -38,13 +40,13 @@ inventory and repository map is
   optional non-normative project inventory and orientation material.
 
 If these artifacts disagree, follow the precedence and correction rules
-in [`spec/sdd-process.md`](sdd-process.md). In short: find the earliest
+in [`specs/sdd-process.md`](../specs/sdd-process.md). In short: find the earliest
 affected artifact, correct it first, then reconsider downstream
 artifacts.
 
 ## Process Authority
 
-Follow [`spec/sdd-process.md`](sdd-process.md) strictly for SDD process
+Follow [`specs/sdd-process.md`](../specs/sdd-process.md) strictly for SDD process
 rules, artifact responsibilities, dependency flow, Discovery/Spike,
 ADR handling, validation, and completion criteria.
 
@@ -64,9 +66,10 @@ Important top-level areas:
 - `config/`: opinionated global configuration consuming those options.
 - `pkgs/`: local package overlay using nixpkgs by-name layout.
 - `tests/`: validation and test support.
-- `spec/`: SDD process, requirements, system specification, ADRs, and
-  historical planning artifacts.
-- `specs/`: SpecD operational specs and optional project inventory.
+- `spec/`: legacy and broader SDD requirements, system specification, ADRs,
+  and historical planning artifacts.
+- `specs/`: the SDD process document, SpecD operational specs, and optional
+  project inventory.
 
 Layer rule summary:
 

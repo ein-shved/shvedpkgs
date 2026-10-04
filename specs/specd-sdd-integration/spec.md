@@ -5,7 +5,7 @@
 This spec defines how SpecD is used in this repository while the existing SDD
 process remains authoritative. SpecD is a tracking, validation, and context
 delivery layer around the SDD artifacts, not a replacement for the process
-defined in `spec/sdd-process.md`.
+defined in `specs/sdd-process.md`.
 
 ## Spec Dependencies
 
@@ -15,7 +15,7 @@ _none_
 
 ### Requirement: Existing SDD process remains authoritative
 
-The repository MUST continue to treat `spec/sdd-process.md` as the normative
+The repository MUST continue to treat `specs/sdd-process.md` as the normative
 definition of the SDD process unless a future accepted process change says
 otherwise.
 

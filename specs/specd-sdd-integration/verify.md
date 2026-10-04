@@ -6,7 +6,7 @@
 
 #### Scenario: SpecD does not replace the SDD process
 
-- GIVEN `spec/sdd-process.md` defines the repository SDD process
+- GIVEN `specs/sdd-process.md` defines the repository SDD process
 - WHEN SpecD artifacts are added to the repository
 - THEN the SDD process document remains the authoritative process definition
 - AND SpecD artifacts do not silently redefine SDD artifact responsibilities
@@ -61,7 +61,7 @@
 #### Scenario: Scenario checks are local to SpecD verification
 
 - GIVEN a SpecD verification artifact uses scenarios
-- WHEN the scenario is read alongside `spec/sdd-process.md`
+- WHEN the scenario is read alongside `specs/sdd-process.md`
 - THEN the scenario is treated as a SpecD verification unit
 - AND it does not globally replace SDD acceptance criteria unless the SDD
   process is explicitly changed

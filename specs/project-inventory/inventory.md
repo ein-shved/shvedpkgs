@@ -8,7 +8,7 @@ The existing `Readme.md` is intentionally not treated as a source of truth.
 This document captures current context discovered from the flake and Nix entry
 points. It is a non-normative orientation aid, not a source of requirements or
 system guarantees. The repository SDD process is defined in
-[`spec/sdd-process.md`](../../spec/sdd-process.md).
+[`specs/sdd-process.md`](../sdd-process.md).
 
 ## Current Entry Points
 

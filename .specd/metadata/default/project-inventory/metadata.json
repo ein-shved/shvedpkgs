@@ -77,7 +77,7 @@
     "requirements.md": "sha256:28dc75d7f34846c394a97161a8e1f02c946ae75939fd1185100dde1ebc0ad1cf",
     "system.md": "sha256:bbce178c508aad8604987ee4f1a5f870354e46b152d8a418ae93a69554a13f6d",
     "verify.md": "sha256:41efb2414431815f99c5fa9f6da409a0e45ac129f3b404246130d047caae7ed7",
-    "inventory.md": "sha256:1be70f7db1a0fc78ed2b69b882c6eb2cbf1440d6007eb7d5aa1a252ba0cd3ac9"
+    "inventory.md": "sha256:d86b67af857c514afab7b6f364b17aa806e5b81df267a51f014377ea40e55a65"
   },
   "generatedBy": "core"
 }

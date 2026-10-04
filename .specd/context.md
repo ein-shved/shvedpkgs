@@ -5,8 +5,9 @@ truth for the whole SDD process.
 
 ## Process Model
 
-- The repository SDD source material remains under `spec/`.
-- SpecD operational specs live under `specs/`.
+- The repository SDD process document lives at `specs/sdd-process.md`.
+- Legacy and broader SDD source material remains under `spec/`.
+- SpecD operational specs also live under `specs/`.
 - The active SpecD schema is the local SDD schema at `schemas/sdd/schema.yaml`.
 - The active SpecD artifact flow is `proposal -> requirements -> system -> verify -> plan`.
 - `requirements.md` owns needs, obligations, rationale, and satisfaction conditions.
@@ -31,7 +32,7 @@ truth for the whole SDD process.
 ## Useful Repository References
 
 - `spec/agent.md` gives repository-level orientation for agents.
-- `spec/sdd-process.md` describes the repository's SDD process.
+- `specs/sdd-process.md` describes the repository's SDD process.
 - `spec/requirements.md` captures broader process requirements.
 - `specs/project-inventory/inventory.md` captures optional non-normative
   project inventory and orientation.

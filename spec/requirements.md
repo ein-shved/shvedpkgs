@@ -112,7 +112,7 @@ executable exposed under the `specd` command name.
   to one specific host.
 - Providing SpecD on development hosts allows the project to test whether the
   tool can carry the current SDD artifacts, project state, and active work
-  without changing the SDD model defined by `spec/sdd-process.md`.
+  without changing the SDD model defined by `specs/sdd-process.md`.
 
 ### Validation scenarios
 

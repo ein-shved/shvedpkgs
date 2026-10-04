@@ -546,7 +546,7 @@ layer before it can be installed through development host tooling.
 
 ### Constraints
 
-- Keep the SDD model defined by `spec/sdd-process.md`; this change only makes
+- Keep the SDD model defined by `specs/sdd-process.md`; this change only makes
   the candidate tool available.
 - Keep package definition and host installation separate:
   `pkgs.specd` belongs in `pkgs`, while development-host installation belongs

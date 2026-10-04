@@ -54,7 +54,7 @@ The local SDD schema defines first-class artifacts for:
 
 ## Constraints
 
-- `spec/sdd-process.md` remains the normative SDD process definition.
+- `specs/sdd-process.md` remains the normative SDD process definition.
 - SpecD artifacts are allowed to provide machine-readable tracking and context
   without silently replacing the SDD process.
 - `specs/project-inventory/inventory.md` is optional non-normative orientation
