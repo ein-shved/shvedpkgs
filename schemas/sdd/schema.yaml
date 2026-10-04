@@ -1,7 +1,7 @@
 kind: schema
 name: sdd
 version: 1
-description: Repository SDD workflow — requirements → system → plan → tasks.
+description: Repository SDD workflow — requirements → system → verify → plan.
 
 artifacts:
   - id: proposal
@@ -16,8 +16,8 @@ artifacts:
       Preserve the repository SDD model:
       - Requirements own needs and satisfaction conditions.
       - System owns current system contracts and interfaces.
-      - Plan owns implementation strategy.
-      - Tasks own executable work.
+      - Plan owns implementation strategy, validation strategy, and top-level
+        plan items.
       - Context is non-normative orientation.
       - ADRs own significant decisions and rationale.
 
@@ -34,7 +34,8 @@ artifacts:
         - id: resolve-open-questions
           instruction: |
             Review the "Open questions" section. Resolve any question that can
-            change requirements, system specification, plan, or task artifacts
+            change requirements, system specification, verification, or plan
+            artifacts
             before proceeding.
 
   - id: requirements
@@ -89,8 +90,8 @@ artifacts:
       concepts, interfaces, invariants, layers, host classification, package
       buckets, validation outputs, and other current contracts.
 
-      Do not put implementation sequencing or work checklist detail here; that
-      belongs in plan and tasks.
+      Do not put implementation sequencing or plan-item checklist detail here;
+      that belongs in the plan.
     deltaInstruction: |
       For modified system specification content, write a delta file at
       `{{change.path}}/deltas/<workspace>/<capability-path>/system.md.delta.yaml`.
@@ -132,8 +133,9 @@ artifacts:
 
   - id: plan
     scope: change
+    hasTasks: true
     output: plan.md
-    description: SDD implementation plan derived from requirements and system specification
+    description: SDD implementation plan with validation strategy and top-level plan items
     template: templates/plan.md
     requires:
       - requirements
@@ -143,9 +145,15 @@ artifacts:
       Create the implementation plan for this change.
 
       The plan owns implementation strategy, sequencing, assumptions,
-      constraints, validation commands, and explicit out-of-scope boundaries.
-      It must be concrete enough for tasks to be derived without inventing
-      design decisions.
+      constraints, validation strategy, explicit out-of-scope boundaries, and
+      top-level plan items.
+
+      Top-level plan items are the executable work units for implementation.
+      Each top-level plan item must be independently completable and must
+      include or reference the validation needed to prove that item reaches an
+      agreed state. Smaller execution steps may be nested under a plan item
+      when helpful, but they are local execution structure rather than separate
+      process artifacts.
     rules:
       post:
         - id: upstream-coverage
@@ -153,21 +161,6 @@ artifacts:
             Cross-check the plan against requirements, system, and verify
             artifacts. Every requirement and scenario must have a path through
             the plan.
-
-  - id: tasks
-    scope: change
-    hasTasks: true
-    output: tasks.md
-    description: SDD task checklist derived from the plan
-    template: templates/tasks.md
-    requires:
-      - plan
-    instruction: |
-      Create the executable task checklist derived from plan.md.
-
-      Tasks must be small, ordered by dependency, and specific about target
-      files or validation commands where relevant. Each task should be
-      independently checkable.
     preHashCleanup:
       - id: normalize-checkboxes
         pattern: '^([ \t]*-\s+)\[x\]'
@@ -186,7 +179,8 @@ artifacts:
       - proposal
     instruction: |
       Write context only when the change needs non-normative orientation that
-      does not belong in requirements, system specification, plan, tasks, or ADRs.
+      does not belong in requirements, system specification, verification,
+      plan, or ADRs.
 
   - id: adr
     scope: change
@@ -266,32 +260,33 @@ workflow:
         - id: designing-guidance
           instruction: |
             Preserve the SDD dependency direction:
-            requirements -> system -> plan -> tasks -> implementation.
+            requirements -> system -> verify -> plan -> implementation.
             Discovery may move upstream; corrections must propagate downstream.
 
   - step: ready
-    requires: [proposal, requirements, system, verify, plan, tasks]
+    requires: [proposal, requirements, system, verify, plan]
     hooks:
       pre:
         - id: ready-guidance
           instruction: |
-            Verify that requirements, system, verify, plan, and tasks are all
-            complete and aligned before implementation starts.
+            Verify that requirements, system, verify, and plan are all complete
+            and aligned before implementation starts.
 
   - step: implementing
-    requires: [proposal, requirements, system, verify, plan, tasks]
+    requires: [proposal, requirements, system, verify, plan]
     hooks:
       pre:
         - id: implementing-guidance
           instruction: |
-            Read requirements, system, verify, plan, and tasks before coding.
-            Implement tasks in order and mark checkboxes complete as work is
-            done. If implementation reveals upstream defects, return to
-            designing and correct the earliest affected artifact.
+            Read requirements, system, verify, and plan before coding.
+            Implement top-level plan items in order and mark checkboxes
+            complete as work is done. If implementation reveals upstream
+            defects, return to designing and correct the earliest affected
+            artifact.
 
   - step: verifying
-    requires: [proposal, requirements, system, verify, plan, tasks]
-    requiresTaskCompletion: [tasks]
+    requires: [proposal, requirements, system, verify, plan]
+    requiresTaskCompletion: [plan]
     hooks:
       pre:
         - id: verifying-guidance
@@ -301,8 +296,8 @@ workflow:
             because artifacts are wrong, return to designing.
 
   - step: archiving
-    requires: [proposal, requirements, system, verify, plan, tasks]
-    requiresTaskCompletion: [tasks]
+    requires: [proposal, requirements, system, verify, plan]
+    requiresTaskCompletion: [plan]
     hooks:
       pre:
         - id: archiving-guidance

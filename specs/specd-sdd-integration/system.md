@@ -47,8 +47,7 @@ The local SDD schema defines first-class artifacts for:
 - requirements
 - system specification
 - verification scenarios
-- implementation plan
-- task checklist
+- implementation plan with top-level plan items
 - optional context
 - optional ADR
 

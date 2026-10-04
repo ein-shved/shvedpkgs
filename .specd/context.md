@@ -8,12 +8,12 @@ truth for the whole SDD process.
 - The repository SDD source material remains under `spec/`.
 - SpecD operational specs live under `specs/`.
 - The active SpecD schema is the local SDD schema at `schemas/sdd/schema.yaml`.
-- The active SpecD artifact flow is `proposal -> requirements -> system -> verify -> plan -> tasks`.
+- The active SpecD artifact flow is `proposal -> requirements -> system -> verify -> plan`.
 - `requirements.md` owns needs, obligations, rationale, and satisfaction conditions.
 - `system.md` owns current contracts, concepts, interfaces, invariants, and constraints.
 - `verify.md` owns concrete scenarios used to check requirements and system contracts.
-- `plan.md` owns implementation strategy and sequencing for one change.
-- `tasks.md` owns executable checklist items for one change.
+- `plan.md` owns implementation strategy, validation strategy, and top-level
+  plan items for one change.
 - `context.md` and `adr.md` are optional change-scoped artifacts.
 
 ## Agent Rules

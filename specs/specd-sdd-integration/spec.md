@@ -21,7 +21,7 @@ otherwise.
 
 SpecD artifacts MAY restate, index, or operationalize SDD content for agent
 workflow purposes, but they MUST NOT silently redefine the responsibilities of
-Requirements, System Specification, Plans, Tasks, Implementation, Verification,
+Requirements, System Specification, Plans, Implementation, Verification,
 Context, or ADRs.
 
 ### Requirement: SpecD provides machine-readable workflow state
@@ -41,8 +41,12 @@ artifact owns the correction and the SpecD mirror MUST be updated or removed.
 ### Requirement: Changes that modify behavior pass through SpecD artifacts
 
 Future repository changes that modify expected behavior SHOULD be represented as
-SpecD changes with proposal, spec, verification, design, and task artifacts
-before implementation proceeds.
+SpecD changes with proposal, requirements, system, verification, and plan
+artifacts before implementation proceeds.
+
+The plan artifact SHOULD contain implementation strategy, validation strategy,
+and top-level plan items. Top-level plan items are the task-bearing units for
+implementation; tasks are not a separate steady process artifact.
 
 If an existing steady-state SpecD spec already covers the behavior, the change
 SHOULD attach that spec and use deltas or no-op deltas as appropriate. If no

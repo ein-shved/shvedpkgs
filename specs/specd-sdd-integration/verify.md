@@ -43,7 +43,8 @@
 
 - GIVEN a future change modifies expected repository behavior
 - WHEN the change is prepared through SpecD
-- THEN the change has proposal, spec, verification, design, and task artifacts
+- THEN the change has proposal, requirements, system, verification, and plan artifacts
+- AND the plan artifact contains top-level plan items for implementation
 - AND implementation starts only after the relevant blockers are resolved
 
 ### Requirement: Requirement validation may use scenario-style checks
