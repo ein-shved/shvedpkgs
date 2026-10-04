@@ -38,6 +38,20 @@ specification contracts when doing so improves context delivery or validation.
 When mirrored content conflicts with normative SDD artifacts, the normative SDD
 artifact owns the correction and the SpecD mirror MUST be updated or removed.
 
+### Requirement: SpecD preserves inventory lifecycle
+
+SpecD MUST represent repository inventory as optional, non-normative
+orientation rather than as requirements or system guarantees.
+
+Before a SpecD change is archived, agents MUST check whether the work made
+repository inventory materially stale when the work changed repository
+structure, entry points, hosts, module responsibilities, package inventory,
+validation support, or other orientation material.
+
+If inventory became stale, still-useful orientation MUST be refreshed, durable
+knowledge MUST migrate to the owning artifact, or stale material MUST be
+removed.
+
 ### Requirement: Changes that modify behavior pass through SpecD artifacts
 
 Future repository changes that modify expected behavior SHOULD be represented as

@@ -18,7 +18,8 @@ enumeration can be expensive or noisy; prefer targeted evaluation and
 targeted builds.
 
 The main entry point is [`flake.nix`](../flake.nix). The current project
-inventory and repository map is [`spec/context.md`](context.md).
+inventory and repository map is
+[`specs/project-inventory/inventory.md`](../specs/project-inventory/inventory.md).
 
 ## Process Entry Points
 
@@ -33,8 +34,8 @@ inventory and repository map is [`spec/context.md`](context.md).
 - [`spec/task.md`](task.md): project Tasks derived from accepted Plans.
 - [`spec/todo.md`](todo.md): known open questions, cleanup candidates,
   and suspicious areas.
-- [`spec/context.md`](context.md): optional non-normative project
-  inventory and orientation material.
+- [`specs/project-inventory/inventory.md`](../specs/project-inventory/inventory.md):
+  optional non-normative project inventory and orientation material.
 
 If these artifacts disagree, follow the precedence and correction rules
 in [`spec/sdd-process.md`](sdd-process.md). In short: find the earliest
@@ -63,7 +64,9 @@ Important top-level areas:
 - `config/`: opinionated global configuration consuming those options.
 - `pkgs/`: local package overlay using nixpkgs by-name layout.
 - `tests/`: validation and test support.
-- `spec/`: SDD artifacts and project context.
+- `spec/`: SDD process, requirements, system specification, ADRs, and
+  historical planning artifacts.
+- `specs/`: SpecD operational specs and optional project inventory.
 
 Layer rule summary:
 
@@ -74,8 +77,9 @@ Layer rule summary:
 - `hosts/` assembles concrete machines and profiles.
 - `pkgs/` owns local packages and package overrides.
 
-Use [`spec/context.md`](context.md) for more detailed current-state
-orientation.
+Use
+[`specs/project-inventory/inventory.md`](../specs/project-inventory/inventory.md)
+for more detailed current-state orientation.
 
 ## Validation Orientation
 

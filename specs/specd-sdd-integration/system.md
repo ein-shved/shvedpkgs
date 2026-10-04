@@ -47,6 +47,7 @@ The local SDD schema defines first-class artifacts for:
 - requirements
 - system specification
 - verification scenarios
+- optional inventory
 - implementation plan with top-level plan items
 - optional context
 - optional ADR
@@ -56,5 +57,7 @@ The local SDD schema defines first-class artifacts for:
 - `spec/sdd-process.md` remains the normative SDD process definition.
 - SpecD artifacts are allowed to provide machine-readable tracking and context
   without silently replacing the SDD process.
+- `specs/project-inventory/inventory.md` is optional non-normative orientation
+  and must not become a parallel current-system specification.
 - Runtime/generated SpecD graph and log files are not tracked as durable
   artifacts.

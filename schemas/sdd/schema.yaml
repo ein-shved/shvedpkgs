@@ -16,6 +16,8 @@ artifacts:
       Preserve the repository SDD model:
       - Requirements own needs and satisfaction conditions.
       - System owns current system contracts and interfaces.
+      - Inventory owns optional non-normative orientation and must not become
+        a parallel current-system specification.
       - Plan owns implementation strategy, validation strategy, and top-level
         plan items.
       - Context is non-normative orientation.
@@ -130,6 +132,36 @@ artifacts:
         type: section
         matches: '^Scenario:'
         required: true
+
+  - id: inventory
+    scope: spec
+    optional: true
+    output: inventory.md
+    description: Optional non-normative inventory and orientation for a spec
+    template: templates/inventory.md
+    requires:
+      - requirements
+      - system
+    delta: true
+    instruction: |
+      Create or update inventory only when the affected spec needs
+      non-normative orientation that helps agents or humans navigate current
+      repository state.
+
+      Inventory may contain current entry points, repository maps, implementation
+      observations, host or package inventories, and other discovery material.
+      It must not define required behavior, system guarantees, verification
+      scenarios, implementation strategy, or significant decisions.
+
+      If inventory material should remain true after the transition, migrate it
+      to the owning requirements, system, verify, or ADR artifact and keep
+      inventory as orientation only.
+    deltaInstruction: |
+      For modified inventory content, write a delta file at
+      `{{change.path}}/deltas/<workspace>/<capability-path>/inventory.md.delta.yaml`.
+
+      Target complete sections by heading. Remove stale sections rather than
+      preserving inventory as a parallel current-system specification.
 
   - id: plan
     scope: change
@@ -305,6 +337,13 @@ workflow:
             Confirm archived requirements and system specification will match
             the implemented behavior. Do not archive stale or incomplete
             artifacts.
+
+            If implementation changed repository structure, entry points, host
+            inventory, module responsibilities, package inventory, validation
+            support, or other orientation material, check
+            `specs/project-inventory/inventory.md`. Refresh still-useful
+            orientation, migrate durable knowledge to the owning artifact, or
+            remove stale inventory before archive.
       post:
         - id: summarise-archive
           instruction: |

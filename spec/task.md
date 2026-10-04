@@ -106,8 +106,8 @@ Source plan: [`PLAN-001`](plan.md#plan-001-align-host-classification-and-provide
 
 - [x] Update context after implementation.
 
-  Update `spec/context.md` to reflect any current-state information made stale
-  by the completed implementation.
+  Update `specs/project-inventory/inventory.md` to reflect any current-state
+  information made stale by the completed implementation.
 
   Progress:
 
@@ -186,9 +186,9 @@ Source plan: [`PLAN-002`](plan.md#plan-002-add-validation-configurations-with-te
 
 - [x] Update context after validation infrastructure implementation.
 
-  Update `spec/context.md` if implementation changes make the current context
-  stale, especially around test support layout, secret-dependent validation, or
-  active-host validation workflow.
+  Update `specs/project-inventory/inventory.md` if implementation changes make
+  the current inventory stale, especially around test support layout,
+  secret-dependent validation, or active-host validation workflow.
 
   Progress:
 
@@ -307,9 +307,9 @@ Source plan:
 
 - [x] Update context after SpecD tooling implementation.
 
-  Update `spec/context.md` if implementation changes make the current project
-  inventory stale, especially around local packages, test support, or
-  development-host tooling.
+  Update `specs/project-inventory/inventory.md` if implementation changes make
+  the current project inventory stale, especially around local packages, test
+  support, or development-host tooling.
 
   Progress:
 

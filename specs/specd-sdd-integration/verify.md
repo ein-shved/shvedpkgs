@@ -37,6 +37,15 @@
 - THEN the normative SDD artifact owns the correction
 - AND the SpecD mirror is treated as stale until updated or removed
 
+### Requirement: SpecD preserves inventory lifecycle
+
+#### Scenario: Inventory stale check happens before archive
+
+- GIVEN a SpecD change modifies repository structure, entry points, hosts, module responsibilities, package inventory, validation support, or other orientation material
+- WHEN the change is archived
+- THEN the agent checks whether `specs/project-inventory/inventory.md` became materially stale
+- AND stale inventory is refreshed, migrated to the owning artifact, or removed before archive
+
 ### Requirement: Changes that modify behavior pass through SpecD artifacts
 
 #### Scenario: Behavior change has SpecD lifecycle artifacts
