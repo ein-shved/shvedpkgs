@@ -72,10 +72,10 @@ Core principles:
 1.  **Repository artifacts are the durable process context.**
     Conversation and agent context are temporary aids.
 2.  **Artifacts have distinct responsibilities.** Requirements,
-    Specification, ADRs, Plans, Tasks, Implementation, and any optional
-    Context artifact must not silently absorb each other’s roles.
+    Specification, ADRs, Plans, Implementation, and any optional Context
+    artifact must not silently absorb each other’s roles.
 3.  **The main dependency direction is
-    `REQ → SPEC → PLAN → TASKS → IMPLEMENTATION`.** This is a dependency
+    `REQ → SPEC → PLAN → IMPLEMENTATION`.** This is a dependency
     model, not an irreversible waterfall.
 4.  **Discovery may move upstream.** Downstream work can reveal that an
     earlier artifact is wrong, ambiguous, or incomplete.
@@ -94,7 +94,7 @@ Core principles:
 The primary dependency flow is:
 
 ``` text
-REQ -> SPEC -> PLAN -> TASKS -> IMPLEMENTATION
+REQ -> SPEC -> PLAN -> IMPLEMENTATION
        ^       ^
        +-- ADR-+
 ```
@@ -110,9 +110,9 @@ The arrows express dependency, not permitted direction of work. Later
 work may expose missing information upstream:
 
 ``` text
-REQ -> SPEC -> PLAN -> TASKS -> IMPLEMENTATION
-       ^       ^       ^          |
-       +-------+-------+----------+
+REQ -> SPEC -> PLAN -> IMPLEMENTATION
+       ^       ^       |
+       +-------+-------+
                  discovery
 ```
 
@@ -130,7 +130,7 @@ still too uncertain to stabilize Specification responsibly, an optional
 Discovery/Spike branch may appear:
 
 ``` text
-REQ -> [DISCOVERY/SPIKE] -> SPEC -> PLAN -> TASKS -> IMPLEMENTATION
+REQ -> [DISCOVERY/SPIKE] -> SPEC -> PLAN -> IMPLEMENTATION
 ```
 
 Discovery/Spike is not a normal mandatory stage and is not production
@@ -304,8 +304,8 @@ accepted decisions.
 
 A Plan may contain related artifacts, goal, assumptions, constraints,
 current implementation observations, implementation approach, minimal
-change set, scope/out-of-scope, migration order, risks, and validation
-strategy.
+change set, scope/out-of-scope, migration order, risks, validation
+strategy, and top-level plan items.
 
 It answers:
 
@@ -314,6 +314,34 @@ It answers:
 
 Plans may name concrete files, modules, packages, configuration options,
 commands, and migration steps.
+
+Top-level plan items decompose the transition into executable units.
+
+> **A top-level plan item is the minimum practically useful unit of
+> planned implementation work that can move the project from one agreed
+> state to another agreed and validated state.**
+
+Each top-level plan item is expected to leave the system in an agreed
+and validated state. Validation is a completion criterion of the plan
+item, not a separate correctness-validation item.
+
+A plan item may be subdivided into smaller work items when useful for
+execution. Those work items are local execution structure, not separate
+process artifacts. The plan item is marked complete only when the whole
+item, including its final validation, has reached one agreed and
+validated state.
+
+A good top-level plan item boundary is a point at which work can safely
+stop.
+
+Preparatory or non-mutating plan items are valid when their result is
+independently complete and they do not leave the project degraded.
+Capturing a baseline for a later migration is one example.
+
+If a proposed plan item is too large to execute or review practically,
+split it into smaller top-level plan items. If smaller execution
+structure would help without changing the process boundary, subdivide
+the plan item into work items.
 
 A Plan must not silently introduce new normative system behavior. If
 planning reveals a missing concept, interface, or guarantee, return to
@@ -335,53 +363,21 @@ The Plan’s validation strategy describes evidence that the transition is
 correct, including intended changes and preservation of behavior that
 should remain unchanged.
 
-A completed Plan is primarily transition history. Current system truth
-remains in Requirements and Specification.
-
-### 3.5 Tasks
-
-Tasks decompose an accepted Plan into independently completable units of
-work.
-
-> **A Task is the minimum practically useful unit of work that can move
-> the project from one agreed state to another agreed and validated
-> state.**
-
-Each Task is expected to leave the system in an agreed and validated
-state. Validation is a completion criterion of the Task, not a separate
-correctness-validation Task.
-
-A Task may contain several implementation steps when splitting them
-would intentionally create an invalid, inconsistent, or unvalidated
-intermediate state.
-
-Those steps may be written down as a checklist or executed as separate
-commits, but they are not independently completed project Tasks. The
-Task is marked complete only when the whole step sequence, including its
-final validation, has reached one agreed and validated state.
-
-A good Task boundary is a point at which work can safely stop.
-
-Preparatory or non-mutating Tasks are valid when their result is
-independently complete and they do not leave the project degraded.
-Capturing a baseline for a later migration is one example.
-
-Tasks derive decisions from the Plan rather than introducing new
-significant design decisions. If execution exposes a missing decision,
-work returns to the appropriate upstream layer.
+Top-level plan items derive decisions from the Plan rather than
+introducing new significant design decisions. If execution exposes a
+missing decision, work returns to the appropriate upstream layer.
 
 If implementation work is committed, the execution artifact should be
 either one atomic self-contained commit or a chain of atomic
-self-contained commits. A Task does not have to equal one commit.
+self-contained commits. A plan item does not have to equal one commit.
 
-Repository Tasks are not an agent’s temporary TODO list. Agents may
-split a Task into many ephemeral execution steps without persisting each
-step as a project Task.
+A completed Plan is primarily transition history. Current system truth
+remains in Requirements and Specification.
 
-### 3.6 Implementation
+### 3.5 Implementation
 
-Implementation executes Tasks in code, configuration, tests, generated
-artifacts, or other project material.
+Implementation executes top-level plan items in code, configuration,
+tests, generated artifacts, or other project material.
 
 Local decisions that do not alter the agreed system model or significant
 design may be made during implementation.
@@ -392,10 +388,10 @@ Implementation must not hide upstream discoveries:
 - missing system concept/contract → Specification;
 - significant choice → appropriate owning layer and possibly ADR;
 - wrong transition approach → Plan;
-- unsafe work boundary → Tasks.
+- unsafe work boundary → Plan.
 
-Implementation is complete only when the Task’s completion criteria,
-including validation, are satisfied.
+Implementation of a plan item is complete only when that item’s
+completion criteria, including validation, are satisfied.
 
 ## 4. Architecture Decision Records
 
@@ -417,7 +413,7 @@ system truth.
 ADR is **not a pipeline stage**.
 
 It may arise while defining Requirements, Specification, or a Plan, or
-during Task execution when discovery exposes a previously unmade
+during plan item execution when discovery exposes a previously unmade
 significant decision.
 
 In the latter case, do not bury the decision in code. Return to the
@@ -501,7 +497,7 @@ It may produce:
 Discovery/Spike does **not** define normative behavior by itself.
 Prototype code is not production implementation merely because it
 exists. If prototype code is reused, it must be adopted through the
-normal Specification, Plan, Tasks, and Implementation flow.
+normal Specification, Plan, and Implementation flow.
 
 Completion of Discovery/Spike means that the agreed questions were
 answered well enough to continue. The result should feed an ADR when a
@@ -552,31 +548,33 @@ correctness will be demonstrated.
 If Specification cannot adequately describe the intended result, correct
 Specification before continuing the Plan.
 
-### 6.5 Plan → Tasks
+### 6.5 Plan Decomposition
 
-Decompose the Plan along safe execution boundaries.
+Decompose the Plan into top-level plan items along safe execution
+boundaries.
 
-Task granularity is determined by coherent validated states, not file
-count, line count, or the desire to make every action a checkbox.
+Plan item granularity is determined by coherent validated states, not
+file count, line count, or the desire to make every action a checkbox.
 
-If two proposed Tasks cannot each independently finish in an agreed and
-validated state, they are probably steps of one Task.
+When useful for execution, a top-level plan item may be subdivided into
+smaller work items without making those work items separate process
+artifacts.
 
-### 6.6 Tasks → Implementation
+### 6.6 Plan → Implementation
 
-Normal Task execution is:
+Normal plan item execution is:
 
 ``` text
 implement
    |
    v
 validate
-   |-- failure -> fix within the open Task -> validate again
-   +-- success -> Task complete
+   |-- failure -> fix within the open plan item -> validate again
+   +-- success -> plan item complete
 ```
 
 A correctness validation failure does not create a separate validation
-Task while the implementation Task is still open.
+plan item while the implementation plan item is still open.
 
 ### 6.7 Completion and Optional Context
 
@@ -587,8 +585,8 @@ If non-normative Context exists, do not leave it misleading. Refresh the
 still-useful orientation, migrate durable knowledge to the proper owning
 artifact, or remove stale Context material.
 
-Completed Plans and Tasks remain transition history, not alternative
-current-system documentation.
+Completed Plans remain transition and execution history, not
+alternative current-system documentation.
 
 ## 7. Backward Flow and Upstream Discovery
 
@@ -608,13 +606,11 @@ Examples:
 Planning reveals a missing system contract
 -> correct SPEC
 -> reconsider PLAN
--> reconsider TASKS
 ```
 
 ``` text
 Implementation reveals a significant unmade design decision
 -> update PLAN and/or create ADR
--> reconsider TASKS
 -> continue implementation
 ```
 
@@ -623,7 +619,6 @@ Implementation reveals a previously unknown project need
 -> update REQ
 -> update SPEC
 -> update PLAN
--> update TASKS
 -> implementation
 ```
 
@@ -646,10 +641,8 @@ A defect may be a:
   or incomplete;
 - **decision/design defect** — a significant direction is wrong or its
   rationale/constraints are missing;
-- **Plan defect** — transition approach, assumptions, scope, or
-  validation strategy is insufficient;
-- **Task defect** — decomposition creates an unsafe boundary or omits
-  work;
+- **Plan defect** — transition approach, assumptions, scope,
+  decomposition, or validation strategy is insufficient;
 - **implementation defect** — implementation violates correct upstream
   artifacts;
 - **validation defect** — validation cannot detect a relevant violation.
@@ -657,24 +650,24 @@ A defect may be a:
 Categories may overlap. The useful question is which earliest artifact
 must change.
 
-### 8.2 Defects Found During an Open Task
+### 8.2 Defects Found During an Open Plan Item
 
-If validation fails, the Task remains open.
+If validation fails, the plan item remains open.
 
 Fix implementation and validate again. If the failure reveals an
 upstream defect, correct that artifact first and propagate the change
-back to the Task.
+back to the Plan.
 
 Do not complete implementation and create a separate
-correctness-validation Task.
+correctness-validation plan item.
 
 ### 8.3 Defects Found After Completion
 
-A defect may appear after Tasks were completed, committed, pushed,
+A defect may appear after plan items were completed, committed, pushed,
 deployed, or integrated:
 
 ``` text
-PLAN -> TASK -> validation OK -> commit/push -> deployment -> bug
+PLAN -> plan item -> validation OK -> commit/push -> deployment -> bug
 ```
 
 Completion means work was agreed and validated against the knowledge and
@@ -690,7 +683,7 @@ knowledge appears to have been known originally.
 
 If the original approach remains valid but a completed Plan had
 incomplete validation or needs a bounded correction, add an explicit
-follow-up/amendment to that Plan and derive new Tasks from it.
+follow-up/amendment to that Plan with new plan items.
 
 The follow-up should record:
 
@@ -700,9 +693,9 @@ The follow-up should record:
 - what correction is required;
 - what regression validation is required.
 
-Do not reopen completed Tasks merely because new information appeared
-later. They were completed according to their then-current definition of
-done. Represent corrective work explicitly.
+Do not reopen completed plan items merely because new information
+appeared later. They were completed according to their then-current
+definition of done. Represent corrective work explicitly.
 
 Create a new Plan when discovery requires a materially different
 transition or implementation approach rather than a bounded correction.
@@ -748,10 +741,10 @@ so it may sometimes allow comparison of output hashes or other build
 identities before and after a structural migration. This is
 project-specific evidence, not a universal SDD requirement.
 
-### 9.4 Task Completion Validation
+### 9.4 Plan Item Completion Validation
 
-Task validation is part of definition of done. A Task cannot be complete
-while required correctness validation is pending.
+Plan item validation is part of definition of done. A plan item cannot
+be complete while required correctness validation is pending.
 
 ### 9.5 Deployment and Operational Feedback
 
@@ -773,15 +766,13 @@ Different artifacts have different lifetimes:
   describing current accepted needs and system contract.
 - **ADRs:** historical decision artifacts preserving why significant
   choices were made; superseded ADRs remain history.
-- **Plans:** transition artifacts describing how a particular
-  implementation state was moved toward a target state.
-- **Tasks:** execution work queue and execution history; not current
-  system specification.
+- **Plans:** transition and execution artifacts describing how a
+  particular implementation state was moved toward a target state.
 - **Context:** optional non-normative current-state inventory, useful
   during discovery or SDD adoption and removable when no longer needed.
 
-This separation prevents Plans, Tasks, old ADRs, and historical
-implementation notes from becoming competing sources of current truth.
+This separation prevents Plans, old ADRs, and historical implementation
+notes from becoming competing sources of current truth.
 
 ## 11. Traceability
 
@@ -790,10 +781,10 @@ one-to-one mappings:
 
 ``` text
 REQ --+
-REQ --+--> SPEC concepts/contracts --> PLAN --> TASKS --> commits
+REQ --+--> SPEC concepts/contracts --> PLAN --> commits
 REQ --+             ^
-                     |
-                    ADR
+                    |
+                   ADR
 ```
 
 Valid relationships include:
@@ -801,9 +792,8 @@ Valid relationships include:
 - one Requirement → several Specification sections;
 - several Requirements → one shared Specification concept;
 - one Plan → changes arising from several Specification sections/ADRs;
-- one Task → several tightly coupled Plan actions when separation would
-  create an invalid intermediate state;
-- one Task → several atomic commits.
+- one top-level plan item → several internal work items;
+- one top-level plan item → several atomic commits.
 
 Artifacts are organized by responsibility, **not to force one-to-one
 correspondence between layers**.
@@ -837,11 +827,11 @@ Agents should not silently invent mappings or decisions to close
 upstream gaps. Material ambiguity should be surfaced and resolved at the
 owning layer.
 
-### 12.3 Repository Tasks vs Agent Execution Steps
+### 12.3 Plan Items vs Agent Execution Steps
 
-Repository Tasks are integration-safe units of project work. An agent
-may use a much finer temporary TODO list internally; those steps are
-execution mechanics, not automatically project Tasks.
+Top-level plan items are integration-safe units of project work. An
+agent may use a much finer temporary TODO list internally; those steps
+are execution mechanics, not automatically plan items.
 
 ### 12.4 Tooling
 
@@ -872,7 +862,7 @@ according to Section 0.
 | Why was this significant design choice made?                 | ADR                  |
 | How will current implementation be changed?                  | Plan                 |
 | How will this transition be validated?                       | Plan                 |
-| What independently completable work unit should be executed? | Task                 |
+| What independently completable work unit should be executed? | Plan                 |
 | What code/configuration realizes the change?                 | Implementation       |
 | What temporary orientation is useful during discovery?        | Optional Context     |
 
@@ -884,7 +874,7 @@ according to Section 0.
 | Required behavior/concept/interface is missing or wrong | Specification                                                 |
 | A significant unresolved choice is required             | Owning layer + ADR                                            |
 | Transition or validation strategy is wrong              | Plan                                                          |
-| Work is decomposed across an unsafe boundary            | Tasks                                                         |
+| Work is decomposed across an unsafe boundary            | Plan                                                          |
 | Upstream artifacts are correct but code is wrong        | Implementation                                                |
 | A completed change missed a relevant failure case       | Find first bad artifact; add regression validation downstream |
 
