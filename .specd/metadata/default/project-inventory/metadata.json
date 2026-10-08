@@ -1,20 +1,20 @@
 {
   "title": "Requirements",
-  "description": "## Requirement: Project inventory remains non-normative orientation\n\nThe project inventory must remain a non-normative orientation aid for current\nrepository structure, entry points, host inventory, module layers, package\ninventory, validation support, and other discovery material.\n\nThe inventory must not define required behavior, system guarantees, or process\nrules. When inventory content conflicts with Requirements, System\nSpecification, ADRs, or the SDD process, the normative artifact owns the\ncorrection.\n\n## Requirement: Durable knowledge migrates to owning artifacts\n\nWhen inventory material becomes stable system knowledge, it must be migrated to\nthe artifact that owns that knowledge rather than preserved only in inventory.\n\nStable needs belong in Requirements. Stable system contracts, architecture\nboundaries, interfaces, invariants, and current implementation guarantees\nbelong in System Specification. Significant decisions and rationale belong in\nADRs.\n\n## Requirement: Inventory freshness is checked during completed work\n\nWhen a change modifies repository structure, entry points, host inventory,\nmodule responsibilities, package inventory, validation support, or other\norientation material, the agent must check whether inventory became materially\nstale before completing the change.\n\nIf inventory became stale, the still-useful orientation must be refreshed,\ndurable knowledge must be migrated to the owning artifact, or stale material\nmust be removed.",
+  "description": "## Requirement: Project inventory remains non-normative orientation\n\nThe project inventory must remain a non-normative orientation aid for current\nrepository structure, entry points, host inventory, module layers, package\ninventory, validation support, and other discovery material.\n\nThe inventory must not define required behavior, system guarantees, or process\nrules. When inventory content conflicts with Requirements, System\nSpecification, `adrs.md`, or the SDD process, the normative artifact owns the\ncorrection.\n\n## Requirement: Durable knowledge migrates to owning artifacts\n\nWhen inventory material becomes stable system knowledge, it must be migrated to\nthe artifact that owns that knowledge rather than preserved only in inventory.\n\nStable needs belong in Requirements. Stable system contracts, architecture\nboundaries, interfaces, invariants, and current implementation guarantees\nbelong in System Specification. Significant decisions and rationale belong in\n`adrs.md`.\n\n## Requirement: Inventory freshness is checked during completed work\n\nWhen a change modifies repository structure, entry points, host inventory,\nmodule responsibilities, package inventory, validation support, or other\norientation material, the agent must check whether inventory became materially\nstale before completing the change.\n\nIf inventory became stale, the still-useful orientation must be refreshed,\ndurable knowledge must be migrated to the owning artifact, or stale material\nmust be removed.",
   "context": [
-    "## Requirement: Project inventory remains non-normative orientation\n\nThe project inventory must remain a non-normative orientation aid for current\nrepository structure, entry points, host inventory, module layers, package\ninventory, validation support, and other discovery material.\n\nThe inventory must not define required behavior, system guarantees, or process\nrules. When inventory content conflicts with Requirements, System\nSpecification, ADRs, or the SDD process, the normative artifact owns the\ncorrection.\n\n## Requirement: Durable knowledge migrates to owning artifacts\n\nWhen inventory material becomes stable system knowledge, it must be migrated to\nthe artifact that owns that knowledge rather than preserved only in inventory.\n\nStable needs belong in Requirements. Stable system contracts, architecture\nboundaries, interfaces, invariants, and current implementation guarantees\nbelong in System Specification. Significant decisions and rationale belong in\nADRs.\n\n## Requirement: Inventory freshness is checked during completed work\n\nWhen a change modifies repository structure, entry points, host inventory,\nmodule responsibilities, package inventory, validation support, or other\norientation material, the agent must check whether inventory became materially\nstale before completing the change.\n\nIf inventory became stale, the still-useful orientation must be refreshed,\ndurable knowledge must be migrated to the owning artifact, or stale material\nmust be removed."
+    "## Requirement: Project inventory remains non-normative orientation\n\nThe project inventory must remain a non-normative orientation aid for current\nrepository structure, entry points, host inventory, module layers, package\ninventory, validation support, and other discovery material.\n\nThe inventory must not define required behavior, system guarantees, or process\nrules. When inventory content conflicts with Requirements, System\nSpecification, `adrs.md`, or the SDD process, the normative artifact owns the\ncorrection.\n\n## Requirement: Durable knowledge migrates to owning artifacts\n\nWhen inventory material becomes stable system knowledge, it must be migrated to\nthe artifact that owns that knowledge rather than preserved only in inventory.\n\nStable needs belong in Requirements. Stable system contracts, architecture\nboundaries, interfaces, invariants, and current implementation guarantees\nbelong in System Specification. Significant decisions and rationale belong in\n`adrs.md`.\n\n## Requirement: Inventory freshness is checked during completed work\n\nWhen a change modifies repository structure, entry points, host inventory,\nmodule responsibilities, package inventory, validation support, or other\norientation material, the agent must check whether inventory became materially\nstale before completing the change.\n\nIf inventory became stale, the still-useful orientation must be refreshed,\ndurable knowledge must be migrated to the owning artifact, or stale material\nmust be removed."
   ],
   "rules": [
     {
       "requirement": "Requirement: Project inventory remains non-normative orientation",
       "rules": [
-        "The project inventory must remain a non-normative orientation aid for current\nrepository structure, entry points, host inventory, module layers, package\ninventory, validation support, and other discovery material.\n\nThe inventory must not define required behavior, system guarantees, or process\nrules. When inventory content conflicts with Requirements, System\nSpecification, ADRs, or the SDD process, the normative artifact owns the\ncorrection."
+        "The project inventory must remain a non-normative orientation aid for current\nrepository structure, entry points, host inventory, module layers, package\ninventory, validation support, and other discovery material.\n\nThe inventory must not define required behavior, system guarantees, or process\nrules. When inventory content conflicts with Requirements, System\nSpecification, `adrs.md`, or the SDD process, the normative artifact owns the\ncorrection."
       ]
     },
     {
       "requirement": "Requirement: Durable knowledge migrates to owning artifacts",
       "rules": [
-        "When inventory material becomes stable system knowledge, it must be migrated to\nthe artifact that owns that knowledge rather than preserved only in inventory.\n\nStable needs belong in Requirements. Stable system contracts, architecture\nboundaries, interfaces, invariants, and current implementation guarantees\nbelong in System Specification. Significant decisions and rationale belong in\nADRs."
+        "When inventory material becomes stable system knowledge, it must be migrated to\nthe artifact that owns that knowledge rather than preserved only in inventory.\n\nStable needs belong in Requirements. Stable system contracts, architecture\nboundaries, interfaces, invariants, and current implementation guarantees\nbelong in System Specification. Significant decisions and rationale belong in\n`adrs.md`."
       ]
     },
     {
@@ -54,7 +54,7 @@
         "that knowledge becomes stable enough to guide future work"
       ],
       "then": [
-        "the knowledge is moved to the owning requirements, system, verification, or ADR artifact",
+        "the knowledge is moved to the owning requirements, system, verification, or adrs.md artifact",
         "AND inventory is not the only place where durable system truth is preserved"
       ]
     },
@@ -74,9 +74,9 @@
     }
   ],
   "contentHashes": {
-    "requirements.md": "sha256:28dc75d7f34846c394a97161a8e1f02c946ae75939fd1185100dde1ebc0ad1cf",
-    "system.md": "sha256:bbce178c508aad8604987ee4f1a5f870354e46b152d8a418ae93a69554a13f6d",
-    "verify.md": "sha256:41efb2414431815f99c5fa9f6da409a0e45ac129f3b404246130d047caae7ed7",
+    "requirements.md": "sha256:d755e26baefcf8b92a33f27bda8a4833b7d363c04be4af3f324c02571c2514d5",
+    "system.md": "sha256:5a71e78a768dbaffa9d661e6e2db9443dbc1dbfc436a945fd2c7053e607d255a",
+    "verify.md": "sha256:50df8927843c2a9ac5e272ea470c02614727343fc51b12eada1084b942d2b8a1",
     "inventory.md": "sha256:d86b67af857c514afab7b6f364b17aa806e5b81df267a51f014377ea40e55a65"
   },
   "generatedBy": "core"

@@ -9,7 +9,7 @@ otherwise.
 SpecD artifacts may restate, index, or operationalize SDD content for agent
 workflow purposes, but they must not silently redefine the responsibilities of
 Requirements, System Specification, Plans, Implementation, Verification,
-Context, or ADRs.
+Context, or `adrs.md`.
 
 ## Requirement: SpecD provides machine-readable workflow state
 

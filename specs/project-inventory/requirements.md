@@ -8,7 +8,7 @@ inventory, validation support, and other discovery material.
 
 The inventory must not define required behavior, system guarantees, or process
 rules. When inventory content conflicts with Requirements, System
-Specification, ADRs, or the SDD process, the normative artifact owns the
+Specification, `adrs.md`, or the SDD process, the normative artifact owns the
 correction.
 
 ## Requirement: Durable knowledge migrates to owning artifacts
@@ -19,7 +19,7 @@ the artifact that owns that knowledge rather than preserved only in inventory.
 Stable needs belong in Requirements. Stable system contracts, architecture
 boundaries, interfaces, invariants, and current implementation guarantees
 belong in System Specification. Significant decisions and rationale belong in
-ADRs.
+`adrs.md`.
 
 ## Requirement: Inventory freshness is checked during completed work
 

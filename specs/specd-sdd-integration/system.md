@@ -50,7 +50,7 @@ The local SDD schema defines first-class artifacts for:
 - optional inventory
 - implementation plan with top-level plan items
 - optional context
-- optional ADR
+- optional spec-scoped ADRs
 
 ## Constraints
 

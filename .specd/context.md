@@ -15,9 +15,11 @@ truth for the whole SDD process.
 - `verify.md` owns concrete scenarios used to check requirements and system contracts.
 - `inventory.md` owns optional non-normative orientation and must be refreshed,
   migrated, or removed when work makes it materially stale.
+- `adrs.md` owns optional durable architecture decision records for significant
+  spec decisions.
 - `plan.md` owns implementation strategy, validation strategy, and top-level
   plan items for one change.
-- `context.md` and `adr.md` are optional change-scoped artifacts.
+- `context.md` is an optional change-scoped artifact.
 
 ## Agent Rules
 

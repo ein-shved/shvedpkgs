@@ -154,7 +154,7 @@ artifacts:
       scenarios, implementation strategy, or significant decisions.
 
       If inventory material should remain true after the transition, migrate it
-      to the owning requirements, system, verify, or ADR artifact and keep
+      to the owning requirements, system, verify, or `adrs.md` artifact and keep
       inventory as orientation only.
     deltaInstruction: |
       For modified inventory content, write a delta file at
@@ -162,6 +162,36 @@ artifacts:
 
       Target complete sections by heading. Remove stale sections rather than
       preserving inventory as a parallel current-system specification.
+
+  - id: adrs
+    scope: spec
+    optional: true
+    output: adrs.md
+    description: Durable architecture decision records for significant spec decisions
+    template: templates/adrs.md
+    requires:
+      - requirements
+      - system
+    delta: true
+    instruction: |
+      Create or update ADRs only when the affected spec has significant
+      decisions whose rationale must remain durable after the change is
+      archived.
+
+      ADRs preserve decision history and rationale. They are not the primary
+      source of current required behavior or current system guarantees; those
+      belong in requirements and system artifacts. If an ADR changes current
+      system truth, update the owning requirements, system, and verification
+      artifacts as well.
+
+      Store multiple decisions as sections in this single artifact. Preserve
+      superseded decisions instead of rewriting history.
+    deltaInstruction: |
+      For modified ADR content, write a delta file at
+      `{{change.path}}/deltas/<workspace>/<capability-path>/adrs.md.delta.yaml`.
+
+      Target complete ADR sections by heading. Added operations include the full
+      ADR section with status, context, decision, rationale, and consequences.
 
   - id: plan
     scope: change
@@ -212,19 +242,7 @@ artifacts:
     instruction: |
       Write context only when the change needs non-normative orientation that
       does not belong in requirements, system specification, verification,
-      plan, or ADRs.
-
-  - id: adr
-    scope: change
-    optional: true
-    output: adr.md
-    description: Optional architecture decision record for significant decisions
-    template: templates/adr.md
-    requires:
-      - proposal
-    instruction: |
-      Write an ADR only when the change includes a significant decision whose
-      rationale must be preserved independently from the implementation plan.
+      `adrs.md`, or plan.
 
 metadataExtraction:
   title:

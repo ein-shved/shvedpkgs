@@ -17,7 +17,7 @@
 
 - GIVEN inventory material describes knowledge that should remain true after a transition
 - WHEN that knowledge becomes stable enough to guide future work
-- THEN the knowledge is moved to the owning requirements, system, verification, or ADR artifact
+- THEN the knowledge is moved to the owning requirements, system, verification, or `adrs.md` artifact
 - AND inventory is not the only place where durable system truth is preserved
 
 ### Requirement: Inventory freshness is checked during completed work

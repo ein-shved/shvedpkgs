@@ -30,7 +30,7 @@ that durable knowledge must move to the owning artifact:
 - current system contracts, interfaces, invariants, and architecture boundaries
   move to `system.md`;
 - verification expectations move to `verify.md`;
-- significant decisions and rationale move to ADRs.
+- significant decisions and rationale move to `adrs.md`.
 
 ## Completion Check
 
