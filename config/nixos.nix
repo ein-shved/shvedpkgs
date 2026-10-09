@@ -35,6 +35,7 @@
     ./media/pulseaudio
     ./nix
     ./services
+    ./services/codex
     ./services/home-assistant
     ./services/nas/ftp
     ./services/nas/upnp

@@ -81,6 +81,10 @@ lib: prev: {
           packages = lib.transformNixosPackages nixosConfigurations {
             default = extendedSelf.defaultHost;
           };
+
+          tests.codex =
+            extendedSelf.nixosConfigurations.${extendedSelf.defaultHost}.pkgs.callPackage ../tests/modules/codex
+              { };
         };
     in
     extendedSelf;
