@@ -1,0 +1,88 @@
+{
+  "title": "Requirements",
+  "description": "## REQ-001: System classifies hosts by hardware traits and purpose\n\nThe system must introduce host classes that describe relevant hardware traits,\noperational roles, and intended purpose of evaluated host configurations.\n\nClassification must be explicit enough for role-sensitive configuration,\npackage selection, and package build-time behavior to depend on the host class\nwithout guessing from unrelated implementation details.\n\n## REQ-002: Host class membership is controlled by disabled-by-default boolean configuration\n\nEach host class must be represented by an elementary boolean configuration\nvalue.\n\nThe default value for each class flag must be `false`. A host belongs to a\nclass only when the evaluated host configuration sets that class flag to\n`true`.\n\n## REQ-003: Host classes are composable unless incompatible\n\nA host may belong to more than one class at the same time.\n\nThe system must not treat host classes as mutually exclusive unless the classes\nare explicitly declared incompatible or are semantically incompatible by their\ndefinitions.\n\n## REQ-004: Each host class has a derived package-set flag\n\nEach host class must expose a corresponding derived flag in the root package\nset, `pkgs`, when package expressions need to vary by evaluated host.\n\nPackage-set host flags must be derived from evaluated host configuration. They\nmust not define host classification independently.\n\n## REQ-005: Host classes provide package buckets\n\nEach host class must provide a host-specific package bucket that is merged into\n`environment.systemPackages` when the host belongs to that class.\n\nPackage buckets must collect packages for a host class before those packages\nare merged into the evaluated system package set.\n\n## REQ-006: System introduces graphical host class\n\nThe graphical class represents hosts that provide a graphical shell for\ninteractive use.\n\n### Rationale\n\nGraphical hosts need classification because desktop or graphical interaction is\nnot universal across the repository. Server and validation hosts should not be\nforced to carry graphical packages or services merely because some personal\nmachines need an interactive graphical environment.\n\n## REQ-007: System introduces laptop host class\n\nThe laptop class represents portable personal computers with integrated\ndisplay, battery, and input devices.\n\n### Rationale\n\nLaptop hosts need classification because portable machines often differ from\nstationary machines in hardware capabilities, power behavior, input devices,\nand package or service choices. The class lets the system express laptop-aware\nbehavior without assuming that every personal host is portable.\n\n## REQ-008: System introduces development host class\n\nThe development class represents hosts intended to support repository\ndevelopment and maintenance workflows.\n\n### Rationale\n\nDevelopment hosts need classification because development tools are required on\nmachines used for project work, but they are not inherently required on storage\nservers, VPS machines, validation-only configurations, or other hosts whose\npurpose does not include development.\n\n## REQ-009: System introduces NAS host class\n\nThe NAS class represents home media server and storage machines.\n\n### Rationale\n\nNAS hosts need classification because storage-oriented machines have a\ndifferent purpose from interactive workstations and cloud machines. Their\npackage and service needs are driven by storage, media, and server operation,\nnot by the primary user's interactive desktop or development workflow.\n\n## REQ-010: System introduces VPS host class\n\nThe VPS class represents machines running in a cloud or virtual private server\nenvironment.\n\n### Rationale\n\nVPS hosts need classification because cloud or virtual server environments have\ndifferent operational constraints from local physical machines. They may need\nserver-oriented packages and services while lacking local hardware assumptions\nthat make sense for laptops, NAS machines, or graphical hosts.\n\n## REQ-011: System introduces VPS client host class\n\nThe VPS client class represents hosts that use services provided by a VPS host.\n\n### Rationale\n\nVPS client hosts need classification because consuming services from a VPS is a\nseparate role from running the VPS itself. A host may be a client of remote VPS\nservices while also belonging to another class such as laptop, graphical, or\ndevelopment.",
+  "context": [
+    "## REQ-001: System classifies hosts by hardware traits and purpose\n\nThe system must introduce host classes that describe relevant hardware traits,\noperational roles, and intended purpose of evaluated host configurations.\n\nClassification must be explicit enough for role-sensitive configuration,\npackage selection, and package build-time behavior to depend on the host class\nwithout guessing from unrelated implementation details.\n\n## REQ-002: Host class membership is controlled by disabled-by-default boolean configuration\n\nEach host class must be represented by an elementary boolean configuration\nvalue.\n\nThe default value for each class flag must be `false`. A host belongs to a\nclass only when the evaluated host configuration sets that class flag to\n`true`.\n\n## REQ-003: Host classes are composable unless incompatible\n\nA host may belong to more than one class at the same time.\n\nThe system must not treat host classes as mutually exclusive unless the classes\nare explicitly declared incompatible or are semantically incompatible by their\ndefinitions.\n\n## REQ-004: Each host class has a derived package-set flag\n\nEach host class must expose a corresponding derived flag in the root package\nset, `pkgs`, when package expressions need to vary by evaluated host.\n\nPackage-set host flags must be derived from evaluated host configuration. They\nmust not define host classification independently.\n\n## REQ-005: Host classes provide package buckets\n\nEach host class must provide a host-specific package bucket that is merged into\n`environment.systemPackages` when the host belongs to that class.\n\nPackage buckets must collect packages for a host class before those packages\nare merged into the evaluated system package set.\n\n## REQ-006: System introduces graphical host class\n\nThe graphical class represents hosts that provide a graphical shell for\ninteractive use.\n\n### Rationale\n\nGraphical hosts need classification because desktop or graphical interaction is\nnot universal across the repository. Server and validation hosts should not be\nforced to carry graphical packages or services merely because some personal\nmachines need an interactive graphical environment.\n\n## REQ-007: System introduces laptop host class\n\nThe laptop class represents portable personal computers with integrated\ndisplay, battery, and input devices.\n\n### Rationale\n\nLaptop hosts need classification because portable machines often differ from\nstationary machines in hardware capabilities, power behavior, input devices,\nand package or service choices. The class lets the system express laptop-aware\nbehavior without assuming that every personal host is portable.\n\n## REQ-008: System introduces development host class\n\nThe development class represents hosts intended to support repository\ndevelopment and maintenance workflows.\n\n### Rationale\n\nDevelopment hosts need classification because development tools are required on\nmachines used for project work, but they are not inherently required on storage\nservers, VPS machines, validation-only configurations, or other hosts whose\npurpose does not include development.\n\n## REQ-009: System introduces NAS host class\n\nThe NAS class represents home media server and storage machines.\n\n### Rationale\n\nNAS hosts need classification because storage-oriented machines have a\ndifferent purpose from interactive workstations and cloud machines. Their\npackage and service needs are driven by storage, media, and server operation,\nnot by the primary user's interactive desktop or development workflow.\n\n## REQ-010: System introduces VPS host class\n\nThe VPS class represents machines running in a cloud or virtual private server\nenvironment.\n\n### Rationale\n\nVPS hosts need classification because cloud or virtual server environments have\ndifferent operational constraints from local physical machines. They may need\nserver-oriented packages and services while lacking local hardware assumptions\nthat make sense for laptops, NAS machines, or graphical hosts.\n\n## REQ-011: System introduces VPS client host class\n\nThe VPS client class represents hosts that use services provided by a VPS host.\n\n### Rationale\n\nVPS client hosts need classification because consuming services from a VPS is a\nseparate role from running the VPS itself. A host may be a client of remote VPS\nservices while also belonging to another class such as laptop, graphical, or\ndevelopment."
+  ],
+  "rules": [
+    {
+      "requirement": "REQ-001: System classifies hosts by hardware traits and purpose",
+      "rules": [
+        "The system must introduce host classes that describe relevant hardware traits,\noperational roles, and intended purpose of evaluated host configurations.\n\nClassification must be explicit enough for role-sensitive configuration,\npackage selection, and package build-time behavior to depend on the host class\nwithout guessing from unrelated implementation details."
+      ]
+    },
+    {
+      "requirement": "REQ-002: Host class membership is controlled by disabled-by-default boolean configuration",
+      "rules": [
+        "Each host class must be represented by an elementary boolean configuration\nvalue.\n\nThe default value for each class flag must be `false`. A host belongs to a\nclass only when the evaluated host configuration sets that class flag to\n`true`."
+      ]
+    },
+    {
+      "requirement": "REQ-003: Host classes are composable unless incompatible",
+      "rules": [
+        "A host may belong to more than one class at the same time.\n\nThe system must not treat host classes as mutually exclusive unless the classes\nare explicitly declared incompatible or are semantically incompatible by their\ndefinitions."
+      ]
+    },
+    {
+      "requirement": "REQ-004: Each host class has a derived package-set flag",
+      "rules": [
+        "Each host class must expose a corresponding derived flag in the root package\nset, `pkgs`, when package expressions need to vary by evaluated host.\n\nPackage-set host flags must be derived from evaluated host configuration. They\nmust not define host classification independently."
+      ]
+    },
+    {
+      "requirement": "REQ-005: Host classes provide package buckets",
+      "rules": [
+        "Each host class must provide a host-specific package bucket that is merged into\n`environment.systemPackages` when the host belongs to that class.\n\nPackage buckets must collect packages for a host class before those packages\nare merged into the evaluated system package set."
+      ]
+    },
+    {
+      "requirement": "REQ-006: System introduces graphical host class",
+      "rules": [
+        "The graphical class represents hosts that provide a graphical shell for\ninteractive use.\n\n### Rationale\n\nGraphical hosts need classification because desktop or graphical interaction is\nnot universal across the repository. Server and validation hosts should not be\nforced to carry graphical packages or services merely because some personal\nmachines need an interactive graphical environment."
+      ]
+    },
+    {
+      "requirement": "REQ-007: System introduces laptop host class",
+      "rules": [
+        "The laptop class represents portable personal computers with integrated\ndisplay, battery, and input devices.\n\n### Rationale\n\nLaptop hosts need classification because portable machines often differ from\nstationary machines in hardware capabilities, power behavior, input devices,\nand package or service choices. The class lets the system express laptop-aware\nbehavior without assuming that every personal host is portable."
+      ]
+    },
+    {
+      "requirement": "REQ-008: System introduces development host class",
+      "rules": [
+        "The development class represents hosts intended to support repository\ndevelopment and maintenance workflows.\n\n### Rationale\n\nDevelopment hosts need classification because development tools are required on\nmachines used for project work, but they are not inherently required on storage\nservers, VPS machines, validation-only configurations, or other hosts whose\npurpose does not include development."
+      ]
+    },
+    {
+      "requirement": "REQ-009: System introduces NAS host class",
+      "rules": [
+        "The NAS class represents home media server and storage machines.\n\n### Rationale\n\nNAS hosts need classification because storage-oriented machines have a\ndifferent purpose from interactive workstations and cloud machines. Their\npackage and service needs are driven by storage, media, and server operation,\nnot by the primary user's interactive desktop or development workflow."
+      ]
+    },
+    {
+      "requirement": "REQ-010: System introduces VPS host class",
+      "rules": [
+        "The VPS class represents machines running in a cloud or virtual private server\nenvironment.\n\n### Rationale\n\nVPS hosts need classification because cloud or virtual server environments have\ndifferent operational constraints from local physical machines. They may need\nserver-oriented packages and services while lacking local hardware assumptions\nthat make sense for laptops, NAS machines, or graphical hosts."
+      ]
+    },
+    {
+      "requirement": "REQ-011: System introduces VPS client host class",
+      "rules": [
+        "The VPS client class represents hosts that use services provided by a VPS host.\n\n### Rationale\n\nVPS client hosts need classification because consuming services from a VPS is a\nseparate role from running the VPS itself. A host may be a client of remote VPS\nservices while also belonging to another class such as laptop, graphical, or\ndevelopment."
+      ]
+    }
+  ],
+  "constraints": [
+    "Host classification flags default to disabled unless explicitly set by a\nconcrete host or reusable profile.",
+    "Role-sensitive behavior applies only when the corresponding flag is true.",
+    "pkgs.isDesktop is not part of the host classification interface.",
+    "New host-derived package flags require a clear system contract before use."
+  ],
+  "contentHashes": {
+    "requirements.md": "sha256:40cfe6133c9e8449395df91f840543e9decf326bd714c843e14a20dd630224bb",
+    "system.md": "sha256:ee38e58e37b1658bb92c4181f4c8c9a271283bd25f06f31f568bb3aeebb80417",
+    "verify.md": "sha256:174f58ee7448bcf7132520c7e3f333791529576adc40960567115fcc4d542585",
+    "adrs.md": "sha256:6fa3554058404a90e7106cfa3db01b7e88bfa0d72302e4d3f736a31e16d84369"
+  },
+  "generatedBy": "core"
+}

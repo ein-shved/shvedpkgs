@@ -1,13 +1,18 @@
 # Project Context
 
-This repository uses SpecD as agent-assisted SDD tooling, not as the source of
-truth for the whole SDD process.
+This repository uses SpecD as agent-assisted SDD tooling. The human-readable
+SDD process rules live beside SpecD-owned artifacts in the indexed process
+section.
 
 ## Process Model
 
-- The repository SDD process document lives at `specs/sdd-process.md`.
-- Legacy and broader SDD source material remains under `spec/`.
-- SpecD operational specs also live under `specs/`.
+- The repository SDD process document lives at `specs/000-sdd-process/rules.md`.
+- The Russian process translation lives at `specs/000-sdd-process/rules.ru.md`.
+- Current SDD requirements, system contracts, verification scenarios, optional
+  inventory, and ADRs live in indexed SpecD specs under `specs/`.
+- Historical legacy planning material may remain under `spec/`, but
+  requirements, system contracts, and ADR decisions are owned by SpecD
+  artifacts.
 - The active SpecD schema is the local SDD schema at `schemas/sdd/schema.yaml`.
 - The active SpecD artifact flow is `proposal -> requirements -> system -> verify -> plan`.
 - `requirements.md` owns needs, obligations, rationale, and satisfaction conditions.
@@ -34,9 +39,16 @@ truth for the whole SDD process.
 ## Useful Repository References
 
 - `spec/agent.md` gives repository-level orientation for agents.
-- `specs/sdd-process.md` describes the repository's SDD process.
-- `spec/requirements.md` captures broader process requirements.
-- `specs/project-inventory/inventory.md` captures optional non-normative
-  project inventory and orientation.
-- `specs/specd-sdd-integration/` describes the SpecD integration.
-- `specs/development-host-tooling/` describes development-host workflow tooling.
+- `specs/000-sdd-process/rules.md` describes the repository's SDD process.
+- `specs/000-sdd-process/` describes SpecD integration and process-facing
+  contracts.
+- `specs/001-project-architecture/` describes repository layer boundaries,
+  primary-user semantics, package-source handling, and document-order ADRs.
+- `specs/002-host-classification/` describes host role flags, package buckets,
+  derived package-set flags, and migrated host-classification ADRs.
+- `specs/003-testing-infrastructure/` describes validation-only configurations
+  and test-only private-value stubs.
+- `specs/004-generic-host-tooling/` describes configured generic host tools such
+  as the user-facing `rg` wrapper.
+- `specs/005-development-host-tooling/` describes development-host workflow
+  tooling such as `codex` and `specd`.

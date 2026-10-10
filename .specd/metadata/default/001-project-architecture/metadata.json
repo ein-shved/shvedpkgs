@@ -1,0 +1,34 @@
+{
+  "title": "Requirements",
+  "description": "## REQ-001: Project supports multiple personal host configurations\n\nThe repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository.\n\n## REQ-002: User-facing behavior is scoped to the host primary user\n\nWhen a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository.\n\n## REQ-003: Host environments are selected by purpose and capability\n\nThe repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose.",
+  "context": [
+    "## REQ-001: Project supports multiple personal host configurations\n\nThe repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository.\n\n## REQ-002: User-facing behavior is scoped to the host primary user\n\nWhen a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository.\n\n## REQ-003: Host environments are selected by purpose and capability\n\nThe repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose."
+  ],
+  "rules": [
+    {
+      "requirement": "REQ-001: Project supports multiple personal host configurations",
+      "rules": [
+        "The repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository."
+      ]
+    },
+    {
+      "requirement": "REQ-002: User-facing behavior is scoped to the host primary user",
+      "rules": [
+        "When a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository."
+      ]
+    },
+    {
+      "requirement": "REQ-003: Host environments are selected by purpose and capability",
+      "rules": [
+        "The repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose."
+      ]
+    }
+  ],
+  "contentHashes": {
+    "requirements.md": "sha256:098029b9f58579f5541b5cfc1c5ec1bd44423920705d66e09286375bc2270707",
+    "system.md": "sha256:102f2402c07a628274467b7819fe147445a7666676cad39e27910111ec533b80",
+    "verify.md": "sha256:c86cc4b35bc364ccbff60320a68645674be255033aff90d5960d38b8d940c9d4",
+    "adrs.md": "sha256:8cc055a2ae78eb077ac9667cd1479fedbd7ca1c7bed1ed489d045e30a3319f4e"
+  },
+  "generatedBy": "core"
+}
