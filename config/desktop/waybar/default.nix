@@ -11,7 +11,7 @@ let
 in
 {
   hm.programs.waybar = {
-    enable = config.hardware.needGraphic;
+    enable = config.hardware.isGraphic;
     systemd.enable = true;
     systemd.target = "niri.service";
     style = ./style.css;

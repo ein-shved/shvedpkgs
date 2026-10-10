@@ -18,7 +18,7 @@
     programs = {
       command-not-found.enable = false; # Use nix-index instead
       nix-index = {
-        enable = config.hardware.development;
+        enable = config.hardware.isDevelopment;
         enableBashIntegration = true;
       };
       bash = {

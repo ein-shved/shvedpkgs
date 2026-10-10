@@ -3,7 +3,7 @@
   ...
 }:
 {
-  programs.nm-applet.enable = config.hardware.needGraphic;
+  programs.nm-applet.enable = config.hardware.isGraphic;
   systemd.user.services.nm-applet = {
     after = [
       "waybar.service"

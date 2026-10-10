@@ -2,7 +2,7 @@
 {
   config = {
     services.pulseaudio = {
-      enable = config.hardware.needGraphic;
+      enable = config.hardware.isGraphic;
       package = pkgs.pulseaudioFull;
       extraConfig = ''
         load-module module-switch-on-connect

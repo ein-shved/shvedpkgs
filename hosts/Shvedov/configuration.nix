@@ -6,8 +6,8 @@
       ./desktop
     ];
 
-  hardware.needGraphic = true;
-  hardware.development = true;
+  hardware.isGraphic = true;
+  hardware.isDevelopment = true;
 
   kl = {
     enable = true;

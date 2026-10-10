@@ -27,8 +27,8 @@ tests
     modules = [
       {
         user.name = "NixOS";
-        hardware.needGraphic = true;
-        hardware.development = true;
+        hardware.isGraphic = true;
+        hardware.isDevelopment = true;
       }
     ];
   };

@@ -6,8 +6,8 @@ in
     modules = [
       {
         inherit user;
-        hardware.needGraphic = true;
-        hardware.development = true;
+        hardware.isGraphic = true;
+        hardware.isDevelopment = true;
         hardware.bluetooth.enable = true;
       }
     ];
@@ -16,8 +16,8 @@ in
     modules = [
       {
         inherit user;
-        hardware.needGraphic = true;
-        hardware.development = true;
+        hardware.isGraphic = true;
+        hardware.isDevelopment = true;
         hardware.bluetooth.enable = true;
         services.xserver.videoDrivers = [ "nvidia" ];
         hardware.nvidia = {

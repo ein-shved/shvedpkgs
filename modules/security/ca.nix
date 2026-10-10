@@ -34,7 +34,7 @@ in
         certutil = "${nss.tools}/bin/certutil -d ${db}";
         modutil = "${nss.tools}/bin/modutil -dbdir ${db}";
       in
-      lib.mkIf config.hardware.needGraphic {
+      lib.mkIf config.hardware.isGraphic {
         # The certutil may hang openning db, when pkcs11 token plugged in
         # removing it will solve this problem
         installNssDbCerts = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

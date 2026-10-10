@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (config.hardware) needGraphic;
+  inherit (config.hardware) isGraphic;
 
   mkMonitor = name: if name == "default" || name == null then "greeter" else "monitor: ${name}";
   mkBlurOutput =
@@ -29,7 +29,7 @@ let
   lemurs = config.services.displayManager.lemurs.enable;
 in
 {
-  services = lib.mkIf needGraphic {
+  services = lib.mkIf isGraphic {
     displayManager.defaultSession = "niri";
     displayManager.lemurs = {
       enable = true;
@@ -39,7 +39,7 @@ in
         lightdm = {
           # TODO: get rid of direct usage of other fields values: replace with extra
           # options values
-          greeters.gtk = lib.optionalAttrs needGraphic {
+          greeters.gtk = lib.optionalAttrs isGraphic {
             enable = true;
             cursorTheme = {
               inherit (config.hm.home.pointerCursor) package name size;

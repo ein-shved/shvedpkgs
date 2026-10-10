@@ -4,11 +4,11 @@
   ...
 }:
 let
-  mkGraphic = lib.mkIf config.hardware.needGraphic;
+  mkGraphic = lib.mkIf config.hardware.isGraphic;
 in
 {
   hm.services.wpaperd = mkGraphic {
-    enable = config.hardware.needGraphic;
+    enable = config.hardware.isGraphic;
     settings = lib.mapAttrs (_: mon: {
       path = mon.wallpaper;
     }) config.hardware.wallpaperMonitors;

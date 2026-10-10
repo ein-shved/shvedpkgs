@@ -4,11 +4,11 @@
   ...
 }:
 let
-  mkGraphic = lib.mkIf config.hardware.needGraphic;
+  mkGraphic = lib.mkIf config.hardware.isGraphic;
 in
 {
   hm.services.awww = mkGraphic {
-    enable = config.hardware.needGraphic;
+    enable = config.hardware.isGraphic;
   };
   hm.systemd = mkGraphic {
     user.services.awww = {

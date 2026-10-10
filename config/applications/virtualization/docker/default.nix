@@ -1,6 +1,6 @@
 { config, ... }:
 {
   config = {
-    virtualisation.docker.enable = config.hardware.needGraphic;
+    virtualisation.docker.enable = config.hardware.isGraphic;
   };
 }

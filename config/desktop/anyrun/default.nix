@@ -5,7 +5,7 @@
   ...
 }:
 {
-  hm.programs.anyrun = lib.mkIf config.hardware.needGraphic {
+  hm.programs.anyrun = lib.mkIf config.hardware.isGraphic {
     enable = true;
     config = {
       x = {
