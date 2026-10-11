@@ -63,6 +63,9 @@ artifacts:
       Keep requirement prose concise. A reader should be able to understand the
       core need first, then return to scenarios for nuance, boundary cases,
       examples, and clarifications.
+      Treat an overly long requirement body as a warning sign: move details,
+      examples, edge cases, and clarifications into scenarios unless they are
+      essential to understanding the requirement itself.
 
       Every requirement must have at least one acceptance scenario. If a
       proposed requirement mostly clarifies, narrows, or gives an example of
@@ -77,6 +80,15 @@ artifacts:
       - Include rationale where it helps future readers.
       - Express satisfaction with mandatory `### Scenario: <name>` sections
         inside the owning requirement.
+      - Each scenario belongs to exactly one requirement: place it under the
+        owning requirement, not as a file-level section.
+      - Use OpenSpec-style scenario clauses:
+        - `GIVEN` is optional.
+        - `WHEN` is required.
+        - `THEN` is required.
+        - `AND` may extend any preceding `GIVEN`, `WHEN`, or `THEN` clause.
+        - Multiple scenarios per requirement are allowed and encouraged when
+          they make nuance easier to read.
       - Acceptance scenarios must use the terms available to the requirement's
         consumer. Do not mention implementation configuration, package buckets,
         internal module names, or design-only concepts unless they are part of

@@ -1,26 +1,26 @@
 {
   "title": "Requirements",
-  "description": "## REQ-001: Development hosts expose required workflow tools\n\nDevelopment hosts must make the required repository workflow tools available\nin the primary user's command lookup path.\n\nThe required tools are:\n\n- `codex`\n- `specd`\n\nEach listed command must resolve to the widely recognized developer tool\nidentified by that command name at the time the command is added to this\nlist. For example, `codex` means the genuine Codex CLI originated by\nOpenAI, and `git` means the distributed version control system originally\ncreated by Linus Torvalds. Listed commands must not resolve to stubs,\nplaceholders, or unrelated executables unless this document explicitly says\notherwise.\n\n### Rationale\n\nDevelopment hosts support the repository SDD workflow and related project\nmaintenance. Providing the tools through host configuration keeps the workflow\nreproducible across development machines.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-002: Non-development hosts are not required to expose development tooling\n\nHosts that are not classified as development hosts are not required by this\nspec to expose `codex`, `specd`, or other development-host-only workflow tools.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-003: Tooling selection belongs to development host configuration\n\nPackages required only because a host is a development host must be selected\nthrough development-host configuration policy rather than by encoding\nhost-specific installation policy in package definitions.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.",
+  "description": "## REQ-001: Development hosts expose required workflow tools\n\nDevelopment hosts must make the required repository workflow tools available\nin the primary user's command lookup path.\n\nThe required tools are:\n\n- `codex`\n- `specd`\n\nEach listed command must resolve to the widely recognized developer tool\nidentified by that command name at the time the command is added to this\nlist. For example, `codex` means the genuine Codex CLI originated by\nOpenAI, and `git` means the distributed version control system originally\ncreated by Linus Torvalds. Listed commands must not resolve to stubs,\nplaceholders, or unrelated executables unless this document explicitly says\notherwise.\n\n### Rationale\n\nDevelopment hosts support the repository SDD workflow and related project\nmaintenance. Providing the tools through host configuration keeps the workflow\nreproducible across development machines.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-002: Non-development hosts are not required to expose development tooling\n\nHosts that are not classified as development hosts are not required by this\nspec to expose `codex`, `specd`, or other development-host-only workflow tools.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-003: Tooling selection belongs to development host configuration\n\nPackages required only because a host is a development host must be selected\nthrough development-host configuration policy rather than by encoding\nhost-specific installation policy in package definitions.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.",
   "context": [
-    "## REQ-001: Development hosts expose required workflow tools\n\nDevelopment hosts must make the required repository workflow tools available\nin the primary user's command lookup path.\n\nThe required tools are:\n\n- `codex`\n- `specd`\n\nEach listed command must resolve to the widely recognized developer tool\nidentified by that command name at the time the command is added to this\nlist. For example, `codex` means the genuine Codex CLI originated by\nOpenAI, and `git` means the distributed version control system originally\ncreated by Linus Torvalds. Listed commands must not resolve to stubs,\nplaceholders, or unrelated executables unless this document explicitly says\notherwise.\n\n### Rationale\n\nDevelopment hosts support the repository SDD workflow and related project\nmaintenance. Providing the tools through host configuration keeps the workflow\nreproducible across development machines.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-002: Non-development hosts are not required to expose development tooling\n\nHosts that are not classified as development hosts are not required by this\nspec to expose `codex`, `specd`, or other development-host-only workflow tools.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-003: Tooling selection belongs to development host configuration\n\nPackages required only because a host is a development host must be selected\nthrough development-host configuration policy rather than by encoding\nhost-specific installation policy in package definitions.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+    "## REQ-001: Development hosts expose required workflow tools\n\nDevelopment hosts must make the required repository workflow tools available\nin the primary user's command lookup path.\n\nThe required tools are:\n\n- `codex`\n- `specd`\n\nEach listed command must resolve to the widely recognized developer tool\nidentified by that command name at the time the command is added to this\nlist. For example, `codex` means the genuine Codex CLI originated by\nOpenAI, and `git` means the distributed version control system originally\ncreated by Linus Torvalds. Listed commands must not resolve to stubs,\nplaceholders, or unrelated executables unless this document explicitly says\notherwise.\n\n### Rationale\n\nDevelopment hosts support the repository SDD workflow and related project\nmaintenance. Providing the tools through host configuration keeps the workflow\nreproducible across development machines.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-002: Non-development hosts are not required to expose development tooling\n\nHosts that are not classified as development hosts are not required by this\nspec to expose `codex`, `specd`, or other development-host-only workflow tools.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-003: Tooling selection belongs to development host configuration\n\nPackages required only because a host is a development host must be selected\nthrough development-host configuration policy rather than by encoding\nhost-specific installation policy in package definitions.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
   ],
   "rules": [
     {
       "requirement": "REQ-001: Development hosts expose required workflow tools",
       "rules": [
-        "Development hosts must make the required repository workflow tools available\nin the primary user's command lookup path.\n\nThe required tools are:\n\n- `codex`\n- `specd`\n\nEach listed command must resolve to the widely recognized developer tool\nidentified by that command name at the time the command is added to this\nlist. For example, `codex` means the genuine Codex CLI originated by\nOpenAI, and `git` means the distributed version control system originally\ncreated by Linus Torvalds. Listed commands must not resolve to stubs,\nplaceholders, or unrelated executables unless this document explicitly says\notherwise.\n\n### Rationale\n\nDevelopment hosts support the repository SDD workflow and related project\nmaintenance. Providing the tools through host configuration keeps the workflow\nreproducible across development machines.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "Development hosts must make the required repository workflow tools available\nin the primary user's command lookup path.\n\nThe required tools are:\n\n- `codex`\n- `specd`\n\nEach listed command must resolve to the widely recognized developer tool\nidentified by that command name at the time the command is added to this\nlist. For example, `codex` means the genuine Codex CLI originated by\nOpenAI, and `git` means the distributed version control system originally\ncreated by Linus Torvalds. Listed commands must not resolve to stubs,\nplaceholders, or unrelated executables unless this document explicitly says\notherwise.\n\n### Rationale\n\nDevelopment hosts support the repository SDD workflow and related project\nmaintenance. Providing the tools through host configuration keeps the workflow\nreproducible across development machines.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
       ]
     },
     {
       "requirement": "REQ-002: Non-development hosts are not required to expose development tooling",
       "rules": [
-        "Hosts that are not classified as development hosts are not required by this\nspec to expose `codex`, `specd`, or other development-host-only workflow tools.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "Hosts that are not classified as development hosts are not required by this\nspec to expose `codex`, `specd`, or other development-host-only workflow tools.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
       ]
     },
     {
       "requirement": "REQ-003: Tooling selection belongs to development host configuration",
       "rules": [
-        "Packages required only because a host is a development host must be selected\nthrough development-host configuration policy rather than by encoding\nhost-specific installation policy in package definitions.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "Packages required only because a host is a development host must be selected\nthrough development-host configuration policy rather than by encoding\nhost-specific installation policy in package definitions.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
       ]
     }
   ],
@@ -28,6 +28,9 @@
     {
       "requirement": "REQ-001: Development hosts expose required workflow tools",
       "name": "TBD",
+      "when": [
+        "TBD: define acceptance scenario trigger during requirements migration."
+      ],
       "then": [
         "TBD: define acceptance scenarios for this requirement during requirements migration."
       ]
@@ -35,6 +38,9 @@
     {
       "requirement": "REQ-002: Non-development hosts are not required to expose development tooling",
       "name": "TBD",
+      "when": [
+        "TBD: define acceptance scenario trigger during requirements migration."
+      ],
       "then": [
         "TBD: define acceptance scenarios for this requirement during requirements migration."
       ]
@@ -42,13 +48,16 @@
     {
       "requirement": "REQ-003: Tooling selection belongs to development host configuration",
       "name": "TBD",
+      "when": [
+        "TBD: define acceptance scenario trigger during requirements migration."
+      ],
       "then": [
         "TBD: define acceptance scenarios for this requirement during requirements migration."
       ]
     }
   ],
   "contentHashes": {
-    "requirements.md": "sha256:c69606632c54fbf98996cf47d5c720cd9e97a804a628dd41e6a777a2e585b152",
+    "requirements.md": "sha256:d8917bc7b712879b0cbe72afded68ebdde4ba2f1e080aef5258400d483b37539",
     "system.md": "sha256:5848688b1d4bf6e35a987e8231836b47aafb22cc2db44711f74604b4bc0774a4",
     "validate.md": "sha256:94ab1321ac68d114eea9da045fa9d28c626f15767e65df8424b121c30d5cd1c3"
   },

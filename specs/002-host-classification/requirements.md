@@ -12,6 +12,7 @@ without guessing from unrelated implementation details.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-002: Host class membership is controlled by disabled-by-default boolean configuration
@@ -26,6 +27,7 @@ class only when the evaluated host configuration sets that class flag to
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-003: Host classes are composable unless incompatible
@@ -39,6 +41,7 @@ definitions.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-004: Each host class has a derived package-set flag
@@ -52,6 +55,7 @@ must not define host classification independently.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-005: Host classes provide package buckets
@@ -65,6 +69,7 @@ are merged into the evaluated system package set.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-006: System introduces graphical host class
@@ -82,6 +87,7 @@ machines need an interactive graphical environment.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-007: System introduces laptop host class
@@ -99,6 +105,7 @@ behavior without assuming that every personal host is portable.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-008: System introduces development host class
@@ -116,6 +123,7 @@ purpose does not include development.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-009: System introduces NAS host class
@@ -132,6 +140,7 @@ not by the primary user's interactive desktop or development workflow.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-010: System introduces VPS host class
@@ -149,6 +158,7 @@ that make sense for laptops, NAS machines, or graphical hosts.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-011: System introduces VPS client host class
@@ -165,4 +175,5 @@ development.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.

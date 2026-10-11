@@ -13,6 +13,7 @@ repository.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-002: User-facing behavior is scoped to the host primary user
@@ -28,6 +29,7 @@ the repository.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-003: Host environments are selected by purpose and capability
@@ -42,4 +44,5 @@ unsupported, or outside the host's purpose.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.

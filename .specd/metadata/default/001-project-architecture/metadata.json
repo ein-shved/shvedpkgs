@@ -1,26 +1,26 @@
 {
   "title": "Requirements",
-  "description": "## REQ-001: Project supports multiple personal host configurations\n\nThe repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-002: User-facing behavior is scoped to the host primary user\n\nWhen a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-003: Host environments are selected by purpose and capability\n\nThe repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.",
+  "description": "## REQ-001: Project supports multiple personal host configurations\n\nThe repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-002: User-facing behavior is scoped to the host primary user\n\nWhen a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-003: Host environments are selected by purpose and capability\n\nThe repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.",
   "context": [
-    "## REQ-001: Project supports multiple personal host configurations\n\nThe repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-002: User-facing behavior is scoped to the host primary user\n\nWhen a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-003: Host environments are selected by purpose and capability\n\nThe repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+    "## REQ-001: Project supports multiple personal host configurations\n\nThe repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-002: User-facing behavior is scoped to the host primary user\n\nWhen a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-003: Host environments are selected by purpose and capability\n\nThe repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
   ],
   "rules": [
     {
       "requirement": "REQ-001: Project supports multiple personal host configurations",
       "rules": [
-        "The repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "The repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
       ]
     },
     {
       "requirement": "REQ-002: User-facing behavior is scoped to the host primary user",
       "rules": [
-        "When a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "When a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
       ]
     },
     {
       "requirement": "REQ-003: Host environments are selected by purpose and capability",
       "rules": [
-        "The repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose.\n\n### Scenario: TBD\n\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "The repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
       ]
     }
   ],
@@ -28,6 +28,9 @@
     {
       "requirement": "REQ-001: Project supports multiple personal host configurations",
       "name": "TBD",
+      "when": [
+        "TBD: define acceptance scenario trigger during requirements migration."
+      ],
       "then": [
         "TBD: define acceptance scenarios for this requirement during requirements migration."
       ]
@@ -35,6 +38,9 @@
     {
       "requirement": "REQ-002: User-facing behavior is scoped to the host primary user",
       "name": "TBD",
+      "when": [
+        "TBD: define acceptance scenario trigger during requirements migration."
+      ],
       "then": [
         "TBD: define acceptance scenarios for this requirement during requirements migration."
       ]
@@ -42,13 +48,16 @@
     {
       "requirement": "REQ-003: Host environments are selected by purpose and capability",
       "name": "TBD",
+      "when": [
+        "TBD: define acceptance scenario trigger during requirements migration."
+      ],
       "then": [
         "TBD: define acceptance scenarios for this requirement during requirements migration."
       ]
     }
   ],
   "contentHashes": {
-    "requirements.md": "sha256:27742c918e8316e46fa5367b48e5370ee6541b46e57bf42500e0e6ec1e540199",
+    "requirements.md": "sha256:8e29592a82721defd802042d0cfe05c31a9a46725a6d17a21533b8277cb11953",
     "system.md": "sha256:102f2402c07a628274467b7819fe147445a7666676cad39e27910111ec533b80",
     "validate.md": "sha256:5973ca918a4db69d74e4f7fe9e40d5271cb05811f573bb78ab92f301c5186d14",
     "adrs.md": "sha256:8cc055a2ae78eb077ac9667cd1479fedbd7ca1c7bed1ed489d045e30a3319f4e"

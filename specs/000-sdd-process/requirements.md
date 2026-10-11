@@ -14,6 +14,7 @@ Context, or `adrs.md`.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-002: SpecD provides machine-readable workflow state
@@ -25,6 +26,7 @@ blockers, and next artifact instructions through the SpecD CLI.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-003: SpecD specs may mirror current SDD contracts
@@ -44,6 +46,7 @@ non-normative orientation.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-004: SpecD-owned SDD fragments reconstruct readable documents
@@ -58,6 +61,7 @@ visible rather than hiding them behind arbitrary filesystem or glob order.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-005: Normative SDD artifacts describe the current architecture
@@ -77,6 +81,7 @@ current architecture once the migration is complete.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-006: Changes that modify behavior pass through SpecD artifacts
@@ -97,6 +102,7 @@ SpecD spec covers the behavior, the change should introduce one.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-007: Requirement validation may use scenario-style checks
@@ -108,4 +114,5 @@ criteria model in the normative SDD process.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.

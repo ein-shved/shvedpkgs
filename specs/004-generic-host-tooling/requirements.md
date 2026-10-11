@@ -41,4 +41,5 @@ users, not by changing the global `pkgs.ripgrep` package contract.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.

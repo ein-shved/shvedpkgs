@@ -27,6 +27,7 @@ reproducible across development machines.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-002: Non-development hosts are not required to expose development tooling
@@ -37,6 +38,7 @@ spec to expose `codex`, `specd`, or other development-host-only workflow tools.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-003: Tooling selection belongs to development host configuration
@@ -48,4 +50,5 @@ host-specific installation policy in package definitions.
 
 ### Scenario: TBD
 
+- WHEN TBD: define acceptance scenario trigger during requirements migration.
 - THEN TBD: define acceptance scenarios for this requirement during requirements migration.
