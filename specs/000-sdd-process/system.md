@@ -32,8 +32,8 @@ Active and historical change state is stored under `.specd/`:
 ## SpecD-Owned SDD Locations
 
 Steady-state SpecD specs under `specs/` are the machine-readable location for
-requirements, system specification, verification, and optional inventory
-artifacts managed by SpecD.
+requirements, system specification, verification, and optional ADR artifacts
+managed by SpecD.
 
 Active and archived SpecD changes under `.specd/` hold change-scoped proposal,
 plan, and context artifacts. Spec-scoped `adrs.md` artifacts hold significant
@@ -54,12 +54,8 @@ Document-shaped views such as `requirements.md` and `system.md` follow the
 numeric section order when presenting split SpecD artifacts for validation or
 review.
 
-While legacy source files still exist, reconstruction comparison is allowed to
-differ for content that was already represented by steady-state SpecD artifacts
-before the migration, heading shape required by SpecD artifacts, acceptance
-criteria represented as scenarios, and additions for SpecD-only content that
-did not exist in the legacy document. It must not hide arbitrary reordering of
-migrated legacy content.
+This ordering supports readable generated views of the SDD model without
+making agents depend on arbitrary filesystem or glob order.
 
 ## SDD Schema
 
@@ -68,10 +64,28 @@ The local SDD schema defines first-class artifacts for:
 - requirements
 - system specification
 - verification scenarios
-- optional inventory
 - implementation plan with top-level plan items
 - optional context
 - optional spec-scoped ADRs
+
+## Transitional Orientation Documents
+
+The repository is still migrating from manually maintained project knowledge to
+the SDD process and its normative artifact set.
+
+During this transition, the project keeps two non-normative documents under
+`specs/001-project-architecture/`:
+
+- [`inventory.md`](../001-project-architecture/inventory.md): temporary
+  project inventory and repository map.
+- [`todo.md`](../001-project-architecture/todo.md): temporary open questions,
+  cleanup candidates, and SDD preparation tasks.
+
+These documents help humans and agents navigate the transition, but they are
+not SpecD schema artifacts and they do not own current requirements, current
+system contracts, verification expectations, or architecture decisions.
+Durable knowledge discovered in them must move to the owning `requirements.md`,
+`system.md`, `verify.md`, or `adrs.md` artifact.
 
 ## Constraints
 
@@ -79,12 +93,9 @@ The local SDD schema defines first-class artifacts for:
   definition.
 - SpecD artifacts are allowed to provide machine-readable tracking and context
   without silently replacing the SDD process.
-- Inventory under `specs/000-sdd-process/` is optional non-normative
-  orientation and must not become a parallel current-system specification.
 - Runtime/generated SpecD graph and log files are not tracked as durable
   artifacts.
-- Legacy `spec/` files must not be deleted until coverage is documented, specs
-  validate, metadata is fresh, and live context no longer depends on those
-  files as normative sources.
+- Temporary manual notes must not become parallel normative sources for current
+  requirements, system contracts, verification expectations, or ADR decisions.
 - Reconstructed SDD document views must follow deterministic numeric fragment
   order.

@@ -23,7 +23,7 @@ behavioral changes.
   `extend`.
   - Public source: `lib/system.nix`.
   - Missing context: private extensions and secrets are intentionally outside
-  this repository.
+    this repository.
   - Need to capture the user-provided deployment workflow later.
 - Bring personal flake inputs into the SDD process as separate repositories.
   - Current known inputs from GitHub account `ein-shved`:

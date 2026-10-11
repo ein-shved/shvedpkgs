@@ -26,53 +26,35 @@ When mirrored content conflicts with the normative SDD process or a more
 specific owning SpecD artifact, the owning artifact must be corrected and
 dependent mirrors must be updated or removed.
 
-A legacy `spec/` source may stop being a live normative reference only after
-its durable requirements, system contracts, ADR decisions, and coverage
-treatment are represented in SpecD-owned artifacts or explicitly documented as
-historical, stale, duplicate, or non-normative.
+Manual project notes may stop being active guidance only after their durable
+requirements, system contracts, ADR decisions, and verification expectations
+are represented in the owning SDD artifacts or explicitly treated as
+non-normative orientation.
 
-## REQ-004: Legacy SDD retirement is coverage-gated
+## REQ-004: SpecD-owned SDD fragments reconstruct readable documents
 
-Legacy SDD files under `spec/` must not be deleted merely because new SpecD
-specs exist.
-
-Before deleting a legacy requirements, system, agent, task, plan, todo, or ADR
-file, the repository must be able to show whether each durable item was
-migrated to an owning SpecD artifact, retained as historical material, replaced
-by fresher content, or intentionally discarded as stale or duplicate.
-
-Live project context and agent guidance must stop pointing at deleted legacy
-files as normative inputs.
-
-## REQ-005: SpecD-owned SDD fragments reconstruct readable documents
-
-When legacy SDD documents are split across SpecD-owned artifacts, the
-repository must retain a deterministic reconstruction order for each document
-kind.
+When the SDD model is split across SpecD-owned artifacts, the repository must
+retain a deterministic reconstruction order for each document kind.
 
 Reconstructed documents must follow the same general-to-specific reading order
-as the legacy documents. The comparison may differ where content was already
-represented by a steady-state SpecD artifact before the migration, where SpecD
-artifact format changes headings, where acceptance criteria are represented as
-verification scenarios, or where intentionally added SpecD-only material has no
-legacy source. Validation must make ordering mistakes visible rather than
-hiding them behind arbitrary filesystem or glob order.
+as the repository's SDD sections. Validation must make ordering mistakes
+visible rather than hiding them behind arbitrary filesystem or glob order.
 
-## REQ-006: SpecD preserves inventory lifecycle
+## REQ-005: Normative SDD artifacts describe the current architecture
 
-SpecD must represent repository inventory as optional, non-normative
-orientation rather than as requirements or system guarantees.
+The repository's normative SDD artifacts must fully describe the current
+project architecture at the level needed for agents and humans to make changes
+without relying on stale inventory, manual notes, or conversation history.
 
-Before a SpecD change is archived, agents must check whether the work made
-repository inventory materially stale when the work changed repository
-structure, entry points, hosts, module responsibilities, package inventory,
-validation support, or other orientation material.
+Current requirements must live in `requirements.md`, current system contracts
+must live in `system.md`, verification expectations must live in `verify.md`,
+and significant decisions and rationale must live in `adrs.md`.
 
-If inventory became stale, still-useful orientation must be refreshed, durable
-knowledge must migrate to the owning artifact, or stale material must be
-removed.
+Temporary inventory and TODO documents may exist while the project is still
+migrating to the SDD process, but they must not be required to understand the
+current architecture once the migration is complete.
 
-## REQ-007: Changes that modify behavior pass through SpecD artifacts
+## REQ-006: Changes that modify behavior pass through SpecD artifacts
 
 Future repository changes that modify expected behavior should be represented
 as SpecD changes with requirements, system, verification, and plan artifacts
@@ -87,7 +69,7 @@ If an existing steady-state SpecD spec already covers the behavior, the change
 should attach that spec and use deltas or no-op deltas as appropriate. If no
 SpecD spec covers the behavior, the change should introduce one.
 
-## REQ-008: Requirement validation may use scenario-style checks
+## REQ-007: Requirement validation may use scenario-style checks
 
 SpecD verification artifacts may use scenario-style checks to describe how a
 requirement is validated. This does not by itself replace the acceptance

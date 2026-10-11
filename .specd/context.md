@@ -8,9 +8,9 @@ section.
 
 - The repository SDD process document lives at `specs/000-sdd-process/rules.md`.
 - The Russian process translation lives at `specs/000-sdd-process/rules.ru.md`.
-- Current SDD requirements, system contracts, verification scenarios, optional
-  inventory, and ADRs live in indexed SpecD specs under `specs/`.
-- Historical legacy planning material may remain under `spec/`, but
+- Current SDD requirements, system contracts, verification scenarios, and ADRs
+  live in indexed SpecD specs under `specs/`.
+- Temporary manual planning material may remain outside `specs/`, but
   requirements, system contracts, and ADR decisions are owned by SpecD
   artifacts.
 - The active SpecD schema is the local SDD schema at `schemas/sdd/schema.yaml`.
@@ -18,8 +18,6 @@ section.
 - `requirements.md` owns needs, obligations, rationale, and satisfaction conditions.
 - `system.md` owns current contracts, concepts, interfaces, invariants, and constraints.
 - `verify.md` owns concrete scenarios used to check requirements and system contracts.
-- `inventory.md` owns optional non-normative orientation and must be refreshed,
-  migrated, or removed when work makes it materially stale.
 - `adrs.md` owns optional durable architecture decision records for significant
   spec decisions.
 - `plan.md` owns implementation strategy, validation strategy, and top-level
@@ -38,8 +36,10 @@ section.
 
 ## Useful Repository References
 
-- `spec/agent.md` gives repository-level orientation for agents.
 - `specs/000-sdd-process/rules.md` describes the repository's SDD process.
+- `specs/001-project-architecture/inventory.md` and
+  `specs/001-project-architecture/todo.md` are temporary non-normative
+  migration aids for humans and agents, not SpecD schema artifacts.
 - `specs/000-sdd-process/` describes SpecD integration and process-facing
   contracts.
 - `specs/001-project-architecture/` describes repository layer boundaries,
