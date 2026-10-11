@@ -9,6 +9,11 @@ Classification must be explicit enough for role-sensitive configuration,
 package selection, and package build-time behavior to depend on the host class
 without guessing from unrelated implementation details.
 
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+
 ## REQ-002: Host class membership is controlled by disabled-by-default boolean configuration
 
 Each host class must be represented by an elementary boolean configuration
@@ -18,6 +23,11 @@ The default value for each class flag must be `false`. A host belongs to a
 class only when the evaluated host configuration sets that class flag to
 `true`.
 
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+
 ## REQ-003: Host classes are composable unless incompatible
 
 A host may belong to more than one class at the same time.
@@ -25,6 +35,11 @@ A host may belong to more than one class at the same time.
 The system must not treat host classes as mutually exclusive unless the classes
 are explicitly declared incompatible or are semantically incompatible by their
 definitions.
+
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-004: Each host class has a derived package-set flag
 
@@ -34,6 +49,11 @@ set, `pkgs`, when package expressions need to vary by evaluated host.
 Package-set host flags must be derived from evaluated host configuration. They
 must not define host classification independently.
 
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+
 ## REQ-005: Host classes provide package buckets
 
 Each host class must provide a host-specific package bucket that is merged into
@@ -41,6 +61,11 @@ Each host class must provide a host-specific package bucket that is merged into
 
 Package buckets must collect packages for a host class before those packages
 are merged into the evaluated system package set.
+
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-006: System introduces graphical host class
 
@@ -54,6 +79,11 @@ not universal across the repository. Server and validation hosts should not be
 forced to carry graphical packages or services merely because some personal
 machines need an interactive graphical environment.
 
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+
 ## REQ-007: System introduces laptop host class
 
 The laptop class represents portable personal computers with integrated
@@ -65,6 +95,11 @@ Laptop hosts need classification because portable machines often differ from
 stationary machines in hardware capabilities, power behavior, input devices,
 and package or service choices. The class lets the system express laptop-aware
 behavior without assuming that every personal host is portable.
+
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-008: System introduces development host class
 
@@ -78,6 +113,11 @@ machines used for project work, but they are not inherently required on storage
 servers, VPS machines, validation-only configurations, or other hosts whose
 purpose does not include development.
 
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+
 ## REQ-009: System introduces NAS host class
 
 The NAS class represents home media server and storage machines.
@@ -88,6 +128,11 @@ NAS hosts need classification because storage-oriented machines have a
 different purpose from interactive workstations and cloud machines. Their
 package and service needs are driven by storage, media, and server operation,
 not by the primary user's interactive desktop or development workflow.
+
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-010: System introduces VPS host class
 
@@ -101,6 +146,11 @@ different operational constraints from local physical machines. They may need
 server-oriented packages and services while lacking local hardware assumptions
 that make sense for laptops, NAS machines, or graphical hosts.
 
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+
 ## REQ-011: System introduces VPS client host class
 
 The VPS client class represents hosts that use services provided by a VPS host.
@@ -111,3 +161,8 @@ VPS client hosts need classification because consuming services from a VPS is a
 separate role from running the VPS itself. A host may be a client of remote VPS
 services while also belonging to another class such as laptop, graphical, or
 development.
+
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.

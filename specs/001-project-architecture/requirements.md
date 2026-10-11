@@ -10,6 +10,11 @@ and practical capability set. The project must not require every host to expose
 the same user environment merely because the hosts are managed by the same
 repository.
 
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+
 ## REQ-002: User-facing behavior is scoped to the host primary user
 
 When a requirement refers to tools, packages, or environment visible to "the
@@ -20,6 +25,11 @@ User-facing guarantees apply to that primary user on that host. They must not
 implicitly require the same environment for unrelated users or for every host in
 the repository.
 
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+
 ## REQ-003: Host environments are selected by purpose and capability
 
 The repository must let host environments differ according to the host's
@@ -28,3 +38,8 @@ intended role and physical or operational capabilities.
 Packages and services needed only for a particular class of host must be
 selectable without forcing that environment onto hosts where it is unnecessary,
 unsupported, or outside the host's purpose.
+
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.

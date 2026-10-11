@@ -37,3 +37,8 @@ users, not by changing the global `pkgs.ripgrep` package contract.
   consumers and is not globally overridden with repository configuration.
 - Adding another package that depends on `pkgs.ripgrep` does not force that
   package to consume the repository's configured ripgrep package.
+
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.

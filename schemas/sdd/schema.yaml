@@ -1,7 +1,7 @@
 kind: schema
 name: sdd
 version: 1
-description: Repository SDD workflow — requirements → system → verify → plan.
+description: Repository SDD workflow — requirements → system → validate → plan.
 
 artifacts:
   - id: proposal
@@ -15,7 +15,10 @@ artifacts:
 
       Preserve the repository SDD model:
       - Requirements own needs and satisfaction conditions.
+      - Acceptance scenarios belong inside requirements and use only
+        requirement-level concepts.
       - System owns current system contracts and interfaces.
+      - Validate owns technical validation design for system conformance.
       - Plan owns implementation strategy, validation strategy, and top-level
         plan items.
       - Context is non-normative orientation.
@@ -34,14 +37,14 @@ artifacts:
         - id: resolve-open-questions
           instruction: |
             Review the "Open questions" section. Resolve any question that can
-            change requirements, system specification, verification, or plan
+            change requirements, system specification, validation, or plan
             artifacts
             before proceeding.
 
   - id: requirements
     scope: spec
     output: requirements.md
-    description: SDD requirements describing needs, obligations, rationale, and satisfaction conditions
+    description: SDD requirements describing needs, obligations, rationale, and requirement-level acceptance scenarios
     template: templates/requirements.md
     requires:
       - proposal
@@ -53,14 +56,31 @@ artifacts:
       Requirements describe WHAT need or obligation the system must satisfy.
       They do not own implementation files, package placement, migration steps,
       internal module structure, or historical implementation notes.
+      Acceptance scenarios are part of requirements. They describe observable
+      satisfaction conditions in requirement-level language, not implementation
+      mechanics or system-design internals.
+
+      Keep requirement prose concise. A reader should be able to understand the
+      core need first, then return to scenarios for nuance, boundary cases,
+      examples, and clarifications.
+
+      Every requirement must have at least one acceptance scenario. If a
+      proposed requirement mostly clarifies, narrows, or gives an example of
+      another requirement, treat it as a candidate for conversion into a
+      scenario under that requirement instead of creating a separate
+      requirement.
 
       Format requirements:
       - Top-level heading: `# Requirements`
       - Each requirement uses `## REQ-<n>: <name>` or
         `## Requirement: <name>`.
       - Include rationale where it helps future readers.
-      - Express satisfaction either as acceptance criteria or validation
-        scenarios. Prefer scenarios for new requirements in this experiment.
+      - Express satisfaction with mandatory `### Scenario: <name>` sections
+        inside the owning requirement.
+      - Acceptance scenarios must use the terms available to the requirement's
+        consumer. Do not mention implementation configuration, package buckets,
+        internal module names, or design-only concepts unless they are part of
+        the requirement itself.
     deltaInstruction: |
       For modified requirements, write a delta file at
       `{{change.path}}/deltas/<workspace>/<capability-path>/requirements.md.delta.yaml`.
@@ -72,6 +92,10 @@ artifacts:
       - id: has-requirement
         type: section
         matches: '^(REQ-[0-9]+:|Requirement:)'
+        required: true
+      - id: has-acceptance-scenario
+        type: section
+        matches: '^Scenario:'
         required: true
 
   - id: system
@@ -104,31 +128,38 @@ artifacts:
         level: 1
         required: true
 
-  - id: verify
+  - id: validate
     scope: spec
-    output: verify.md
-    description: Verification scenarios for requirements and system contracts
-    template: templates/verify.md
+    output: validate.md
+    description: Technical validation design for system conformance
+    template: templates/validate.md
     requires:
       - requirements
       - system
     delta: true
     instruction: |
-      Create or update verification scenarios for the affected requirements and
-      system contracts.
+      Create or update the technical validation artifact for the affected
+      requirements and system contracts.
 
-      Use scenario-style checks with WHERE/GIVEN, WHEN, THEN, and AND clauses.
-      Scenarios must be concrete enough for an agent to verify by inspecting
-      code and running commands.
+      This artifact owns HOW the implementation will be checked against the
+      requirements and system model. It may name concrete tests, commands,
+      inspections, fixtures, validation configurations, and validation support
+      described by other system artifacts.
+
+      Do not write acceptance scenarios here. Acceptance scenarios belong in
+      requirements. Validation may reference those scenarios, but it must focus
+      on technical evidence and coverage.
     deltaInstruction: |
-      For modified verification content, write a delta file at
-      `{{change.path}}/deltas/<workspace>/<capability-path>/verify.md.delta.yaml`.
+      For modified validation content, write a delta file at
+      `{{change.path}}/deltas/<workspace>/<capability-path>/validate.md.delta.yaml`.
 
-      Target requirement sections or scenario sections by exact heading.
+      Target complete validation sections by heading. Keep each section precise
+      about what is checked, what command/test/inspection provides evidence,
+      and which requirement or system contract it covers.
     validations:
-      - id: has-scenario
+      - id: has-validation-heading
         type: section
-        matches: '^Scenario:'
+        level: 1
         required: true
 
   - id: adrs
@@ -149,7 +180,7 @@ artifacts:
       ADRs preserve decision history and rationale. They are not the primary
       source of current required behavior or current system guarantees; those
       belong in requirements and system artifacts. If an ADR changes current
-      system truth, update the owning requirements, system, and verification
+      system truth, update the owning requirements, system, and validation
       artifacts as well.
 
       Store multiple decisions as sections in this single artifact. Preserve
@@ -170,7 +201,7 @@ artifacts:
     requires:
       - requirements
       - system
-      - verify
+      - validate
     instruction: |
       Create the implementation plan for this change.
 
@@ -188,9 +219,9 @@ artifacts:
       post:
         - id: upstream-coverage
           instruction: |
-            Cross-check the plan against requirements, system, and verify
-            artifacts. Every requirement and scenario must have a path through
-            the plan.
+            Cross-check the plan against requirements, system, and validate
+            artifacts. Every requirement, acceptance scenario, and validation
+            check must have a path through the plan.
     preHashCleanup:
       - id: normalize-checkboxes
         pattern: '^([ \t]*-\s+)\[x\]'
@@ -209,7 +240,7 @@ artifacts:
       - proposal
     instruction: |
       Write context only when the change needs non-normative orientation that
-      does not belong in requirements, system specification, verification,
+      does not belong in requirements, system specification, validation,
       `adrs.md`, or plan.
 
 metadataExtraction:
@@ -241,13 +272,13 @@ metadataExtraction:
           parent: { type: section, matches: '^Constraints$' }
         extract: label
   scenarios:
-    - id: verification-scenarios
-      artifact: verify
+    - id: acceptance-scenarios
+      artifact: requirements
       extractor:
         selector:
           type: section
           matches: '^Scenario:'
-          parent: { type: section, matches: '^Requirement:' }
+          parent: { type: section, matches: '^(REQ-[0-9]+:|Requirement:)' }
         fields:
           name: { from: label, strip: '^Scenario:\s*' }
           requirement: { from: parentLabel, strip: '^Requirement:\s*' }
@@ -278,43 +309,45 @@ workflow:
         - id: designing-guidance
           instruction: |
             Preserve the SDD dependency direction:
-            requirements -> system -> verify -> plan -> implementation.
+            requirements -> system -> validate -> plan -> implementation.
             Discovery may move upstream; corrections must propagate downstream.
 
   - step: ready
-    requires: [proposal, requirements, system, verify, plan]
+    requires: [proposal, requirements, system, validate, plan]
     hooks:
       pre:
         - id: ready-guidance
           instruction: |
-            Verify that requirements, system, verify, and plan are all complete
+            Verify that requirements, system, validate, and plan are all complete
             and aligned before implementation starts.
 
   - step: implementing
-    requires: [proposal, requirements, system, verify, plan]
+    requires: [proposal, requirements, system, validate, plan]
     hooks:
       pre:
         - id: implementing-guidance
           instruction: |
-            Read requirements, system, verify, and plan before coding.
+            Read requirements, system, validate, and plan before coding.
             Implement top-level plan items in order and mark checkboxes
             complete as work is done. If implementation reveals upstream
             defects, return to designing and correct the earliest affected
             artifact.
 
   - step: verifying
-    requires: [proposal, requirements, system, verify, plan]
+    requires: [proposal, requirements, system, validate, plan]
     requiresTaskCompletion: [plan]
     hooks:
       pre:
         - id: verifying-guidance
           instruction: |
-            Verify every scenario against the implementation. If scenarios fail
-            because code is wrong, return to implementing. If scenarios fail
-            because artifacts are wrong, return to designing.
+            Run or inspect the validation checks described by validate. Confirm
+            that acceptance scenarios in requirements are covered by technical
+            evidence. If checks fail because code is wrong, return to
+            implementing. If checks fail because artifacts are wrong, return to
+            designing.
 
   - step: archiving
-    requires: [proposal, requirements, system, verify, plan]
+    requires: [proposal, requirements, system, validate, plan]
     requiresTaskCompletion: [plan]
     hooks:
       pre:
@@ -325,7 +358,7 @@ workflow:
             artifacts.
 
             If implementation reveals that requirements, system specification,
-            verification, or ADRs are incomplete or stale, return to designing
+            validation, or ADRs are incomplete or stale, return to designing
             and correct the earliest affected artifact before archive.
       post:
         - id: summarise-archive

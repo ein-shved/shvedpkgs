@@ -8,16 +8,20 @@ section.
 
 - The repository SDD process document lives at `specs/000-sdd-process/rules.md`.
 - The Russian process translation lives at `specs/000-sdd-process/rules.ru.md`.
-- Current SDD requirements, system contracts, verification scenarios, and ADRs
-  live in indexed SpecD specs under `specs/`.
+- Current SDD requirements, acceptance scenarios, system contracts,
+  validation design, and ADRs live in indexed SpecD specs under `specs/`.
 - Temporary manual planning material may remain outside `specs/`, but
   requirements, system contracts, and ADR decisions are owned by SpecD
   artifacts.
 - The active SpecD schema is the local SDD schema at `schemas/sdd/schema.yaml`.
-- The active SpecD artifact flow is `proposal -> requirements -> system -> verify -> plan`.
-- `requirements.md` owns needs, obligations, rationale, and satisfaction conditions.
+- The active SpecD artifact flow is `proposal -> requirements -> system -> validate -> plan`.
+- `requirements.md` owns needs, obligations, rationale, satisfaction
+  conditions, and mandatory acceptance scenarios.
+- Acceptance scenarios use requirement-level concepts and belong inside the
+  owning requirement.
 - `system.md` owns current contracts, concepts, interfaces, invariants, and constraints.
-- `verify.md` owns concrete scenarios used to check requirements and system contracts.
+- `validate.md` owns technical validation design, checks, commands,
+  inspections, and evidence for system conformance.
 - `adrs.md` owns optional durable architecture decision records for significant
   spec decisions.
 - `plan.md` owns implementation strategy, validation strategy, and top-level

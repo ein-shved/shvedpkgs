@@ -40,7 +40,7 @@
 - [ ] 1. <!-- Plan item name -->
       <!-- Scope: files/modules/configuration affected. -->
       <!-- Approach: concrete implementation approach for this item. -->
-      <!-- Validation: command, inspection, test, or scenario evidence required
+      <!-- Validation: command, inspection, test, or acceptance-scenario evidence required
            before this item can be marked complete. -->
 
 ## Out Of Scope

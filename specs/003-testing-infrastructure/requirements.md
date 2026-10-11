@@ -31,3 +31,8 @@ for deployment.
 - Validation substitutes are stored in repository test support files rather
   than embedded in production host configuration.
 - Validation substitutes are explicitly identifiable as test-only values.
+
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.

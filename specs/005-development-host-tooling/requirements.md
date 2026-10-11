@@ -24,13 +24,28 @@ Development hosts support the repository SDD workflow and related project
 maintenance. Providing the tools through host configuration keeps the workflow
 reproducible across development machines.
 
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+
 ## REQ-002: Non-development hosts are not required to expose development tooling
 
 Hosts that are not classified as development hosts are not required by this
 spec to expose `codex`, `specd`, or other development-host-only workflow tools.
+
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-003: Tooling selection belongs to development host configuration
 
 Packages required only because a host is a development host must be selected
 through development-host configuration policy rather than by encoding
 host-specific installation policy in package definitions.
+
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.

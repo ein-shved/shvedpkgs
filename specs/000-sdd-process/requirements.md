@@ -11,11 +11,21 @@ workflow purposes, but they must not silently redefine the responsibilities
 of Requirements, System Specification, Plans, Implementation, Verification,
 Context, or `adrs.md`.
 
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+
 ## REQ-002: SpecD provides machine-readable workflow state
 
 The repository must provide a SpecD project configuration that allows agents
 to discover project state, steady-state specs, active changes, lifecycle
 blockers, and next artifact instructions through the SpecD CLI.
+
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-003: SpecD specs may mirror current SDD contracts
 
@@ -31,6 +41,11 @@ requirements, system contracts, ADR decisions, and verification expectations
 are represented in the owning SDD artifacts or explicitly treated as
 non-normative orientation.
 
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+
 ## REQ-004: SpecD-owned SDD fragments reconstruct readable documents
 
 When the SDD model is split across SpecD-owned artifacts, the repository must
@@ -39,6 +54,11 @@ retain a deterministic reconstruction order for each document kind.
 Reconstructed documents must follow the same general-to-specific reading order
 as the repository's SDD sections. Validation must make ordering mistakes
 visible rather than hiding them behind arbitrary filesystem or glob order.
+
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-005: Normative SDD artifacts describe the current architecture
 
@@ -53,6 +73,11 @@ and significant decisions and rationale must live in `adrs.md`.
 Temporary inventory and TODO documents may exist while the project is still
 migrating to the SDD process, but they must not be required to understand the
 current architecture once the migration is complete.
+
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
 
 ## REQ-006: Changes that modify behavior pass through SpecD artifacts
 
@@ -69,8 +94,18 @@ If an existing steady-state SpecD spec already covers the behavior, the change
 should attach that spec and use deltas or no-op deltas as appropriate. If no
 SpecD spec covers the behavior, the change should introduce one.
 
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+
 ## REQ-007: Requirement validation may use scenario-style checks
 
 SpecD verification artifacts may use scenario-style checks to describe how a
 requirement is validated. This does not by itself replace the acceptance
 criteria model in the normative SDD process.
+
+
+### Scenario: TBD
+
+- THEN TBD: define acceptance scenarios for this requirement during requirements migration.

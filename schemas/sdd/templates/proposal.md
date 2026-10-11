@@ -21,7 +21,7 @@
 
 <!-- Specs to be created. Each gets SDD artifacts under
      specs/<workspace>/<capability-path>/, starting with requirements.md,
-     system.md, and verify.md. -->
+     system.md, and validate.md. -->
 
 - `<workspace>:<capability-path>`: <!-- brief description of what this spec covers -->
   - Depends on: <!-- list spec IDs this spec depends on, or "none" -->
