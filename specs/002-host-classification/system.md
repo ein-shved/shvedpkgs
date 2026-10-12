@@ -56,8 +56,8 @@ enabled.
 
 ## Package-Set Host Flags
 
-The package set exposes derived host flags for package expressions that need
-host-specific variation:
+Package expressions access evaluated host classification through derived
+host flags exposed in the root package set:
 
 ```nix
 pkgs.isGraphic
@@ -69,7 +69,9 @@ pkgs.isVpsClient
 ```
 
 The repository package-set overlay introduces these flags into `pkgs` for the
-evaluated host package set.
+evaluated host package set. This is the current package-layer mechanism for
+making host classification available to package expressions that need
+host-specific variation.
 
 These values correspond directly to evaluated host configuration flags:
 
@@ -88,4 +90,3 @@ The package set does not define host roles independently.
   concrete host or reusable profile.
 - Role-sensitive behavior applies only when the corresponding flag is true.
 - `pkgs.isDesktop` is not part of the host classification interface.
-- New host-derived package flags require a clear system contract before use.

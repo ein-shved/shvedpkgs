@@ -62,7 +62,7 @@ This decision does not by itself define which concrete hosts have which roles.
 Those assignments belong in host or profile configuration and can be reviewed
 separately.
 
-## ADR-0002: Remove `pkgs.isDesktop`
+## ADR-0002: Remove pkgs.isDesktop
 
 Status: Accepted
 

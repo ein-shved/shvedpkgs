@@ -21,19 +21,26 @@ for deployment.
 - Test substitutes must remain clearly separated from deployable host
   configurations.
 
-### Acceptance criteria
+### Scenario: Secret-dependent host build is identifiable in validation
 
-- For a host whose normal configuration depends on private values, a validation
-  command can identify the host system build without requiring the real private
-  values.
-- Validation substitutes do not implicitly affect final deployable host
-  configurations.
-- Validation substitutes are stored in repository test support files rather
-  than embedded in production host configuration.
-- Validation substitutes are explicitly identifiable as test-only values.
+- WHEN a host normally depends on private secrets or downstream private values
+- THEN validation can identify the host system build without requiring the real private inputs to be present in the public checkout
+- AND the validation path remains suitable for reproducible SDD checks from public repository state
 
+### Scenario: Validation substitutes do not affect deployment configuration
 
-### Scenario: TBD
+- WHEN validation uses substitutes for private or machine-specific values
+- THEN those substitutes do not implicitly affect final deployable host configurations
+- AND deployment configurations remain separate from validation-only support
 
-- WHEN TBD: define acceptance scenario trigger during requirements migration.
-- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+### Scenario: Validation substitutes are stored as test support
+
+- WHEN substitutes are needed to evaluate or build-plan a secret-dependent host in a test context
+- THEN the substitutes are stored in repository test support files
+- AND they are not embedded in production host configuration
+
+### Scenario: Validation substitutes are visibly test-only
+
+- WHEN a developer or agent inspects validation substitutes
+- THEN the substitutes are explicitly identifiable as test-only values
+- AND they cannot be mistaken for real private material required for deployment

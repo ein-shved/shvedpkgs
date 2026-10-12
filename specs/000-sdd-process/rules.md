@@ -16,7 +16,7 @@ defines the current working model.
 
 **Process changes are made only in this English document.** After an
 accepted change, this document is translated in full into the
-[Russian version](sdd-process.ru.md). The Russian document is not
+[Russian version](rules.ru.md). The Russian document is not
 developed independently.
 
 If the English and Russian documents diverge, the divergence is a defect
@@ -27,19 +27,13 @@ and should be tracked and corrected as a bug. Until it is resolved,
 
 The primary candidates for future revision are:
 
-- **Requirement validation model.** Requirements currently use
-  acceptance criteria (AC). A scenario-based model, similar in spirit to
-  OpenSpec scenarios, is being considered as a replacement or
-  refinement. A constrained scenario format may provide clearer
-  validation units and reduce subjective judgement about whether an AC
-  is well formed.
 - **Artifact lifecycle and status model.** The process needs an explicit
   model for artifact states and transitions, such as draft, accepted,
   active, completed, superseded, archived, or equivalent project-specific
-  states. OpenSpec may provide useful ideas here, but any borrowed model
+  states. SpecD may provide useful ideas here, but any borrowed model
   must preserve this document’s artifact responsibilities and dependency
   structure.
-- **OpenSpec integration.** OpenSpec is being considered as tooling for
+- **SpecD integration.** SpecD is being introduced as tooling for
   agent-assisted SDD. Its standard workflow is not assumed to define
   this methodology. In particular, the separation between Requirements,
   System Specification, Plans, and other artifacts described here should
@@ -200,22 +194,32 @@ A Requirement may use domain concepts meaningful to its consumer. The
 System Specification maps those concepts to the current system model
 where necessary.
 
-#### 3.2.1 Acceptance Criteria and Scenarios
+#### 3.2.1 Acceptance Scenarios
 
-The current process uses **acceptance criteria (AC)** to express
-conditions under which a Requirement is satisfied.
+The current process uses **requirement-owned acceptance scenarios** to
+express conditions under which a Requirement is satisfied.
 
-AC should test the Requirement rather than encode unnecessary
-implementation or system-design detail.
+An acceptance scenario belongs inside the Requirement it validates. It
+uses Requirement-level concepts and should test the need or obligation
+rather than encode unnecessary implementation or system-design detail.
 
-This part of the process is explicitly under review. A scenario-based
-model is the leading candidate for replacing or refining AC. A formally
-constrained scenario may provide a clearer unit of expected behavior and
-reduce subjective debate over whether an individual AC is appropriately
-formed.
+Use scenario headings to name the observable condition being covered,
+then describe the trigger and expected outcome in concise bullets. The
+normal shape is:
 
-Until a scenario model is explicitly adopted, AC remain the current
-mechanism.
+``` text
+### Scenario: <observable condition>
+
+- WHEN <the requirement-relevant condition occurs>
+- THEN <the required outcome is true>
+- AND <any additional requirement-level outcome or boundary is true>
+```
+
+Scenarios must not duplicate technical validation commands, fixture
+setup, package layout, module wiring, or other implementation mechanics
+unless that detail is itself part of the Requirement's external contract.
+Technical evidence for checking the scenario belongs in validation
+artifacts.
 
 ### 3.3 System Specification
 
@@ -719,8 +723,13 @@ Validation has different responsibilities at different layers.
 
 ### 9.1 Requirement Satisfaction
 
-AC currently define evidence that a Requirement is satisfied. A
-scenario-based replacement/refinement is under consideration.
+Requirement-owned acceptance scenarios define the conditions under which
+a Requirement is satisfied. They describe expected behavior, boundaries,
+or satisfaction outcomes in requirement-level language.
+
+Validation artifacts may reference those scenarios and describe the
+technical evidence used to check them, but they do not introduce a
+second acceptance model outside the owning Requirement.
 
 ### 9.2 Specification Conformance
 
@@ -842,11 +851,10 @@ context assembly, lifecycle, and archival operations.
 **The methodology defines artifact semantics and responsibilities;
 tooling implements or assists the workflow around them.**
 
-OpenSpec is currently being considered in this role. Its standard
-workflow is not currently adopted as the project’s process model.
-Integration may require adapting the tool or deliberately revising this
-methodology. Such revisions are made first in this English document
-according to Section 0.
+SpecD is currently used in this role. Its workflow assists the
+repository's SDD process, but this document remains the authority for
+artifact semantics and responsibilities. Tooling changes that alter those
+semantics are made first in this English document according to Section 0.
 
 ## 13. Practical Decision Guide
 

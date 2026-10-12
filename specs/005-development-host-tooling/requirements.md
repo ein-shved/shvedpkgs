@@ -24,31 +24,32 @@ Development hosts support the repository SDD workflow and related project
 maintenance. Providing the tools through host configuration keeps the workflow
 reproducible across development machines.
 
+### Scenario: Development host primary user can invoke required tools
 
-### Scenario: TBD
+- WHEN the primary user works on a host classified as a development host
+- THEN the primary user's command lookup path includes every required repository workflow tool
+- AND the user can invoke each tool listed by this requirement
 
-- WHEN TBD: define acceptance scenario trigger during requirements migration.
-- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+### Scenario: Required tool commands resolve to the expected tools
 
-## REQ-002: Non-development hosts are not required to expose development tooling
+- WHEN the primary user invokes a listed workflow-tool command on a development host
+- THEN the command resolves to the widely recognized developer tool identified by that command name
+- AND it does not resolve to a stub, placeholder, or unrelated executable unless this requirement explicitly allows it
 
-Hosts that are not classified as development hosts are not required by this
-spec to expose `codex`, `specd`, or other development-host-only workflow tools.
+### Scenario: Non-development hosts are outside the requirement
 
+- WHEN a host is not classified as a development host
+- THEN this requirement does not require that host to expose the listed workflow tools
+- AND the host may remain valid for its own purpose without those tools
 
-### Scenario: TBD
+### Scenario: Required workflow tools are selected by development host policy
 
-- WHEN TBD: define acceptance scenario trigger during requirements migration.
-- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+- WHEN a package is required only because a host is a development host
+- THEN that package is selected through development-host configuration policy
+- AND the selection is not encoded as host-specific installation policy in the package definition
 
-## REQ-003: Tooling selection belongs to development host configuration
+### Scenario: Package definitions remain host-policy neutral
 
-Packages required only because a host is a development host must be selected
-through development-host configuration policy rather than by encoding
-host-specific installation policy in package definitions.
-
-
-### Scenario: TBD
-
-- WHEN TBD: define acceptance scenario trigger during requirements migration.
-- THEN TBD: define acceptance scenarios for this requirement during requirements migration.
+- WHEN a package can be used by multiple host purposes
+- THEN the package definition does not decide which concrete hosts install it for development workflow reasons
+- AND development-host configuration policy owns that installation decision

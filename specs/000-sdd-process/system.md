@@ -32,12 +32,35 @@ Active and historical change state is stored under `.specd/`:
 ## SpecD-Owned SDD Locations
 
 Steady-state SpecD specs under `specs/` are the machine-readable location for
-requirements, system specification, verification, and optional ADR artifacts
+requirements, system specification, validation, and optional ADR artifacts
 managed by SpecD.
 
 Active and archived SpecD changes under `.specd/` hold change-scoped proposal,
 plan, and context artifacts. Spec-scoped `adrs.md` artifacts hold significant
 architecture decisions for their owning specs.
+
+The human-readable SDD process rules live at:
+
+```text
+specs/000-sdd-process/rules.md
+```
+
+The Russian translation of the same process rules lives at:
+
+```text
+specs/000-sdd-process/rules.ru.md
+```
+
+## SDD Process Discoverability
+
+The repository root `CONTRIBUTING.md` file is the developer-facing entry
+point for contribution and process guidance.
+
+`CONTRIBUTING.md` must link to the authoritative English SDD process rules
+at `specs/000-sdd-process/rules.md`. It may also link to the Russian
+translation at `specs/000-sdd-process/rules.ru.md` for reader convenience,
+while preserving the English process document as authoritative when the two
+versions diverge.
 
 ## Ordered SpecD SDD Sections
 
@@ -61,9 +84,9 @@ making agents depend on arbitrary filesystem or glob order.
 
 The local SDD schema defines first-class artifacts for:
 
-- requirements
+- requirements with requirement-owned acceptance scenarios
 - system specification
-- verification scenarios
+- validation design
 - implementation plan with top-level plan items
 - optional context
 - optional spec-scoped ADRs
@@ -83,19 +106,21 @@ During this transition, the project keeps two non-normative documents under
 
 These documents help humans and agents navigate the transition, but they are
 not SpecD schema artifacts and they do not own current requirements, current
-system contracts, verification expectations, or architecture decisions.
+system contracts, validation expectations, or architecture decisions.
 Durable knowledge discovered in them must move to the owning `requirements.md`,
-`system.md`, `verify.md`, or `adrs.md` artifact.
+`system.md`, `validate.md`, or `adrs.md` artifact.
 
 ## Constraints
 
-- `specs/000-sdd-process/rules.md` remains the normative SDD process
-  definition.
+- `specs/000-sdd-process/rules.md` remains the authoritative English SDD
+  process definition.
+- `specs/000-sdd-process/rules.ru.md` is the Russian translation and must
+  stay aligned with the English process definition.
 - SpecD artifacts are allowed to provide machine-readable tracking and context
   without silently replacing the SDD process.
 - Runtime/generated SpecD graph and log files are not tracked as durable
   artifacts.
 - Temporary manual notes must not become parallel normative sources for current
-  requirements, system contracts, verification expectations, or ADR decisions.
+  requirements, system contracts, validation expectations, or ADR decisions.
 - Reconstructed SDD document views must follow deterministic numeric fragment
   order.

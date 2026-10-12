@@ -1,64 +1,134 @@
 {
   "title": "Requirements",
-  "description": "## REQ-001: Project supports multiple personal host configurations\n\nThe repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-002: User-facing behavior is scoped to the host primary user\n\nWhen a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-003: Host environments are selected by purpose and capability\n\nThe repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.",
+  "description": "## REQ-001: Project supports multiple personal host configurations\n\nThe repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository.\n\n### Scenario: Multiple personal hosts coexist\n\n- WHEN the repository contains multiple concrete host configurations for the same primary human user\n- THEN each host can be represented as a distinct supported configuration\n- AND the hosts are not required to share the same purpose, hardware profile, deployment context, or capability set\n\n### Scenario: One host's environment does not define every host\n\n- WHEN one personal host needs a user environment, package, or service that another personal host does not need\n- THEN the project can support that difference between the host configurations\n- AND the other host is not required to expose the same user environment merely because both hosts belong to the same repository\n\n### Scenario: Shared behavior is not duplicated across hosts\n\n- WHEN multiple personal host configurations need the same behavior or configuration\n- THEN that shared behavior or configuration can be described once and applied to those hosts\n- AND the same definition does not need to be duplicated in each host's code\n- AND each host can still keep its own purpose, hardware profile, deployment context, and capability differences\n\n## REQ-002: User-facing behavior is scoped to the host primary user\n\nWhen a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository.\n\n### Scenario: User-facing guarantee applies to the host primary user\n\n- WHEN a requirement promises a tool, package, or environment to \"the user\" on an evaluated host\n- THEN the promise applies to that host's primary user\n- AND the evaluated host provides a stable way to identify that primary user\n\n### Scenario: Other users are not implicitly covered\n\n- WHEN a host has users other than the primary user\n- THEN user-facing guarantees for \"the user\" do not automatically apply to those other users\n- AND those users require separate requirements if they need the same guarantee\n\n### Scenario: Other hosts are not implicitly covered\n\n- WHEN another host in the repository has a different primary user environment or purpose\n- THEN a user-facing guarantee for one host does not automatically require the same environment on that other host\n- AND that other host requires its own applicable requirement or host-purpose selection\n\n## REQ-003: Host environments are selected by purpose and capability\n\nThe repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose.\n\n### Scenario: Host purpose selects relevant environment\n\n- WHEN a host has an intended role that needs specific packages, services, or user-facing tools\n- THEN the repository can select those environment elements for that host's role\n- AND hosts with other roles are not forced to include them\n\n### Scenario: Host capability limits environment selection\n\n- WHEN a package, service, or user-facing environment depends on a physical or operational capability that a host lacks\n- THEN the repository can avoid selecting that environment element for the incapable host\n- AND the host remains supported for its own purpose\n\n### Scenario: Unnecessary environments are not required globally\n\n- WHEN a package or service is useful only for a particular class of host\n- THEN that package or service can be selected for that class\n- AND hosts outside the class are not required to expose it",
   "context": [
-    "## REQ-001: Project supports multiple personal host configurations\n\nThe repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-002: User-facing behavior is scoped to the host primary user\n\nWhen a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-003: Host environments are selected by purpose and capability\n\nThe repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+    "## REQ-001: Project supports multiple personal host configurations\n\nThe repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository.\n\n### Scenario: Multiple personal hosts coexist\n\n- WHEN the repository contains multiple concrete host configurations for the same primary human user\n- THEN each host can be represented as a distinct supported configuration\n- AND the hosts are not required to share the same purpose, hardware profile, deployment context, or capability set\n\n### Scenario: One host's environment does not define every host\n\n- WHEN one personal host needs a user environment, package, or service that another personal host does not need\n- THEN the project can support that difference between the host configurations\n- AND the other host is not required to expose the same user environment merely because both hosts belong to the same repository\n\n### Scenario: Shared behavior is not duplicated across hosts\n\n- WHEN multiple personal host configurations need the same behavior or configuration\n- THEN that shared behavior or configuration can be described once and applied to those hosts\n- AND the same definition does not need to be duplicated in each host's code\n- AND each host can still keep its own purpose, hardware profile, deployment context, and capability differences\n\n## REQ-002: User-facing behavior is scoped to the host primary user\n\nWhen a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository.\n\n### Scenario: User-facing guarantee applies to the host primary user\n\n- WHEN a requirement promises a tool, package, or environment to \"the user\" on an evaluated host\n- THEN the promise applies to that host's primary user\n- AND the evaluated host provides a stable way to identify that primary user\n\n### Scenario: Other users are not implicitly covered\n\n- WHEN a host has users other than the primary user\n- THEN user-facing guarantees for \"the user\" do not automatically apply to those other users\n- AND those users require separate requirements if they need the same guarantee\n\n### Scenario: Other hosts are not implicitly covered\n\n- WHEN another host in the repository has a different primary user environment or purpose\n- THEN a user-facing guarantee for one host does not automatically require the same environment on that other host\n- AND that other host requires its own applicable requirement or host-purpose selection\n\n## REQ-003: Host environments are selected by purpose and capability\n\nThe repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose.\n\n### Scenario: Host purpose selects relevant environment\n\n- WHEN a host has an intended role that needs specific packages, services, or user-facing tools\n- THEN the repository can select those environment elements for that host's role\n- AND hosts with other roles are not forced to include them\n\n### Scenario: Host capability limits environment selection\n\n- WHEN a package, service, or user-facing environment depends on a physical or operational capability that a host lacks\n- THEN the repository can avoid selecting that environment element for the incapable host\n- AND the host remains supported for its own purpose\n\n### Scenario: Unnecessary environments are not required globally\n\n- WHEN a package or service is useful only for a particular class of host\n- THEN that package or service can be selected for that class\n- AND hosts outside the class are not required to expose it"
   ],
   "rules": [
     {
       "requirement": "REQ-001: Project supports multiple personal host configurations",
       "rules": [
-        "The repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "The repository must support more than one concrete host configuration owned by\nthe same primary human user.\n\nEach host may have a different purpose, hardware profile, deployment context,\nand practical capability set. The project must not require every host to expose\nthe same user environment merely because the hosts are managed by the same\nrepository.\n\n### Scenario: Multiple personal hosts coexist\n\n- WHEN the repository contains multiple concrete host configurations for the same primary human user\n- THEN each host can be represented as a distinct supported configuration\n- AND the hosts are not required to share the same purpose, hardware profile, deployment context, or capability set\n\n### Scenario: One host's environment does not define every host\n\n- WHEN one personal host needs a user environment, package, or service that another personal host does not need\n- THEN the project can support that difference between the host configurations\n- AND the other host is not required to expose the same user environment merely because both hosts belong to the same repository\n\n### Scenario: Shared behavior is not duplicated across hosts\n\n- WHEN multiple personal host configurations need the same behavior or configuration\n- THEN that shared behavior or configuration can be described once and applied to those hosts\n- AND the same definition does not need to be duplicated in each host's code\n- AND each host can still keep its own purpose, hardware profile, deployment context, and capability differences"
       ]
     },
     {
       "requirement": "REQ-002: User-facing behavior is scoped to the host primary user",
       "rules": [
-        "When a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "When a requirement refers to tools, packages, or environment visible to \"the\nuser\", the repository must have a stable way to identify the primary user for\nthe evaluated host.\n\nUser-facing guarantees apply to that primary user on that host. They must not\nimplicitly require the same environment for unrelated users or for every host in\nthe repository.\n\n### Scenario: User-facing guarantee applies to the host primary user\n\n- WHEN a requirement promises a tool, package, or environment to \"the user\" on an evaluated host\n- THEN the promise applies to that host's primary user\n- AND the evaluated host provides a stable way to identify that primary user\n\n### Scenario: Other users are not implicitly covered\n\n- WHEN a host has users other than the primary user\n- THEN user-facing guarantees for \"the user\" do not automatically apply to those other users\n- AND those users require separate requirements if they need the same guarantee\n\n### Scenario: Other hosts are not implicitly covered\n\n- WHEN another host in the repository has a different primary user environment or purpose\n- THEN a user-facing guarantee for one host does not automatically require the same environment on that other host\n- AND that other host requires its own applicable requirement or host-purpose selection"
       ]
     },
     {
       "requirement": "REQ-003: Host environments are selected by purpose and capability",
       "rules": [
-        "The repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "The repository must let host environments differ according to the host's\nintended role and physical or operational capabilities.\n\nPackages and services needed only for a particular class of host must be\nselectable without forcing that environment onto hosts where it is unnecessary,\nunsupported, or outside the host's purpose.\n\n### Scenario: Host purpose selects relevant environment\n\n- WHEN a host has an intended role that needs specific packages, services, or user-facing tools\n- THEN the repository can select those environment elements for that host's role\n- AND hosts with other roles are not forced to include them\n\n### Scenario: Host capability limits environment selection\n\n- WHEN a package, service, or user-facing environment depends on a physical or operational capability that a host lacks\n- THEN the repository can avoid selecting that environment element for the incapable host\n- AND the host remains supported for its own purpose\n\n### Scenario: Unnecessary environments are not required globally\n\n- WHEN a package or service is useful only for a particular class of host\n- THEN that package or service can be selected for that class\n- AND hosts outside the class are not required to expose it"
       ]
     }
   ],
   "scenarios": [
     {
       "requirement": "REQ-001: Project supports multiple personal host configurations",
-      "name": "TBD",
+      "name": "Multiple personal hosts coexist",
       "when": [
-        "TBD: define acceptance scenario trigger during requirements migration."
+        "the repository contains multiple concrete host configurations for the same primary human user"
       ],
       "then": [
-        "TBD: define acceptance scenarios for this requirement during requirements migration."
+        "each host can be represented as a distinct supported configuration",
+        "AND the hosts are not required to share the same purpose, hardware profile, deployment context, or capability set"
+      ]
+    },
+    {
+      "requirement": "REQ-001: Project supports multiple personal host configurations",
+      "name": "One host's environment does not define every host",
+      "when": [
+        "one personal host needs a user environment, package, or service that another personal host does not need"
+      ],
+      "then": [
+        "the project can support that difference between the host configurations",
+        "AND the other host is not required to expose the same user environment merely because both hosts belong to the same repository"
+      ]
+    },
+    {
+      "requirement": "REQ-001: Project supports multiple personal host configurations",
+      "name": "Shared behavior is not duplicated across hosts",
+      "when": [
+        "multiple personal host configurations need the same behavior or configuration"
+      ],
+      "then": [
+        "that shared behavior or configuration can be described once and applied to those hosts",
+        "AND the same definition does not need to be duplicated in each host's code",
+        "AND each host can still keep its own purpose, hardware profile, deployment context, and capability differences"
       ]
     },
     {
       "requirement": "REQ-002: User-facing behavior is scoped to the host primary user",
-      "name": "TBD",
+      "name": "User-facing guarantee applies to the host primary user",
       "when": [
-        "TBD: define acceptance scenario trigger during requirements migration."
+        "a requirement promises a tool, package, or environment to \"the user\" on an evaluated host"
       ],
       "then": [
-        "TBD: define acceptance scenarios for this requirement during requirements migration."
+        "the promise applies to that host's primary user",
+        "AND the evaluated host provides a stable way to identify that primary user"
+      ]
+    },
+    {
+      "requirement": "REQ-002: User-facing behavior is scoped to the host primary user",
+      "name": "Other users are not implicitly covered",
+      "when": [
+        "a host has users other than the primary user"
+      ],
+      "then": [
+        "user-facing guarantees for \"the user\" do not automatically apply to those other users",
+        "AND those users require separate requirements if they need the same guarantee"
+      ]
+    },
+    {
+      "requirement": "REQ-002: User-facing behavior is scoped to the host primary user",
+      "name": "Other hosts are not implicitly covered",
+      "when": [
+        "another host in the repository has a different primary user environment or purpose"
+      ],
+      "then": [
+        "a user-facing guarantee for one host does not automatically require the same environment on that other host",
+        "AND that other host requires its own applicable requirement or host-purpose selection"
       ]
     },
     {
       "requirement": "REQ-003: Host environments are selected by purpose and capability",
-      "name": "TBD",
+      "name": "Host purpose selects relevant environment",
       "when": [
-        "TBD: define acceptance scenario trigger during requirements migration."
+        "a host has an intended role that needs specific packages, services, or user-facing tools"
       ],
       "then": [
-        "TBD: define acceptance scenarios for this requirement during requirements migration."
+        "the repository can select those environment elements for that host's role",
+        "AND hosts with other roles are not forced to include them"
+      ]
+    },
+    {
+      "requirement": "REQ-003: Host environments are selected by purpose and capability",
+      "name": "Host capability limits environment selection",
+      "when": [
+        "a package, service, or user-facing environment depends on a physical or operational capability that a host lacks"
+      ],
+      "then": [
+        "the repository can avoid selecting that environment element for the incapable host",
+        "AND the host remains supported for its own purpose"
+      ]
+    },
+    {
+      "requirement": "REQ-003: Host environments are selected by purpose and capability",
+      "name": "Unnecessary environments are not required globally",
+      "when": [
+        "a package or service is useful only for a particular class of host"
+      ],
+      "then": [
+        "that package or service can be selected for that class",
+        "AND hosts outside the class are not required to expose it"
       ]
     }
   ],
   "contentHashes": {
-    "requirements.md": "sha256:8e29592a82721defd802042d0cfe05c31a9a46725a6d17a21533b8277cb11953",
-    "system.md": "sha256:102f2402c07a628274467b7819fe147445a7666676cad39e27910111ec533b80",
+    "requirements.md": "sha256:0c7788b1b8c567a5fb22443edd7f8c8fbf868ec767ce857da9a6f9849665c75d",
+    "system.md": "sha256:ec312a64268f53d07d634de01b66431c3e6819351224d999f63f7d9a4df6a182",
     "validate.md": "sha256:5973ca918a4db69d74e4f7fe9e40d5271cb05811f573bb78ab92f301c5186d14",
     "adrs.md": "sha256:8cc055a2ae78eb077ac9667cd1479fedbd7ca1c7bed1ed489d045e30a3319f4e"
   },

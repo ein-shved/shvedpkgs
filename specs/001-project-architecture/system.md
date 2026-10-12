@@ -17,7 +17,7 @@ The repository is organized into layers with distinct roles. Changes SHOULD
 respect these boundaries unless a specification explicitly changes the layer
 model.
 
-### `lib`
+### lib
 
 The `lib` layer provides helper functions for assembling and transforming the
 repository's flake outputs and NixOS system sets.
@@ -26,7 +26,7 @@ repository's flake outputs and NixOS system sets.
 mechanisms. It MUST NOT encode host-specific policy that belongs in host or
 configuration modules.
 
-### `pkgs`
+### pkgs
 
 The `pkgs` layer provides package definitions and package-set extensions.
 
@@ -48,7 +48,7 @@ the package-set member SHOULD remain usable by unrelated package consumers, and
 the user-facing configuration SHOULD be applied in the appropriate module or
 configuration layer.
 
-### `modules`
+### modules
 
 The `modules` layer defines reusable NixOS module interfaces and the behavior
 owned by those interfaces.
@@ -57,7 +57,7 @@ Files under `modules` SHOULD introduce or own options and may implement
 configuration derived from those options. They SHOULD NOT be used for broad
 repository policy that merely consumes existing options.
 
-### `config`
+### config
 
 The `config` layer applies repository policy across hosts by consuming existing
 options from NixOS, Home Manager, nixpkgs modules, or this repository's
@@ -66,6 +66,7 @@ options from NixOS, Home Manager, nixpkgs modules, or this repository's
 Files under `config` SHOULD NOT introduce new reusable options. When a
 configuration needs a new reusable interface, that interface belongs in
 `modules`, and `config` should consume it.
+
 ## Packages sources
 
 This system is based on several inputs, some of them may be part of

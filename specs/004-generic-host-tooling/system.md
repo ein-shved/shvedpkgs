@@ -23,12 +23,6 @@ The module-local overridden package MUST:
 - use the stable nixpkgs `ripgrep` package as its underlying implementation;
 - create or reference a repository-owned ripgrep configuration file containing
   these custom file type definitions:
-
-  ```text
-  --type-add=cin:Config.in
-  --type-add=cc:*.[chH], *.[chH].in, *.cats
-  ```
-
 - expose `rg` in the user's command lookup path;
 - set `RIPGREP_CONFIG_PATH` for its `rg` executable so the custom
   configuration is used.

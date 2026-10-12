@@ -1,33 +1,68 @@
 {
   "title": "Requirements",
-  "description": "## REQ-001: Validate Secret-Dependent Hosts Without Private Material\n\nThe repository must support evaluation and build-planning validation for host\nconfigurations that normally depend on private secrets or downstream private\nvalues, without requiring those private inputs to be present in the public\ncheckout.\n\nValidation support must make it possible to identify the host system build in a\ntest context. It must not replace or weaken the final host configurations used\nfor deployment.\n\n### Rationale\n\n- SDD changes need reproducible validation commands that work from the public\n  repository state.\n- Some active hosts intentionally depend on private or machine-specific values.\n- Missing private values should not prevent validating unrelated structural\n  changes when safe test substitutes are sufficient.\n- Test substitutes must remain clearly separated from deployable host\n  configurations.\n\n### Acceptance criteria\n\n- For a host whose normal configuration depends on private values, a validation\n  command can identify the host system build without requiring the real private\n  values.\n- Validation substitutes do not implicitly affect final deployable host\n  configurations.\n- Validation substitutes are stored in repository test support files rather\n  than embedded in production host configuration.\n- Validation substitutes are explicitly identifiable as test-only values.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.",
+  "description": "## REQ-001: Validate Secret-Dependent Hosts Without Private Material\n\nThe repository must support evaluation and build-planning validation for host\nconfigurations that normally depend on private secrets or downstream private\nvalues, without requiring those private inputs to be present in the public\ncheckout.\n\nValidation support must make it possible to identify the host system build in a\ntest context. It must not replace or weaken the final host configurations used\nfor deployment.\n\n### Rationale\n\n- SDD changes need reproducible validation commands that work from the public\n  repository state.\n- Some active hosts intentionally depend on private or machine-specific values.\n- Missing private values should not prevent validating unrelated structural\n  changes when safe test substitutes are sufficient.\n- Test substitutes must remain clearly separated from deployable host\n  configurations.\n\n### Scenario: Secret-dependent host build is identifiable in validation\n\n- WHEN a host normally depends on private secrets or downstream private values\n- THEN validation can identify the host system build without requiring the real private inputs to be present in the public checkout\n- AND the validation path remains suitable for reproducible SDD checks from public repository state\n\n### Scenario: Validation substitutes do not affect deployment configuration\n\n- WHEN validation uses substitutes for private or machine-specific values\n- THEN those substitutes do not implicitly affect final deployable host configurations\n- AND deployment configurations remain separate from validation-only support\n\n### Scenario: Validation substitutes are stored as test support\n\n- WHEN substitutes are needed to evaluate or build-plan a secret-dependent host in a test context\n- THEN the substitutes are stored in repository test support files\n- AND they are not embedded in production host configuration\n\n### Scenario: Validation substitutes are visibly test-only\n\n- WHEN a developer or agent inspects validation substitutes\n- THEN the substitutes are explicitly identifiable as test-only values\n- AND they cannot be mistaken for real private material required for deployment",
   "context": [
-    "## REQ-001: Validate Secret-Dependent Hosts Without Private Material\n\nThe repository must support evaluation and build-planning validation for host\nconfigurations that normally depend on private secrets or downstream private\nvalues, without requiring those private inputs to be present in the public\ncheckout.\n\nValidation support must make it possible to identify the host system build in a\ntest context. It must not replace or weaken the final host configurations used\nfor deployment.\n\n### Rationale\n\n- SDD changes need reproducible validation commands that work from the public\n  repository state.\n- Some active hosts intentionally depend on private or machine-specific values.\n- Missing private values should not prevent validating unrelated structural\n  changes when safe test substitutes are sufficient.\n- Test substitutes must remain clearly separated from deployable host\n  configurations.\n\n### Acceptance criteria\n\n- For a host whose normal configuration depends on private values, a validation\n  command can identify the host system build without requiring the real private\n  values.\n- Validation substitutes do not implicitly affect final deployable host\n  configurations.\n- Validation substitutes are stored in repository test support files rather\n  than embedded in production host configuration.\n- Validation substitutes are explicitly identifiable as test-only values.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+    "## REQ-001: Validate Secret-Dependent Hosts Without Private Material\n\nThe repository must support evaluation and build-planning validation for host\nconfigurations that normally depend on private secrets or downstream private\nvalues, without requiring those private inputs to be present in the public\ncheckout.\n\nValidation support must make it possible to identify the host system build in a\ntest context. It must not replace or weaken the final host configurations used\nfor deployment.\n\n### Rationale\n\n- SDD changes need reproducible validation commands that work from the public\n  repository state.\n- Some active hosts intentionally depend on private or machine-specific values.\n- Missing private values should not prevent validating unrelated structural\n  changes when safe test substitutes are sufficient.\n- Test substitutes must remain clearly separated from deployable host\n  configurations.\n\n### Scenario: Secret-dependent host build is identifiable in validation\n\n- WHEN a host normally depends on private secrets or downstream private values\n- THEN validation can identify the host system build without requiring the real private inputs to be present in the public checkout\n- AND the validation path remains suitable for reproducible SDD checks from public repository state\n\n### Scenario: Validation substitutes do not affect deployment configuration\n\n- WHEN validation uses substitutes for private or machine-specific values\n- THEN those substitutes do not implicitly affect final deployable host configurations\n- AND deployment configurations remain separate from validation-only support\n\n### Scenario: Validation substitutes are stored as test support\n\n- WHEN substitutes are needed to evaluate or build-plan a secret-dependent host in a test context\n- THEN the substitutes are stored in repository test support files\n- AND they are not embedded in production host configuration\n\n### Scenario: Validation substitutes are visibly test-only\n\n- WHEN a developer or agent inspects validation substitutes\n- THEN the substitutes are explicitly identifiable as test-only values\n- AND they cannot be mistaken for real private material required for deployment"
   ],
   "rules": [
     {
       "requirement": "REQ-001: Validate Secret-Dependent Hosts Without Private Material",
       "rules": [
-        "The repository must support evaluation and build-planning validation for host\nconfigurations that normally depend on private secrets or downstream private\nvalues, without requiring those private inputs to be present in the public\ncheckout.\n\nValidation support must make it possible to identify the host system build in a\ntest context. It must not replace or weaken the final host configurations used\nfor deployment.\n\n### Rationale\n\n- SDD changes need reproducible validation commands that work from the public\n  repository state.\n- Some active hosts intentionally depend on private or machine-specific values.\n- Missing private values should not prevent validating unrelated structural\n  changes when safe test substitutes are sufficient.\n- Test substitutes must remain clearly separated from deployable host\n  configurations.\n\n### Acceptance criteria\n\n- For a host whose normal configuration depends on private values, a validation\n  command can identify the host system build without requiring the real private\n  values.\n- Validation substitutes do not implicitly affect final deployable host\n  configurations.\n- Validation substitutes are stored in repository test support files rather\n  than embedded in production host configuration.\n- Validation substitutes are explicitly identifiable as test-only values.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "The repository must support evaluation and build-planning validation for host\nconfigurations that normally depend on private secrets or downstream private\nvalues, without requiring those private inputs to be present in the public\ncheckout.\n\nValidation support must make it possible to identify the host system build in a\ntest context. It must not replace or weaken the final host configurations used\nfor deployment.\n\n### Rationale\n\n- SDD changes need reproducible validation commands that work from the public\n  repository state.\n- Some active hosts intentionally depend on private or machine-specific values.\n- Missing private values should not prevent validating unrelated structural\n  changes when safe test substitutes are sufficient.\n- Test substitutes must remain clearly separated from deployable host\n  configurations.\n\n### Scenario: Secret-dependent host build is identifiable in validation\n\n- WHEN a host normally depends on private secrets or downstream private values\n- THEN validation can identify the host system build without requiring the real private inputs to be present in the public checkout\n- AND the validation path remains suitable for reproducible SDD checks from public repository state\n\n### Scenario: Validation substitutes do not affect deployment configuration\n\n- WHEN validation uses substitutes for private or machine-specific values\n- THEN those substitutes do not implicitly affect final deployable host configurations\n- AND deployment configurations remain separate from validation-only support\n\n### Scenario: Validation substitutes are stored as test support\n\n- WHEN substitutes are needed to evaluate or build-plan a secret-dependent host in a test context\n- THEN the substitutes are stored in repository test support files\n- AND they are not embedded in production host configuration\n\n### Scenario: Validation substitutes are visibly test-only\n\n- WHEN a developer or agent inspects validation substitutes\n- THEN the substitutes are explicitly identifiable as test-only values\n- AND they cannot be mistaken for real private material required for deployment"
       ]
     }
   ],
   "scenarios": [
     {
       "requirement": "REQ-001: Validate Secret-Dependent Hosts Without Private Material",
-      "name": "TBD",
+      "name": "Secret-dependent host build is identifiable in validation",
       "when": [
-        "TBD: define acceptance scenario trigger during requirements migration."
+        "a host normally depends on private secrets or downstream private values"
       ],
       "then": [
-        "TBD: define acceptance scenarios for this requirement during requirements migration."
+        "validation can identify the host system build without requiring the real private inputs to be present in the public checkout",
+        "AND the validation path remains suitable for reproducible SDD checks from public repository state"
+      ]
+    },
+    {
+      "requirement": "REQ-001: Validate Secret-Dependent Hosts Without Private Material",
+      "name": "Validation substitutes do not affect deployment configuration",
+      "when": [
+        "validation uses substitutes for private or machine-specific values"
+      ],
+      "then": [
+        "those substitutes do not implicitly affect final deployable host configurations",
+        "AND deployment configurations remain separate from validation-only support"
+      ]
+    },
+    {
+      "requirement": "REQ-001: Validate Secret-Dependent Hosts Without Private Material",
+      "name": "Validation substitutes are stored as test support",
+      "when": [
+        "substitutes are needed to evaluate or build-plan a secret-dependent host in a test context"
+      ],
+      "then": [
+        "the substitutes are stored in repository test support files",
+        "AND they are not embedded in production host configuration"
+      ]
+    },
+    {
+      "requirement": "REQ-001: Validate Secret-Dependent Hosts Without Private Material",
+      "name": "Validation substitutes are visibly test-only",
+      "when": [
+        "a developer or agent inspects validation substitutes"
+      ],
+      "then": [
+        "the substitutes are explicitly identifiable as test-only values",
+        "AND they cannot be mistaken for real private material required for deployment"
       ]
     }
   ],
   "contentHashes": {
-    "requirements.md": "sha256:38848a9c502895f091cad8aab9ef6d798c2f72dfa980014cf7b217b2b6df36df",
+    "requirements.md": "sha256:887337c31dbcb602e9610ce541a3321c6b07a5c7b7bda5536b379dea99b7afef",
     "system.md": "sha256:c5992ccc18ab47eb67b92e7287008d76e847adc167f9d12058f2bf2fc1eab735",
-    "validate.md": "sha256:b15108d470238373ab87fb53a3350e698bad2689f3ae25a0ca4c1edaf0caccf9"
+    "validate.md": "sha256:b15108d470238373ab87fb53a3350e698bad2689f3ae25a0ca4c1edaf0caccf9",
+    "adrs.md": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   },
   "generatedBy": "core"
 }

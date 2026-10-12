@@ -1,136 +1,233 @@
 {
   "title": "Requirements",
-  "description": "## REQ-001: Existing SDD process remains authoritative\n\nThe repository must continue to treat `specs/000-sdd-process/rules.md` as\nthe normative definition of the SDD process unless a future accepted process\nchange says otherwise.\n\nSpecD artifacts may restate, index, or operationalize SDD content for agent\nworkflow purposes, but they must not silently redefine the responsibilities\nof Requirements, System Specification, Plans, Implementation, Verification,\nContext, or `adrs.md`.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-002: SpecD provides machine-readable workflow state\n\nThe repository must provide a SpecD project configuration that allows agents\nto discover project state, steady-state specs, active changes, lifecycle\nblockers, and next artifact instructions through the SpecD CLI.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-003: SpecD specs may mirror current SDD contracts\n\nSpecD steady-state specs may mirror existing SDD requirements and system\nspecification contracts when doing so improves context delivery or validation.\n\nWhen mirrored content conflicts with the normative SDD process or a more\nspecific owning SpecD artifact, the owning artifact must be corrected and\ndependent mirrors must be updated or removed.\n\nManual project notes may stop being active guidance only after their durable\nrequirements, system contracts, ADR decisions, and verification expectations\nare represented in the owning SDD artifacts or explicitly treated as\nnon-normative orientation.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-004: SpecD-owned SDD fragments reconstruct readable documents\n\nWhen the SDD model is split across SpecD-owned artifacts, the repository must\nretain a deterministic reconstruction order for each document kind.\n\nReconstructed documents must follow the same general-to-specific reading order\nas the repository's SDD sections. Validation must make ordering mistakes\nvisible rather than hiding them behind arbitrary filesystem or glob order.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-005: Normative SDD artifacts describe the current architecture\n\nThe repository's normative SDD artifacts must fully describe the current\nproject architecture at the level needed for agents and humans to make changes\nwithout relying on stale inventory, manual notes, or conversation history.\n\nCurrent requirements must live in `requirements.md`, current system contracts\nmust live in `system.md`, verification expectations must live in `verify.md`,\nand significant decisions and rationale must live in `adrs.md`.\n\nTemporary inventory and TODO documents may exist while the project is still\nmigrating to the SDD process, but they must not be required to understand the\ncurrent architecture once the migration is complete.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-006: Changes that modify behavior pass through SpecD artifacts\n\nFuture repository changes that modify expected behavior should be represented\nas SpecD changes with requirements, system, verification, and plan artifacts\nbefore implementation proceeds.\n\nThe plan artifact must contain the implementation strategy, validation\nstrategy, and top-level plan items needed to execute the transition. Top-level\nplan items are the task-bearing units for implementation; there is no separate\nsteady process artifact for tasks.\n\nIf an existing steady-state SpecD spec already covers the behavior, the change\nshould attach that spec and use deltas or no-op deltas as appropriate. If no\nSpecD spec covers the behavior, the change should introduce one.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-007: Requirement validation may use scenario-style checks\n\nSpecD verification artifacts may use scenario-style checks to describe how a\nrequirement is validated. This does not by itself replace the acceptance\ncriteria model in the normative SDD process.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.",
+  "description": "## REQ-001: Existing SDD process remains authoritative\n\nThe repository must continue to treat `specs/000-sdd-process/rules.md` as\nthe normative definition of the SDD process unless a future accepted process\nchange says otherwise.\n\nSpecD artifacts may restate, index, or operationalize SDD content for agent\nworkflow purposes, but they must not silently redefine the responsibilities\nof Requirements, System Specification, Plans, Implementation, Verification,\nContext, or `adrs.md`.\n\n### Scenario: Process rules govern SDD meaning\n\n- WHEN an agent or human interprets the repository SDD process\n- THEN `specs/000-sdd-process/rules.md` provides the normative process meaning\n- AND SpecD artifacts may only restate or operationalize that meaning without silently changing it\n\n### Scenario: Process changes are explicit\n\n- WHEN the repository needs to change the responsibilities of an SDD artifact type\n- THEN the change is represented as an accepted process change\n- AND dependent SpecD artifacts are updated to match the new process meaning\n\n## REQ-002: SpecD provides machine-readable workflow state\n\nThe repository must provide a SpecD project configuration that allows agents\nto discover project state, steady-state specs, active changes, lifecycle\nblockers, and next artifact instructions through the SpecD CLI.\n\n### Scenario: Agent discovers current project state\n\n- WHEN an agent begins SDD work in the repository\n- THEN the SpecD CLI exposes the current project configuration, specs, changes, lifecycle state, and blockers\n- AND the agent can determine the next lifecycle action without relying on conversation history\n\n### Scenario: Agent discovers the next artifact instruction\n\n- WHEN a change is ready for its next design or lifecycle artifact\n- THEN the SpecD CLI exposes the next artifact identifier, scope, instructions, validation expectations, and target output location\n- AND the agent can use that information as the authority for the next artifact write\n\n## REQ-003: Developers can find current SDD process rules\n\nA developer working on the repository must have access to a complete\nhuman-readable SDD process description and must be able to find it easily\nfrom the repository's SDD materials.\n\nThe process description must explain artifact responsibilities, dependency\ndirection, lifecycle expectations, artifact boundaries, and examples needed\nfor humans and agents to apply the schema consistently.\n\nWhen the schema changes, the human-readable process description must be\nupdated so it does not preserve obsolete artifact formats, terminology, or\nworkflow rules.\n\n### Scenario: Developer finds the current process description\n\n- WHEN a developer needs to understand the repository's SDD process\n- THEN the developer can find the human-readable process description from the repository's SDD materials\n- AND the description explains the current SpecD schema artifact responsibilities, dependency direction, lifecycle expectations, artifact boundaries, and useful examples\n\n### Scenario: Process description is updated with schema changes\n\n- WHEN a change modifies the SpecD schema, accepted artifact format, artifact terminology, or lifecycle workflow\n- THEN the human-readable SDD process description is updated as part of that change\n- AND obsolete process text is removed or rewritten so the description matches the current schema\n\n## REQ-004: SpecD-owned SDD fragments reconstruct readable documents\n\nWhen the SDD model is split across SpecD-owned artifacts, the repository must\nretain a deterministic reconstruction order for each document kind.\n\nReconstructed documents must follow the same general-to-specific reading order\nas the repository's SDD sections. Validation must make ordering mistakes\nvisible rather than hiding them behind arbitrary filesystem or glob order.\n\n### Scenario: Reconstructed documents are deterministic\n\n- WHEN a document is reconstructed from SpecD-owned fragments\n- THEN the fragments appear in a deterministic order for that document kind\n- AND repeated reconstruction produces the same reading order from the same inputs\n\n### Scenario: Ordering mistakes are visible\n\n- WHEN a SpecD-owned fragment would appear in an order that breaks the expected general-to-specific reading flow\n- THEN validation or review can identify the ordering problem\n- AND the problem is not hidden by arbitrary filesystem or glob ordering\n\n## REQ-005: Normative SDD artifacts describe the current architecture\n\nThe repository's normative SDD artifacts must fully describe the current\nproject architecture at the level needed for agents and humans to make changes\nwithout relying on stale inventory, manual notes, or conversation history.\n\nCurrent requirements must live in `requirements.md`, current system contracts\nmust live in `system.md`, validation expectations must live in `validate.md`,\nand significant decisions and rationale must live in `adrs.md`.\n\nTemporary inventory and TODO documents may exist while the project is still\nmigrating to the SDD process, but they must not be required to understand the\ncurrent architecture once the migration is complete.\n\n### Scenario: Current architecture is understandable from normative artifacts\n\n- WHEN an agent or human needs to understand the current project architecture\n- THEN the normative SDD artifacts describe the requirements, system contracts, validation expectations, and durable decisions needed for the work\n- AND stale inventory, manual notes, or conversation history are not required to recover current architectural truth\n\n### Scenario: Temporary notes do not become hidden authority\n\n- WHEN temporary inventory or TODO documents remain in the repository\n- THEN they may provide orientation during migration\n- AND they must not override or replace the owning normative SDD artifacts\n\n## REQ-006: Changes that modify behavior pass through SpecD artifacts\n\nFuture repository changes that modify expected behavior should be represented\nas SpecD changes with requirements, system, validation, and plan artifacts\nbefore implementation proceeds.\n\nThe plan artifact must contain the implementation strategy, validation\nstrategy, and top-level plan items needed to execute the transition. Top-level\nplan items are the task-bearing units for implementation; there is no separate\nsteady process artifact for tasks.\n\nIf an existing steady-state SpecD spec already covers the behavior, the change\nshould attach that spec and use deltas or no-op deltas as appropriate. If no\nSpecD spec covers the behavior, the change should introduce one.\n\n### Scenario: Behavior change starts from SpecD artifacts\n\n- WHEN a repository change modifies expected behavior\n- THEN the change is represented with requirements, system, validation, and plan artifacts before implementation proceeds\n- AND implementation work can trace back to the expected behavior described by those artifacts\n\n### Scenario: Existing specs are reused when they own the behavior\n\n- WHEN an existing steady-state SpecD spec already covers the behavior being changed\n- THEN the change attaches that spec\n- AND the change uses a delta or no-op delta according to whether that artifact needs to change\n\n### Scenario: New specs are introduced for uncovered behavior\n\n- WHEN no existing SpecD spec covers the behavior being changed\n- THEN the change introduces a spec for that behavior\n- AND the new spec carries the required SDD artifacts for future work\n\n## REQ-007: Validation checks remain distinct from acceptance scenarios\n\nRequirement-owned acceptance scenarios are the repository's requirements\nacceptance format. Technical validation artifacts may reference those\nscenarios and may describe checks in a scenario-like form, but they must not\nredefine acceptance conditions outside the owning requirement.\n\n### Scenario: Acceptance conditions stay in requirements\n\n- WHEN an acceptance condition defines whether a requirement is satisfied\n- THEN that condition is expressed as an acceptance scenario inside the owning requirement\n- AND validation artifacts may reference it without replacing it\n\n### Scenario: Validation describes evidence\n\n- WHEN a validation artifact describes how requirement conformance is checked\n- THEN it describes the technical evidence, check, command, inspection, or fixture used for validation\n- AND it does not introduce a separate acceptance-criteria model outside requirements",
   "context": [
-    "## REQ-001: Existing SDD process remains authoritative\n\nThe repository must continue to treat `specs/000-sdd-process/rules.md` as\nthe normative definition of the SDD process unless a future accepted process\nchange says otherwise.\n\nSpecD artifacts may restate, index, or operationalize SDD content for agent\nworkflow purposes, but they must not silently redefine the responsibilities\nof Requirements, System Specification, Plans, Implementation, Verification,\nContext, or `adrs.md`.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-002: SpecD provides machine-readable workflow state\n\nThe repository must provide a SpecD project configuration that allows agents\nto discover project state, steady-state specs, active changes, lifecycle\nblockers, and next artifact instructions through the SpecD CLI.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-003: SpecD specs may mirror current SDD contracts\n\nSpecD steady-state specs may mirror existing SDD requirements and system\nspecification contracts when doing so improves context delivery or validation.\n\nWhen mirrored content conflicts with the normative SDD process or a more\nspecific owning SpecD artifact, the owning artifact must be corrected and\ndependent mirrors must be updated or removed.\n\nManual project notes may stop being active guidance only after their durable\nrequirements, system contracts, ADR decisions, and verification expectations\nare represented in the owning SDD artifacts or explicitly treated as\nnon-normative orientation.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-004: SpecD-owned SDD fragments reconstruct readable documents\n\nWhen the SDD model is split across SpecD-owned artifacts, the repository must\nretain a deterministic reconstruction order for each document kind.\n\nReconstructed documents must follow the same general-to-specific reading order\nas the repository's SDD sections. Validation must make ordering mistakes\nvisible rather than hiding them behind arbitrary filesystem or glob order.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-005: Normative SDD artifacts describe the current architecture\n\nThe repository's normative SDD artifacts must fully describe the current\nproject architecture at the level needed for agents and humans to make changes\nwithout relying on stale inventory, manual notes, or conversation history.\n\nCurrent requirements must live in `requirements.md`, current system contracts\nmust live in `system.md`, verification expectations must live in `verify.md`,\nand significant decisions and rationale must live in `adrs.md`.\n\nTemporary inventory and TODO documents may exist while the project is still\nmigrating to the SDD process, but they must not be required to understand the\ncurrent architecture once the migration is complete.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-006: Changes that modify behavior pass through SpecD artifacts\n\nFuture repository changes that modify expected behavior should be represented\nas SpecD changes with requirements, system, verification, and plan artifacts\nbefore implementation proceeds.\n\nThe plan artifact must contain the implementation strategy, validation\nstrategy, and top-level plan items needed to execute the transition. Top-level\nplan items are the task-bearing units for implementation; there is no separate\nsteady process artifact for tasks.\n\nIf an existing steady-state SpecD spec already covers the behavior, the change\nshould attach that spec and use deltas or no-op deltas as appropriate. If no\nSpecD spec covers the behavior, the change should introduce one.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration.\n\n## REQ-007: Requirement validation may use scenario-style checks\n\nSpecD verification artifacts may use scenario-style checks to describe how a\nrequirement is validated. This does not by itself replace the acceptance\ncriteria model in the normative SDD process.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+    "## REQ-001: Existing SDD process remains authoritative\n\nThe repository must continue to treat `specs/000-sdd-process/rules.md` as\nthe normative definition of the SDD process unless a future accepted process\nchange says otherwise.\n\nSpecD artifacts may restate, index, or operationalize SDD content for agent\nworkflow purposes, but they must not silently redefine the responsibilities\nof Requirements, System Specification, Plans, Implementation, Verification,\nContext, or `adrs.md`.\n\n### Scenario: Process rules govern SDD meaning\n\n- WHEN an agent or human interprets the repository SDD process\n- THEN `specs/000-sdd-process/rules.md` provides the normative process meaning\n- AND SpecD artifacts may only restate or operationalize that meaning without silently changing it\n\n### Scenario: Process changes are explicit\n\n- WHEN the repository needs to change the responsibilities of an SDD artifact type\n- THEN the change is represented as an accepted process change\n- AND dependent SpecD artifacts are updated to match the new process meaning\n\n## REQ-002: SpecD provides machine-readable workflow state\n\nThe repository must provide a SpecD project configuration that allows agents\nto discover project state, steady-state specs, active changes, lifecycle\nblockers, and next artifact instructions through the SpecD CLI.\n\n### Scenario: Agent discovers current project state\n\n- WHEN an agent begins SDD work in the repository\n- THEN the SpecD CLI exposes the current project configuration, specs, changes, lifecycle state, and blockers\n- AND the agent can determine the next lifecycle action without relying on conversation history\n\n### Scenario: Agent discovers the next artifact instruction\n\n- WHEN a change is ready for its next design or lifecycle artifact\n- THEN the SpecD CLI exposes the next artifact identifier, scope, instructions, validation expectations, and target output location\n- AND the agent can use that information as the authority for the next artifact write\n\n## REQ-003: Developers can find current SDD process rules\n\nA developer working on the repository must have access to a complete\nhuman-readable SDD process description and must be able to find it easily\nfrom the repository's SDD materials.\n\nThe process description must explain artifact responsibilities, dependency\ndirection, lifecycle expectations, artifact boundaries, and examples needed\nfor humans and agents to apply the schema consistently.\n\nWhen the schema changes, the human-readable process description must be\nupdated so it does not preserve obsolete artifact formats, terminology, or\nworkflow rules.\n\n### Scenario: Developer finds the current process description\n\n- WHEN a developer needs to understand the repository's SDD process\n- THEN the developer can find the human-readable process description from the repository's SDD materials\n- AND the description explains the current SpecD schema artifact responsibilities, dependency direction, lifecycle expectations, artifact boundaries, and useful examples\n\n### Scenario: Process description is updated with schema changes\n\n- WHEN a change modifies the SpecD schema, accepted artifact format, artifact terminology, or lifecycle workflow\n- THEN the human-readable SDD process description is updated as part of that change\n- AND obsolete process text is removed or rewritten so the description matches the current schema\n\n## REQ-004: SpecD-owned SDD fragments reconstruct readable documents\n\nWhen the SDD model is split across SpecD-owned artifacts, the repository must\nretain a deterministic reconstruction order for each document kind.\n\nReconstructed documents must follow the same general-to-specific reading order\nas the repository's SDD sections. Validation must make ordering mistakes\nvisible rather than hiding them behind arbitrary filesystem or glob order.\n\n### Scenario: Reconstructed documents are deterministic\n\n- WHEN a document is reconstructed from SpecD-owned fragments\n- THEN the fragments appear in a deterministic order for that document kind\n- AND repeated reconstruction produces the same reading order from the same inputs\n\n### Scenario: Ordering mistakes are visible\n\n- WHEN a SpecD-owned fragment would appear in an order that breaks the expected general-to-specific reading flow\n- THEN validation or review can identify the ordering problem\n- AND the problem is not hidden by arbitrary filesystem or glob ordering\n\n## REQ-005: Normative SDD artifacts describe the current architecture\n\nThe repository's normative SDD artifacts must fully describe the current\nproject architecture at the level needed for agents and humans to make changes\nwithout relying on stale inventory, manual notes, or conversation history.\n\nCurrent requirements must live in `requirements.md`, current system contracts\nmust live in `system.md`, validation expectations must live in `validate.md`,\nand significant decisions and rationale must live in `adrs.md`.\n\nTemporary inventory and TODO documents may exist while the project is still\nmigrating to the SDD process, but they must not be required to understand the\ncurrent architecture once the migration is complete.\n\n### Scenario: Current architecture is understandable from normative artifacts\n\n- WHEN an agent or human needs to understand the current project architecture\n- THEN the normative SDD artifacts describe the requirements, system contracts, validation expectations, and durable decisions needed for the work\n- AND stale inventory, manual notes, or conversation history are not required to recover current architectural truth\n\n### Scenario: Temporary notes do not become hidden authority\n\n- WHEN temporary inventory or TODO documents remain in the repository\n- THEN they may provide orientation during migration\n- AND they must not override or replace the owning normative SDD artifacts\n\n## REQ-006: Changes that modify behavior pass through SpecD artifacts\n\nFuture repository changes that modify expected behavior should be represented\nas SpecD changes with requirements, system, validation, and plan artifacts\nbefore implementation proceeds.\n\nThe plan artifact must contain the implementation strategy, validation\nstrategy, and top-level plan items needed to execute the transition. Top-level\nplan items are the task-bearing units for implementation; there is no separate\nsteady process artifact for tasks.\n\nIf an existing steady-state SpecD spec already covers the behavior, the change\nshould attach that spec and use deltas or no-op deltas as appropriate. If no\nSpecD spec covers the behavior, the change should introduce one.\n\n### Scenario: Behavior change starts from SpecD artifacts\n\n- WHEN a repository change modifies expected behavior\n- THEN the change is represented with requirements, system, validation, and plan artifacts before implementation proceeds\n- AND implementation work can trace back to the expected behavior described by those artifacts\n\n### Scenario: Existing specs are reused when they own the behavior\n\n- WHEN an existing steady-state SpecD spec already covers the behavior being changed\n- THEN the change attaches that spec\n- AND the change uses a delta or no-op delta according to whether that artifact needs to change\n\n### Scenario: New specs are introduced for uncovered behavior\n\n- WHEN no existing SpecD spec covers the behavior being changed\n- THEN the change introduces a spec for that behavior\n- AND the new spec carries the required SDD artifacts for future work\n\n## REQ-007: Validation checks remain distinct from acceptance scenarios\n\nRequirement-owned acceptance scenarios are the repository's requirements\nacceptance format. Technical validation artifacts may reference those\nscenarios and may describe checks in a scenario-like form, but they must not\nredefine acceptance conditions outside the owning requirement.\n\n### Scenario: Acceptance conditions stay in requirements\n\n- WHEN an acceptance condition defines whether a requirement is satisfied\n- THEN that condition is expressed as an acceptance scenario inside the owning requirement\n- AND validation artifacts may reference it without replacing it\n\n### Scenario: Validation describes evidence\n\n- WHEN a validation artifact describes how requirement conformance is checked\n- THEN it describes the technical evidence, check, command, inspection, or fixture used for validation\n- AND it does not introduce a separate acceptance-criteria model outside requirements"
   ],
   "rules": [
     {
       "requirement": "REQ-001: Existing SDD process remains authoritative",
       "rules": [
-        "The repository must continue to treat `specs/000-sdd-process/rules.md` as\nthe normative definition of the SDD process unless a future accepted process\nchange says otherwise.\n\nSpecD artifacts may restate, index, or operationalize SDD content for agent\nworkflow purposes, but they must not silently redefine the responsibilities\nof Requirements, System Specification, Plans, Implementation, Verification,\nContext, or `adrs.md`.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "The repository must continue to treat `specs/000-sdd-process/rules.md` as\nthe normative definition of the SDD process unless a future accepted process\nchange says otherwise.\n\nSpecD artifacts may restate, index, or operationalize SDD content for agent\nworkflow purposes, but they must not silently redefine the responsibilities\nof Requirements, System Specification, Plans, Implementation, Verification,\nContext, or `adrs.md`.\n\n### Scenario: Process rules govern SDD meaning\n\n- WHEN an agent or human interprets the repository SDD process\n- THEN `specs/000-sdd-process/rules.md` provides the normative process meaning\n- AND SpecD artifacts may only restate or operationalize that meaning without silently changing it\n\n### Scenario: Process changes are explicit\n\n- WHEN the repository needs to change the responsibilities of an SDD artifact type\n- THEN the change is represented as an accepted process change\n- AND dependent SpecD artifacts are updated to match the new process meaning"
       ]
     },
     {
       "requirement": "REQ-002: SpecD provides machine-readable workflow state",
       "rules": [
-        "The repository must provide a SpecD project configuration that allows agents\nto discover project state, steady-state specs, active changes, lifecycle\nblockers, and next artifact instructions through the SpecD CLI.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "The repository must provide a SpecD project configuration that allows agents\nto discover project state, steady-state specs, active changes, lifecycle\nblockers, and next artifact instructions through the SpecD CLI.\n\n### Scenario: Agent discovers current project state\n\n- WHEN an agent begins SDD work in the repository\n- THEN the SpecD CLI exposes the current project configuration, specs, changes, lifecycle state, and blockers\n- AND the agent can determine the next lifecycle action without relying on conversation history\n\n### Scenario: Agent discovers the next artifact instruction\n\n- WHEN a change is ready for its next design or lifecycle artifact\n- THEN the SpecD CLI exposes the next artifact identifier, scope, instructions, validation expectations, and target output location\n- AND the agent can use that information as the authority for the next artifact write"
       ]
     },
     {
-      "requirement": "REQ-003: SpecD specs may mirror current SDD contracts",
+      "requirement": "REQ-003: Developers can find current SDD process rules",
       "rules": [
-        "SpecD steady-state specs may mirror existing SDD requirements and system\nspecification contracts when doing so improves context delivery or validation.\n\nWhen mirrored content conflicts with the normative SDD process or a more\nspecific owning SpecD artifact, the owning artifact must be corrected and\ndependent mirrors must be updated or removed.\n\nManual project notes may stop being active guidance only after their durable\nrequirements, system contracts, ADR decisions, and verification expectations\nare represented in the owning SDD artifacts or explicitly treated as\nnon-normative orientation.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "A developer working on the repository must have access to a complete\nhuman-readable SDD process description and must be able to find it easily\nfrom the repository's SDD materials.\n\nThe process description must explain artifact responsibilities, dependency\ndirection, lifecycle expectations, artifact boundaries, and examples needed\nfor humans and agents to apply the schema consistently.\n\nWhen the schema changes, the human-readable process description must be\nupdated so it does not preserve obsolete artifact formats, terminology, or\nworkflow rules.\n\n### Scenario: Developer finds the current process description\n\n- WHEN a developer needs to understand the repository's SDD process\n- THEN the developer can find the human-readable process description from the repository's SDD materials\n- AND the description explains the current SpecD schema artifact responsibilities, dependency direction, lifecycle expectations, artifact boundaries, and useful examples\n\n### Scenario: Process description is updated with schema changes\n\n- WHEN a change modifies the SpecD schema, accepted artifact format, artifact terminology, or lifecycle workflow\n- THEN the human-readable SDD process description is updated as part of that change\n- AND obsolete process text is removed or rewritten so the description matches the current schema"
       ]
     },
     {
       "requirement": "REQ-004: SpecD-owned SDD fragments reconstruct readable documents",
       "rules": [
-        "When the SDD model is split across SpecD-owned artifacts, the repository must\nretain a deterministic reconstruction order for each document kind.\n\nReconstructed documents must follow the same general-to-specific reading order\nas the repository's SDD sections. Validation must make ordering mistakes\nvisible rather than hiding them behind arbitrary filesystem or glob order.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "When the SDD model is split across SpecD-owned artifacts, the repository must\nretain a deterministic reconstruction order for each document kind.\n\nReconstructed documents must follow the same general-to-specific reading order\nas the repository's SDD sections. Validation must make ordering mistakes\nvisible rather than hiding them behind arbitrary filesystem or glob order.\n\n### Scenario: Reconstructed documents are deterministic\n\n- WHEN a document is reconstructed from SpecD-owned fragments\n- THEN the fragments appear in a deterministic order for that document kind\n- AND repeated reconstruction produces the same reading order from the same inputs\n\n### Scenario: Ordering mistakes are visible\n\n- WHEN a SpecD-owned fragment would appear in an order that breaks the expected general-to-specific reading flow\n- THEN validation or review can identify the ordering problem\n- AND the problem is not hidden by arbitrary filesystem or glob ordering"
       ]
     },
     {
       "requirement": "REQ-005: Normative SDD artifacts describe the current architecture",
       "rules": [
-        "The repository's normative SDD artifacts must fully describe the current\nproject architecture at the level needed for agents and humans to make changes\nwithout relying on stale inventory, manual notes, or conversation history.\n\nCurrent requirements must live in `requirements.md`, current system contracts\nmust live in `system.md`, verification expectations must live in `verify.md`,\nand significant decisions and rationale must live in `adrs.md`.\n\nTemporary inventory and TODO documents may exist while the project is still\nmigrating to the SDD process, but they must not be required to understand the\ncurrent architecture once the migration is complete.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "The repository's normative SDD artifacts must fully describe the current\nproject architecture at the level needed for agents and humans to make changes\nwithout relying on stale inventory, manual notes, or conversation history.\n\nCurrent requirements must live in `requirements.md`, current system contracts\nmust live in `system.md`, validation expectations must live in `validate.md`,\nand significant decisions and rationale must live in `adrs.md`.\n\nTemporary inventory and TODO documents may exist while the project is still\nmigrating to the SDD process, but they must not be required to understand the\ncurrent architecture once the migration is complete.\n\n### Scenario: Current architecture is understandable from normative artifacts\n\n- WHEN an agent or human needs to understand the current project architecture\n- THEN the normative SDD artifacts describe the requirements, system contracts, validation expectations, and durable decisions needed for the work\n- AND stale inventory, manual notes, or conversation history are not required to recover current architectural truth\n\n### Scenario: Temporary notes do not become hidden authority\n\n- WHEN temporary inventory or TODO documents remain in the repository\n- THEN they may provide orientation during migration\n- AND they must not override or replace the owning normative SDD artifacts"
       ]
     },
     {
       "requirement": "REQ-006: Changes that modify behavior pass through SpecD artifacts",
       "rules": [
-        "Future repository changes that modify expected behavior should be represented\nas SpecD changes with requirements, system, verification, and plan artifacts\nbefore implementation proceeds.\n\nThe plan artifact must contain the implementation strategy, validation\nstrategy, and top-level plan items needed to execute the transition. Top-level\nplan items are the task-bearing units for implementation; there is no separate\nsteady process artifact for tasks.\n\nIf an existing steady-state SpecD spec already covers the behavior, the change\nshould attach that spec and use deltas or no-op deltas as appropriate. If no\nSpecD spec covers the behavior, the change should introduce one.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "Future repository changes that modify expected behavior should be represented\nas SpecD changes with requirements, system, validation, and plan artifacts\nbefore implementation proceeds.\n\nThe plan artifact must contain the implementation strategy, validation\nstrategy, and top-level plan items needed to execute the transition. Top-level\nplan items are the task-bearing units for implementation; there is no separate\nsteady process artifact for tasks.\n\nIf an existing steady-state SpecD spec already covers the behavior, the change\nshould attach that spec and use deltas or no-op deltas as appropriate. If no\nSpecD spec covers the behavior, the change should introduce one.\n\n### Scenario: Behavior change starts from SpecD artifacts\n\n- WHEN a repository change modifies expected behavior\n- THEN the change is represented with requirements, system, validation, and plan artifacts before implementation proceeds\n- AND implementation work can trace back to the expected behavior described by those artifacts\n\n### Scenario: Existing specs are reused when they own the behavior\n\n- WHEN an existing steady-state SpecD spec already covers the behavior being changed\n- THEN the change attaches that spec\n- AND the change uses a delta or no-op delta according to whether that artifact needs to change\n\n### Scenario: New specs are introduced for uncovered behavior\n\n- WHEN no existing SpecD spec covers the behavior being changed\n- THEN the change introduces a spec for that behavior\n- AND the new spec carries the required SDD artifacts for future work"
       ]
     },
     {
-      "requirement": "REQ-007: Requirement validation may use scenario-style checks",
+      "requirement": "REQ-007: Validation checks remain distinct from acceptance scenarios",
       "rules": [
-        "SpecD verification artifacts may use scenario-style checks to describe how a\nrequirement is validated. This does not by itself replace the acceptance\ncriteria model in the normative SDD process.\n\n### Scenario: TBD\n\n- WHEN TBD: define acceptance scenario trigger during requirements migration.\n- THEN TBD: define acceptance scenarios for this requirement during requirements migration."
+        "Requirement-owned acceptance scenarios are the repository's requirements\nacceptance format. Technical validation artifacts may reference those\nscenarios and may describe checks in a scenario-like form, but they must not\nredefine acceptance conditions outside the owning requirement.\n\n### Scenario: Acceptance conditions stay in requirements\n\n- WHEN an acceptance condition defines whether a requirement is satisfied\n- THEN that condition is expressed as an acceptance scenario inside the owning requirement\n- AND validation artifacts may reference it without replacing it\n\n### Scenario: Validation describes evidence\n\n- WHEN a validation artifact describes how requirement conformance is checked\n- THEN it describes the technical evidence, check, command, inspection, or fixture used for validation\n- AND it does not introduce a separate acceptance-criteria model outside requirements"
       ]
     }
   ],
   "constraints": [
-    "specs/000-sdd-process/rules.md remains the normative SDD process\ndefinition.",
+    "specs/000-sdd-process/rules.md remains the authoritative English SDD\nprocess definition.",
+    "specs/000-sdd-process/rules.ru.md is the Russian translation and must\nstay aligned with the English process definition.",
     "SpecD artifacts are allowed to provide machine-readable tracking and context\nwithout silently replacing the SDD process.",
     "Runtime/generated SpecD graph and log files are not tracked as durable\nartifacts.",
-    "Temporary manual notes must not become parallel normative sources for current\nrequirements, system contracts, verification expectations, or ADR decisions.",
+    "Temporary manual notes must not become parallel normative sources for current\nrequirements, system contracts, validation expectations, or ADR decisions.",
     "Reconstructed SDD document views must follow deterministic numeric fragment\norder."
   ],
   "scenarios": [
     {
       "requirement": "REQ-001: Existing SDD process remains authoritative",
-      "name": "TBD",
+      "name": "Process rules govern SDD meaning",
       "when": [
-        "TBD: define acceptance scenario trigger during requirements migration."
+        "an agent or human interprets the repository SDD process"
       ],
       "then": [
-        "TBD: define acceptance scenarios for this requirement during requirements migration."
+        "specs/000-sdd-process/rules.md provides the normative process meaning",
+        "AND SpecD artifacts may only restate or operationalize that meaning without silently changing it"
+      ]
+    },
+    {
+      "requirement": "REQ-001: Existing SDD process remains authoritative",
+      "name": "Process changes are explicit",
+      "when": [
+        "the repository needs to change the responsibilities of an SDD artifact type"
+      ],
+      "then": [
+        "the change is represented as an accepted process change",
+        "AND dependent SpecD artifacts are updated to match the new process meaning"
       ]
     },
     {
       "requirement": "REQ-002: SpecD provides machine-readable workflow state",
-      "name": "TBD",
+      "name": "Agent discovers current project state",
       "when": [
-        "TBD: define acceptance scenario trigger during requirements migration."
+        "an agent begins SDD work in the repository"
       ],
       "then": [
-        "TBD: define acceptance scenarios for this requirement during requirements migration."
+        "the SpecD CLI exposes the current project configuration, specs, changes, lifecycle state, and blockers",
+        "AND the agent can determine the next lifecycle action without relying on conversation history"
       ]
     },
     {
-      "requirement": "REQ-003: SpecD specs may mirror current SDD contracts",
-      "name": "TBD",
+      "requirement": "REQ-002: SpecD provides machine-readable workflow state",
+      "name": "Agent discovers the next artifact instruction",
       "when": [
-        "TBD: define acceptance scenario trigger during requirements migration."
+        "a change is ready for its next design or lifecycle artifact"
       ],
       "then": [
-        "TBD: define acceptance scenarios for this requirement during requirements migration."
+        "the SpecD CLI exposes the next artifact identifier, scope, instructions, validation expectations, and target output location",
+        "AND the agent can use that information as the authority for the next artifact write"
+      ]
+    },
+    {
+      "requirement": "REQ-003: Developers can find current SDD process rules",
+      "name": "Developer finds the current process description",
+      "when": [
+        "a developer needs to understand the repository's SDD process"
+      ],
+      "then": [
+        "the developer can find the human-readable process description from the repository's SDD materials",
+        "AND the description explains the current SpecD schema artifact responsibilities, dependency direction, lifecycle expectations, artifact boundaries, and useful examples"
+      ]
+    },
+    {
+      "requirement": "REQ-003: Developers can find current SDD process rules",
+      "name": "Process description is updated with schema changes",
+      "when": [
+        "a change modifies the SpecD schema, accepted artifact format, artifact terminology, or lifecycle workflow"
+      ],
+      "then": [
+        "the human-readable SDD process description is updated as part of that change",
+        "AND obsolete process text is removed or rewritten so the description matches the current schema"
       ]
     },
     {
       "requirement": "REQ-004: SpecD-owned SDD fragments reconstruct readable documents",
-      "name": "TBD",
+      "name": "Reconstructed documents are deterministic",
       "when": [
-        "TBD: define acceptance scenario trigger during requirements migration."
+        "a document is reconstructed from SpecD-owned fragments"
       ],
       "then": [
-        "TBD: define acceptance scenarios for this requirement during requirements migration."
+        "the fragments appear in a deterministic order for that document kind",
+        "AND repeated reconstruction produces the same reading order from the same inputs"
+      ]
+    },
+    {
+      "requirement": "REQ-004: SpecD-owned SDD fragments reconstruct readable documents",
+      "name": "Ordering mistakes are visible",
+      "when": [
+        "a SpecD-owned fragment would appear in an order that breaks the expected general-to-specific reading flow"
+      ],
+      "then": [
+        "validation or review can identify the ordering problem",
+        "AND the problem is not hidden by arbitrary filesystem or glob ordering"
       ]
     },
     {
       "requirement": "REQ-005: Normative SDD artifacts describe the current architecture",
-      "name": "TBD",
+      "name": "Current architecture is understandable from normative artifacts",
       "when": [
-        "TBD: define acceptance scenario trigger during requirements migration."
+        "an agent or human needs to understand the current project architecture"
       ],
       "then": [
-        "TBD: define acceptance scenarios for this requirement during requirements migration."
+        "the normative SDD artifacts describe the requirements, system contracts, validation expectations, and durable decisions needed for the work",
+        "AND stale inventory, manual notes, or conversation history are not required to recover current architectural truth"
+      ]
+    },
+    {
+      "requirement": "REQ-005: Normative SDD artifacts describe the current architecture",
+      "name": "Temporary notes do not become hidden authority",
+      "when": [
+        "temporary inventory or TODO documents remain in the repository"
+      ],
+      "then": [
+        "they may provide orientation during migration",
+        "AND they must not override or replace the owning normative SDD artifacts"
       ]
     },
     {
       "requirement": "REQ-006: Changes that modify behavior pass through SpecD artifacts",
-      "name": "TBD",
+      "name": "Behavior change starts from SpecD artifacts",
       "when": [
-        "TBD: define acceptance scenario trigger during requirements migration."
+        "a repository change modifies expected behavior"
       ],
       "then": [
-        "TBD: define acceptance scenarios for this requirement during requirements migration."
+        "the change is represented with requirements, system, validation, and plan artifacts before implementation proceeds",
+        "AND implementation work can trace back to the expected behavior described by those artifacts"
       ]
     },
     {
-      "requirement": "REQ-007: Requirement validation may use scenario-style checks",
-      "name": "TBD",
+      "requirement": "REQ-006: Changes that modify behavior pass through SpecD artifacts",
+      "name": "Existing specs are reused when they own the behavior",
       "when": [
-        "TBD: define acceptance scenario trigger during requirements migration."
+        "an existing steady-state SpecD spec already covers the behavior being changed"
       ],
       "then": [
-        "TBD: define acceptance scenarios for this requirement during requirements migration."
+        "the change attaches that spec",
+        "AND the change uses a delta or no-op delta according to whether that artifact needs to change"
+      ]
+    },
+    {
+      "requirement": "REQ-006: Changes that modify behavior pass through SpecD artifacts",
+      "name": "New specs are introduced for uncovered behavior",
+      "when": [
+        "no existing SpecD spec covers the behavior being changed"
+      ],
+      "then": [
+        "the change introduces a spec for that behavior",
+        "AND the new spec carries the required SDD artifacts for future work"
+      ]
+    },
+    {
+      "requirement": "REQ-007: Validation checks remain distinct from acceptance scenarios",
+      "name": "Acceptance conditions stay in requirements",
+      "when": [
+        "an acceptance condition defines whether a requirement is satisfied"
+      ],
+      "then": [
+        "that condition is expressed as an acceptance scenario inside the owning requirement",
+        "AND validation artifacts may reference it without replacing it"
+      ]
+    },
+    {
+      "requirement": "REQ-007: Validation checks remain distinct from acceptance scenarios",
+      "name": "Validation describes evidence",
+      "when": [
+        "a validation artifact describes how requirement conformance is checked"
+      ],
+      "then": [
+        "it describes the technical evidence, check, command, inspection, or fixture used for validation",
+        "AND it does not introduce a separate acceptance-criteria model outside requirements"
       ]
     }
   ],
   "contentHashes": {
-    "requirements.md": "sha256:680831382f493b3715f1cec30c041173968bedfa6d5c0c6a5a82ffb7f32d39df",
-    "system.md": "sha256:7bd740e49ebdbc0990b9fb28598afa07832d0733baf56a6550b67de1d723e4aa",
-    "validate.md": "sha256:7f65aa647566d1e7615a40859b230427213bf9557d90d661a42b5fdb30b2141d"
+    "requirements.md": "sha256:6891568c51a19be005327a5a3081e3a1dc20a0b2174f08754a2a178aa64861f9",
+    "system.md": "sha256:500ad94b8ca42af0b42c04fc9535922169f3335ad95c959ccce12b84f9582929",
+    "validate.md": "sha256:7f65aa647566d1e7615a40859b230427213bf9557d90d661a42b5fdb30b2141d",
+    "adrs.md": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   },
   "generatedBy": "core"
 }

@@ -6,8 +6,8 @@ For every [development host](#development-host), the
 [primary user](#primary-user) has these development tools available in
 the command lookup path:
 
-* `codex`
-* `specd`
+- `codex`
+- `specd`
 
 `codex` is provided from [nixpkgs stable](#nixpkgs-stable).
 
@@ -23,8 +23,6 @@ Traceability:
 
 - Satisfies
   [`REQ-001: Development hosts expose required workflow tools`](requirements.md#req-001-development-hosts-expose-required-workflow-tools).
-- Satisfies
-  [`REQ-002: Non-development hosts are not required to expose development tooling`](requirements.md#req-002-non-development-hosts-are-not-required-to-expose-development-tooling).
 
 ## SpecD CLI Package
 
