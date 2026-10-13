@@ -1,0 +1,48 @@
+diff --git a/core/src/tools/handlers/shell/shell_command.rs b/core/src/tools/handlers/shell/shell_command.rs
+index b99411976..fb2cb34cb 100644
+--- a/core/src/tools/handlers/shell/shell_command.rs
++++ b/core/src/tools/handlers/shell/shell_command.rs
+@@ -77,7 +77,7 @@ impl ShellCommandHandler {
+             ));
+         }
+ 
+-        Ok(login.unwrap_or(allow_login_shell))
++        Ok(login.unwrap_or(false))
+     }
+ 
+     pub(super) fn base_command(shell: &Shell, command: &str, use_login_shell: bool) -> Vec<String> {
+diff --git a/core/src/tools/handlers/shell_spec.rs b/core/src/tools/handlers/shell_spec.rs
+index 6d6469213..c483aa60e 100644
+--- a/core/src/tools/handlers/shell_spec.rs
++++ b/core/src/tools/handlers/shell_spec.rs
+@@ -70,7 +70,7 @@ pub(crate) fn create_exec_command_tool_with_environment_id(
+         properties.insert(
+             "login".to_string(),
+             JsonSchema::boolean(Some(
+-                "True runs the shell with -l/-i semantics; false disables them. Defaults to true."
++                "True runs the shell with -l/-i semantics; false disables them. Defaults to false."
+                     .to_string(),
+             )),
+         );
+@@ -179,7 +179,7 @@ pub fn create_shell_command_tool(options: CommandToolOptions) -> ToolSpec {
+         properties.insert(
+             "login".to_string(),
+             JsonSchema::boolean(Some(
+-                "True runs with login shell semantics; false disables them. Defaults to true."
++                "True runs with login shell semantics; false disables them. Defaults to false."
+                     .to_string(),
+             )),
+         );
+diff --git a/core/src/tools/handlers/unified_exec.rs b/core/src/tools/handlers/unified_exec.rs
+index 825ebd5c2..488ffb659 100644
+--- a/core/src/tools/handlers/unified_exec.rs
++++ b/core/src/tools/handlers/unified_exec.rs
+@@ -107,7 +107,7 @@ pub(crate) fn get_command(
+             );
+         }
+         Some(use_login_shell) => use_login_shell,
+-        None => allow_login_shell,
++        None => false,
+     };
+ 
+     match shell_mode {

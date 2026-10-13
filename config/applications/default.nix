@@ -57,7 +57,7 @@
     environment.developmentPackages = with pkgs; [
       android-tools
       bear
-      codex
+      codex-fixed-env
       docker
       dowork
       esp-config
