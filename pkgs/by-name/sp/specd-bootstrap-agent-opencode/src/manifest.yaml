@@ -1,0 +1,3 @@
+agent: opencode
+sourceSkillsDir: skills
+destinationSkillsDir: .opencode/skills

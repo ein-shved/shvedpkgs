@@ -1,0 +1,3 @@
+agent: kilocode
+sourceSkillsDir: skills
+destinationSkillsDir: .kilocode/skills
