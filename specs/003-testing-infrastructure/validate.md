@@ -1,11 +1,30 @@
 # Validation: Testing Infrastructure
 
-## Artifact Status
+## Execution
 
-TBD: the composition of this validation artifact is still being developed.
+The project test runner is validated when all registered test cases pass on it.
 
-This artifact is a placeholder. The previous verification placeholder used
-scenario form, but acceptance scenarios now belong in `requirements.md`.
+Run one case:
 
-Future work should define technical validation checks here and move any real
-acceptance scenarios into the owning requirements.
+```sh
+nix build .#projectTests.cifs-keyutils
+```
+
+Run all cases:
+
+```sh
+nix build .#projectTests.allTests
+```
+
+## Memory during evaluation
+
+Evaluating all cases together can consume substantial RAM. Limit the Nix
+client with a systemd scope, allowing it to use swap:
+
+```sh
+systemd-run --user --scope \
+  -p MemoryHigh=4G -p MemoryMax=4608M -p MemorySwapMax=16G \
+  nix build .#projectTests.allTests
+```
+
+The scope limits the client; daemon builders remain outside it.
