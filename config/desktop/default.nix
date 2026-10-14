@@ -5,7 +5,7 @@
   ...
 }:
 let
-  mkGraphic = lib.mkIf config.hardware.needGraphic;
+  mkGraphic = lib.mkIf config.hardware.isGraphic;
 in
 {
   config = {

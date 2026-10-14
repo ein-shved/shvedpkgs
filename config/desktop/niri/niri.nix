@@ -71,7 +71,7 @@ let
 in
 {
   programs.niri = {
-    enable = config.hardware.needGraphic;
+    enable = config.hardware.isGraphic;
     package = pkgs.niri-lightdm-wa;
   };
   hm.programs.niri.settings = {

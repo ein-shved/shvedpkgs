@@ -24,7 +24,13 @@ tests
 // boots
 // {
   generic = {
-    modules = [ { user.name = "NixOS"; } ];
+    modules = [
+      {
+        user.name = "NixOS";
+        hardware.isGraphic = true;
+        hardware.isDevelopment = true;
+      }
+    ];
   };
 }
 // mkHosts [

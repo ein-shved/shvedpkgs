@@ -31,7 +31,7 @@ let
 in
 {
   hm.programs.swaylock = {
-    enable = config.hardware.needGraphic;
+    enable = config.hardware.isGraphic;
     settings = {
       color = "000000";
       show-keyboard-layout = true;

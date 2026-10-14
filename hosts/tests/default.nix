@@ -11,6 +11,8 @@
           humanName = "Alice Cooper";
           password = "alice";
         };
+        hardware.isGraphic = true;
+        hardware.isDevelopment = true;
         kl.remote.enable = true;
       }
     ];
@@ -24,6 +26,8 @@
           humanName = "Bob";
           password = "bob";
         };
+        hardware.isGraphic = true;
+        hardware.isDevelopment = true;
         environment.printing3d.enable = true;
         kl.domain.enable = true;
       }

@@ -5,12 +5,12 @@
   ...
 }:
 let
-  inherit (config.hardware) needGraphic;
+  inherit (config.hardware) isGraphic;
 in
 {
-  xdg.portal = lib.mkIf needGraphic {
-    enable = needGraphic;
-    wlr.enable = needGraphic;
+  xdg.portal = lib.mkIf isGraphic {
+    enable = isGraphic;
+    wlr.enable = isGraphic;
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
       xdg-desktop-portal-gnome
@@ -68,7 +68,7 @@ in
       # "org.freedesktop.impl.portal.Wallpaper" = "gnome";
     };
   };
-  systemd.user.services = lib.mkIf needGraphic {
+  systemd.user.services = lib.mkIf isGraphic {
     xdg-desktop-portal-gtk = {
       after = [ "niri.service" ];
     };
