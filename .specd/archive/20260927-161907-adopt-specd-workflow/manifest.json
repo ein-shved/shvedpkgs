@@ -1,0 +1,224 @@
+{
+  "name": "adopt-specd-workflow",
+  "createdAt": "2026-09-27T16:19:07.086Z",
+  "description": "Introduce SpecD as a tracking and context-delivery layer around the repository SDD artifacts.",
+  "schema": {
+    "name": "schema-std",
+    "version": 1
+  },
+  "specIds": [
+    "default:specd-sdd-integration"
+  ],
+  "artifacts": [
+    {
+      "type": "proposal",
+      "optional": false,
+      "requires": [],
+      "state": "complete",
+      "files": [
+        {
+          "key": "proposal",
+          "filename": "proposal.md",
+          "state": "complete",
+          "validatedHash": "sha256:1e15c871804d5695a84cd81ca9f3c9c635dd283ad5ed675de95ac55591f21b92"
+        }
+      ]
+    },
+    {
+      "type": "specs",
+      "optional": false,
+      "requires": [
+        "proposal"
+      ],
+      "state": "complete",
+      "files": [
+        {
+          "key": "default:specd-sdd-integration",
+          "filename": "specs/default/specd-sdd-integration/spec.md",
+          "state": "complete",
+          "validatedHash": "sha256:95af2f59980f1bc2a5937b86159d5bd42a17b1d0091f6bfee4a793fe71760c7c"
+        }
+      ]
+    },
+    {
+      "type": "verify",
+      "optional": false,
+      "requires": [
+        "specs"
+      ],
+      "state": "complete",
+      "files": [
+        {
+          "key": "default:specd-sdd-integration",
+          "filename": "specs/default/specd-sdd-integration/verify.md",
+          "state": "complete",
+          "validatedHash": "sha256:1a177835727b6dacbf79652e80fc61059bd9ee1421f9a71c8c880b6d3e80e545"
+        }
+      ]
+    },
+    {
+      "type": "design",
+      "optional": false,
+      "requires": [
+        "proposal",
+        "specs",
+        "verify"
+      ],
+      "state": "complete",
+      "files": [
+        {
+          "key": "design",
+          "filename": "design.md",
+          "state": "complete",
+          "validatedHash": "sha256:f98f296716dd831a5db4db0a5ec20e9d82ac25236177e042ce586f5632908205"
+        }
+      ]
+    },
+    {
+      "type": "tasks",
+      "optional": false,
+      "requires": [
+        "specs",
+        "design"
+      ],
+      "state": "complete",
+      "files": [
+        {
+          "key": "tasks",
+          "filename": "tasks.md",
+          "state": "complete",
+          "validatedHash": "sha256:ac7d3e2d7b0b2eea91d83cdceece4615b1d899857265a2d556c3a3f49be99a74"
+        }
+      ]
+    }
+  ],
+  "history": [
+    {
+      "type": "created",
+      "at": "2026-09-27T16:19:07.086Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "specIds": [
+        "default:specd-sdd-integration"
+      ],
+      "schemaName": "schema-std",
+      "schemaVersion": 1
+    },
+    {
+      "type": "artifacts-synced",
+      "at": "2026-09-27T16:19:07.097Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "typesAdded": [
+        "proposal",
+        "specs",
+        "verify",
+        "design",
+        "tasks"
+      ],
+      "typesRemoved": [],
+      "filesAdded": [
+        {
+          "type": "proposal",
+          "key": "proposal"
+        },
+        {
+          "type": "specs",
+          "key": "default:specd-sdd-integration"
+        },
+        {
+          "type": "verify",
+          "key": "default:specd-sdd-integration"
+        },
+        {
+          "type": "design",
+          "key": "design"
+        },
+        {
+          "type": "tasks",
+          "key": "tasks"
+        }
+      ],
+      "filesRemoved": []
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-09-27T16:20:41.378Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "drafting",
+      "to": "designing"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-09-27T16:21:26.324Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "designing",
+      "to": "ready"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-09-27T16:21:31.568Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "ready",
+      "to": "implementing"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-09-27T16:21:36.525Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "implementing",
+      "to": "verifying"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-09-27T16:21:40.681Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "verifying",
+      "to": "done"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-09-27T16:21:56.030Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "done",
+      "to": "archivable"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-09-27T16:21:59.361Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "archivable",
+      "to": "archiving"
+    }
+  ],
+  "archivedAt": "2026-09-27T16:21:59.366Z",
+  "archivedBy": {
+    "name": "Yury Shvedov",
+    "email": "mestofel13@gmail.com"
+  }
+}

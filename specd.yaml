@@ -1,6 +1,6 @@
 schema: "./schemas/sdd/schema.yaml"
 context:
-  - file: specs/context.md
+  - file: .specd/context.md
 contextIncludeSpecs:
   - "default:*"
 contextMode: summary
