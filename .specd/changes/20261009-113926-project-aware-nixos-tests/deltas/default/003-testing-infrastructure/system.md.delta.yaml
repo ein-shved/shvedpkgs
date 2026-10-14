@@ -1,0 +1,53 @@
+- op: added
+  position:
+    after:
+      type: section
+      matches: '^Validation Configurations$'
+  content: |
+    # Project NixOS Test Runner
+
+    The project overrides `testers` through the by-name mechanism, replacing
+    `runNixOSTest` with its own wrapper around the upstream function. Other
+    upstream helpers remain available.
+
+    Tests receive the functional modules assembled in `flake.nix`, including
+    modules added by external project users through `.extend { modules = [ ... ]; }`.
+    The wrapper imports this collection from `extensions.modules`.
+
+    Test nodes receive `extensions`, `flake-inputs` and `pkgsUnstable`.
+    Existing standalone module arguments remain available for compatibility.
+    Caller special arguments take precedence; project defaults remain available
+    after replacing special arguments via `extendNixOS`.
+
+    Guests default to normal NixOS package assembly (`node.pkgsReadOnly = false`)
+    so the shared functional modules can contribute their package overlays.
+
+    Shared support does not automatically
+    import host policy, concrete hosts or validation stubs. Each test selects its
+    capabilities and supplies their intrinsic inputs.
+
+    References: [REQ-002](requirements.md#req-002-exercise-project-capabilities-in-nixos-tests),
+    [REQ-003](requirements.md#req-003-preserve-existing-package-and-test-use).
+
+- op: added
+  position:
+    after:
+      type: section
+      matches: '^Project NixOS Test Runner$'
+  content: |
+    # Test Suite
+
+    The test registry explicitly lists module and package test cases.
+    Each file accepts concrete `callPackage` dependencies and
+    calls `testers.runNixOSTest`. The registry calls each file with `callPackage`
+    and names its result after the file's basename, without the `.nix` suffix.
+
+    The collection is exposed as `projectTests` through the by-name mechanism.
+    Its `allTests` attribute aggregates all tests and is used as the flake check
+    `checks.<system>.tests`.
+    Individual cases remain available under `packages.<system>.projectTests.<case>`.
+
+    External project users can add their own checks through `extend`.
+
+    References: [REQ-002](requirements.md#req-002-exercise-project-capabilities-in-nixos-tests),
+    [REQ-003](requirements.md#req-003-preserve-existing-package-and-test-use).

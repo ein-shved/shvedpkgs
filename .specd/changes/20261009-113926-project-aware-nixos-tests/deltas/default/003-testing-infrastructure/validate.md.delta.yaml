@@ -1,0 +1,33 @@
+- op: modified
+  selector:
+    type: section
+    matches: '^Validation: Testing Infrastructure$'
+  content: |
+    ## Execution
+
+    The project test runner is validated when all registered test cases pass on it.
+
+    Run one case:
+
+    ```sh
+    nix build .#projectTests.cifs-keyutils
+    ```
+
+    Run all cases:
+
+    ```sh
+    nix build .#projectTests.allTests
+    ```
+
+    ## Memory during evaluation
+
+    Evaluating all cases together can consume substantial RAM. Limit the Nix
+    client with a systemd scope, allowing it to use swap:
+
+    ```sh
+    systemd-run --user --scope \
+      -p MemoryHigh=4G -p MemoryMax=4608M -p MemorySwapMax=16G \
+      nix build .#projectTests.allTests
+    ```
+
+    The scope limits the client; daemon builders remain outside it.

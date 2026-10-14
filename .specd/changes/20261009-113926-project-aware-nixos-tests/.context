@@ -1,0 +1,1735 @@
+# Restart context: project-aware-nixos-tests
+
+## Design DAG closed; implementing restored (2026-10-30, current)
+
+Owner accepted the compact validation and explicitly requested closing the DAG
+and returning to implementation after the sequential architecture/plan edits.
+Retained involved mode, root as author and existing manager. Removed only the
+stale proposal sentence deferring extend inheritance, aligning the proposal
+with the owner's already specified external-module contract.
+
+Fresh independent final arbiter /root/design_final_arbiter reviewed the current
+proposal/requirements/system/validate/plan, merged outputs, binding context and
+relevant source; PASS with no blocking findings on these exact SHA256 revisions:
+proposal 908b8f6f86056ab9211dc1e0ba195ad6fffaef8c25541d891dd0ad9d5d8a1db7;
+requirements e3bd7770c6443aa987467b06fb9a7a5c163e2ca026a655a697bb6d338b9c0a99;
+system 47c4fca5fb008b6af83f384ed9f253b7f2d56b297dcd66c03afc443bc1658868;
+validate 67e483b1ee2320cba9abdff9df2c2537aea359b12d9fadc569384027afb4772c;
+plan c190980bece3a3830c56b972acac095fc911c8e072781c69140e8262946d19fa.
+Plan's CLI fingerprint 2a457ce6582fffdf10eac7d918b100a473daf84d1ecc76edb688067fb9578622
+is the same content with checkbox normalization, not source drift.
+
+Structural validation passed in dependency order: proposal, requirements,
+system, restore previously accepted ADR skip, validate, plan. The validate
+section-label suggestion was informational; no content repair was needed.
+Designing post / ready pre / ready post / implementing pre hooks and agent
+instructions were handled in order; no executable hooks. Transitioned through
+ready to implementing, reloading context after each transition. Current context
+fingerprint sha256:73ba7d574b7e425c3129c14eeeb8615cb505364baa54f974bff181b8958a4c43.
+Final status: required artifacts complete, ADR skipped, no review or blockers;
+spec/signoff approvals off, no human approval commands issued.
+
+This request was lifecycle closure only: no Nix eval/build/VM, code changes,
+commits/staging or task marks. Item3 remains [ ]; final-source runtime suite
+evidence is still pending. Next work is $specd-implement project-aware-nixos-tests
+against the accepted plan, with checkbox-only plan updates. Old readonly-mode
+and cross-guest-platform concerns were disclosed; the final arbiter confirmed
+the current accepted contracts promise neither special case. No runtime
+support for them is claimed and no design DAG blocker remains.
+
+## Minimal validation instructions (2026-10-30)
+
+Owner explicitly reduced validation to passing all registered test cases on the
+project runner, with plain nix build commands for one case and allTests, and a
+separate evaluation-memory caveat/systemd-run command. Removed separate manual,
+host-output, collection and extension-boundary procedures from this draft.
+Used projectTests.cifs-keyutils and projectTests.allTests shorthand targets;
+systemd scope keeps MemoryHigh4G/Max4608M/Swap16G, no unrelated Nix flags.
+Noted scope covers client only. This does not change requirements or prior
+evidence; no fresh tests/VMs, lifecycle, approval or task-mark updates claimed.
+Documentation self-review/merged preview/diff-check only.
+
+## Remove project guest CPU default (2026-10-30)
+
+Owner requested removing core-count constraints from code and architecture.
+Removed virtualisation.cores default from support and the matching system/
+validate statements; follow-up prompts no longer prescribe a guest CPU count.
+Removed the stale CPU-count assertion from the temporary context probe.
+Earlier two-core run records remain historical evidence only. Builder --cores
+run flags and memory protections remain operational instructions. Source review
+and diff-check only, no new eval/build/VM or lifecycle/approval/task mark changes.
+
+## Architecture scope correction (2026-10-30)
+
+Owner asked to omit mkExtendableSystems internals from this architecture.
+Runner now states only that tests import extensions.modules assembled in
+flake.nix and augmented by external users through extend. Removed host assembly
+and list-merging mechanics; suite keeps only the public extend/checks usage.
+Owner's next correction also removes the separate project-lib explanation.
+Suite aggregate is now described in prose: allTests aggregates all tests and
+is used as a flake check; implementation expressions and the checks example
+were removed per the next owner comment.
+Owner also removed the suite paragraph about existing validation configurations
+and private-value stubs; the pre-existing base section itself is not changed.
+Original Validation Configurations section and requirement links preserved.
+Merged preview/self-review/diff-check passed. Documentation only; no Nix runs,
+state/approval/marks changes, or resolution of earlier open source boundaries.
+
+## Canonical configs name and argument comments (2026-10-30)
+
+Owner first suggested config, then explicitly chose configs with trailing s.
+Renamed the complete project API to configs, including extensions.configs,
+host entries, flake composition, legacy fixture, prompt and current system/plan.
+NixOS config attributes and configuration.nix filenames retain their meanings.
+Added argument comments for modules (options/feature implementation shared by
+hosts/tests), configs (host feature selection/settings, excluded from tests),
+and checks (flat names merged under defaultSystem, later values override).
+Pure accumulation probe passed6; scoped real x86 probe passed10 and retained
+the same project-arguments derivation. One RSS sample client367264KiB plus
+worker12024KiB; no peak claim. Same RAM/CPU limits, no VM/build/aggregate;
+post-run only idle daemons. Old API-name search and diff-check/self-review clean.
+State/approval/task marks unchanged; prior readonly/platform questions remain open.
+
+## Ordinary lib argument correction (2026-10-30)
+
+Owner clarified that project lib replaces standard lib; do not move it into
+extensions. Removed lib from the flake/legacy-fixture extensions payload and
+changed pkgs/default plus testers/support to pass ordinary lib directly.
+Updated system and .prompts/unify-special-args.md to exempt lib from migration.
+Repeated the same scoped x86 probe: all 10 checks passed; project-arguments
+drvPath remains h7d2wb8z27z3b64126mggn8rcn4w0i3j-vm-test-run-project-arguments.drv.
+Project functions through ordinary lib are exercised by packageLib and the
+existing project-arguments guest assertion. Same 4G/4608M/16G/CPU200% scope;
+one sample clientRSS198360KiB/worker11896KiB, not a peak. No active Nix/VM after
+exit0, only idle daemons. Diff-check/self-review passed; no builds/VMs or state,
+approval, checkbox or staging changes. Earlier readonly/other-guest-platform
+questions below remain open; this correction does not answer them.
+
+## Direct extensions/configuration refactor (2026-10-30, owner advice needed)
+
+Owner explicitly requested code changes: configuration accumulates like modules;
+flake specialArgs carries extensions; pkgs/default publishes it and its package
+arguments; generic by-name loader restored; tests import extensions.modules;
+new follow-up prompt for migrating standalone project args into extensions.
+This supersedes the previous architecture wording, including the brief HM edit.
+Performed the bounded source refactor without lifecycle transitions or claimed
+approval, honoring the explicit implementation request over the skill's
+wrong-state stop. State remains designing; marks unchanged.
+
+Host policy in hosts/{default,tests/default,boots/default}.nix now uses
+configuration. Existing standalone args stay for compatibility. Test support
+defaults node.pkgsReadOnly=false to allow the shared package overlays. The
+legacy conditional-module-activation fixture explicitly supplies extensions for
+its direct pkgs import; its script was not executed. Follow-up task is in
+.prompts/unify-special-args.md. System/validate/plan describe this draft.
+
+Pure /tmp/project-configuration-probe.nix passed 6 assertions. Real scoped
+/tmp/project-extensions-probe.nix passed 10 assertions: appended modules reach
+guest, configuration affects host only, package args/context work, x86 guest
+platform matches, guest has 2 CPUs. project-arguments drvPath is
+/nix/store/h7d2wb8z27z3b64126mggn8rcn4w0i3j-vm-test-run-project-arguments.drv.
+No VM, aggregate or builds. Scope MemoryHigh4G/Max4608M/Swap16G/CPUQuota200%;
+one sample client RSS345424KiB and worker11280KiB, not a measured peak. Post-run
+only idle daemons and hostAvailable~13GiB. Initial probe accessed undefined
+guest nixpkgs.hostPlatform; corrected query to upstream nixpkgs.system and passed.
+Merged previews/self-review/diff-check passed; no staging or structural validation.
+
+Manager source review identified two old-contract boundaries not covered by the
+normal x86 probe: explicit node.pkgsReadOnly=true conflicts with imported package
+overlays, and a guest platform differing from host inherits host pkgsUnstable.
+Stopped before adding adapters, per owner's explicit instruction to ask when
+complexity appears. Need owner decision on retaining those special cases versus
+the simple same-platform project package context; do not claim full compatibility.
+
+## Reconcile this change with approved implementation (2026-10-30)
+
+Owner explicitly requested fixing this change now, rather than assigning it in
+another agent's prompt. Removed those tasks from
+.prompts/reconcile-nixos-validation.md; archived validation/refresh work stays
+there for a separate change. No code, archived specs, proposal or requirements
+changed in this correction.
+
+Ran implementing post-hooks and designing pre-hooks, then transitioned to
+designing. Retained involved mode and the existing manager; root authored the
+revisions. Owner's batch request permits preparing system/validate/plan together
+for one handoff, overriding the old plan prose freeze for this correction only;
+it does not constitute acceptance of the resulting content.
+
+System now describes by-name testers, direct cases, projectTests/allTests and
+extendable checks. The existing Validation Configurations section is preserved.
+Owner's subsequent wording correction removes unnecessary implementation paths:
+the architecture describes overriding testers through by-name and replacing
+runNixOSTest with the project wrapper. API/semantics and requirement links are
+unchanged. Merged preview and self-review passed again; no new execution.
+Validation gives short resource-controlled commands and boundary cases, without
+deleted matrices, host inventories or overstated refresh coverage. Plan has
+three short items. Items 1/2 were reassessed against current source plus the
+individual VM results and targeted klvpn repair recorded below and in
+/tmp/project-aware-nixos-tests-20261029.md. Item 3 remains pending: the aggregate
+pass predates the final checks wiring, whose lightweight evaluations passed.
+
+One required graph index exited 0 at vcsRef 6cbe7ef: 0 source files discovered or
+indexed, 6 specs discovered, no errors. Nix graph coverage is unavailable;
+review used the actual runner, overlay guards, registry and checks sources.
+Merged system/validate previews and executor self-review passed; diff --check
+passed. No Nix evaluation, builds or VMs ran for this correction; no staging.
+Draft SHA256: system c107b7ba3f604babbec1dc8834c71ff9b0ec0ab7d6067f10ede8e4a32ab07540;
+validate 44e6f15a20c8f212a6a3d6ca1eb6f57533e56378fe4c486683c8567022fd2cef;
+plan 06192b34f74b4d2dca88269fa92addf86662b73ac2540acda29560d899c74a63.
+Next boundary is one owner handoff. Structural validation/closure require owner
+acceptance and final independent arbiter review of that same revision; neither
+has been claimed or run for these drafts.
+
+## Extendable checks API (2026-10-29, current)
+
+Owner approved flat checks={myCheck=derivation;} argument to mkExtendableSystems.
+lib/system.nix now merges names under extendedSelf.defaultSystem, preserving
+existing checks/other system keys; later names override earlier ones with shallow
+merge. Per owner's subsequent request flake.nix now puts
+checks.${defaultSystem}.tests with baseline fields in the FIRST argument (initial
+grouped state), second argument restored to { }. External .extend checks remain
+flat; no new flat-first-argument contract or helper change. Usage documented;
+the outer checks-only // is removed. No factories or rebinding.
+Self-review/diff-check passed. /tmp/project-aware-extend-checks.nix returned10true
+results for empty/add/inherit/override/repeated/empty extension, cross-system and
+laziness using throwing suite/host witnesses. A bounded real-flake getFlake eval
+returned baseChecks=[tests], extendedChecks=[externalCheck,tests], one x86 system;
+override/inherited-tests assertions passed without forcing allTests or hosts.
+An initial CLI .#extend probe selected packages.x86_64-linux.extend (nixpkgs
+overlay API), so it failed on overlay type; corrected selection explicitly used
+builtins.getFlake(...).extend. This was a probe selector issue, not product failure.
+Both probes had AS cap4718592KiB; no builds/VMs, no active Nix remains.
+Current SHA256 lib/system.nix104d80b7422776da5a21e3067a449f599fe1d41221f7a8e38abca84448a81334;
+flake.nixe3879547b3960f9106422b0dd516f47f220e731425f29f817fc292b00a1668ab.
+After moving baseline checks to the first argument the10 synthetic results and
+real-flake base=[tests]/extended=[externalCheck,tests] checks passed again.
+The successful aggregate below predates this wiring change; no repeat claimed.
+No plan/manifest/task marks, commits or lifecycle changed; item3 still pending.
+
+## allTests under systemd scope (2026-10-29, PASS)
+
+Owner explicitly authorized systemd-run with memory.high4GiB/max4.5GiB,
+swap.max16GiB instead of ulimit-v. Actual cgroup values and uncapped ancestors
+confirmed; initial exec AS unlimited, inherited by --scope. Client /proc hidden
+from sandbox PID namespace; no false claim of a direct limits read.
+One allTests build exited0, observed08:35:12--09:00:19UTC (~25min). Only the
+aggregate was built; all35 test outputs were already present, no fresh VMs.
+Output /nix/store/i3nh65kb3bj4q41mmvclr2iwm6fi4d9i-all-tests contains35 VM-result
+symlinks. Source hashes unchanged from the preceding klvpn repair/failed AS run.
+162 full-tree/cgroup/host samples: maxRSS4193796KiB (~4GiB), max sampled cgroup
+current4295462912bytes, max sampled swap8590987264bytes (~8GiB), minimum
+MemAvailable9696972KiB (~9.25GiB). A mid-run kernel memory.peak read was
+4297248768bytes; final exact cgroup peak unavailable after scope removal.
+OOM0 at all reads, no safety stop. Final ps only idle daemons, no client/VM;
+hostAvailable13998224KiB. Resource settings constrain client, not daemon builders.
+Full command/resource/source evidence appended to /tmp/project-aware-nixos-tests-20261029.md.
+No implementation edits, commits, plan marks or lifecycle changes. Item3 pending.
+
+## Authorized allTests attempt (2026-10-29, current)
+
+Owner explicitly requested aggregate execution after the klvpn repair. One
+allTests build with client AS cap4718592KiB/max-jobs1/cores2/TTY exited1 before
+any derivation build or VM launch: GC reported heap3864MiB and out of memory.
+The existing simple aggregate forces all35 tests in one evaluation process;
+max-jobs limits builds, not evaluation. Exact retention cause is not diagnosed.
+The first process sample occurred after the client had already exited; no active
+RSS/CPU peak was measured. Client AS cap, GC diagnostic and post-exit idle-only
+process checks are the actual evidence, not a claimed sampled memory peak.
+No other clients/VMs before or after; no retry, higher limit or code change.
+Source hashes and command/failure recorded in /tmp/project-aware-nixos-tests-20261029.md.
+Aggregate remains unbuilt; individual test successes above/below remain valid
+for their documented revisions. Plan/lifecycle/item3 unchanged.
+
+## Targeted klvpn repair (2026-10-29, current)
+
+Owner subsequently explicitly authorized fixing klvpn. Added only
+users.groups.pkcs11 = { }; inside the existing cfg.enable conditional; existing
+membership, services, permissions and test assertions are unchanged. This
+supersedes the previous run's instruction to leave the VPN module unchanged.
+Self-review and git diff --check passed. Only klvpn was freshly built/run after
+the overlay simplification: exit0, VM script60.09s, pcscd.socket, command,
+actual tester membership and all three provider-library files passed.
+Same client limit/max-jobs1/cores2/TTY protocol; QEMU -m1024 -smp2, sampled full
+treeRSS peak2,320,780KiB=2.21GiB, minimum MemAvailable12,496,812KiB, no resource
+stop. No other Nix client or VM remained at completion. Detailed source hashes,
+derivation and resource evidence appended to /tmp/project-aware-nixos-tests-20261029.md.
+This is one post-refactor targeted pass, not a full final-source suite rerun.
+No task marks, approved artifacts, lifecycle or commits changed; item3 pending.
+
+## Sequential execution and simpler overlay (2026-10-29, current)
+
+Owner authorized all35 registered cases one at a time with memory/CPU monitoring,
+max5GB and preferably VM2cores, then explicitly clarified to FINISH the full run
+before simplifying lib/modules.nix. Completed35 individual outcomes:34fresh VM
+passes, klvpn fails actual user membership in pkcs11. Its module appends the name
+to extraGroups but declares no corresponding group; project search found none.
+Keep the failing assertion and production VPN module unchanged. Later provider
+checks were not reached. Old tokens-only/Transmission-account/Gerrit concerns
+remain separate source-only questions, not newly executed failures.
+
+Full per-attempt results, final test-source SHA256 manifest, resource evidence and
+before/after overlay boundary: /tmp/project-aware-nixos-tests-20261029.md.
+The controlled commands used same-shell ulimit-v4718592KiB, max-jobs1/cores2,
+no-link/no-write-lock-file, individual explicit attr paths and cancellable TTYs.
+Monitored full Nix/daemon worker descendant trees including compilers/driver/VM,
+stopping threshold4,000,000KiB summedRSS or MemAvailable8GiB. Observed VM args
+-m1024 -smp2. Maximum sampled treeRSS3,352,364KiB=3.20GiB, minimum available
+11,143,324KiB; no resource stop. CPU-sum peak292.4% is ps lifetime averages,
+not a hard global2CPU cap. Address-space cap covers client, not daemon workers.
+First project-arguments overlapped owner's independent kl-trust terminal build;
+sampling for that overlap is incomplete. Owner finished it, all processes exited,
+then the controlled queue continued alone. Do not infer an exact global peak.
+Mistaken pause cancelled home-manager once; owner clarified, it was rerun/pass.
+
+Local execution fixes: tests path trailing slash removed; common guest default
+virtualisation.cores=lib.mkDefault2; whole-hm mkForce case supplies its mandatory
+home.stateVersion=config.system.stateVersion inside the forced value; SSH uses
+explicit config and case-normalized OpenSSH10.4 diagnostic output. These preserve
+test intent; history includes their earlier failures. kl-trust was cached from
+owner's run, so a targeted rebuild provided fresh controlled VM execution.
+
+ONLY after the35 outcomes, simplified lib/modules.nix: original by-name loader
+plus ordinary overlay fields inheritlib/inherit(lib)flake-inputs; preserved
+conditional pkgsOrigin. No newScope, callProjectPackage, private-hook proxy or
+projectLib alias. Final SHA2561c9660e3d876729f8255c6bb123289a7b28e98f80d8c1fc81bb4e7dce2bb5d53.
+Static callPackage/scope trace and diff-check passed. One capped post-refactor
+eval of project-arguments.drvPath succeeded and matched pre-refactor
+/nix/store/ayxww5jsk2wp40krbfbm9l5d17hqdrf1-vm-test-run-project-arguments.drv.
+This does not relabel all35 pre-refactor outcomes as post-refactor executions.
+
+Owner asked to record overengineering incident and process proposals in other
+active change's feedback file; appended to
+../20261015-073247-tighten-sdd-artifact-boundaries/.specd-exploration.md
+sections807/856: authored validate/plan scope inflation vs non-mandated helpers,
+owner does not read plan/validate, short detail-free plan, short validation with
+general run approach/special edge cases/no obvious checks, incremental architecture
+alongside implementation. Also proposed Nix dependency/fixed-point/laziness and
+eval/build/runtime orientation for future project context and minimal native
+examples before abstractions; model-causation hypothesis explicitly unproven.
+These are feedback only, not adopted process/schema/skill/context changes.
+
+No aggregate, legacy shell, normative/approved artifact prose, task marks, hooks,
+commits, lifecycle transition or next skill. Item3 remains pending with the prior
+owner-withdrawn criteria/API/path mismatch recorded below. Active work is done
+for this requested run/refactor/feedback batch; report outstanding klvpn finding.
+
+## Legacy migration ledger (2026-10-28, code for owner review)
+
+Owner authorizes simple uncovered feature cases plus a deferred/partial table. Static-only: no Nix, parser, formatter, evaluation, build, VM or legacy shell execution. Legacy scripts/fixtures and production behavior remain unchanged in this batch. Item3 stays pending.
+
+Current tests/default.nix registers 35 explicit executable paths (30 newly authored module cases, one extended existing HM case, four other retained cases). Every entry uses ordinary callPackage and direct testers.runNixOSTest. It returns tests // { allTests = linkFarmFromDrvs "all-tests" (builtins.attrValues tests); }; no checker. Flake exports only checks.${defaultSystem}.tests = flake-inputs.self.packages.${defaultSystem}.projectTests.allTests. Link names use each derivation's name; all 35 declared test names are distinct by static source review. symlinkJoin would merge directory contents and takes an attribute set, so it is not used.
+
+Every one of the 134 exported legacy assertion/expected-error keys is listed below. Status describes SOURCE COVERAGE, never passing execution: authored = concrete replacement scenario; partial = named remainder explicitly remains; deferred = non-simple/intrinsic prerequisite unresolved; excluded = owner rejected inventories/upstream/broad-policy comparisons. Data witnesses may differ as recorded. No equivalence, runtime, aggregate memory or success proof is inferred.
+
+| Source | Exact old keys | Source coverage | Current case | Remaining scope / reason |
+| --- | --- | --- | --- | --- |
+| conditional | `hardware.defaultOff`, `hardware.explicitOff`, `hardware.developmentPolicy`, `hardware.nonDevelopmentPolicy`, `hardware.policyOverrides`, `hardware.keyutilsPolicy`, `hardware.keyutilsPolicyOverrides`, `hardware.emptyDrives`, `kl.defaultOff`, `kl.explicitOff`, `kl.employmentPolicy`, `kl.graphicEmploymentPolicy`, `kl.graphicOnlyPolicy`, `kl.overridePolicy`, `services.defaultOff`, `services.explicitOff`, `services.vpsPolicy`, `collection.defaultEffects`, `collection.explicitOffEffects`, `collection.defaultToplevel`, `collection.explicitOffToplevel`, `collection.noPrimarySelection`, `collection.independentService` | excluded | — | Broad baseline/role comparison; excluded from per-feature VM scope. |
+| conditional | `hardware.enabledPower` | partial | power-wakeup | Guest unit and ACPI postcondition authored; QEMU may expose no non-power enabled wake entries. Physical sleep/wake remains untested. |
+| conditional | `hardware.enabledKeyutils` | authored | cifs-keyutils | Actual tools/rules/request-key callback; SMB/Kerberos server authentication is outside this old configuration assertion. |
+| conditional | `hardware.enabledAvr` | authored | avr | Installed USB vendor/product/group rule; physical flashing remains outside this old rule-string assertion. |
+| conditional | `hardware.enabledStm32` | authored | stm32 | Installed STLink/GPIO commands and USB rules; physical programming remains outside this old package/rule assertion. |
+| conditional | `hardware.independentPackage` | excluded | stm32 (selected feature only) | Unused st-gpio drvPath smoke is not reproduced; owner excludes ordinary package/upstream smoke. |
+| conditional | `hardware.independentFeature`, `collection.independentProgrammer` | partial | avr | Isolated AVR enable/rules authored; separate full off-state and unrelated-feature absence comparisons not duplicated. |
+| conditional | `hardware.disabledDrives`, `hardware.mixedDrives` | partial | drive-standby | Selected /dev/vda timer/timeout command and disabled device unit absence authored. Different device/timeout witness; complete unit inventories and physical spin-down not claimed. |
+| conditional | `kl.trustOnly` | partial | kl-trust | Real system trust and CURL_CA_BUNDLE without primary/HM authored; no separate active-HM no-NSS-step comparison. |
+| conditional | `kl.certificatesOnly` | partial | kl-nss-certificates | Actual fresh-home NSS certificate import authored; no separate comparison of system trust and token activation absence. |
+| conditional | `kl.tokensOnly` | deferred | — | Token activation assumes an NSS DB and does not initialize it. Clean-home prerequisite unresolved by source inspection; no fabricated DB/certificate enable. Smart-card authentication also needs hardware. |
+| conditional | `kl.inactiveNoLogin`, `kl.inactiveAccountOnly` | partial | kl-trust; home-manager-inactive; home-manager-independent | System trust and generic inactive alias laziness authored separately. Original true NSS flags with poisoned package dependencies, both account states, are not reproduced. |
+| conditional | `services.gerritEnabled` | deferred | — | Local service/credentials/plugin fixture deferred: pinned core3.13 vs OAuth artifact3.14 compatibility unresolved. This is source-based concern, not observed failure; remote provider login is additional scope. |
+| conditional | `services.gamingEnabled` | authored | gaming | Guest Steam binary, hid-playstation module, project extra flags and firewall ports authored. Real games/graphics/controllers are additional hardware scope. |
+| conditional | `services.steamDisabled` | partial | gaming-steam-disabled | Steam binary/extras absent while controller module remains; exact upstream baseline firewall/settings equality not reproduced. |
+| conditional | `services.independentSteam` | excluded | — | Independent upstream Steam equivalence with gaming disabled is an upstream/baseline smoke comparison. |
+| conditional | `collection.browserDefaultOff` | partial | home-manager | Default activation-step absence authored; separate explicit-false variant not duplicated. |
+| conditional | `collection.browserSelections` | authored | browser-firefox; browser-chromium | Each browser flag triggers actual shared NSS/profile links and trust-module link. GUI launch and real browser authentication not claimed. |
+| conditional | `collection.luksDefaultOff` | excluded | — | Baseline absence/package-inventory assertion is excluded by owner. |
+| conditional | `collection.luksSelected` | deferred | — | Actual helpers require encrypted-device/initrd fixture. Old fake device evaluation/package-name check is not a successful encrypted-VM boot or key operation. |
+| conditional | `formats.sameAvailableFormats`, `formats.reusableMatchesUpstream`, `formats.policyApplied`, `formats.policyDiffers`, `formatSettings.iso`, `formatSettings.qcow`, `formatSettings.raw` | deferred | — | ISO/QCOW/RAW generator equivalence and image-policy evaluation require distinct format graphs/builds. |
+| conditional | `errors.gerritDomain`, `errors.gerritServerId`, `errors.standbyTimeout` | deferred | — | Expected Nix evaluation failure and exact diagnostics/source locations; a bootable VM cannot establish it. |
+| conditional | `hosts.hardwarePolicy`, `hosts.klPolicy`, `hosts.gamingHasNoKlTrust`, `hosts.servicePolicy` | excluded | — | Inventory of real host roles/configurations, explicitly excluded by owner. |
+| primary | `accountChecks.absent` | partial | home-manager-independent | Missing primary selection, no empty-name account and actual independent secondary HM authored. Unrelated SSH baseline/full account inventory not duplicated. |
+| primary | `accountChecks.noEnableOption` | authored | primary-user-defaults | Project user API has no enable option. |
+| primary | `accountChecks.defaults` | partial | primary-user-defaults | Actual account/home/description/UID and default metadata/group inclusion authored. Exact supplementary-group equality is not claimed. |
+| primary | `accountChecks.surname` | authored | git-identity | Default lowercased surname consumed by KL domain identity. |
+| primary | `accountChecks.factory` | authored | primary-user-customization | Custom domain-name factory consumed by configured primary account; different humanName/login witness. |
+| primary | `accountChecks.overrides` | partial | primary-user-customization | Custom metadata/home/password/groups authored. Direct domainName override, duplicate alice/bob variants and exact group inventory not reproduced. |
+| primary | `homeChecks.defaultOff`, `homeChecks.accountOnly`, `homeChecks.explicitOff`, `homeChecks.inactiveNoLogin`, `homeChecks.inactiveAccountOnly`, `homeChecks.inactiveExplicitOff`, `homeChecks.inactiveRefresh` | partial | home-manager-inactive; home-manager-independent; home-manager-independent-primary | Inactive alias, deferred poison and refresh laziness authored in account/no-primary and independent-HM cases. Entire old alternate empty-config/type/declaration matrix not duplicated. |
+| primary | `homeChecks.active`, `homeChecks.deferredType`, `homeChecks.activation` | authored | home-manager; home-manager-inactive | Account/default projection, deferred type and actual managed activation authored. |
+| primary | `homeChecks.directOnly` | authored | home-manager-declarations | Direct declaration is observed through config.hm and installed in guest; shared case also has alias declarations. |
+| primary | `homeChecks.secondary`, `homeChecks.independentDeclarations` | authored | home-manager-independent; home-manager-independent-primary | Real independent secondary and same-login HM activations do not consume poisoned primary declarations; global-pkgs projection remains inactive. |
+| primary | `homeChecks.appliedDeclarations` | partial | home-manager-declarations | Attribute/login/alias/imported HM function declarations installed; standalone hm=function witness not separate from imported function witness. |
+| primary | `homeChecks.nestedConditions` | authored | home-manager-declarations | True file installed, false branch has a throwing value and produces no file. |
+| primary | `homeChecks.library` | excluded | — | Upstream lib.hm DAG helper itself; owner excludes upstream helper smoke tests. |
+| primary | `homeChecks.merge`, `homeChecks.ordering` | authored | home-manager-merge | Alias/direct file merge and sessionPath ordering authored; old session-variable data witnesses changed. |
+| primary | `homeChecks.priorities` | partial | home-manager-merge; home-manager-force; home-manager-default | Inner mkDefault/mkForce and root-priority forwarding observed on files. Old stateVersion-specific witnesses not repeated. |
+| primary | `homeChecks.refreshDefault`, `homeChecks.refreshEnabled`, `refreshActivation.enabled`, `refreshActivation.disabled` | partial | home-manager; home-manager-refresh | Default step absence, enabled DAG order, fresh profile manifest and service restart authored. Exact explicit-false variant/raw derivation text/command-order checks not reproduced. |
+| primary | `homeErrors.missingLogin`, `homeErrors.conflict`, `homeErrors.readNoLogin`, `homeErrors.readAccountOnly`, `homeErrors.readSecondary`, `homeErrors.readIndependentPrimary`, `homeErrors.nestedThrow`, `homeErrors.moduleThrow`, `homeErrors.invalidValue`, `transmissionMissingLogin`, `consumerErrors.dmAccountOnly`, `consumerErrors.dmTheme`, `consumerErrors.printing`, `consumerErrors.vpn`, `consumerErrors.media`, `consumerErrors.dmRead`, `consumerErrors.cntlm`, `consumerErrors.kl`, `consumerErrors.domain`, `missing.name`, `missing.humanName`, `missing.home`, `missing.domainName` | deferred | — | Expected Nix evaluation failure and exact diagnostics/source locations; a bootable VM cannot establish it. |
+| primary | `transmissionChecks.noLogin`, `transmissionChecks.accountOnlyDefault` | excluded | — | Full-repository default-policy variants not re-imported. Narrow managed and explicit-disable cases do not establish these alternate policies. |
+| primary | `transmissionChecks.managed` | authored | transmission | Actual local daemon/settings/permissions and HM ordering authored. |
+| primary | `transmissionChecks.disabled` | authored | transmission-disabled | Narrow default policy explicitly disabled: no activation, daemon unit or daemon home directory. |
+| primary | `transmissionChecks.accountOnlySelected` | deferred | — | Upstream setup has Before/PartOf but no observed start dependency; BindPaths requires directories. Account-only automatic startup prerequisite unresolved by source, not executed failure. No mkdir or manual setup-unit workaround authored. |
+| primary | `consumerChecks.absent`, `consumerChecks.accountOnly`, `consumerChecks.disabled`, `consumerChecks.independent`, `consumerChecks.unmanagedDeclarations` | excluded | — | Repository-wide consumer configuration/alternative-state matrix; no one-node coverage claim. |
+| primary | `consumerChecks.managed` | partial | git-identity; ssh-config; kitty-config; top-config; pass; transmission | Focused actual consumers authored. Full-repository activation inventory and managed pass activation with real key/store not claimed. |
+| primary | `consumerChecks.graphical`, `consumerChecks.dormantEnabled`, `consumerChecks.dmRead`, `consumerChecks.dmTheme` | deferred | — | Full graphical policy includes flake-specific compositor modules, GTK themes and display-manager/session prerequisites. |
+| primary | `consumerChecks.printing` | partial | printing3d | Actual local writable Prusa config copy and modeling3d user/path assertions authored. Personal remote gitwatch explicitly disabled; repository clone/sync not claimed. |
+| primary | `consumerChecks.explicitDisable` | partial | transmission-disabled | Transmission explicit disable authored; pass disabled activation variant not duplicated. |
+| primary | `consumerChecks.dormant`, `consumerChecks.selectedDormant` | partial | home-manager-inactive | Generic poisoned inactive alias is tested. Actual dormant desktop fragment imports and graphical-selection variants remain untested. |
+| primary | `consumerChecks.passSystem` | authored | pass | Pass-otp is available under actual account without HM and project GPG-agent selection is asserted; encrypted store/key import/git remote not claimed. |
+| primary | `consumerChecks.printingAccountOnly` | deferred | — | Account-only automatic personal-remote gitwatch service needs repository/auth fixture; managed local Prusa copy does not cover this alternate account-only branch. |
+| primary | `consumerChecks.suppliedDependencies` | partial | git-identity; cntlm; klvpn | KL mail/domain identity, local proxy port/account, PKCS module files/socket/group and polkit declaration string authored. Polkit rule emission/authorization, real GSS/VPN/card auth and NAS/ACME private inputs not claimed. |
+| primary | `consumerChecks.accountMetadata` | partial | git-identity; primary-user-customization | Actual Git human name and KL-generated primary mail plus direct metadata config assertion authored; original custom-mail override directly consumed by Git is not a separate witness. |
+
+Additional shell-only obligations remain distinct: exact diagnostic/source paths for alias/direct conflict and invalid-value failures; refresh activation .drv extraction, manifest/nix-profile command and ordering inspection; primary-user-hm-hosts snapshot/JQ integration; all seven real-host toplevel evals/build --dry-run (ShvedGaming, ShvedMedia, gerrit, testA, testB, testNas, testVps). Last host/global duties are excluded by owner; negative diagnostics and raw derivation inspection require separate evaluation approach.
+
+Source-only concerns for owner review: tokens-only assumes an NSS DB; account-only Transmission may not pull its setup unit; Gerrit core/plugin revisions differ. None is an observed execution failure. Printing3d disables the personal-remote watcher explicitly to isolate local configuration copying; klvpn checks polkit declarations but does not assert emitted/active rules because polkit enablement is separate.
+
+Approved system/validate/plan still describe withdrawn cases, old paths/API, and old aggregate/check names. Preserve approved artifact prose/checkboxes and manifest this turn; reconcile owner changes explicitly later, starting with validate. No hooks/lifecycle transition/commit/next skill. Current suite and aggregate unrun; historical ordinary VM success is only evidence for its deleted source revision. Stop for owner code review after static source review and git diff --check HEAD.
+
+Static review complete for this batch: 35 registered paths and distinct declared test names; all new files registered with git add --intent-to-add for flake visibility. git diff --check HEAD passed; git diff on all legacy scripts/fixtures/stubs is empty. Separate read-only arbiter review found and author fixed the power-wakeup Type=simple completion race via systemctl start --wait, then reported no remaining actionable source findings. No execution/approval/closure was inferred. Reviewed hashes: tests/default.nix 682ca490a921ed8c53967ad3db9de56e3da85841e3b2d1a9ce1fcf1b0edde450; flake.nix bbe2d51f4e379911265db09ccdd1bb5ff2532696012e20f4cfd5c373aedb008b; power-wakeup 956e5d2ebe60be5ca7caae1e1dd6dc0b09398ac62eeabdbb6847c15b6d95cd86. Arbiter's source-manifest digest (sha256sum output for registry, flake, tests/modules/*.nix and both package tests): 2d3d0e4f6cda5e8b698261c77061935c9ebc1289c27002b4955ad85990c41219. Owner code review pending; no further execution authorized.
+
+## Ordinary-package smoke withdrawal (2026-10-28, historical)
+
+- Owner rejects ordinary-packages as a redundant package/test-runner smoke,
+  after explanation of its two hello runs and duplicated package CLI checks.
+  Deleted tests/modules/ordinary-packages.nix and its only registration in
+  tests/default.nix; cleaned its new-file index entry. No replacement smoke,
+  package alias, fixture or extra infrastructure was added.
+- Current collection has five executable cases: project-arguments (the
+  expressly permitted project-local argument assertions), cifs-keyutils,
+  home-manager, specd and specd-bootstrap; plus the aggregate. Remaining case
+  hashes and loader/checker implementation are unchanged except list removal.
+  Dedicated package VM behavior tests, wrapper, flake and production untouched.
+- Static remaining-name/source/dependency review and git diff --check HEAD
+  passed. Focused Nix-source rg finds no ordinary-packages reference (expected
+  no-match exit1). No Nix/parser/formatter/evaluation/runtime was run.
+  tests/default.nix SHA-256
+  cd6f87a6b32375f9bf1b73f4eca5bb5b55a414e140a20890440fb50c71b5c57b.
+- Approved validate/plan still contain ordinary-packages references, alongside
+  prior owner-withdrawn checks, API and path changes. Preserve approved
+  artifacts/task marks now and record the mismatch for later explicit
+  reconciliation beginning with validate. Production package compatibility
+  is not withdrawn merely by deleting this particular smoke check.
+- IMPORTANT: the earlier bounded successful ordinary VM execution now covers
+  only a DELETED case at its recorded historical source revision. It is not
+  evidence of executing any current retained case or aggregate. Current suite
+  remains unrun, aggregate never passed and item3 stays pending. No hooks,
+  lifecycle transition, commit or next skill. Stop after owner review report.
+
+## Explicit module-case dependencies (2026-10-28, historical)
+
+- Owner requests concrete package/tool inputs instead of pkgs in module test
+  entry functions. Changed cifs-keyutils, home-manager and project-arguments
+  to {testers}: testers.runNixOSTest. Ordinary-packages now takes hello,
+  pkgsUnstable, specd, specd-bootstrap and testers explicitly. Its four paths
+  and CLI interpolations use those same named dependencies; no assertion,
+  guest command, node setting or additional path was removed or changed.
+- Only the case-entry callPackage interfaces were refactored. The inner
+  project-arguments NixOS module still takes actual guest lib/flake-inputs/
+  pkgsUnstable/pkgs, with its assertions delayed inside systemPackages and its
+  guest pkgs.hello return intact. Guest pkgs is the observed module environment,
+  not the removed outer package dependency. Keep this distinction; do not
+  replace it with outer packages or add new module argument machinery.
+  Ordinary's named unstable namespace remains the existing pkgsUnstable export,
+  without an invented unstableHello alias or case-specific loader arguments.
+- Uniform tests/default loader, both package VM tests, legacy standalone
+  module fixtures, by-name wrapper, flake and production runner/scopes/guards
+  untouched. Same six test names plus aggregate. Static source argument/tool/
+  package substitution and unchanged assertion/settings review passed, as did
+  git diff --check HEAD. No Nix/parser/formatter/eval/runtime or equality proof.
+  Current SHA-256:
+  project-arguments e54342bdd2c3b3a3e399058ac2e1135d2c99720a0111aee7c9e3e987681eb188;
+  cifs-keyutils cdac29c58628be51541c03459c2322dce7aadec0feac987062568640ae8a5802;
+  home-manager 14e9fc975383c2965189918c993b6592a81ffb95e8395302167103ea91ac120d;
+  ordinary-packages d9668056a1bca709a653c55b92e0323ed8184a4d2be17695176582f9d089244b;
+  unchanged tests/default
+  1f56219699c7c2c52b920b9435bb01fc4644627327bd1e3a158c640a7aee3098.
+- Preserve the previously recorded owner-authorized API/name/coverage changes
+  for later explicit normative reconciliation; no approved artifact or plan
+  mark changed now. Current suite unrun, historical ordinary execution remains
+  tied to its earlier revision, aggregate never passed and item3 stays pending.
+  No hooks, lifecycle transition, commit or next skill; stop at owner review.
+
+## Unified case loading (2026-10-28, historical)
+
+- Owner requests invoking package tests analogously to module tests. Added
+  ./pkgs/specd.nix and ./pkgs/specd-bootstrap.nix to tests/default.nix's same
+  explicit cases list; all six values now use callPackage file {} and basename
+  names. Removed the separate passthru.tests.vm entry merge and unused specd/
+  specd-bootstrap function arguments. Only lib/callPackage/linkFarm are inputs.
+- Public checker/aggregate member names are now project-arguments, cifs-keyutils,
+  home-manager, ordinary-packages, specd and specd-bootstrap, plus the aggregate.
+  The package check names intentionally change from specd-vm/specd-bootstrap-vm
+  to their source basenames. No aliases, filename moves, directory conditions or
+  other package-specific loader behavior were added. There are still six
+  executable cases plus aggregate; checker/callPackage metadata boundary and
+  lazy map remain the same. No source references to the old executable aliases.
+- Both package test files already consume normal callPackage dependencies.
+  Source trace of their passthru definitions shows the same files with only
+  explicit own finalPackage bindings, supplied directly from the current root
+  package set by the unified loader; bootstrap discovery retains true default.
+  Package test commands/assertions/dependencies, package passthru declarations,
+  wrapper, flake alias, four functional cases and production code untouched.
+  This is a source trace, NOT an evaluated drvPath-equality/runtime proof.
+- Static argument/package-self/path/name/aggregate/laziness review and
+  git diff --check HEAD passed; focused no-obsolete-Nix-reference rg returned
+  expected no-match exit1. No Nix/parser/formatter/eval/runtime was run.
+  tests/default.nix SHA-256
+  1f56219699c7c2c52b920b9435bb01fc4644627327bd1e3a158c640a7aee3098.
+  Unchanged package test SHA-256: specd
+  72cc08f673abdee46dcdc829fcc0e35c2793a7f8942c9b449fd060edf8697be2;
+  specd-bootstrap
+  78d7e0db9830afa11030a44bcb59af80a16d6cbcb18b39ed8d9172aefec67728.
+- Approved system/validate/plan still name old -vm checker entries and direct
+  passthru collection identities, alongside earlier API/path/test withdrawals.
+  Record this owner-authorized unification/name change for later explicit
+  artifact reconciliation beginning with validate; preserve approved artifacts
+  and task marks now. Current suite unrun, aggregate never passed, item3 pending.
+  No hooks, lifecycle transition, commit or next skill. Stop at owner code review.
+
+## Direct-dependency simplification (2026-10-28, historical)
+
+- Owner rejected suite-collection's circular rationale after the explanation
+  and deletion proposal. This resolves the previous STOP-and-ask boundary:
+  delete the obsolete case and remove its supplied-collection API, without
+  repeating the question or inventing replacement fixture machinery.
+- Deleted tests/modules/suite-collection.nix and its registration. Replaced
+  tests/default.nix's pkgs/testCases arguments with direct named dependencies
+  {lib, callPackage, linkFarm, specd, specd-bootstrap}: and local cases/tests.
+  No testCases argument or pkgs.XX access remains in that file. Local tests
+  cannot auto-capture pkgs.tests. Each explicit case uses callPackage file {};
+  package VM entries consume the direct specd/specd-bootstrap arguments.
+  checker remains the plain local tests set plus linkFarm aggregate; metadata
+  stays outside checker in the unchanged two-line by-name package wrapper.
+- Collection now has four authored cases (project-arguments, cifs-keyutils,
+  home-manager, ordinary-packages), two existing package VM entries, and its
+  aggregate: six executable members plus aggregate. No generic supplied-set
+  API, fixture/meta-test, hidden override, fake scope or replacement API test.
+  Four functional case hashes, by-name wrapper and production code unchanged.
+  Flake's direct projectTests.checker alias remains; its observed hash changed
+  only with the user's defaultSystem indentation fix, which was preserved.
+- Static source/dependency/name/identity/checker-laziness self-review passed.
+  Focused Nix-source rg confirms no suite-collection/testCases/testLib/old
+  tests/nixos reference; pkgs is absent from tests/default. No-match exit1 is
+  expected. git diff --check HEAD passed. No Nix/parser/formatter/evaluation
+  or runtime. Current source SHA-256:
+  tests/default.nix
+  ba8ab483c3bc869e6616086bd34ae5490a37ac9696e2b769f7746e0fbe0b18f6;
+  flake.nix 6730959fbbbecaf3bd09e8960397d0de29374da232560549cc195b657bac9afc;
+  unchanged by-name package
+  ab9dbf55b76030c591f8aee7de55bc4c90fa55d413d42d4d205b31c2000cf47d.
+- Approved system/validate/plan still describe supplied-set constructor API
+  and suite-collection behavior, alongside earlier stale paths and withdrawn
+  tests. The owner has now removed that API itself as well as its test; do not
+  preserve it invisibly or label its removal as preserved generic behavior.
+  Record the mismatch for later explicit artifact reconciliation beginning
+  with validate; preserve approved artifacts/task marks now. Historical
+  ordinary execution remains evidence only for its recorded source. Current
+  suite remains unrun, aggregate never passed, item3 stays pending. No hooks,
+  lifecycle transition, commit or next skill. Stop at owner source review.
+
+## Applied checker correction (2026-10-28, historical)
+
+- Owner replaces the metadata-removal workaround with an explicit checker
+  attribute in the package, selected directly by flake checks. Wrapped the
+  existing collection result in tests/default.nix as
+  { checker = testCases // { testing-infrastructure = linkFarm ...; }; }.
+  The same optional lazy testCases default, five case paths, case callPackage
+  calls, two existing package entries and exact aggregate inputs remain.
+- Flake now exports projectTests.checker directly. suite-collection selects
+  .checker from both its supplied-testCases callPackage fixture and the public
+  pkgs.projectTests. All metadata removeAttrs expressions are gone from this
+  wiring, with no type filters, adapters or duplicate direct-member aliases.
+  The two callPackage layers decorate only their outer result; neither wraps
+  checker, so it remains the plain lazy seven-member-plus-aggregate collection.
+  Fixture checker remains exactly left/right/aggregate and retains the same
+  derivation-identity and guest link checks. Supplied testCases still bypasses
+  default construction. No pkgs.tests auto-injection was reintroduced.
+- By-name package wrapper, four functional cases, package VM tests, production
+  runner/scopes/guards and prior pending task marks are unchanged. Source
+  self-review traced both callPackage boundaries, constructor/default laziness,
+  member names/identities and selectors. Focused reference checks and
+  git diff --check HEAD passed. No Nix/parser/formatter/evaluation/runtime ran.
+  Current SHA-256:
+  tests/default.nix
+  f93c127eaafa7d1875862e4d3c98bb9b5e9ce9757dd8dc85752fd8d9bcbd482e;
+  tests/modules/suite-collection.nix
+  63cb0dba60372867fa1e005d7e5d0d619f73ed66d73ee501b36d5e1bca6c260c;
+  flake.nix 3050b5a6c18dbacbc3c6b42f2fccaaaf279d0b25bae89df9dc301e826626ef48;
+  unchanged by-name package
+  ab9dbf55b76030c591f8aee7de55bc4c90fa55d413d42d4d205b31c2000cf47d.
+- This current section supersedes the removeAttrs boundary recorded below.
+  Approved system/validate/plan still describe earlier constructor/public API
+  shapes and source pointers, alongside explicitly withdrawn coverage. Record
+  this owner-authorized correction for later explicit artifact reconciliation
+  beginning with validate; preserve those artifacts now. Current suite remains
+  unrun, item3 stays pending and aggregate never passed. No lifecycle action,
+  hooks, commits or next skill. Stop after compact owner code-review report.
+
+## callPackage integration (2026-10-28, historical)
+
+- Owner authorizes making the collection part of pkgs via by-name and asks
+  for package.nix to use pkgs.callPackage ../../../../tests/ {}, with each case
+  also loaded by callPackage. Added the two-line
+  pkgs/by-name/pr/projectTests/package.nix exactly in that form; registered
+  intent-to-add so the flake source includes it. No extra overlay binding.
+- tests/default.nix now consumes pkgs only, plus optional testCases. Its
+  default still lists the same five explicit module paths plus the two package
+  VM entries; each mapped value uses pkgs.callPackage file {}. Constructor
+  output remains the supplied/default collection plus its linkFarm aggregate.
+  Rename tests -> testCases is necessary: pinned nixpkgs all-packages.nix:166
+  already exports pkgs.tests, which callPackage would auto-supply instead of
+  our old default. No testCases name collision exists in pinned top-level,
+  by-name or project sources. An explicit supplied collection remains lazy and
+  preserves exact derivation identities; no directory scan/new helper/scope.
+- Pinned lib/customisation.nix:174-180 adds override and overrideDerivation to
+  attrset results, including both callPackage layers here. Flake checks now
+  use builtins.removeAttrs pkgs.projectTests [those two keys]. No overrideAttrs
+  key exists in our explicit collection, so its conditional addition does not
+  apply. Do NOT replace this with filterAttrs isDerivation: type filtering
+  would force all member heads during targeted selection. The earlier type-
+  filter suggestion was withdrawn after source review; no such filter landed.
+  Metadata removal preserves lazy member values; this is not runtime/memory
+  evidence and does not relax the user's single-case authorization or cap.
+- suite-collection uses pkgs.callPackage ../default.nix {testCases=supplied;}
+  and removes the same two metadata keys for exact fixture-name assertions.
+  Its presence/identity checks now inspect pkgs.projectTests directly, not an
+  independent flake-inputs.self.checks path. Assertion messages match this
+  boundary; all supplied identities and aggregate guest link checks remain.
+  Flake exports the same seven members plus aggregate after metadata removal.
+  Four functional cases and project runner/support/guards are untouched. Node
+  project-arguments still receives/asserts actual lib, flake-inputs and unstable
+  arguments from the runner; no package-level argument threading is needed.
+- Static source/path/argument/identity/laziness review and git diff --check HEAD
+  passed. New by-name relative path/collision and both standard callPackage
+  layers reviewed against pinned primary source. No Nix/parser/formatter,
+  evaluation or runtime command ran. Current SHA-256:
+  package.nix ab9dbf55b76030c591f8aee7de55bc4c90fa55d413d42d4d205b31c2000cf47d;
+  tests/default.nix
+  cc6c3a50102d035c10e753cd21e59b4cf49ff6f254f216125ed81884deeae97d;
+  tests/modules/suite-collection.nix
+  824486020e127f94bd9e743f14a46018f841ec8f2031761cce39b20aefeed014;
+  flake.nix bb5ca184c0815d2051043a7da324725dc840dacd9647d43951b1f786f767c428;
+  unchanged tests/modules/project-arguments.nix
+  2c3ea06e364ba0922e78e38f197a956f66abf040418771f05423582c9b6a9c07.
+- Approved system/validate/plan still describe old source/API placement,
+  explicit context threading, the old tests override name and independent
+  public-check inspection, alongside earlier withdrawn matrices/host tests.
+  Record this owner-authorized correction for later explicit reconciliation
+  beginning with validate; preserve normative artifacts/task marks now.
+  Item3 stays pending, aggregate/current source remains unrun. No commits,
+  hooks, lifecycle transitions or next skill. Stop at owner code-review boundary.
+
+## Directory-layout correction (2026-10-28, historical)
+
+- Owner explicitly requests one entry point tests/default.nix, cases directly
+  under tests/modules, and no separate testing-infrastructure.nix registry.
+  Moved only the five authored cases; existing standalone module fixtures,
+  shell scripts, fixture directories and private-value stubs are untouched.
+  Removed the obsolete tests/nixos tree after merging its two entry files.
+- tests/default.nix is now 28 lines: explicit five-path/default two-package
+  registration in the lazy tests argument default, followed by the unchanged
+  tests // linkFarm aggregate body. The supplied-tests override bypasses default
+  case construction and preserves exact supplied values. Both callers pass
+  pkgs and flake-inputs explicitly; suite-collection's relative ../default.nix
+  remains correct after its move. Do not auto-scan tests/modules: its existing
+  standalone fixtures/stubs are not collection cases. No new helper/dispatcher.
+  Flake checks wiring now imports ./tests once. Public member names remain
+  five authored + two package VM entries + testing-infrastructure aggregate.
+- Four moved functional cases are byte-identical to their previous sources.
+  Suite-collection only adds flake-inputs to its fixture constructor call.
+  Static source/path/member/dependency review, focused no-stale-path rg and
+  git diff --check HEAD passed. Existing tests/modules fixtures/scripts/stubs
+  were compared against HEAD with git diff --exit-code and are unchanged.
+  No Nix/parser/formatter/evaluation/runtime ran. Current SHA-256:
+  flake.nix 3dc4ba82c359e1893bf4f9e6f6230913b04855e53201abbf6044af6011cadf6d;
+  tests/default.nix
+  b3701211b274e3f757a548a8a8657d398153511ef7b4996e13a5ad6b8a14f4a7;
+  tests/modules/project-arguments.nix
+  2c3ea06e364ba0922e78e38f197a956f66abf040418771f05423582c9b6a9c07;
+  tests/modules/cifs-keyutils.nix
+  c49486cf78661005513b7f038b6f7bbee4ea670eb755424b558ba98c92c8be9a;
+  tests/modules/home-manager.nix
+  c4e6da8ab8b7fe761dacb1183bf89853b5a570b11a68d6c63c1a474e2f60999e;
+  tests/modules/ordinary-packages.nix
+  cd416bae0e97a415e3e63845cbd022be1f3a2b8cab699f4d0b82b7a296836678;
+  tests/modules/suite-collection.nix
+  9775c1e19a05ad9994efc7141d00f99a8ad1a4e835f716e50c193a82c793b11b.
+- Approved system/Test Suite, validate and plan still refer to old source paths
+  and constructor context expectations, alongside withdrawn coverage below.
+  This owner-authorized placement/merge correction supersedes those source
+  choices. Preserve approved artifacts now; reconcile later in explicit scope,
+  beginning with validate. Item3 stays pending; aggregate/current cases remain
+  unrun. No task marks, normative edits, hooks, lifecycle transitions, commits
+  or next skill. Stop after reporting the concrete new layout/entry point.
+- Managed sandbox denies .git index writes. Direct git mv/rm escalated retries
+  succeeded, and git mv prefix approval is now saved. Use direct standard Git
+  commands with known required sandbox permissions for future index mutations.
+
+## Host-validation removal (2026-10-28, historical)
+
+- Owner explicitly chooses no validation-configurations/host-composition or
+  role-composition tests. Such expected inventories would need updating for
+  every new feature. Instead, each feature gets a focused test enabling its
+  corresponding role and checking that feature's behavior. This resolves the
+  previous stop-on-complexity question; no split or narrowed host case is due.
+- Deleted validation-configurations.nix and its sole remaining support/default
+  dependency. Removed testLib import/injection from the registry and removed
+  the case from its list and suite-collection's expected names. There is now
+  no support/ directory or testLib usage in executable Nix sources. All five
+  remaining authored cases call pkgs.testers.runNixOSTest directly. The generic
+  constructor, production runner/modules, individual case behavior and public
+  nixosValidationConfigurations output are unchanged by this removal.
+- Registry now lists five authored cases plus two existing package VM entries:
+  seven executable members plus aggregate. Static source review/rg confirms no
+  obsolete validation-case/testLib/support references in Nix sources; rg's
+  no-match exit1 is expected. git diff --check passed. No Nix/parser/formatter,
+  evaluation, host forcing or VM execution ran. Current SHA-256:
+  registry 18cdc718252f7fb50887f070f093c878abe1526262a66473b369288ca75d11d7;
+  suite-collection 2295c8287fb56ae20c82e2a33bb49cfcb0c56822aa9ea205dfa32e6524c7b531;
+  unchanged constructor
+  7ec2cf41b39e4dba2973a760c3d394f9eae78aa4b1863d3a09858b0f5118ca7a.
+- Approved validate/plan still describe the removed validation host checks,
+  in addition to earlier coverage withdrawals. User authorization supersedes
+  that code-test scope; approved artifacts remain untouched for later explicit
+  reconciliation beginning with validate. Removing these tests does not remove
+  required production validation behavior or prove it. Item3 remains open;
+  aggregate never passed, and historical runs are not evidence for the current
+  suite. No task checkmarks, hooks, lifecycle transitions, commits or next skill.
+
+## Previous implementation correction (2026-10-28, historical)
+
+- Owner explicitly rejects testing upstream pkgsReadOnly/package-mode behavior.
+  Project lib/flake-inputs should be exercised by actual module tests, with a
+  small argument-consuming asserted hello case permitted as a fallback. This
+  answers and supersedes the previous shared-environment mode-splitting question.
+- Deleted shared-environment, frozen-packages and extensions cases, their
+  registry/expected-name entries, support/arguments.nix and package-probes.nix.
+  Removed unused fixture/packageProbes exports. No executable references to
+  those cases/helpers or pkgsReadOnly remain under tests/nixos. Production
+  runner behavior and guards are unchanged; deleting tests does not withdraw
+  the project's required behavior or prove the former matrices.
+- Added direct one-machine project-arguments.nix. Its node module consumes
+  lib, flake-inputs, pkgsUnstable and pkgs; the systemPackages expression asserts
+  the local getSurname helper, the home-manager input and matching package
+  platforms, then returns pkgs.hello. Assertions are delayed inside the option
+  value to avoid forcing module arguments during module collection. The guest
+  runs hello. This intentionally narrower smoke does not preserve declaration-
+  source, import-time argument, extension or package-mode matrix coverage.
+- Registry now lists six authored cases and two original package VM entries:
+  eight executable members plus aggregate. suite-collection expected names
+  match. Only unchanged validation-configurations still consumes testLib;
+  support/default retains its six small exports until that case is resolved.
+  Do not inline this support wholesale to hide the remaining complexity.
+- STOP before editing validation-configurations, per the owner's explicit
+  instruction to ask for advice when another case is large/difficult. It
+  evaluates seven actual public host configurations, compares validation vs
+  deployment sources/values, checks public stubs and marked assembly, and
+  forces all seven validation toplevel derivations. Its VM merely boots.
+  Ask whether to split by host, narrow to an agreed representative/contract,
+  or remove it. No host evaluation or new VM run is authorized or due.
+- Static source review/rg and git diff --check passed. No Nix, parser,
+  formatter, evaluation or runtime command ran for these changes. Prior
+  ordinary-packages success predates the stateVersion cleanup; other historical
+  runs do not validate these new sources. New path has intent-to-add; deleted
+  new files were removed from the index. Current SHA-256:
+  project-arguments 2c3ea06e364ba0922e78e38f197a956f66abf040418771f05423582c9b6a9c07;
+  registry aedcb338fc6d121411d91282ca3755c4844537796c84c055b72ccac097a9bf49;
+  suite-collection 791995903d16cbc162e34966e376764c0dd4d02a8a9c9bff8a737010edc61317;
+  support/default 56b19f151c735192706492a9a0584d92f2b51ea6b976807480f2428912df9a63;
+  validation-configurations unchanged
+  59d267cde35e360d249f3a264c84718d7deae93b7c48e66e7e3913758838d065.
+- Approved validate/plan still describe removed shared-environment, frozen and
+  extensions tests, alongside earlier mutable/selected/minimal withdrawals.
+  The owner explicitly authorized this code-scope reduction. Preserve approved
+  artifacts now; record the mismatch for later explicit reconciliation starting
+  with validate. Item3 stays unchecked and aggregate has never passed. No
+  normative edits, task checkmarks, hooks, transitions, commits or next skill.
+  This current section supersedes earlier continuation coverage maps below.
+
+## Earlier source rewrite continuation (2026-10-28, historical)
+
+- Latest owner directive: simplify all remaining authored cases to familiar
+  direct runNixOSTest; if a case becomes large or poses another difficulty,
+  STOP and ask the owner for advice. Applied the straightforward suite-collection
+  correction only: direct pkgs.testers.runNixOSTest, ordinary pkgs.lib helpers,
+  three explicit assertion records and inline boot commands. Supplied package
+  test identities, constructor, exact public names and guest aggregate link
+  count/destinations are unchanged. No testLib/runner/check/boot aliases remain
+  in this case. SHA-256
+  b66d394d05a59b467cec4f5417a5de5107fead465ecaa01dfbc4833c0ba22459.
+  Source self-review and git diff --check passed; no Nix/parser/runtime ran.
+- Stopped BEFORE changing shared-environment or later cases, per the owner's
+  explicit stop-on-difficulty instruction. shared-environment checks original
+  declaration sources and import-time project arguments in BOTH test-level
+  package modes. node.pkgsReadOnly applies to the whole test, so preserving both
+  needs separate run configurations or independently named tests; a single
+  ordinary guest would reduce the coverage. Ask the owner whether to split it
+  into two direct cases, keep only default-mode checks, or remove this case.
+  Await that answer before dependent edits; do not silently inline its fixture
+  machinery, add another helper, or discard the mode check. Frozen-packages,
+  extensions and validation-configurations also retain nontrivial old matrices
+  and are untouched by this correction. support/registry stay while their
+  remaining consumers exist. Only suite-collection code changed this turn.
+  Item3 remains open; no plan/artifact/hook/lifecycle/commit action is due.
+- Latest owner instruction removes redundant stateVersion settings across VM
+  tests. Pinned nixpkgs test-instrumentation.nix:276 supplies mkOverride1200
+  lib.trivial.release; pinned .version is26.05, matching the removed literals.
+  Removed explicit system.stateVersion from cifs-keyutils/home-manager/ordinary
+  and both tests/pkgs VM callers, plus support's state helper and every consumer
+  import/inherit. Empty node modules remain where a guest must still be declared.
+  User explicitly authorizes these two package-test source edits despite the
+  earlier approved-plan 'unchanged' wording; all their assertions/dependencies
+  and commands remain intact. No production/host or standalone module fixture
+  changed. The latter do not use VM instrumentation; primary-user-HM versions
+  are deliberate inheritance/priority/conflict data. Validation host source/
+  value identity comparisons remain. Do not claim no behavior uses stateVersion:
+  project HM integration inherits it; VM defaults provide its value here.
+  Static self-review/rg and git diff --check passed, no Nix/parser/runtime run.
+  Prior ordinary success predates this source cleanup; do not count it as a run
+  of the current case. Current source SHA-256: cifs-keyutils
+  c49486cf78661005513b7f038b6f7bbee4ea670eb755424b558ba98c92c8be9a;
+  home-manager c4e6da8ab8b7fe761dacb1183bf89853b5a570b11a68d6c63c1a474e2f60999e;
+  ordinary cd416bae0e97a415e3e63845cbd022be1f3a2b8cab699f4d0b82b7a296836678;
+  support/default f3946095c11ec881be18a2f027af1683c1351444b54d230255346ddcc0651386;
+  tests/pkgs/specd.nix
+  72cc08f673abdee46dcdc829fcc0e35c2793a7f8942c9b449fd060edf8697be2;
+  tests/pkgs/specd-bootstrap.nix
+  78d7e0db9830afa11030a44bcb59af80a16d6cbcb18b39ed8d9172aefec67728.
+  Item3 remains open, no hooks/lifecycle action/commit or new run is due.
+- Latest owner instruction replaces the combined selected-capability matrices
+  with separate enabled-CIFS and enabled-HM functional tests. An empty-node
+  cleanliness test is optional and must not enumerate project features; owner
+  explicitly permits dropping it if no simple useful indicator is found.
+  Implemented direct one-machine runNixOSTest cases cifs-keyutils.nix and
+  home-manager.nix, no testLib, baseline, mode matrix or extra configurations.
+  CIFS checks installed tools, both generated CIFS/dns-resolver rules, activated
+  request-key symlink, and a kernel request2 -> configured debug-loop helper ->
+  returned-payload roundtrip. The latter follows existing module configuration
+  and local keyutils manuals /usr/share/man/man{1,5}/{keyctl.1,request-key.conf.5}.gz;
+  it is not an SMB mounting/authentication claim. HM checks account creation,
+  home-manager-tester.service and marker contents read as that user.
+  New source SHA-256: cifs-keyutils
+  3a8b4c6b1db60b0330e883781a6f0b6d55392c6c760610e5249bcc6f2022f0cd;
+  home-manager b2af15d803eebd90d25bae1ec83dc0dd3c18c833e7b27350a42c8b94d958ef30.
+- Removed selected-frozen, selected-mutable, selected-capabilities and
+  minimal-isolation files and their registry/expected-name entries. No simple
+  baseline-independent cleanliness indicator was established; user permitted
+  omission rather than a narrow smoke test labeled as general purity. Removed
+  unconsumed support/effects.nix plus snapshot/upstream exports. Retained other
+  still-used support and unrelated cases. Registry now has eight direct case
+  paths + two original package VM entries = ten executable members + aggregate.
+  Registry SHA-256 d7aa4b90d8b9b4388a7ff572715ad267e19256f2117ca3ca8140e91105c1a0c4;
+  suite-collection 76d7f1d3eb27f727a5968f752a470710c54c094c419022303b1f75a388fb237f;
+  support/default 12a515ac5124bf8d945604f45ad620f6d0e8e3fbb2416f2b92c09cc3bebf30e7.
+  Static self-review/registration checks and git diff --check passed; no Nix,
+  parser/formatter/evaluation/runtime was run for this change. New case paths
+  have intent-to-add, deleted new paths are removed from the Git index.
+  Show both complete concrete cases for owner code discussion; no run is due.
+- New explicit owner scope supersedes the old selected/minimal coverage map
+  recorded below. Approved validate still has minimal-isolation and combined
+  selected-frozen/mutable checks; shared-environment references their removed
+  fixtures. Approved plan items 1/2 name those old cases. Keep those artifacts
+  unchanged in this implementation correction, record this mismatch alongside
+  the earlier mutable-packages withdrawal, and reconcile validate first in a
+  later explicit artifact-edit scope. Requirements' isolation and system runner
+  package-mode behavior remain obligations, not proved by these two new guest
+  tests. Ordinary's prior bounded success remains the only fresh current-case
+  runtime evidence; item 3 stays unchecked. No lifecycle action/commit is due.
+- Owner explicitly withdrew the mutable-packages case. Deleted its new file
+  and Git intent-to-add entry, registry path and suite-collection expected name.
+  No executable references remain under tests/nixos or flake.nix. Retained
+  package-probe helpers are still used by extensions/frozen-packages. The suite
+  now exposes eleven executable members plus its aggregate; item 3 stays open.
+  Registry SHA-256 a4b39a3a8af7cbf1bb170660516054a49f9d03eb9c7c2c95c4a8c8f0ae808981;
+  suite-collection 19f8f83e57992bc27013862355152d0960874a799b815cb32777804c70b98de2.
+  Static self-review and git diff --check passed. No Nix commands were run for
+  this removal. Ordinary-case source and its successful run below are untouched.
+  Approved artifacts were deliberately preserved: validate still contains the
+  withdrawn named check and extensions Evidence reference, and completed plan
+  item 1 names it. This mismatch requires explicit later artifact reconciliation
+  starting with validate; owner withdrawal is authorization to delete the code,
+  not evidence that the originally accepted suite is fully satisfied. The
+  mutable-mode runner behavior itself has not been withdrawn. No claim is made
+  that retained cases replace the deleted explicit-base comparison matrix.
+  Next proposal is selected-frozen, with real CIFS/keyutils and Home Manager
+  guest checks. Do not edit or run it until the owner directs the next action.
+- Owner explicitly authorized building/executing ONLY ordinary-packages, with
+  immediate cancellation if Nix approaches 5 GB. Fresh targeted VM execution
+  succeeded, session 44179 exit 0, test script 179.69 seconds under QEMU TCG
+  (KVM unavailable). Exact command: `ulimit -v 4718592 && nix build --rebuild
+  --no-link --no-write-lock-file --max-jobs 1 --cores 2 --print-build-logs
+  --print-out-paths '.#checks.x86_64-linux.ordinary-packages'`. Both soft and
+  hard RLIMIT_AS were verified as 4718592 KiB before launch; this is a 4.5 GiB
+  address-space cap, not an RSS or daemon/QEMU cap. Monitoring cancellation
+  threshold was 4,000,000 KiB RSS and host MemAvailable floor 8 GiB. Neither
+  threshold nor the hard limit tripped. Nix RSS samples were 1,514,824 KiB;
+  QEMU sampled up to 1,114,916 KiB. These samples are not exact peak readings.
+  Host MemAvailable stayed above 16,579,656 KiB in samples and recovered to
+  19,288,152 KiB. Sandbox ps cannot see the escalated client/build processes;
+  monitoring used explicitly approved ps -C outside sandbox. The initial
+  sandbox build failed on the daemon socket before a bounded escalated retry.
+  No Python wrapper or output redirection was used.
+- Fresh ordinary guest boot and all four exact CLI checks passed; --rebuild
+  also passed output comparison. Derivation is
+  /nix/store/ylrwk7i6miwb31daij292nc502pmcnxv-vm-test-run-ordinary-packages.drv;
+  output /nix/store/v20sh441p8lm5xpmzqv5gvpsgwjbmw03-vm-test-run-ordinary-packages.
+  Post-run outside-sandbox ps confirms Nix client and QEMU ended; only the
+  pre-existing daemon processes remain. No source changes occurred during run.
+  The exact current ordinary/loader/runner/support source hashes below match
+  the executed revision. Other current cases and aggregate remain unverified;
+  item 3 stays unchecked, no hooks or lifecycle actions are due.
+- While the test ran, owner reiterated removing confusing test abstractions
+  and asked which case depends most on testLib. Executor named
+  mutable-packages: it uses fixture/upstream references, marked package probes,
+  a two-by-two base-selection matrix and two guest architectures. This is a
+  suggested next readability example, not authorization to run that case.
+  No broad cleanup or additional Nix command has started.
+- Latest owner feedback asks for the familiar direct runNixOSTest API in every
+  case and requests ordinary-packages as the concrete example first. Only that
+  case was rewritten to `{ pkgs, ... }: pkgs.testers.runNixOSTest { ... }` with
+  stateVersion and boot commands inline, no testLib usage. Outer pkgs is exactly
+  the ordinary public output passed by flake/registry; all four additionalPaths
+  and exact CLI assertions remain. Other cases/registry/support stay unchanged
+  pending owner review of this example. Source SHA-256 is
+  7bd94043084d4dbf0e44cbc5ac69e3ae27fe1f5c444b6872053de6b3e8054287.
+  Executor self-review and git diff --check preceded the successful bounded
+  VM run recorded above.
+  The earlier independent-review digest predates this small case rewrite.
+  The owner reviewed this example and authorized only its bounded run above.
+- Runner registration uses by-name auto-discovery only. pkgs/default.nix is
+  restored exactly to HEAD's original ten-line module: by-name import and
+  pkgsUnstable export, with no testers binding. In lib/modules.nix the generic
+  mkBynameOverlayModule creates one final.newScope with project lib/flake-inputs
+  and passes a local proxy overriding _internalCallByNamePackageFile to the
+  pinned by-name loader. Only project entries capture that scoped helper.
+  Proxy.callPackage is untouched, so the loader's returned global helper still
+  calls ordinary final.callPackage; upstream by-name entries retain their
+  original argument scope. pkgsOrigin capture and spliced inputs are preserved.
+  The manager confirmed this routine correction to the owner's duplicate-
+  registration feedback; executor statically reviewed both pinned loader call
+  sites and callPackageWith argument filtering. No package-name branches,
+  global input exports or duplicate discovery were introduced.
+  testers/package.nix still extends/delegates pkgsOrigin.testers;
+  project-test-support.nix is unchanged, including verified relative paths to
+  modules/nixos.nix and pkgs/. That loader correction did not change tests,
+  guards or approved artifacts.
+  Source SHA-256: pkgs/default.nix
+  4d5050c62d9023e3e23fae92e74338bd8b549b771155373db06e009e96f5f809;
+  lib/modules.nix
+  21cb7d9deb4c2fc6379895808b3cfa59cdc3572e8a4e5e3a452873952be98201;
+  testers/package.nix
+  9aef836a4af9cefb3022344265ce2e4dd80986115e936f9be57c2e61b31707c8;
+  testers/project-test-support.nix
+  460ecbb8f70034e0c7b5ec3f2e93f287bf5f9651b0c3aef642c4e547c80c4ed9.
+  git diff --check passed; no Nix commands were run. The new files have Git
+  intent-to-add. Its ordinary-case runtime now passed as recorded above;
+  the other mode/extension checks still lack current-runtime evidence.
+- User explicitly rejected the monolithic testing-infrastructure.nix and
+  requested simple common infrastructure with a list of concrete cases. The
+  manager confirmed this is a routine implementation correction under the
+  unchanged accepted Test Suite contract, within still-open item 3.
+- tests/nixos/testing-infrastructure.nix now lists eight case files and the two
+  unchanged package VM derivations. It loads a small support library once and
+  passes that shared library to each case. The original generic six-line
+  tests/nixos/default.nix still returns the supplied collection plus linkFarm.
+  flake.nix contains only declarative checks wiring. The unsuccessful
+  compactCheck workaround was removed; no replacement projection was added.
+- Focused cases live under tests/nixos/cases/. CIFS and Home Manager are
+  independent direct runner cases. Remaining reusable helpers under support/
+  cover basic runner/fixture operations, import-time arguments and package
+  observations for the other cases. Plain and marked package
+  sets are shared across cases rather than freshly instantiated per file.
+- Old-to-new coverage mapping (static author inspection; no runtime claim):
+  shared-environment retains exact original declaration sources, pinned Home
+  Manager and import-time arguments in both modes; minimal-isolation retains
+  every snapshot field and default/disabled x frozen/mutable comparisons;
+  frozen-packages retains omitted/mkDefault/explicit modes, marked identities
+  and inactive plain STM32; mutable-packages retains the two supplied test
+  package sets x two node bases, upstream comparisons and both architectures;
+  extensions retains both nodes, every caller contribution, replacement args,
+  both mode switches and cross-architecture toplevels, using equivalent shared
+  package predicates; selected-frozen/mutable retain original-module snapshots,
+  unrelated effects, isolation and guest checks; validation-configurations
+  retains seven actual public toplevels, assembly/source/role comparisons and
+  exact validation-only stubs; ordinary-packages retains all four CLI checks;
+  suite-collection retains supplied names/identities, public exports and guest
+  link targets. Original tests/pkgs sources are unchanged.
+- Before the bounded ordinary run above, this rewrite had only static
+  inspection and git diff --check evidence. The other current cases were not
+  rerun; the twelve earlier individual VM successes apply to the prior source.
+  The public aggregate has never passed. Do not claim the rewrite is verified
+  or that file separation fixes memory. Item 3 stays unchecked; prior item 1/2
+  checkboxes describe their completed historical implementation, not new runs.
+- Hard execution boundary: no Nix processes are running. Do not launch another
+  heavy evaluation without a hard OS memory cap and reviewed bounded/isolated
+  evaluation. max-jobs/cores and polling are insufficient memory protection.
+  User requires direct standard Nix commands without output redirections or
+  arbitrary script wrappers, and avoiding needless repeated approval prompts.
+- Live state remains implementing. No approved design/plan prose changes,
+  commits, post-hooks or lifecycle transitions are due for this static rewrite.
+- Independent source-only review passed without findings: flake SHA-256
+  35ab07b2eacff0e2000cbe4f9b4e876591496bd2b21a8209d8587e24a9c089ce,
+  registry 71bdeb5ed3212b1f5f23d789db065e4a7cc5504f3a120830261da1f77c2fffc6.
+  Reviewer source-manifest digest (flake, constructor, registry, cases, support)
+  375676cec9bd76b8e3d82cef814f1b8b904b020965f2b7758583a7f506823819.
+  This is code inspection, not parsing/evaluation, runtime or memory evidence.
+- Latest explicit user instruction: show the code before attempting to run
+  everything. The executor confirmed no Nix launches until the user's review.
+  Present concrete file links and wait for that review. The hard memory-cap
+  and bounded-evaluation requirements also continue to apply to future runs.
+
+## Implementation before source rewrite (2026-10-28, historical)
+
+- Execution safety boundary: all Nix processes from this session have ended.
+  Item 3 remains unchecked. All twelve member VM tests passed individually,
+  including suite-collection, but the public aggregate has NOT passed.
+  Both aggregate attempts were cancelled because evaluator memory grew too
+  large. The last cancelled process was session 31410 (exit 1).
+- A strict projection of the new checks to derivation identity/output fields
+  was added in flake.nix (hash
+  `4f0577c11cca4a5f699b83630cffa00009a6268c2e954d991ffe4f53487f4c5f`).
+  It passed independent code inspection but did NOT solve the measured memory
+  growth. Do not treat the earlier review as performance evidence. All original
+  test identities and the constructor's passthrough behavior remain preserved.
+- The user again reported evaluator growth approaching 20 GiB and explicitly
+  questioned its cause. The aggregate forces many complete test configurations
+  and seven public host toplevels in one shared evaluation. max-jobs/cores limit
+  build scheduling/resources; they do not bound evaluator memory. Polling memory
+  through tools proved insufficient as a reliable system-protection mechanism.
+  Do not launch another aggregate/full-host evaluation without a hard OS memory
+  limit and a reviewed way to bound/isolate evaluation graphs. No Nix commands
+  are running; the executor committed to no further launches at this boundary.
+
+- This section supersedes the older lifecycle status below. Live state is
+  `implementing`; ready post-hooks and implementing pre-hooks ran, with no
+  executable hooks. Accepted design artifacts remain unchanged. The approved
+  normalized plan hash is still `c512b87e52e815eb61e8c169b225973a60733c77a58f7319cbcc5b7e6fb0375c`.
+- Executor `/root`, manager `/root/specd_manager`. Item 1 is complete and only
+  its checkbox is marked. Its five new tests passed derivation evaluation,
+  driver builds and VM execution: shared-environment, minimal-isolation,
+  frozen-packages, mutable-packages and extensions. Assertions included forced
+  aarch64 toplevels. Existing unchanged specd/bootstrap VM tests also passed
+  using upstream QEMU's automatic TCG fallback. Ordinary exported names,
+  sampled package identities and role flags matched the before-change baseline.
+- Item 2 is complete and its checkbox is marked. selected-frozen,
+  selected-mutable, ordinary-packages and validation-configurations each passed
+  a separate direct build with guest execution. All seven public host
+  derivations were forced; host systems were not built. The corrected
+  validation run retained at least about 9.4 GiB available memory and recovered
+  to about 19 GiB after completion. Direct-import helpers are
+  `/tmp/project-aware-nixos-tests-item1.nix` and
+  `/tmp/project-aware-nixos-tests-item2.nix`.
+- Item 3 is implemented and under execution: `tests/nixos/default.nix`
+  returns the supplied tests plus a linkFarm aggregate; `flake.nix` exports all
+  twelve named tests plus the aggregate under `checks.x86_64-linux`.
+  suite-collection checks the constructor through a two-test guest fixture.
+  Public package/host names and extended host names match the baseline.
+  The two new Nix files have Git intent-to-add so flake evaluation sees them.
+  No package VM test source was changed. Its checkbox remains unchecked until
+  suite-collection and the actual public aggregate both build successfully.
+- Resource incident: concurrent standalone evaluation and build evaluation,
+  each retaining repeated full host configurations, exhausted memory and swap.
+  Both processes ended with status 137. The test now probes marked common
+  assembly only on testVps, retaining source comparisons and all seven real
+  public host derivation checks. This is a routine implementation correction;
+  the manager confirmed no design revision is needed.
+- Explicit user constraints: use ordinary direct Nix commands; avoid output
+  redirection and Python/shell wrappers that cause repeated approval prompts.
+  Existing allow rules can fail to match shell wrappers; do not promise that
+  approvals can never occur. Do not change global permission settings.
+- Run only one heavy Nix process at a time, including review work. Never
+  overlap standalone evaluation with a build evaluation. Use a cancellable
+  `tty=true` exec session and `--max-jobs 1 --cores 2`. Check MemAvailable before
+  launch and while running; stop if it falls below 8 GiB, and wait for process
+  exit before starting another. Split or optimize a check instead of allowing
+  memory/swap pressure to grow. The user explicitly requires preventing another
+  system resource incident.
+- Independent implementation review passed items 1 and 2, including the
+  resource correction and actual identity/role comparisons, at test-file hash
+  `be4f6743ae0f08ccc54e82e9a66991bf8d99666e3a8a227ecec440a7c3491f9d`.
+  Item 3 code inspection also passed at flake hash
+  `bf8efd354e0f272e76ba23a6fc2ae274dec39679f7eb90280ec19a9b432217bb`,
+  constructor `7ec2cf41b39e4dba2973a760c3d394f9eae78aa4b1863d3a09858b0f5118ca7a`,
+  and test-file `1a0fd3e3759b577503177f23e0294b556f66569123a0569468c7a0d63a30ea18`.
+  No new design-content acceptance is needed for these code changes. Keep
+  review and technical execution evidence distinct.
+- No commits are authorized. Keep plan edits limited to successful checkbox
+  marks. The manager has assigned item 3 and its terminal boundary.
+  After the final checkbox, run implementing post-hooks and stop, recommending
+  `$specd-verify project-aware-nixos-tests` without invoking it.
+
+## Design complete; ready (2026-10-27, current)
+
+- The user corrected the suggested next lifecycle: "А че дальше дизайнить?
+  Дальше ведь в implemnt надо идти?" No additional design work or repeated plan
+  approval is required. This supersedes the failed-transition handoff below.
+- Applied the diagnosed metadata-only repair: manifest plan.requires changed
+  from `[requirements, system, verify]` to `[requirements, system, validate]`,
+  matching the active schema. Pre-repair backup:
+  `/tmp/project-aware-nixos-tests-manifest-before-dependency-repair-yian2m4k.json`.
+  Diff confirmed only this dependency replacement plus final newline before the
+  CLI transition recorded its normal history event. All completed artifact
+  contents still match their previously accepted/reviewed validated hashes.
+- Plan SHA-256 remains
+  `c512b87e52e815eb61e8c169b225973a60733c77a58f7319cbcc5b7e6fb0375c`;
+  real-user acceptance, final independent review and structural validation below
+  remain applicable. Its three implementation checkboxes are still unchecked.
+- Ready pre-hooks ran with no executable hooks; alignment guidance was applied.
+  `specd changes transition project-aware-nixos-tests ready --skip-hooks all
+  --format text` succeeded. Binding ready context was reloaded; fingerprint
+  `sha256:73ba7d574b7e425c3129c14eeeb8615cb505364baa54f974bff181b8958a4c43`.
+  Ready post-hooks had no executable hooks or instructions.
+- Live state is `ready`; all required artifacts are complete/effectively
+  complete, optional ADR skipped, approvals off. Next action is
+  `$specd-implement project-aware-nixos-tests`. No unresolved design decision,
+  content drift or readiness blocker remains. Design group stops here.
+  No implementation, tests/builds, task marks, staging or commit ran.
+
+## Accepted plan; ready redirect (2026-10-27, superseded)
+
+- User resumed `$specd-design project-aware-nixos-tests` with
+  "ADR не делаем - сделай план". Optional `adrs` was skipped through
+  `specd changes skip-artifact`, with that explicit user decision as the reason.
+  No ADR was authored. This supersedes the optional-ADR next-scope pointer below.
+- Current scope is accepted/validated `plan`; participation remains involved, decision owner user,
+  author `/root`, independent manager `/root/design_manager`. Existing large
+  category remains; this group authored only the final required artifact after
+  resolving the expressly declined optional scope.
+- Output: `plan.md`, raw SHA-256
+  `c512b87e52e815eb61e8c169b225973a60733c77a58f7319cbcc5b7e6fb0375c`.
+  Three ordered work units cover runner/overlay migration, remaining named
+  test cases, and collection/flake wiring. Each unit includes completion checks;
+  full aggregate execution belongs to collection completion.
+- Accepted proposal/requirements/system/validate hashes remain those in the
+  closed validate scope below: `ddf3caef...`, `e3bd7770...`, `14016d9d...`,
+  `4404b57e...`. Read merged 003 artifacts through CLI `spec-preview`.
+  No upstream content or unrelated existing edit changed in this group.
+- Binding config/context, artifact instruction/template/post-rules and relevant
+  process Plan rules were read. Designing pre-hooks had no executable hooks;
+  both pre-guidance instructions were applied. Current context fingerprint after
+  skipping ADRs: `sha256:f8db35010d4f58a54ee94e04014af719eb3426430eccae139d839f47262e7559`.
+- Whole-plan self-review, owner/check coverage, reference-target/heading checks
+  and `git diff --check` passed. First-draft arbiter `/root/plan_arbiter` passed
+  the exact current plan hash without findings; its cycle is closed.
+- After the concrete file and summary were presented, the real user accepted
+  this unchanged plan with "Ну на вскидку норм." Fresh final independent arbiter
+  `/root/plan_final_arbiter` passed the identical SHA-256 without findings;
+  its cycle is closed. Actual acceptance, final review and structural validation
+  cover the same raw revision above; no new content acceptance is required.
+- `specd changes validate project-aware-nixos-tests --artifact plan --format text`
+  passed. Designing pre-hooks and guidance were reapplied on resume; immediately
+  after validation, designing post-hooks ran with no hooks/instructions. Ready
+  pre-hooks ran with no executable hooks and alignment guidance was applied.
+  No implementation, VM execution or package build ran in this group.
+- `specd changes transition project-aware-nixos-tests ready --skip-hooks all
+  --format text` failed: plan is in-progress. The diagnostic Repair Guide redirects
+  to designing / `$specd-design`, reason Elaborating design artifacts. Lifecycle
+  remains designing; plan artifact/file are complete at the accepted hash, but
+  its effective status is in-progress. Other mandatory artifacts are complete;
+  optional ADR remains skipped. Ready-context and empty ready-post queries
+  accidentally ran after the failed transition; no state transition or executable
+  hook occurred, so no rollback is needed.
+- Intended code target set remains `pkgs/default.nix`,
+  `modules/hardware/hosts/default.nix`,
+  `modules/hardware/development/programmers/stm32/default.nix`,
+  `tests/nixos/default.nix`, `tests/nixos/testing-infrastructure.nix`, `flake.nix`.
+  Graph freshness/impact was checked: zero indexed Nix code symbols means the
+  LOW/no-symbol result supplies no code-impact assurance. Direct source reads
+  establish runner, package and flake coupling. No readOnly workspace is involved.
+- Read-only diagnosis: manifest `plan.requires` still lists
+  `[requirements, system, verify]`; current `schemas/sdd/schema.yaml` lines
+  465–468 specify `[requirements, system, validate]`. Installed core
+  `/nix/store/pxpw2p554fk46gfyfj4ci60x47y3v66s-specd-0.2.0/lib/node_modules/@specd/cli/node_modules/@specd/core/dist/index.js`
+  hydrates `requires: raw.requires` around line 5617; `syncArtifacts` around
+  lines 957–978 only applies schema dependencies to newly created entries.
+  `_effectiveStatus` around lines 721–743 treats the retired missing `verify`
+  dependency as in-progress. Unchecked implementation tasks are correct and are
+  not the blocker. No plan, code or schema content correction is needed.
+- Next bounded repair on explicit `$specd-design project-aware-nixos-tests`
+  resume: recheck live schema/status/hashes, back up manifest under `/tmp`, change
+  only plan.requires `verify` to `validate` to match active schema, preserving all
+  states, files, hashes, history and unrelated edits. Confirm metadata-only diff
+  and effective-complete status, then follow ready hooks/transition/context
+  sequence under a live manager. Current approval/review/validation stay valid
+  while content is unchanged. Do not check off implementation work or invent a
+  replacement verify artifact.
+- Terminal boundary: current design procedure requires stopping after a failed
+  transition's Repair Guide redirect. Manager `/root/design_manager` named that
+  boundary after diagnosing the metadata migration defect. Save this pointer
+  and stop at designing; ready is not reached. No metadata repair was applied,
+  no implementation skill invoked, no commit or staging requested.
+
+## Closed validate scope (2026-10-27, current)
+
+- Resumed `$specd-design project-aware-nixos-tests` in a fresh primary session.
+  Closed scope is validate for `default:003-testing-infrastructure`.
+  Participation remains involved; user is decision owner, author `/root`,
+  manager `/root/design_manager`. Proposal category remains large architectural
+  development; no batch exception was requested.
+- Closed proposal/requirements/system inputs were checked live and remain at
+  raw SHA-256 `ddf3caef9749ecb85c8e68ec0a12c3754d506948892b45c877c2073ab19918e0`,
+  `e3bd7770c6443aa987467b06fb9a7a5c163e2ca026a655a697bb6d338b9c0a99`,
+  and `14016d9db87b6ae1a9d145995eda43c5dfa089c7b52a10d83d210245b214bfdb`.
+  Current system closure below remains applicable. Context fingerprint on entry:
+  `sha256:6d07b02c75ab2da66ad475b01eb24e38c79f261d89e53b909e234a6aa0d0797b`.
+- Revised validate removes guest-side Nix, offline source/store fixtures and
+  expected-error diagnostic checks. Host build identification uses forced public
+  validation toplevel `.drvPath` assertions; evidence is evaluation/derivation
+  generation, without claiming executed dry-runs or host builds. Positive
+  frozen/mutable, selected/minimal, extension and package checks remain.
+  New suite-collection checks cover named passthrough, aggregate links and
+  flake exposure; existing VM tests use `specd-vm`/`specd-bootstrap-vm` aliases.
+  Both stable/unstable hello binaries are checked by their store paths.
+- Current validate delta SHA-256:
+  `4404b57ef43708205badfb5e470a8ecdb513c4327cf8bf5e252af302e82c68fa`;
+  merged CLI JSON `merged` string SHA-256:
+  `d4bde92a0f52feb8699c5d00d21653855eb3605fd7cfd93148dbf48d3a5e6448`.
+  Read through `specd changes spec-preview project-aware-nixos-tests
+  default:003-testing-infrastructure --artifact validate --format text`.
+  Complete disposable review copy:
+  `/tmp/project-aware-nixos-tests-validate-review-d4bde92a.md`.
+- Designing pre-hooks ran (no executable hooks); guidance/artifact criteria
+  were read. Merged self-review, owner-link checks and whitespace checks passed;
+  CLI preview has no warnings. First-draft arbiter `/root/validate_arbiter`
+  passed the identical current raw/merged revision without findings, reading
+  existing package test assertions directly. This review cycle is closed.
+- The user accepted the complete presented current raw/merged revision with
+  "Особо не вчитывался, но похоже, что норм". Fresh final arbiter
+  `/root/validate_final_arbiter` passed that identical revision without findings;
+  its review cycle is closed. Acceptance, final review and structural validation
+  cover the exact current hashes above.
+- `specd changes validate project-aware-nixos-tests
+  default:003-testing-infrastructure --artifact validate --format text` passed.
+  The generic labeled-section/rename note needs no content repair: this delta
+  preserves the root heading and its merged content was reviewed. Post-validation
+  raw/upstream/merged hashes remain unchanged, with no preview warnings.
+  Live status marks validate complete; proposal/requirements/system remain
+  complete. State remains designing, with required plan still missing.
+- CLI selects optional `adrs` next. Next fresh group resolves that optional
+  scope before plan; preserve the prior explicit closure of the old HM/001 ADR
+  work documented below, without treating it as a decision on new runner ADRs.
+  No optional skip, ADR/plan authoring, lifecycle transition, post-hooks or
+  implementation ran in this group. All new suite mechanisms remain
+  unimplemented; no suite execution is claimed. No unresolved upstream design
+  change was identified during validate reconciliation.
+- Terminal boundary: stop this validate group and strongly recommend a fresh
+  primary session with `$specd-design project-aware-nixos-tests` and this
+  `.context`. That group must recheck live state and closed input hashes before
+  resolving optional ADR disposition, then proceed in dependency order.
+
+## Closed system scope (2026-10-27, current)
+
+- Resumed `$specd-design project-aware-nixos-tests` in a fresh primary session.
+  Closed scope: integrated system, filling the infrastructure subsystem
+  described in the superseded immediate handoff below. Participation remains involved;
+  decision owner user, author `/root`, manager `/root/design_manager`.
+- Latest owner correction removes mentions of other modules' tests, repeated
+  contracts from other spec sections, and descriptions already owned by nixpkgs.
+  Both added sections were shortened to project-specific mechanisms. Canonical
+  Validation Configurations and the retained runner decisions are preserved.
+  No separate unresolved subsystem or additional integration design was identified.
+- The owner then explicitly selected ordinary test-derivation builds and further
+  simplification: remove guest-side Nix evaluation/planning and the whole offline
+  fixture/reference-lock mechanism. System now retains only the runner and a
+  compact named-test collection/aggregate contract. No replacement orchestrator
+  or claim of already implemented aggregate coverage was introduced.
+  This direction approves the edit, not the resulting artifact revision.
+- The latest owner edit adds the expectation that all validation checks are
+  performed by running tests from this collection. This governs subsequent
+  validation design for the affected spec; it does not restore the deleted
+  guest evaluator or establish implemented/executed coverage.
+- Accepted, finally reviewed and structurally validated system delta SHA-256:
+  `14016d9db87b6ae1a9d145995eda43c5dfa089c7b52a10d83d210245b214bfdb`;
+  merged preview SHA-256 (the CLI JSON `merged` string):
+  `930e4cc5791906ec8e6709115a9d4a1d4a5fabf5e90eb7bea9627c33ff82bef8`.
+  Read with the system `spec-preview` command below. A disposable merged review
+  copy is `/tmp/project-aware-nixos-tests-system-review-930e4cc5.md`.
+- Closed proposal and requirements hashes remain unchanged. Draft validate is
+  also unchanged at `6d7bcde389a5af5114127795931343ebc99eaeddc5862c96455116bfdde57cb9`.
+  The older system/validate acceptance records below do not accept this revision.
+- Designing pre-hooks ran (no executable hooks); guidance and artifact criteria
+  were read. Merged self-review and `git diff --check` passed on the current
+  revision. First-draft arbiter `/root/system_infrastructure_arbiter` passed
+  the previous raw `469977e6...` / merged `d77fbdc1...` revision without findings;
+  that review cycle is closed and does not cover this revised content. This
+  sequence of owner corrections used self-review without new first-draft cycles.
+- The user accepted the current exact raw/merged revision after its complete
+  review link and final requested sentence, with "Отлично. Меня устраивает".
+  Fresh final arbiter `/root/system_final_arbiter` passed the identical accepted
+  raw/merged revision without findings; that cycle is closed.
+- `specd changes validate project-aware-nixos-tests
+  default:003-testing-infrastructure --artifact system --format text` passed.
+  Sequential live status marks system complete at the accepted raw hash and
+  names validate as next artifact, now effectively pending-review. State remains
+  designing. Proposal and requirements remain complete; ADR/plan work is pending.
+  Post-validation raw/merged/closed-input hashes match; draft validate is unchanged.
+- Historical evidence is recorded in `.specd-exploration.md`, heading
+  Infrastructure fixture feasibility. All seven intended validation targets evaluated offline with
+  import-from-derivation disabled; testVps also produced an offline dry-run plan.
+  Local reference-lock metadata and an unbuildable synthetic target were probed.
+  These are evaluation/planning evidence, not VM execution or full fixture tests.
+- System is closed. Next scope is validate, in a fresh primary session with
+  `$specd-design project-aware-nixos-tests` and this `.context`. The new group
+  must verify live state and accepted system/input hashes before authoring.
+  No validate/plan/ADR authoring or implementation ran in this group.
+- For later validate reconciliation: its guest-Nix/offline-fixture assumptions
+  are superseded, including source/store preparation and host planning inside
+  the guest. Map all relevant duties, including host evaluation/build planning,
+  to tests in the collection. Surface concrete remaining coverage/mechanism gaps
+  before closing validate; an aggregate alone is not evidence that checks ran.
+  Intended-error diagnostics and setup/evidence methods must reflect supported
+  mechanisms. Validate remains an unchanged draft for that next scope.
+- Terminal boundary: stop the system group and strongly recommend that fresh
+  primary session for validate. No designing post-hooks or lifecycle transition
+  ran: the overall designing phase remains incomplete.
+
+## Current scope and owner (2026-10-27)
+
+- User requested restarting design against the current schema, process and
+  canonical specs; the legacy artifacts are input candidates, not accepted
+  content for this restart.
+- Participation: involved. Decision owner: user. Author: main executor `/root`;
+  separate manager `/root/design_manager` assigns bounded work.
+- Closed scopes: proposal and requirements on 2026-10-26. Their acceptance,
+  final independent review and structural validation remain applicable.
+  The user explicitly reopened system and its dependent validate on 2026-10-27;
+  their prior whole-artifact closure records below are superseded.
+- Requirements for `default:003-testing-infrastructure` consume accepted proposal
+  allocation items 1-3. Following user feedback, isolation is covered by REQ-002
+  scenarios and durable compatibility by REQ-003. The user accepted the final
+  sequentially numbered revision with "сойдет"; final review and validation cover
+  that same revision.
+- Current/next scope: `system` infrastructure architecture for
+  `default:003-testing-infrastructure`, resumed by another agent in a fresh
+  primary session with `$specd-design project-aware-nixos-tests`.
+  Live state: designing; system pending-review; validate pending-review with
+  effective parent-review; next artifact system. ADR and plan work waits.
+- Retain the prior core-runner decisions as input: existing runner, automatic
+  reusable modules and guards only on project overlays using final upstream
+  `node.pkgsReadOnly`. The user found a missing infrastructure contract, not a
+  request to discard that runner design. Whole-system closure is reopened.
+- Preserve validate as a draft/case inventory. Its new suite filename and
+  aggregate output are candidates until system describes their mechanism.
+  Prior validate acceptance/reviews/structural pass are historical and do not
+  authorize proceeding past the newly identified upstream gap.
+- The user requested rollback and context handoff only, then stopping so another
+  agent can continue. No infrastructure design, code or new review was authored
+  after that request. The implementation plan remains unauthored.
+- Only affected spec: `default:003-testing-infrastructure`. Dependencies remain
+  `default:001-project-architecture` and `default:002-host-classification`.
+- User explicitly closed the old Home Manager work and its two requested ADRs
+  ("Считать её закрытой; сосредоточиться на тестовом runner", then
+  "фиг с ними с этими ADR"). Consume the canonical HM contract as an input.
+- CLI scope removal of 001 also removed its obsolete requirements no-op delta;
+  its previous source is retained in Git at a42ccd4, path
+  `deltas/default/001-project-architecture/requirements.md.delta.yaml`.
+- The 003 requirements remain accepted, finally reviewed and structurally
+  validated. System contains the retained concrete runner section but needs the
+  infrastructure contract below before whole-artifact review/closure. Earlier
+  abandoned overview/subsystem skeletons remain superseded.
+
+## Immediate handoff: missing infrastructure contract (2026-10-27)
+
+- Latest owner correction: validate should reference real mechanisms. The
+  proposed `tests/nixos/testing-infrastructure.nix` and
+  `checks.x86_64-linux.testing-infrastructure` were introduced in validate while
+  absent from the implementation and not defined by system. The author and
+  both arbiter cycles failed to catch this ownership gap. Marking those entries
+  "planned" did not establish their architecture.
+- The user explicitly requested returning to system: describe what the test
+  infrastructure consists of and how it works there. Do not enumerate every
+  test in system; named tests and their cases remain in validate. Do not start
+  implementing infrastructure as a shortcut around the missing design.
+- Next agent first reads live state, accepted proposal/requirements, retained
+  merged system and draft validate through CLI. Define infrastructure
+  responsibilities/interfaces, collection and exposure/common command,
+  evaluation versus guest runtime, and the execution/setup boundaries for
+  expected errors and actual host build planning. Offline pinned inputs/store
+  metadata and dependency/evidence boundaries need a coherent mechanism.
+  These are open design topics, not answers approved by this handoff.
+- After system is authored, owner-reviewed, finally reviewed and structurally
+  validated, reconcile validate with its actual architecture and review it
+  again. Full 003 coverage and the user's preference for NixOS-framework tests
+  remain inputs; existing suite names/aggregate are candidate design material.
+- Exact preserved system delta SHA-256:
+  `e51b34036bba77ae0e0d80ac919f4acdb9f1e9541710406623d50726a49160b2`;
+  merged SHA-256 `cead6e0f32e3cd0c9c140ed3e18958c7956db3cc30b850f62ffd9bd3e302f05a`.
+  Preserved draft validate SHA-256:
+  `6d7bcde389a5af5114127795931343ebc99eaeddc5862c96455116bfdde57cb9`;
+  merged SHA-256 `64684b61a831365ec37e472361e1f3365b0d243119ac978fda88538d7a58c92f`.
+- Process rollback was a targeted state-only repair of change `manifest.json`:
+  system/validate artifact and file states changed to `pending-review`, with
+  validated hashes/content preserved; an `artifact-review-required` invalidation
+  history event records the explicit owner request. The CLI has no unvalidate
+  command, and no nonexistent command is claimed. Proposal/requirements and
+  all other entries remain unchanged. Pre-repair manifest backup:
+  `/tmp/project-aware-nixos-tests-manifest-before-reopen-dy0_zje0.json`.
+- Fresh CLI status confirms next artifact system and review required; this
+  supersedes prior closure/handoff notes below. No new artifact validation,
+  reviews, hooks, transitions, ADR decisions, planning or implementation ran
+  during this rollback. Stop here as requested by the user.
+
+## Sources and freshness
+
+Input repository revision: a42ccd4f1cb1595304038039440b8a3162970f2d.
+The old proposal and discovery evidence remain available at that Git revision;
+`.specd-exploration.md` also retains historical discovery. Neither defines the
+current system or approves the restarted artifacts.
+
+Binding sources:
+
+- Project configuration: `../../../specd.yaml`; project context:
+  `../../context.md` (SHA-256 f7661d9445ae5785ef4e19c7e78c8a8caf215eb1bb6a4b48a8c32805786b1719).
+- Active schema: `../../../schemas/sdd/schema.yaml` (SHA-256
+  be521f8aac6a506a66d3bb23f95af2e83890cdf44a7f68a26cc35bd8dae391c5);
+  proposal template: `../../../schemas/sdd/templates/proposal.md`.
+- Process rules: `../../../specs/000-sdd-process/rules.md` (SHA-256
+  df49e5dcb5ff4d9700334b8593e474d942fefa38f4657096446ae833c0ff241f).
+- Read canonical specs with `specd specs show default:<id>`:
+  `003-testing-infrastructure`, `001-project-architecture` (requirements,
+  system, ADRs) and `002-host-classification` (system).
+- Current change context fingerprint at requirements resumption:
+  `sha256:e504262003079d6ef345ce2f7ad539eee9ecc1fd6d82f24893e43b7a84f3c02b`.
+  Historical fingerprint after proposal scope narrowing:
+  `sha256:2e0e95cf66ca1ec156a4effc6aba8031f97b1f9102180d8b118b5fbf65bfa61d`.
+
+`specd graph index` completed at a42ccd4: six specs, zero code files/symbols.
+Stats report fresh; search for `runNixOSTest` is empty. The graph has no Nix
+coverage, so direct source inspection supplies code orientation.
+
+## Current code orientation
+
+Paths below are repository-relative. Re-read their live revisions when designing
+system details; these observations are support, not additional contracts.
+
+- `flake.nix` assembles `config/nixos.nix`, `modules/nixos.nix`, package support,
+  external modules and overlays, and supplies project `lib`, `flake-inputs` and
+  `pkgsUnstable` to assembled systems. The reusable test environment needs its
+  own deliberate boundary rather than importing that whole host assembly.
+- `lib/system.nix` owns `extend`, production/validation configuration assembly
+  and host package exports. Automatic `extend` inheritance remains deferred.
+- `modules/home/homedir.nix` and canonical 001 specify `home.enable` and `hm`:
+  raw deferred declarations are applied only when active; reads project the
+  final merged Home Manager user when active. The primary login separately
+  selects OS-account creation. Those are completed inputs to runner design.
+- Canonical 001 also specifies disabled-by-default optional modules; the archived
+  `conditional-module-activation` change implemented that preparation.
+- `config/hardware/bootable/default.nix` is now in the policy layer. The old
+  claim that reusable bootable modules require nixos-generators support must be
+  re-evaluated before choosing external modules for tests.
+- `lib/modules.nix` owns the by-name overlay helper and `pkgsOrigin`;
+  `pkgs/default.nix` adds that overlay and publishes `pkgsUnstable`.
+- Both current callers use `testers.runNixOSTest`: `tests/pkgs/specd.nix` and
+  `tests/pkgs/specd-bootstrap.nix`. Include both when planning compatibility
+  evidence. No project-aware wrapper is present in inspected current sources.
+
+## Retained direction and open system decisions
+
+- Preserve project capability availability, focused minimal nodes and existing
+  package/test compatibility as requirement-level needs.
+- Retain the existing runner: the user rejected the separate-runner fallback
+  after the final-review finding. The accepted proposal permits that fallback,
+  but it is no longer a live candidate. The user's current correction
+  requires automatic availability of `modules/nixos.nix` and its shared support
+  in test VM nodes, with activation through each node's existing capability
+  configuration. The legacy `projectModules.enable` switch was rejected; it is
+  no longer a design candidate. Prior optional-module work enables this model.
+- Reuse project capability definitions. Exclude automatic policy from `config/`,
+  concrete hosts and private-value validation stubs. Tests supply intrinsic
+  inputs for selected functionality.
+- Determine necessary external support modules from the current reusable module
+  collection. Do not inherit the old Home Manager/nixos-generators shortlist
+  without checking actual consumers and disabled-feature behavior.
+- Guest package-set construction, overlays, evaluation arguments, guest platform
+  selection and composition with upstream extension interfaces require system
+  design. Check upstream runner sources from the locked input at that time.
+- Preserve existing 003 REQ-001 validation-configuration/private-stub contracts.
+  Add focused validation checks without expanding unrelated testing scope.
+- Historical `/workspace/.setup` probes, derivation counts and missing-KVM/PRoot
+  limitations are evidence from a former environment. Fresh technical checks
+  are needed before drawing current evaluation, build or runtime conclusions.
+
+## Review and continuation
+
+### Closed requirements scope (2026-10-26)
+
+- Live state remains designing with proposal and requirements complete; system
+  is the next artifact and remains pending-review.
+  Read-only context, ownership, graph freshness and canonical-spec checks found
+  no blocker that changes this bounded scope.
+- Author: main executor `/root`; manager: `/root/design_manager`.
+  Participation remains involved; decision owner is the user. Requirements are
+  closed, and this group stops at the large-design handoff to system overview.
+- Required designing pre-hooks were run: no executable hooks; designing
+  guidance and review-before-validation instruction read. Requirements rules,
+  template and delta guidance were loaded through CLI and checked against the
+  accepted proposal and canonical requirements.
+- Current requirements delta SHA-256:
+  `e3bd7770c6443aa987467b06fb9a7a5c163e2ca026a655a697bb6d338b9c0a99`.
+  Accepted proposal input SHA-256:
+  `ddf3caef9749ecb85c8e68ec0a12c3754d506948892b45c877c2073ab19918e0`.
+  Current merged content SHA-256 (excluding the CLI artifact header):
+  `499496a00f0890d3e94eb46dc6f5ff8775fdcbe213fda0fa0f0ed8c3d08239c6`.
+  Read the review view with `specd changes spec-preview
+  project-aware-nixos-tests default:003-testing-infrastructure --artifact
+  requirements --format text`.
+- Canonical requirements input SHA-256: 003
+  `c24880277f10e0ea531903771c592beb32bc3a86b73ea074a2cbe989bc22e1fc`;
+  001 `50445ea70a4861e45baedf3dcfd43d3e5b87e2297eac9fad1405b51b41aa23ad`.
+  These hashes exclude the CLI artifact header. REQ-001 is preserved exactly.
+  REQ-002 now covers proposal items 1-2 with four scenarios; REQ-003 covers item 3
+  with two scenarios. The current draft uses consecutive IDs 001, 002 and 003.
+- First-draft independent arbiter `/root/requirements_arbiter` succeeded with no
+  findings on the previous candidate: delta SHA-256
+  `ae8f69fd168429d3e060df9872617fba8ca24b7b457e7d4da7a0dbf5fc94ca0c`,
+  merged SHA-256
+  `6719abe71d07c3bb7bdf17ad8dc102fc06e302bf2ae681999f9af0fbdcb8f9e5`.
+  That cycle is closed; its success does not cover the current revision.
+- The user authorized the proposed regrouping and durable compatibility
+  wording with "Ладно, давай как ты предлагаешь" after discussion and translation
+  of the old REQ-004. This authorizes revision, not acceptance of its resulting
+  content. The old REQ-003's two isolation scenarios were moved unchanged into
+  REQ-002; its redundant explanatory body was removed. Compatibility retains
+  its consumer guarantees, with ordinary-use scenario triggers. No API or proposal
+  scope decision changed.
+- The user's follow-up "А нумерация?" prompted renumbering the unaccepted
+  compatibility draft from REQ-004 to REQ-003. This changed only the requirement
+  heading, not its body or scenarios. The retained system delta has no explicit
+  REQ-002/003/004 references requiring a corresponding link correction.
+- Current revision passed executor self-review and CLI merged-preview inspection:
+  canonical REQ-001 is byte-for-byte unchanged; headings are REQ-001, REQ-002 and
+  REQ-003; all six new scenarios are preserved. Canonical spec scope was
+  reconsidered with CLI summaries. No unresolved requirement decision remains.
+  Sequential owner feedback does not launch another first-draft arbiter.
+- The user accepted the current revision with "сойдет" after the complete
+  requirements presentation and subsequent heading-only numbering correction.
+  Acceptance covers delta SHA `e3bd7770c6443aa987467b06fb9a7a5c163e2ca026a655a697bb6d338b9c0a99`
+  and merged SHA `499496a00f0890d3e94eb46dc6f5ff8775fdcbe213fda0fa0f0ed8c3d08239c6`.
+- Fresh final independent arbiter `/root/requirements_final_arbiter` succeeded
+  with no findings on those exact revisions. The cycle is closed. No content
+  changed after user acceptance or final review.
+- `specd changes validate project-aware-nixos-tests
+  default:003-testing-infrastructure --artifact requirements --format text`
+  passed. Fresh status marks requirements complete at the accepted delta SHA;
+  disk and merged hashes were rechecked and still match acceptance and review.
+- No lifecycle transition or designing post-hooks ran: the designing phase is
+  unfinished, and no hook is due at this artifact boundary. System, validate and
+  plan remain untouched and unapproved; no implementation work was performed.
+
+### System continuation (prior runner closure; whole system now reopened)
+
+- Author `/root`; manager `/root/design_manager`; involved, user decision owner.
+  Current delta SHA-256: `e51b34036bba77ae0e0d80ac919f4acdb9f1e9541710406623d50726a49160b2`.
+  Merged content SHA-256 excluding the CLI header: `cead6e0f32e3cd0c9c140ed3e18958c7956db3cc30b850f62ffd9bd3e302f05a`.
+  Read with `specd changes spec-preview project-aware-nixos-tests
+  default:003-testing-infrastructure --artifact system --format text`.
+- Accepted system extends existing `testers.runNixOSTest`. The support module
+  always supplies reusable/HM definitions and project arguments. It preserves
+  the final upstream `node.pkgsReadOnly`, including its default. Only `pkgs/`
+  and the overlay contributions in `modules/hardware/hosts/` and
+  `modules/hardware/development/programmers/stm32/` are gated in read-only mode.
+  Production guards belong on those overlay definitions, not on capability
+  definitions or a test-maintained copy/blacklist of project modules.
+- Frozen mode preserves the supplied package set, including role flags and
+  variants; it cannot regenerate guest-specific variants or publish missing
+  packages. Mutable mode follows upstream package selection and applies project
+  and caller overlays. The previous `nixpkgs.pkgs = mkDefault node.pkgs` rule
+  was removed: upstream ignores test-level `node.pkgs` when mutable, so that
+  rule changed its semantics. Project argument defaults survive `extendNixOS`.
+- The owner accepted delta
+  `90b61cbd0c933f95325e77f5939c394f1fe7e744b256dd5b33563da145e55bf0`
+  / merged `6b551e1b7ea270422420cbd3e1ca809cb6c99b987812baf4e87fa7cb74b1a32b`
+  with "хорошо, давай закрывать этап". Final arbiter
+  `/root/system_final_arbiter` found the explicit-read-only overlay conflict.
+  That revision was not validated. The same arbiter passed a correction adding
+  a separate `testers.runProjectNixOSTest` (delta
+  `e1d600039a0a37f4a6efba2e7fb1e98012bdb9bebb4b6354b3084048c1694e01`).
+  The user explicitly rejected that fallback and requested investigation of
+  conditional overlays and direct `runTest` integration. Its review cycle is
+  closed; neither acceptance nor review covers the current candidate.
+- Locked nixpkgs source inspected at
+  `/nix/store/63im7h5dmpwj0rjghrs7mi39vssm8hp8-source`, revision
+  `e72e4f299401a3689d4b3d5fc6496b11db7064eb`.
+  `pkgs/build-support/testers/default.nix`, `nixos/lib/testing/default.nix`,
+  `nixos/lib/testing/nodes.nix` and `nixos/modules/misc/nixpkgs/read-only.nix`
+  establish that direct `runTest` uses the same package restrictions. The final
+  test-module config already exposes `node.pkgsReadOnly`; a preliminary separate
+  evaluation of arbitrary `testModule` is unnecessary.
+- Disposable Nix evaluation probe:
+  `/tmp/project-aware-nixos-tests-conditional-probe.nix`. Its overlay-only
+  adapter loads the original project definitions and temporarily replaces only
+  their overlay contributions, modelling guards without changing repository
+  implementation. Its source-path disabling/reimport adapter is scratch-only,
+  not a proposed production implementation. Both the upstream wrapper and direct
+  `runTest` were inspected/evaluated; direct integration does not resolve the
+  read-only conflict by itself.
+- Probe evidence: default, `mkDefault true`, `extendNixOS` and an extension
+  selecting read-only retained exactly the vanilla guest toplevel derivation
+  paths and observed package markers. Reusable options stayed available, HM
+  stayed inactive, and an explicitly selected CIFS/keyutils capability evaluated
+  in frozen mode. Mutable mode applied project packages and retained a caller
+  overlay; an explicit node `nixpkgs.pkgs` retained the custom package base.
+  Extensions could select either package mode. A caller-defined overlay in
+  frozen mode still raised the upstream error. A shallow merge bug in the
+  scratch mutable fixture was corrected before recording the caller-overlay
+  result. These are evaluation checks, not builds, VM execution, all-capability
+  coverage or proof that the complete existing suite passes.
+- Active owner decisions: automatic reusable-module availability, existing
+  per-capability activation, no `projectModules.enable`, existing runner,
+  references to canonical contracts rather than retelling. The implementation
+  sketch remains approximate; local names depend on the environment, external
+  dependencies and implementer choices, as requested by the owner.
+- Self-review: the canonical Validation Configurations body and anchor remain
+  unchanged. Accepted proposal and requirements hashes still match their closed
+  scopes. The merged section has no separate runner, forced package-mode change
+  or replacement mutable-base rule. Sequential feedback uses self-review;
+  the latest owner acceptance and final review cover the current exact hashes
+  as recorded below.
+- Earlier failed flag/retelling and decomposition drafts are superseded.
+  The user-requested cases remain in
+  `../20261015-073247-tighten-sdd-artifact-boundaries/.specd-exploration.md`,
+  sections “Реальный кейс: повтор контрактов прошёл автора и арбитра (2026-10-26)”
+  and “Реальный кейс: избыточная декомпозиция при достаточном контексте (2026-10-26)”.
+  Historical first-draft arbiter `/root/system_overview_arbiter` covered delta
+  `166153ab57588cf800d1e679f990e5e469ad23f4704b3c70dd5b4ebc199e1b59`,
+  missed those problems and covers no current content.
+- On 2026-10-27, after confirmation of actual `nix eval` runs without infinite
+  recursion, the user requested reflecting the mechanism in system and saving
+  the remaining unconditional contributions for this change's plan. The current
+  revision adds the support-module sketch and test/node-config distinction;
+  the two-file inventory is saved in exploration. This authorizes the requested
+  revision, not acceptance of the resulting artifact. Self-review checked the
+  merged content, all four links, unchanged canonical content and closed input
+  hashes; `git diff --check` passed. No fresh arbiter or validation was run.
+- The user accepted closing the exact presented revision conditional on an
+  arbiter pass: "хорошо, давай дадим посмотреть арбитру, если ему норм, то закроем
+  этап". Fresh independent final arbiter
+  `/root/system_conditional_final_arbiter` passed without findings on delta
+  `e51b34036bba77ae0e0d80ac919f4acdb9f1e9541710406623d50726a49160b2`
+  and merged `cead6e0f32e3cd0c9c140ed3e18958c7956db3cc30b850f62ffd9bd3e302f05a`.
+  It read the approved inputs and locked upstream sources independently and
+  reran the scratch probe, including selected capability, caller overlays/base,
+  extensions and vanilla derivation comparisons. The review cycle is closed.
+- `specd changes validate project-aware-nixos-tests
+  default:003-testing-infrastructure --artifact system --format text` passed.
+  Fresh status marks system complete at the accepted/reviewed delta hash and
+  names validate as next artifact. Disk, merged and closed-input hashes were
+  rechecked after validation and remained unchanged. `git diff --check` passed.
+- System scope is closed. The conditional source guards remain implementation
+  work for this change, inventoried in exploration for the future plan.
+  No source code, validate artifact or plan was authored at this boundary.
+  No lifecycle transition or designing post-hooks ran: designing is unfinished.
+- Terminal boundary: stop the current system group. Continue in a fresh primary
+  session with `$specd-design project-aware-nixos-tests`, this `.context`, and
+  `validate` as the next bounded scope. User participation remains involved;
+  the next group must verify live state and closed input revisions first.
+
+### Validation continuation (prior closure, superseded by owner correction)
+
+- Historical scope: `validate` for `default:003-testing-infrastructure`; author
+  `/root`, manager `/root/design_manager`, involved participation, user owner.
+  The fresh primary session resumed from the closed system scope.
+- Preserved draft: `deltas/default/003-testing-infrastructure/validate.md.delta.yaml`.
+  Delta SHA-256:
+  `6d7bcde389a5af5114127795931343ebc99eaeddc5862c96455116bfdde57cb9`.
+  Merged SHA-256 excluding the first CLI header line:
+  `64684b61a831365ec37e472361e1f3365b0d243119ac978fda88538d7a58c92f`.
+  Review with `specd changes spec-preview project-aware-nixos-tests
+  default:003-testing-infrastructure --artifact validate --format text`.
+- Historical first-draft arbiter `/root/validate_arbiter` passed without findings
+  on delta `791412b17a317310779b08c98c7b3ba59740106129922e02c80822d7128166db`
+  and merged `4eef1618c1b0086c38cfeb5204557ac87c811a59b6d5270c2e42892f50f2a28c`;
+  that cycle is closed and covers no current revision.
+- The user's initial question about whole-spec scope was superseded explicitly
+  by "Не, давай оставим". Retain full 003 coverage. The user requested a NixOS
+  testing-framework suite, one launch command, then per-test case descriptions.
+  Accepted content follows that direction and explicitly marks the new aggregate
+  and tests as planned; implementation is pending. The two existing package VM
+  tests remain part of the aggregate. No narrowing was applied.
+- The user asked whether this is feasible. Locked upstream `run.nix` supplies
+  test-level Nix assertions and `testScript.nix` supplies guest execution.
+  A minimal raw-upstream `nix eval` with no nodes and `testScript = "assert True"`
+  returned a derivation path for a true assertion and rejected a false assertion.
+  Result: `/nix/store/2sb2jg8rg6733lp8hzxfjvprbr48iip2--test-run-assertion-feasibility.drv`.
+  This proves only Nix-side assertion support, not VM execution, offline fixture
+  preparation, dry-run host coverage or the proposed suite. These remain work
+  for the plan/implementation, with separate Nix subprocesses for diagnostics
+  and build planning and no prerequisite full-host builds.
+- Self-review covered the full merged artifact, owner links, actual shell/VM
+  assertions, locked upstream semantics and unchanged closed-input hashes.
+  The revised full merged view was self-reviewed after the sequential feedback;
+  sequential corrections used executor self-review. Designing pre-hooks ran
+  (none executable); hook guidance and validate instruction/post-rules were read.
+  `git diff --check` passed.
+- The user accepted the current exact revision with "Ааа выглядит норм" after
+  the framework-suite presentation and clarification of the edited artifact.
+  Raw and merged acceptance hashes are the current ones listed above.
+  Fresh final independent arbiter `/root/validate_final_arbiter` passed without
+  findings on that same revision; its cycle is closed. No content changed after
+  acceptance or final review. The bounded feasibility evaluation above is not
+  technical-suite execution. No implementation or proposed suite execution ran.
+  Closed proposal/requirements/system revisions are unchanged.
+- `specd changes validate project-aware-nixos-tests
+  default:003-testing-infrastructure --artifact validate --format text` passed.
+  A generic container-selector/rename advisory was nonblocking; no repair was
+  required. Fresh status marks validate complete at the accepted raw SHA.
+  Subsequent raw/merged and closed-input hash checks matched acceptance and
+  final review. `git diff --check` passed.
+- The user's `nix check` question means `nix flake check`. Local CLI help confirms
+  it builds `checks.<system>.*`; `--no-build` skips those builds. Actual
+  `nix flake check --no-build --no-write-lock-file .` currently fails while
+  checking `nixosConfigurations.generic`, whose toplevel lacks root-filesystem
+  and GRUB-device settings. This is a broad-flake setup limitation, not a failure
+  of the proposed suite. The accepted targeted build command avoids checking
+  unrelated outputs. No generic-host or accepted-artifact changes were made.
+- Former terminal boundary: validate was declared closed, and CLI then named
+  optional adrs before plan. The latest explicit owner correction supersedes
+  that closure and next-scope choice: resume system infrastructure architecture
+  as described at the top. No ADR was skipped or authored, and no plan was
+  written. No batch exception, lifecycle transition or designing post-hook ran.
+
+### Accepted proposal scope
+
+- Proposal content SHA-256:
+  `ddf3caef9749ecb85c8e68ec0a12c3754d506948892b45c877c2073ab19918e0`.
+  First-draft independent review by `/root/proposal_arbiter` succeeded with no
+  findings for this exact revision; that review cycle is closed.
+- User accepted this exact proposal revision on 2026-10-26 with
+  "да, пойдет" after the full review view and artifact link.
+- Final independent review by `/root/proposal_final_arbiter` succeeded with no
+  findings for the same accepted SHA; that cycle is closed.
+- `specd changes validate project-aware-nixos-tests --artifact proposal
+  --format text` passed. Live status marks proposal complete with the matching
+  SHA and names requirements as next artifact. Change remains designing;
+  requirements/system are pending review, validate/plan missing.
+- Required pre-hooks were loaded/executed: no executable hooks; designing
+  guidance and review-before-validation instruction read.
+- Proposal scope is closed. No further hooks are due at this boundary; designing
+  post-hooks and lifecycle transitions were not run. Requirements and system
+  were not validated and remain unapproved candidates.
+- Large-design boundary after proposal closure: strongly recommend a fresh
+  primary session with `$specd-design project-aware-nixos-tests`, this `.context`
+  and requirements as next scope. No batching exception has been requested.
+
+## Prior refresh note (historical)
+
+The following prior note is retained for provenance. Its overlap blocker and
+artifact-status observations are superseded by live CLI state and this restart.
+
+## Architecture-base refresh after conditional-module-activation archive
+
+- On 2026-10-26 `conditional-module-activation` was archived first as planned:
+  `.specd/archive/20261017-194128-conditional-module-activation`.
+- Current architecture base includes reusable-module selection and activation
+  validation; all nine purpose TBDs remain. Requirements and ADRs are unchanged.
+- Existing architecture requirements delta is a no-op. Its CLI spec preview on
+  the updated base has no warnings; there are no architecture system/validate
+  deltas yet. Do not invent them as a state repair.
+- Live state is designing with OVERLAP_CONFLICT from the archived change.
+  Proposal, both requirement deltas and the existing testing-infrastructure
+  system delta are pending review. Architecture system, validation and plan
+  remain missing. Next artifact is proposal.
+- Requirement revalidation was not attempted past the pending proposal gate;
+  review current proposal/inputs, then reconsider downstream artifacts in order.
+  No new sibling acceptance or content change was recorded by target closure.
+- Resume with `$specd-design project-aware-nixos-tests`. Preserve existing
+  support notes and read live state; this handoff grants no approval.
