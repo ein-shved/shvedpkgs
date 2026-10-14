@@ -1,0 +1,3 @@
+agent: codex
+sourceSkillsDir: skills
+destinationSkillsDir: .codex/skills
