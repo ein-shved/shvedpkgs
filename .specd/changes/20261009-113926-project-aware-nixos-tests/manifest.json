@@ -1,0 +1,637 @@
+{
+  "name": "project-aware-nixos-tests",
+  "createdAt": "2026-10-09T11:39:26.599Z",
+  "description": "Make project modules available to NixOS tests while preserving existing package compatibility.",
+  "schema": {
+    "name": "sdd",
+    "version": 1
+  },
+  "specIds": [
+    "default:003-testing-infrastructure",
+    "default:001-project-architecture"
+  ],
+  "specDependsOn": {
+    "default:003-testing-infrastructure": [
+      "default:002-host-classification",
+      "default:001-project-architecture"
+    ]
+  },
+  "artifacts": [
+    {
+      "type": "proposal",
+      "optional": false,
+      "requires": [],
+      "state": "complete",
+      "files": [
+        {
+          "key": "proposal",
+          "filename": "proposal.md",
+          "state": "complete",
+          "validatedHash": "sha256:87a696979cfc37fb8856ae3354d6b7d574131bbc256f1716373ff6de6a73ffd3"
+        }
+      ]
+    },
+    {
+      "type": "requirements",
+      "optional": false,
+      "requires": [
+        "proposal"
+      ],
+      "state": "complete",
+      "files": [
+        {
+          "key": "default:003-testing-infrastructure",
+          "filename": "deltas/default/003-testing-infrastructure/requirements.md.delta.yaml",
+          "state": "complete",
+          "validatedHash": "sha256:ae8f69fd168429d3e060df9872617fba8ca24b7b457e7d4da7a0dbf5fc94ca0c"
+        },
+        {
+          "key": "default:001-project-architecture",
+          "filename": "deltas/default/001-project-architecture/requirements.md.delta.yaml",
+          "state": "complete",
+          "validatedHash": "sha256:468f38a912d243348e4ac4284ebaba60afec9efc8c0fe4bf6cc54b26de467cc0"
+        }
+      ]
+    },
+    {
+      "type": "system",
+      "optional": false,
+      "requires": [
+        "requirements"
+      ],
+      "state": "in-progress",
+      "files": [
+        {
+          "key": "default:003-testing-infrastructure",
+          "filename": "deltas/default/003-testing-infrastructure/system.md.delta.yaml",
+          "state": "complete",
+          "validatedHash": "sha256:0041b998a7c06a6af003119a3eef708549c297c28bbab345c8d5e04a500b0195"
+        },
+        {
+          "key": "default:001-project-architecture",
+          "filename": "deltas/default/001-project-architecture/system.md.delta.yaml",
+          "state": "missing",
+          "validatedHash": null
+        }
+      ]
+    },
+    {
+      "type": "adrs",
+      "optional": true,
+      "requires": [
+        "requirements",
+        "system"
+      ],
+      "state": "missing",
+      "files": [
+        {
+          "key": "default:003-testing-infrastructure",
+          "filename": "deltas/default/003-testing-infrastructure/adrs.md.delta.yaml",
+          "state": "missing",
+          "validatedHash": null
+        },
+        {
+          "key": "default:001-project-architecture",
+          "filename": "deltas/default/001-project-architecture/adrs.md.delta.yaml",
+          "state": "missing",
+          "validatedHash": null
+        }
+      ]
+    },
+    {
+      "type": "plan",
+      "optional": false,
+      "requires": [
+        "requirements",
+        "system",
+        "verify"
+      ],
+      "state": "missing",
+      "files": [
+        {
+          "key": "plan",
+          "filename": "plan.md",
+          "state": "missing",
+          "validatedHash": null
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "optional": true,
+      "requires": [
+        "proposal"
+      ],
+      "state": "missing",
+      "files": [
+        {
+          "key": "context",
+          "filename": "context.md",
+          "state": "missing",
+          "validatedHash": null
+        }
+      ]
+    },
+    {
+      "type": "validate",
+      "optional": false,
+      "requires": [
+        "requirements",
+        "system"
+      ],
+      "state": "missing",
+      "files": [
+        {
+          "key": "default:003-testing-infrastructure",
+          "filename": "deltas/default/003-testing-infrastructure/validate.md.delta.yaml",
+          "state": "missing",
+          "validatedHash": null
+        },
+        {
+          "key": "default:001-project-architecture",
+          "filename": "deltas/default/001-project-architecture/validate.md.delta.yaml",
+          "state": "missing",
+          "validatedHash": null
+        }
+      ]
+    }
+  ],
+  "history": [
+    {
+      "type": "created",
+      "at": "2026-10-09T11:39:26.599Z",
+      "by": {
+        "name": "Юрий Шведов",
+        "email": "mestofel13@gmail.com"
+      },
+      "specIds": [
+        "default:testing-infrastructure"
+      ],
+      "schemaName": "sdd",
+      "schemaVersion": 1
+    },
+    {
+      "type": "artifacts-synced",
+      "at": "2026-10-09T11:39:26.616Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "typesAdded": [
+        "proposal",
+        "requirements",
+        "system",
+        "verify",
+        "inventory",
+        "adrs",
+        "plan",
+        "context"
+      ],
+      "typesRemoved": [],
+      "filesAdded": [
+        {
+          "type": "proposal",
+          "key": "proposal"
+        },
+        {
+          "type": "requirements",
+          "key": "default:testing-infrastructure"
+        },
+        {
+          "type": "system",
+          "key": "default:testing-infrastructure"
+        },
+        {
+          "type": "verify",
+          "key": "default:testing-infrastructure"
+        },
+        {
+          "type": "inventory",
+          "key": "default:testing-infrastructure"
+        },
+        {
+          "type": "adrs",
+          "key": "default:testing-infrastructure"
+        },
+        {
+          "type": "plan",
+          "key": "plan"
+        },
+        {
+          "type": "context",
+          "key": "context"
+        }
+      ],
+      "filesRemoved": []
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-09T11:47:14.828Z",
+      "by": {
+        "name": "Юрий Шведов",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "drafting",
+      "to": "designing"
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-10-09T12:18:13.917Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "cause": "artifact-drift",
+      "message": "Invalidated because validated artifacts drifted: proposal [proposal]",
+      "affectedArtifacts": [
+        {
+          "type": "proposal",
+          "files": [
+            "proposal"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-10-09T13:04:17.760Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "cause": "artifact-drift",
+      "message": "Invalidated because validated artifacts drifted: proposal [proposal]",
+      "affectedArtifacts": [
+        {
+          "type": "proposal",
+          "files": [
+            "proposal"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-10-09T13:07:27.462Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "cause": "artifact-drift",
+      "message": "Invalidated because validated artifacts drifted: proposal [proposal]",
+      "affectedArtifacts": [
+        {
+          "type": "proposal",
+          "files": [
+            "proposal"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-10-09T13:39:21.482Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "cause": "artifact-drift",
+      "message": "Invalidated because validated artifacts drifted: requirements [default:testing-infrastructure]",
+      "affectedArtifacts": [
+        {
+          "type": "requirements",
+          "files": [
+            "default:testing-infrastructure"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-10-12T04:59:45.860Z",
+      "by": {
+        "name": "Юрий Шведов",
+        "email": "mestofel13@gmail.com"
+      },
+      "cause": "spec-change",
+      "message": "Invalidated because the change scope changed and artifacts require review.",
+      "affectedArtifacts": [
+        {
+          "type": "proposal",
+          "files": [
+            "proposal"
+          ]
+        },
+        {
+          "type": "requirements",
+          "files": [
+            "default:testing-infrastructure"
+          ]
+        },
+        {
+          "type": "system",
+          "files": [
+            "default:testing-infrastructure"
+          ]
+        },
+        {
+          "type": "verify",
+          "files": [
+            "default:testing-infrastructure"
+          ]
+        },
+        {
+          "type": "inventory",
+          "files": [
+            "default:testing-infrastructure"
+          ]
+        },
+        {
+          "type": "adrs",
+          "files": [
+            "default:testing-infrastructure"
+          ]
+        },
+        {
+          "type": "plan",
+          "files": [
+            "plan"
+          ]
+        },
+        {
+          "type": "context",
+          "files": [
+            "context"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "artifacts-synced",
+      "at": "2026-10-12T04:59:45.861Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "typesAdded": [],
+      "typesRemoved": [],
+      "filesAdded": [
+        {
+          "type": "requirements",
+          "key": "default:003-testing-infrastructure"
+        },
+        {
+          "type": "requirements",
+          "key": "default:002-host-classification"
+        },
+        {
+          "type": "system",
+          "key": "default:003-testing-infrastructure"
+        },
+        {
+          "type": "system",
+          "key": "default:002-host-classification"
+        },
+        {
+          "type": "verify",
+          "key": "default:003-testing-infrastructure"
+        },
+        {
+          "type": "verify",
+          "key": "default:002-host-classification"
+        },
+        {
+          "type": "inventory",
+          "key": "default:003-testing-infrastructure"
+        },
+        {
+          "type": "inventory",
+          "key": "default:002-host-classification"
+        },
+        {
+          "type": "adrs",
+          "key": "default:003-testing-infrastructure"
+        },
+        {
+          "type": "adrs",
+          "key": "default:002-host-classification"
+        }
+      ],
+      "filesRemoved": [
+        {
+          "type": "requirements",
+          "key": "default:testing-infrastructure"
+        },
+        {
+          "type": "system",
+          "key": "default:testing-infrastructure"
+        },
+        {
+          "type": "verify",
+          "key": "default:testing-infrastructure"
+        },
+        {
+          "type": "inventory",
+          "key": "default:testing-infrastructure"
+        },
+        {
+          "type": "adrs",
+          "key": "default:testing-infrastructure"
+        }
+      ]
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-10-12T05:07:17.942Z",
+      "by": {
+        "name": "Юрий Шведов",
+        "email": "mestofel13@gmail.com"
+      },
+      "cause": "spec-change",
+      "message": "Invalidated because the change scope changed and artifacts require review.",
+      "affectedArtifacts": [
+        {
+          "type": "proposal",
+          "files": [
+            "proposal"
+          ]
+        },
+        {
+          "type": "requirements",
+          "files": [
+            "default:003-testing-infrastructure",
+            "default:002-host-classification"
+          ]
+        },
+        {
+          "type": "system",
+          "files": [
+            "default:003-testing-infrastructure",
+            "default:002-host-classification"
+          ]
+        },
+        {
+          "type": "verify",
+          "files": [
+            "default:003-testing-infrastructure",
+            "default:002-host-classification"
+          ]
+        },
+        {
+          "type": "inventory",
+          "files": [
+            "default:003-testing-infrastructure",
+            "default:002-host-classification"
+          ]
+        },
+        {
+          "type": "adrs",
+          "files": [
+            "default:003-testing-infrastructure",
+            "default:002-host-classification"
+          ]
+        },
+        {
+          "type": "plan",
+          "files": [
+            "plan"
+          ]
+        },
+        {
+          "type": "context",
+          "files": [
+            "context"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "artifacts-synced",
+      "at": "2026-10-12T05:07:17.943Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "typesAdded": [],
+      "typesRemoved": [],
+      "filesAdded": [
+        {
+          "type": "requirements",
+          "key": "default:001-project-architecture"
+        },
+        {
+          "type": "system",
+          "key": "default:001-project-architecture"
+        },
+        {
+          "type": "verify",
+          "key": "default:001-project-architecture"
+        },
+        {
+          "type": "inventory",
+          "key": "default:001-project-architecture"
+        },
+        {
+          "type": "adrs",
+          "key": "default:001-project-architecture"
+        }
+      ],
+      "filesRemoved": [
+        {
+          "type": "requirements",
+          "key": "default:002-host-classification"
+        },
+        {
+          "type": "system",
+          "key": "default:002-host-classification"
+        },
+        {
+          "type": "verify",
+          "key": "default:002-host-classification"
+        },
+        {
+          "type": "inventory",
+          "key": "default:002-host-classification"
+        },
+        {
+          "type": "adrs",
+          "key": "default:002-host-classification"
+        }
+      ]
+    },
+    {
+      "type": "artifacts-synced",
+      "at": "2026-10-12T16:01:24.735Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "typesAdded": [
+        "validate"
+      ],
+      "typesRemoved": [
+        "verify",
+        "inventory"
+      ],
+      "filesAdded": [
+        {
+          "type": "validate",
+          "key": "default:003-testing-infrastructure"
+        },
+        {
+          "type": "validate",
+          "key": "default:001-project-architecture"
+        }
+      ],
+      "filesRemoved": []
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-10-12T16:35:42.512Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "cause": "artifact-drift",
+      "message": "Invalidated because validated artifacts drifted: proposal [proposal]; system [default:003-testing-infrastructure]",
+      "affectedArtifacts": [
+        {
+          "type": "proposal",
+          "files": [
+            "proposal"
+          ]
+        },
+        {
+          "type": "system",
+          "files": [
+            "default:003-testing-infrastructure"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-10-14T18:15:19.616Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "cause": "artifact-drift",
+      "message": "Invalidated because validated artifacts drifted: requirements [default:003-testing-infrastructure]; system [default:003-testing-infrastructure]",
+      "affectedArtifacts": [
+        {
+          "type": "requirements",
+          "files": [
+            "default:003-testing-infrastructure"
+          ]
+        },
+        {
+          "type": "system",
+          "files": [
+            "default:003-testing-infrastructure"
+          ]
+        }
+      ]
+    }
+  ]
+}

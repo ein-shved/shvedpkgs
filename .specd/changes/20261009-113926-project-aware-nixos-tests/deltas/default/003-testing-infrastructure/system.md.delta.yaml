@@ -1,0 +1,236 @@
+- op: modified
+  selector:
+    type: section
+    matches: '^Validation Configurations$'
+  rename: 'System Specification: Testing Infrastructure'
+  content: |
+    ## Validation Configurations
+
+    A validation configuration is a NixOS configuration used to evaluate and plan
+    builds for repository validation when the corresponding deployable host
+    configuration requires private or machine-specific values that are not present
+    in the public checkout.
+
+    Validation configurations MUST be separate from deployable host configurations.
+    They MUST NOT be exposed through `nixosConfigurations`.
+
+    The flake exposes validation configurations through:
+
+    ```nix
+    nixosValidationConfigurations.<host>
+    ```
+
+    Each `nixosValidationConfigurations.<host>` entry is a NixOS configuration
+    object for the same host as `nixosConfigurations.<host>`, evaluated with the
+    same base modules and host modules plus repository-owned test-only validation
+    stub modules.
+
+    Validation stub modules live under the repository `tests/` tree, in the
+    test-only module support area. The initial private-value validation stubs live
+    under `tests/modules/stubs/private-values/`. They provide non-secret substitute
+    values only for evaluation and build-planning purposes. They MUST NOT contain
+    real credentials, private domains, private keys, or machine-local secret
+    material.
+
+    Validation stub modules MAY define ordinary NixOS module options when that is
+    the normal interface consumed by the system. They SHOULD use existing option
+    interfaces instead of bypassing module ownership. For example, an age secret
+    substitute is provided through `age.secrets.<name>.file`, not by assigning a
+    computed secret `path` directly.
+
+    The initial validation stub set covers the private dependencies currently
+    observed to block active-host toplevel evaluation in the public checkout:
+
+    - `age.secrets.cloudflare.file`
+    - `age.secrets.lastfm-navidrome.file`
+    - `services.vps.domain`
+
+    This list is not a complete inventory of every private, secret, or
+    machine-specific value that may exist in the repository or in downstream
+    private extensions. Additional validation substitutes may be added when a
+    validation target exposes another missing private dependency.
+
+    The validation configuration contract guarantees that these commands can be
+    used for secret-dependent active hosts:
+
+    ```sh
+    nix eval --raw .#nixosValidationConfigurations.<Hostname>.config.system.build.toplevel.drvPath
+    nix build --dry-run --no-link .#nixosValidationConfigurations.<Hostname>.config.system.build.toplevel
+    ```
+
+    The corresponding deployable host output remains:
+
+    ```nix
+    nixosConfigurations.<host>
+    ```
+
+    and it MUST NOT import validation stub modules implicitly.
+
+    Traceability:
+
+    - Satisfies
+      [`REQ-001: Validate Secret-Dependent Hosts Without Private Material`](requirements.md#req-001-validate-secret-dependent-hosts-without-private-material).
+
+    ## System Concepts
+
+    ### Ordinary and project-aware tests
+
+    An ordinary test uses the upstream NixOS test environment. A project-aware test
+    also makes the project's reusable module capabilities available to its VM
+    nodes. Availability declares their interfaces and supplies shared evaluation
+    context; activation is determined independently by each node's configuration.
+
+    The test driver and the guest package sets are distinct. Making modules
+    available to guests does not turn the driver into a deployed project host.
+
+    ## Test Runner Interface
+
+    The project package set exposes the existing `pkgs.testers.runNixOSTest`
+    interface with one additional test-level option:
+
+    ```nix
+    projectModules.enable = true;
+    ```
+
+    The option is a boolean with default `false`. It selects project-aware mode for
+    all VM nodes in that test. A node activates a particular capability through
+    that capability's own configuration interface; the test-level switch does not
+    enable every capability.
+
+    The runner continues to accept upstream test modules, including attribute sets,
+    module functions, and module paths. It returns the upstream test result,
+    including its driver, node configurations, and extension interfaces. Other
+    members of `pkgs.testers` retain their upstream interfaces.
+
+    ### Ordinary mode
+
+    When `projectModules.enable` is false or omitted, the runner does not add
+    project node modules, evaluation arguments, overlays, or capability settings.
+    Upstream package-set handling, including `node.pkgsReadOnly`, remains in force.
+    Existing test definitions do not need changes to select this mode.
+
+    ### Project-aware mode
+
+    When the switch is true, every VM node receives the common project test module
+    environment described below. The author's `defaults`, node modules,
+    `testScript`, and other upstream test settings remain part of the test and
+    compose through the upstream module system.
+
+    The runner supplies project node modules through the upstream node base-module
+    extension point. The author does not repeat their imports for each test or
+    node. Project-aware container behavior is outside this contract's current scope.
+
+    ## Common Project Test Module Environment
+
+    The shared environment consists of:
+
+    | Component | Contract |
+    | --- | --- |
+    | Reusable project modules | The module assembly rooted at `modules/nixos.nix`, using the project's capability definitions rather than test-specific copies. |
+    | Home Manager support | The Home Manager NixOS module from the locked project input, making its option types and integration available. Importing it does not by itself select a user profile. |
+    | Image-format support | The nixos-generators all-formats module from the locked project input, supplying the interfaces consumed by the project's bootable capabilities. Availability does not select an image build. |
+    | Project package support | The local by-name package overlay, making project packages available to node modules without inheriting a concrete host's evaluated package set. |
+
+    This environment excludes `config/`, concrete `hosts/` definitions, and
+    validation-only private-value stubs. The project's flake `extend` additions
+    are not inherited. The environment is sourced from the base project and its
+    locked inputs, rather than from the module list of an assembled host.
+
+    Support modules and package overlays are shared dependencies of reusable
+    capabilities. Their availability must not activate unrelated guest behavior.
+    An enabled capability's intrinsic external inputs are supplied by the test
+    author, through that capability's interface.
+
+    ## Node Evaluation Context
+
+    Project-aware VM node modules receive these bindings:
+
+    | Binding | Meaning |
+    | --- | --- |
+    | `lib` | The project's extended library, based on the locked nixpkgs library. |
+    | `flake-inputs` | The base project's locked flake inputs. |
+    | `pkgs` | The guest's NixOS package set, including project package support and its node-specific overlays. |
+    | `pkgsUnstable` | The package set from the locked unstable input for that guest's platform. |
+
+    The project `lib` and `flake-inputs` are available during node import resolution
+    through `node.specialArgs`. `pkgsUnstable` is a node module argument determined
+    from the guest platform; it does not use the driver platform by assumption.
+    The driver and test-module evaluation retain their upstream context.
+
+    Additional author-supplied node arguments remain supported. Replacing the
+    project bindings with incompatible values is outside project-aware mode's
+    contract. Capability settings are not encoded in these bindings.
+
+    ## Guest Package Assembly
+
+    Project-aware mode uses mutable NixOS package configuration:
+
+    ```nix
+    node.pkgsReadOnly = false;
+    ```
+
+    The guest package set is assembled from the locked nixpkgs input and the
+    guest's NixOS package configuration. Project package overlays and author
+    overlays participate in the normal NixOS merge and overlay order. Packages
+    provided by the project overlay do not imply installation in the guest.
+
+    `node.pkgs` retains its upstream meaning: in mutable mode it does not replace
+    the guest package set assembled by NixOS. Authors customize project-aware guest
+    packages through node `nixpkgs.config` and `nixpkgs.overlays`. Supplying a
+    preassembled guest `nixpkgs.pkgs` or requesting read-only package configuration
+    is not supported in this mode; those upstream workflows remain available in
+    ordinary mode. Incompatible requests must produce an evaluation error rather
+    than silently lose the requested project module environment.
+
+    Guest package construction does not inherit a concrete host's role flags or
+    activation settings. Shared testing support must not require evaluating the
+    tests of a package to construct the package set used by those tests.
+
+    ## Capability Activation and Minimal Nodes
+
+    In project-aware mode, a node with no selected project capability retains the
+    ordinary test framework's guest behavior. Merely exposing project options does
+    not add project-specific packages, users, services, trust changes, udev rules,
+    power policy, or Home Manager profiles. It does not force a username or private
+    inputs for inactive capabilities.
+
+    Selecting a capability adds its behavior and necessary dependencies through
+    its own module interface. Each node is configured independently; selecting a
+    capability on one node does not select it on another.
+
+    Capability activation defaults are overridable through normal NixOS module
+    semantics. The runner does not use forced suppression that prevents an author
+    from enabling a capability, maintain substitute capability implementations,
+    or hide reusable modules through a test-specific blacklist. Caller additions
+    through upstream test extension interfaces preserve the selected runner mode
+    and compose with its node environment.
+
+    ## Boundaries with Other Specifications
+
+    This specification owns the runner interface, common test module environment,
+    node context, package assembly, and the observable isolation of test nodes.
+
+    `default:001-project-architecture` owns primary-user semantics and optional
+    Home Manager environment management, including the activation interface
+    consumed by tests. Home Manager use and disablement are design choices
+    under the existing user-environment requirements.
+    User creation and Home Manager profile activation are distinct concerns;
+    test integration does not define their APIs or assign traits to deployed hosts.
+
+    `default:002-host-classification` owns the existing host-role model.
+    `default:001-project-architecture` also owns repository layer boundaries.
+    The runner consumes these shared concepts without redefining
+    them. Host policy, capability implementation contracts, their ADRs, and host
+    migration steps are not owned by testing infrastructure.
+
+    ## Constraints
+
+    - Module availability and capability activation remain separate.
+    - Ordinary tests preserve their upstream configuration and package semantics.
+    - Project-aware tests use the base project's locked inputs and guest platform.
+    - Private-value stubs and concrete host policy are supplied only through
+      explicit author configuration, never inferred by the runner.
+    - Acceptance scenarios belong inside their owning requirements.
+    - Technical conformance checks, commands, inspections, and evidence coverage
+      belong in `validate`. Implementation sequencing, migration work, and the
+      plan's validation strategy belong in the plan.
