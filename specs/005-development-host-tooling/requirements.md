@@ -53,3 +53,60 @@ reproducible across development machines.
 - WHEN a package can be used by multiple host purposes
 - THEN the package definition does not decide which concrete hosts install it for development workflow reasons
 - AND development-host configuration policy owns that installation decision
+
+## REQ-002: Bootstrap projects with the repository SDD setup
+
+The project must provide a supported bootstrap tool that installs or updates
+enough SpecD SDD setup in a target project for work to begin under this
+repository's current SDD schema after the tool completes.
+
+The installed setup must include the schema assets and supported agent
+skills needed to use that schema. The command must support at least the
+`codex`, `opencode`, and `kilocode` agent targets.
+
+Shared SDD process semantics must remain consistent across supported agent
+targets, while each target may use the skill invocation syntax required by
+that agent.
+
+### Rationale
+
+Reusing this repository's SpecD setup in another project should not require
+manual copying, local patch recreation, or schema-specific skill editing.
+The bootstrap tool should make the SDD setup reproducible while keeping
+agent-specific calling conventions explicit.
+
+### Scenario: Target project receives usable SDD setup
+
+- WHEN a user runs the bootstrap tool for a target project and a supported agent target
+- THEN the target project has the SpecD schema assets needed to start work under this repository's current SDD schema
+- AND the target project has the skills needed by the selected agent target
+
+### Scenario: Schema setup includes required schema assets
+
+- WHEN the bootstrap tool installs schema setup into a target project
+- THEN the installed setup includes the schema file, artifact templates, and related schema assets required by this repository's current SDD schema
+- AND the target project does not need extra setup actions before starting work under that schema
+
+### Scenario: Existing SDD setup can be updated
+
+- WHEN a target project already has schema assets or supported agent skills installed by this bootstrap flow
+- THEN a user can run the bootstrap tool again to update those installed assets
+- AND the target project can continue work under the updated SDD setup
+
+### Scenario: Bootstrap setup follows repository schema updates
+
+- WHEN this repository's current SDD schema changes
+- THEN the bootstrap tool's installable schema setup is updated to match that current schema
+- AND a target project updated through the bootstrap tool receives the updated schema setup
+
+### Scenario: Supported agents keep their invocation syntax
+
+- WHEN the bootstrap tool installs skills for a supported agent target
+- THEN the installed skills use the invocation syntax expected by that agent
+- AND the shared SDD workflow meaning remains aligned with the installed schema
+
+### Scenario: Unsupported agents are not silently treated as supported
+
+- WHEN a user requests an agent target that the bootstrap tool does not support
+- THEN the command makes that unsupported target visible to the user
+- AND it does not silently install skills for a different agent target
