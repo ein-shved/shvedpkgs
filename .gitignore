@@ -2,3 +2,8 @@ secrets/
 secrets.nix
 nda/
 nda.nix
+specd.local.yaml
+.specd
+.codex
+.opencode
+.kilocode
