@@ -1,0 +1,5 @@
+- op: no-op
+  description: >-
+    Existing REQ-001, REQ-002 and REQ-003 already cover host-specific environments,
+    primary-user scope and capability selection. Home Manager use and per-host
+    disablement are design mechanisms under those needs, not new requirements.

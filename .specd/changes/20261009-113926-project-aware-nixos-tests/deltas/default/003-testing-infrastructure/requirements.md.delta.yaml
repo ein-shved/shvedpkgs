@@ -1,0 +1,109 @@
+- op: added
+  position:
+    parent:
+      type: section
+      matches: '^Requirements$'
+    after:
+      type: section
+      matches: "^REQ-001: Validate Secret-Dependent Hosts Without Private Material$"
+  content: |
+    ## REQ-002: Exercise project capabilities in NixOS tests
+
+    Test authors must be able to use the project's reusable NixOS module
+    capabilities in test nodes without reconstructing the project's shared module
+    environment separately for each test.
+
+    Tests need to exercise the project capabilities themselves rather than
+    maintain substitute definitions that may diverge from the project.
+
+    ### Scenario: Use a reusable project capability in a test
+
+    - GIVEN an author selects any reusable project NixOS module capability.
+    - AND the author supplies the settings and inputs intrinsic to that
+      capability.
+    - WHEN the author configures a test node to exercise it.
+    - THEN the capability is available in the node without the author
+      reconstructing the project's shared module environment.
+
+    ### Scenario: Exercise the project's behavior
+
+    - GIVEN a project capability is configured in a test node and in a project
+      system with equivalent relevant settings and inputs.
+    - WHEN the test exercises that capability.
+    - THEN it exercises the same project behavior rather than a substitute
+      definition maintained for the test.
+
+
+- op: added
+  position:
+    parent:
+      type: section
+      matches: '^Requirements$'
+    after:
+      type: section
+      matches: "^REQ-002: Exercise project capabilities in NixOS tests$"
+  content: |
+    ## REQ-003: Keep test nodes focused on the selected behavior
+
+    Making project capabilities available must not impose unrelated project
+    behavior on a test node. Test authors must be able to exercise a selected
+    capability without adopting project-wide application policy or a concrete
+    host's configuration.
+
+    Unrelated behavior changes what a test observes and introduces dependencies
+    that can obscure the result of the test.
+
+    ### Scenario: Keep a minimal test minimal
+
+    - GIVEN a minimal NixOS test selects no project capability.
+    - WHEN project capabilities are made available to its node.
+    - THEN their availability alone does not add project-specific packages,
+      services, user accounts, trust settings, or hardware policy.
+    - AND the author is not required to supply feature-specific inputs for
+      unselected capabilities, such as a user identity, host hardware details, or
+      private values.
+
+    ### Scenario: Select only the behavior needed by a test
+
+    - GIVEN an author selects a project capability and supplies its necessary
+      settings and inputs.
+    - WHEN the node is configured for that test.
+    - THEN it gains the selected capability and its necessary dependencies
+      without requiring unrelated capabilities to be active.
+    - AND the configuration supplied for the test determines the project
+      behavior exercised, without requiring project-wide application policy or a
+      concrete deployed host's configuration.
+    - AND the author does not need to supply feature-specific inputs for
+      unrelated capabilities.
+
+
+- op: added
+  position:
+    parent:
+      type: section
+      matches: '^Requirements$'
+    after:
+      type: section
+      matches: "^REQ-003: Keep test nodes focused on the selected behavior$"
+  content: |
+    ## REQ-004: Preserve existing package and test use
+
+    Adding support for project capabilities in NixOS tests must preserve existing
+    package use and existing package-test behavior, including tests that do not
+    use project capabilities.
+
+    ### Scenario: Continue using an existing package
+
+    - GIVEN an existing usable package.
+    - WHEN support for project capabilities in NixOS tests is introduced.
+    - THEN the package remains usable without opting into project-aware testing.
+
+    ### Scenario: Continue using an ordinary package test
+
+    - GIVEN an existing NixOS package test that does not request project
+      capabilities.
+    - WHEN it is used after project-aware testing support is introduced.
+    - THEN its existing definition remains usable and its expected behavior is
+      preserved.
+    - AND the author does not need to add project-specific configuration or
+      unrelated inputs solely because the new testing support exists.
