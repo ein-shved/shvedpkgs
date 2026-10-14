@@ -9,7 +9,12 @@ the command lookup path:
 - `codex`
 - `specd`
 
-`codex` is provided from [nixpkgs stable](#nixpkgs-stable).
+`codex` is provided from [nixpkgs unstable](#nixpkgs-unstable) through
+`pkgsUnstable.codex`. The stable package is too old for the repository
+workflow. The unstable revision is pinned by the repository flake lock.
+
+Development-host policy selects this package through
+`environment.developmentPackages`.
 
 `specd` is provided by the repository package-set attribute
 `pkgs.specd`, which packages the genuine SpecD CLI from the `@specd/cli`

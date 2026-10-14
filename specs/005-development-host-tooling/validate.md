@@ -7,6 +7,31 @@ tools` remains TBD.
 
 This section intentionally does not describe bootstrap-tool validation.
 
+## Validation: Codex Version
+
+Covers the `REQ-001` scenario "Codex CLI stays current enough for repository
+workflow" and the Codex source contract in
+[Development Host Tooling](system.md#development-host-tooling).
+
+### Check: Installed Codex version
+
+On a development host with the updated configuration activated, run this
+command as the primary user in their normal shell:
+
+```bash
+codex --version
+```
+
+The command must succeed and print:
+
+```text
+codex-cli 0.162.1
+```
+
+Expected release: [OpenAI Codex 0.162.1](https://github.com/openai/codex/releases/tag/rust-v0.162.1),
+checked on 2026-10-14. This check exercises the installed command through
+the user's PATH.
+
 ## Validation: SpecD Bootstrap Support
 
 This section validates `REQ-002: Bootstrap projects with the repository SDD

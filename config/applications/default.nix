@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, pkgsUnstable, ... }:
 {
   config = {
     environment.systemPackages = with pkgs; [
@@ -57,7 +57,7 @@
     environment.developmentPackages = with pkgs; [
       android-tools
       bear
-      codex
+      pkgsUnstable.codex
       docker
       dowork
       esp-config

@@ -36,6 +36,12 @@ reproducible across development machines.
 - THEN the command resolves to the widely recognized developer tool identified by that command name
 - AND it does not resolve to a stub, placeholder, or unrelated executable unless this requirement explicitly allows it
 
+### Scenario: Codex CLI stays current enough for repository workflow
+
+- WHEN the primary user invokes `codex` on a development host
+- THEN the command resolves to a supported OpenAI Codex CLI release from the maintained upstream release stream
+- AND it is not pinned to a package source known to lag the upstream release stream enough to block the repository workflow
+
 ### Scenario: Non-development hosts are outside the requirement
 
 - WHEN a host is not classified as a development host
