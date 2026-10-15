@@ -894,6 +894,40 @@ Top-level plan items are integration-safe units of project work. An
 agent may use a much finer temporary TODO list internally; those steps
 are execution mechanics, not automatically plan items.
 
+#### 12.3.1 Artifact Boundary Self-Review
+
+Before presenting a draft for human review, reread it, including the merged
+result for a delta. Check new or changed statements against their artifact's
+ownership and any already agreed intent allocation:
+
+- Proposal: does it explain motivation, direction, and scope without replacing
+  the owning requirements or system design?
+- Requirements: what independent need does each addition express? Is it
+  already covered by requirements or authoritative process rules? Would it
+  still make sense with a different implementation? Patch constraints, defect
+  descriptions, and proposed fixes do not become requirements merely because
+  the user mentioned them. Unchanged needs can use a no-op delta.
+- System: does each architecture point explain a concrete arrangement or
+  mechanism, identify where its contracts are defined, and link to its owning
+  requirement? Do transition steps and check procedures stay in plan/validate?
+- Validate: does each check give an action, expected result, and requirement
+  or architecture link? Do acceptance conditions and motivation stay upstream?
+- Plan: does it describe the transition and completion evidence without
+  introducing new needs or significant system design?
+- ADRs: does it record a significant choice and rationale without owning
+  current requirements or system mechanisms?
+
+Identify specific misplaced or unsupported passages and correct them before
+human review. A generic assertion of compliance is insufficient. If correction
+needs an upstream change, surface that dependency instead of silently changing
+approved content. Revised content follows the human-review boundary.
+
+Schema `rules.post` delivers this self-review after existing composition checks
+and before human review. It adds no separate report, artifact section, or user
+confirmation step. Keep routine self-assessment out of artifacts; chat mentions
+material corrections or unresolved issues. Structural validation does not judge
+semantic compliance with this agent instruction.
+
 ### 12.4 Review Before Structural Validation
 
 Present each authored artifact's current content for human review and stop

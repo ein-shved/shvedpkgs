@@ -73,6 +73,15 @@ section.
 
 ## Review Before Structural Validation
 
+- Before human review, reread drafts and merged deltas against their ownership
+  and any agreed intent allocation. Apply the artifact-specific self-review
+  questions delivered in post-rules after composition checks and before review.
+  Find and correct specific misplaced or unsupported passages; a generic
+  compliance assertion is insufficient. Surface needed upstream changes rather
+  than silently editing approved content. Revised content follows human review.
+  Add no report, artifact section, or confirmation step; keep routine
+  self-assessment out of artifacts and mention material corrections in chat.
+
 - Present every authored artifact's current content and stop before
   `specd changes validate`, including optional ADRs, deltas, and no-op decisions.
   Review merged deltas or the unchanged base for a no-op.

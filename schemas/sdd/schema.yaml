@@ -45,6 +45,18 @@ artifacts:
             change requirements, system specification, validation, or plan
             artifacts
             before proceeding.
+        - id: boundary-self-review
+          instruction: |
+            Reread the draft, including its merged result for a delta. Check
+            changed statements against proposal ownership and any agreed intent
+            allocation: does this explain motivation, direction, and scope
+            without replacing the owning requirements or system design?
+            Identify specific misplaced or unsupported passages and correct
+            them before human review; a generic compliance assertion is
+            insufficient. Surface any needed upstream change instead of
+            silently modifying approved content. Revised content follows human
+            review. Add no separate report, section, or confirmation step;
+            mention only material corrections or unresolved issues in chat.
         - id: review-before-validation
           instruction: &review-before-validation |
             Present the current artifact for human review and stop before
@@ -142,6 +154,23 @@ artifacts:
         required: true
     rules:
       post:
+        - id: boundary-self-review
+          instruction: |
+            Reread the draft, including its merged result for a delta or the
+            unchanged base for a no-op. Check changed statements against
+            requirements ownership and any agreed intent allocation. What
+            independent user or project need does each addition express? Is it
+            already covered by requirements or authoritative process rules?
+            Would it still make sense with a different implementation? Patch
+            constraints, defect descriptions, and proposed fixes do not become
+            requirements merely because the user mentioned them. Unchanged
+            needs can use a no-op delta.
+            Identify specific misplaced or unsupported passages and correct
+            them before human review; a generic compliance assertion is
+            insufficient. Surface any needed upstream change instead of
+            silently modifying approved content. Revised content follows human
+            review. Add no separate report, section, or confirmation step;
+            mention only material corrections or unresolved issues in chat.
         - id: review-before-validation
           instruction: *review-before-validation
 
@@ -188,6 +217,20 @@ artifacts:
         required: true
     rules:
       post:
+        - id: boundary-self-review
+          instruction: |
+            Reread the draft, including its merged result for a delta. Check
+            changed statements against system ownership and any agreed intent
+            allocation. Does each architecture point explain a concrete
+            arrangement or mechanism, identify where its contracts are defined,
+            and link to its owning requirement? Are transition steps and
+            technical check procedures left to plan and validate?
+            Identify specific misplaced or unsupported passages and correct
+            them before human review; a generic compliance assertion is
+            insufficient. Surface any needed upstream change instead of
+            silently modifying approved content. Revised content follows human
+            review. Add no separate report, section, or confirmation step;
+            mention only material corrections or unresolved issues in chat.
         - id: review-before-validation
           instruction: *review-before-validation
 
@@ -234,6 +277,19 @@ artifacts:
         required: true
     rules:
       post:
+        - id: boundary-self-review
+          instruction: |
+            Reread the draft, including its merged result for a delta. Check
+            changed statements against validate ownership and any agreed intent
+            allocation. Does every check specify a concrete action, an expected
+            result, and a requirement or architecture link? Are acceptance
+            conditions and motivation left with their upstream owners?
+            Identify specific misplaced or unsupported passages and correct
+            them before human review; a generic compliance assertion is
+            insufficient. Surface any needed upstream change instead of
+            silently modifying approved content. Revised content follows human
+            review. Add no separate report, section, or confirmation step;
+            mention only material corrections or unresolved issues in chat.
         - id: review-before-validation
           instruction: *review-before-validation
 
@@ -268,6 +324,19 @@ artifacts:
       ADR section with status, context, decision, rationale, and consequences.
     rules:
       post:
+        - id: boundary-self-review
+          instruction: |
+            Reread the draft, including its merged result for a delta. Check
+            changed statements against ADR ownership and any agreed intent
+            allocation. Does this record a significant choice and its rationale
+            without becoming the source of current requirements or system
+            mechanisms?
+            Identify specific misplaced or unsupported passages and correct
+            them before human review; a generic compliance assertion is
+            insufficient. Surface any needed upstream change instead of
+            silently modifying approved content. Revised content follows human
+            review. Add no separate report, section, or confirmation step;
+            mention only material corrections or unresolved issues in chat.
         - id: review-before-validation
           instruction: *review-before-validation
 
@@ -311,6 +380,19 @@ artifacts:
             Cross-check the plan against requirements, system, and validate
             artifacts. Every requirement, acceptance scenario, and validation
             check must have a path through the plan.
+        - id: boundary-self-review
+          instruction: |
+            Reread the draft, including its merged result for a delta. Check
+            changed statements against plan ownership and any agreed intent
+            allocation. Does this describe the implementation transition and
+            completion evidence without introducing new needs or significant
+            system design?
+            Identify specific misplaced or unsupported passages and correct
+            them before human review; a generic compliance assertion is
+            insufficient. Surface any needed upstream change instead of
+            silently modifying approved content. Revised content follows human
+            review. Add no separate report, section, or confirmation step;
+            mention only material corrections or unresolved issues in chat.
         - id: review-before-validation
           instruction: *review-before-validation
     preHashCleanup:
