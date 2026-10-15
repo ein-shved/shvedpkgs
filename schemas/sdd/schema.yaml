@@ -45,6 +45,26 @@ artifacts:
             change requirements, system specification, validation, or plan
             artifacts
             before proceeding.
+        - id: review-before-validation
+          instruction: &review-before-validation |
+            Present the current artifact for human review and stop before
+            running specd changes validate. This applies to every authored
+            artifact, including optional ADRs, deltas, and no-op decisions.
+            For deltas, present the merged artifact; a no-op refers to the
+            unchanged base. Explicit user approval covers only current content.
+            A revision request or generation-mode selection, including
+            all-at-once generation, is not content approval. Intent allocation
+            agreement alone does not approve subsequently drafted content.
+
+            After explicit approval, structurally validate the reviewed content.
+            If validation requires content changes, including upstream repairs,
+            present their diff and wait for approval of revised content before
+            revalidation. Never silently edit or validate unapproved upstream
+            artifacts to repair dependencies. Reuse an existing approval while
+            reviewed content is unchanged; state-only dependency changes do not
+            require repeating that review. Tests and technical inspections are
+            distinct from artifact-content approval. This is an agent rule,
+            not a new CLI approval state or separate approval document.
 
   - id: requirements
     scope: spec
@@ -120,6 +140,10 @@ artifacts:
         type: section
         matches: '^Scenario:'
         required: true
+    rules:
+      post:
+        - id: review-before-validation
+          instruction: *review-before-validation
 
   - id: system
     scope: spec
@@ -162,6 +186,10 @@ artifacts:
         type: section
         level: 1
         required: true
+    rules:
+      post:
+        - id: review-before-validation
+          instruction: *review-before-validation
 
   - id: validate
     scope: spec
@@ -204,6 +232,10 @@ artifacts:
         type: section
         level: 1
         required: true
+    rules:
+      post:
+        - id: review-before-validation
+          instruction: *review-before-validation
 
   - id: adrs
     scope: spec
@@ -234,6 +266,10 @@ artifacts:
 
       Target complete ADR sections by heading. Added operations include the full
       ADR section with status, context, decision, rationale, and consequences.
+    rules:
+      post:
+        - id: review-before-validation
+          instruction: *review-before-validation
 
   - id: plan
     scope: change
@@ -275,6 +311,8 @@ artifacts:
             Cross-check the plan against requirements, system, and validate
             artifacts. Every requirement, acceptance scenario, and validation
             check must have a path through the plan.
+        - id: review-before-validation
+          instruction: *review-before-validation
     preHashCleanup:
       - id: normalize-checkboxes
         pattern: '^([ \t]*-\s+)\[x\]'
@@ -351,6 +389,18 @@ workflow:
             Preserve the SDD dependency direction:
             requirements -> system -> validate -> plan -> implementation.
             Discovery may move upstream; corrections must propagate downstream.
+
+            Present every authored artifact's current content for human review
+            and stop before specd changes validate, including optional artifacts,
+            deltas, and no-op decisions. For deltas review the merged result;
+            for a no-op review the unchanged base. Revision requests, generation
+            mode selection, and intent allocation alone are not content approval.
+            If validation fails and repairs change content, including upstream
+            content, present the diff and wait for explicit approval before
+            revalidation. Do not silently edit or validate unapproved upstream
+            artifacts to repair dependency state. Reuse approval of unchanged
+            reviewed content when only dependency state changes. Tests and
+            technical inspections do not constitute artifact-content approval.
 
   - step: ready
     requires: [proposal, requirements, system, validate, plan]

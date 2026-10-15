@@ -71,6 +71,21 @@ section.
 - Checkbox normalization preserves the approved plan hash for progress marks;
   other edits cause drift. This is not a filesystem write restriction.
 
+## Review Before Structural Validation
+
+- Present every authored artifact's current content and stop before
+  `specd changes validate`, including optional ADRs, deltas, and no-op decisions.
+  Review merged deltas or the unchanged base for a no-op.
+- Explicit approval applies to current content. Revision requests, generation
+  mode selection, and intent allocation alone do not approve later drafts.
+- If validation repairs change content, including upstream content, present
+  their diff and obtain approval before revalidation. Never silently edit or
+  validate unapproved upstream artifacts to fix dependency state. Reuse approval
+  while reviewed content stays unchanged, including state-only repairs.
+- Schema post-rules deliver this after composition checks; designing hook
+  guidance applies it to repairs. This adds no CLI approval state or document.
+  Tests and technical inspections are distinct from content approval.
+
 ## Useful Repository References
 
 - `specs/000-sdd-process/rules.md` describes the repository's SDD process.

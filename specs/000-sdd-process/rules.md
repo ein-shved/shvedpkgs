@@ -894,7 +894,30 @@ Top-level plan items are integration-safe units of project work. An
 agent may use a much finer temporary TODO list internally; those steps
 are execution mechanics, not automatically plan items.
 
-### 12.4 Tooling
+### 12.4 Review Before Structural Validation
+
+Present each authored artifact's current content for human review and stop
+before `specd changes validate`. This includes proposal, plan, optional ADRs,
+spec deltas, and `no-op` decisions. Review includes the merged result of a
+delta; a no-op refers to the unchanged base artifact.
+
+Explicit user approval applies to current content. A revision request or
+generation-mode selection, including all-at-once generation, does not approve
+content. Agreement on intent allocation alone does not approve later drafts.
+
+After approval, structurally validate the reviewed content. If validation
+requires content changes, including upstream repairs, present their diff and
+wait for approval of revised content before revalidation. Never silently edit
+or validate unapproved upstream artifacts to repair dependency state. Reuse
+approval while reviewed content stays unchanged; state-only dependency changes
+do not require repeating that review.
+
+Every artifact's schema `rules.post` delivers this rule after composition
+checks; designing hook guidance applies it to repairs too. This is an agent
+instruction, not a new CLI approval state or separate approval document.
+Tests and technical inspections are distinct from artifact-content approval.
+
+### 12.5 Tooling
 
 Tooling may assist artifact creation/navigation, dependencies and
 traceability, structural validation, change/delta workflows, agent
