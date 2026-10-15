@@ -83,3 +83,31 @@ unsupported, or outside the host's purpose.
 - WHEN a package or service is useful only for a particular class of host
 - THEN that package or service can be selected for that class
 - AND hosts outside the class are not required to expose it
+
+## REQ-004: Obtain host-available packages with a simple command
+
+The user must be able to obtain any package available for use in any of
+the repository's host configurations with a simple command, without
+writing Nix snippets or changing a host configuration.
+
+### Scenario: Obtain a package by name
+
+- GIVEN a package is available for use in a repository host configuration
+- WHEN the user requests that package by name with a single command
+- THEN the user can obtain the package for that host's platform
+- AND the user does not need to write a Nix expression or configuration file
+- AND the user does not need to change or deploy the host configuration
+
+### Scenario: Packages from different sources are accessible
+
+- GIVEN host configurations can use packages from different package sources
+- WHEN the user requests a package available from any of those sources
+- THEN the user can obtain it with a single command
+- AND the user does not need to write code to import or combine package sources
+
+### Scenario: Select a host-specific package variant
+
+- GIVEN the same package name refers to different variants in different host configurations
+- WHEN the user requests the variant available to a particular host
+- THEN the user can identify and obtain that variant with a single command
+- AND the user does not need to reproduce the host's package configuration in a snippet
