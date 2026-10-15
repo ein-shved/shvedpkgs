@@ -26,7 +26,9 @@ section.
   spec decisions.
 - `plan.md` owns implementation strategy, validation strategy, and top-level
   plan items for one change.
-- `context.md` is an optional change-scoped artifact.
+- The schema has no change-scoped Context artifact. Project context compilation,
+  this `.specd/context.md`, and `.specd-exploration.md` discovery memory remain
+  available for orientation outside the artifact flow.
 
 ## Agent Rules
 

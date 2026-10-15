@@ -21,7 +21,6 @@ artifacts:
       - Validate owns technical validation design for system conformance.
       - Plan owns implementation strategy, validation strategy, and top-level
         plan items.
-      - Context is non-normative orientation.
       - ADRs own significant decisions and rationale.
 
       Include:
@@ -241,19 +240,6 @@ artifacts:
     taskCompletionCheck:
       incompletePattern: '^\s*-\s+\[ \]'
       completePattern: '^\s*-\s+\[x\]'
-
-  - id: context
-    scope: change
-    optional: true
-    output: context.md
-    description: Optional non-normative project or change orientation
-    template: templates/context.md
-    requires:
-      - proposal
-    instruction: |
-      Write context only when the change needs non-normative orientation that
-      does not belong in requirements, system specification, validation,
-      `adrs.md`, or plan.
 
 metadataExtraction:
   title:

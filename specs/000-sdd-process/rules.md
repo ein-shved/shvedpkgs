@@ -66,8 +66,8 @@ Core principles:
 1.  **Repository artifacts are the durable process context.**
     Conversation and agent context are temporary aids.
 2.  **Artifacts have distinct responsibilities.** Requirements,
-    Specification, ADRs, Plans, Implementation, and any optional Context
-    artifact must not silently absorb each other’s roles.
+    Specification, ADRs, Plans, and Implementation must not silently
+    absorb each other’s roles.
 3.  **The main dependency direction is
     `REQ → SPEC → PLAN → IMPLEMENTATION`.** This is a dependency
     model, not an irreversible waterfall.
@@ -93,9 +93,9 @@ REQ -> SPEC -> PLAN -> IMPLEMENTATION
        +-- ADR-+
 ```
 
-An optional non-normative Context artifact may support discovery and
-orientation, especially while introducing SDD to an existing project. It
-is not part of the normative dependency chain.
+Non-normative project guidance and discovery memory may support orientation,
+especially while introducing SDD to an existing project. They are outside
+the normative dependency chain; there is no separate change Context artifact.
 
 ADR is not a fixed pipeline stage. It may arise while working at any
 layer.
@@ -139,28 +139,17 @@ downstream artifacts.
 
 ## 3. Artifact Model
 
-### 3.1 Context
+### 3.1 Project Guidance and Discovery Memory
 
-Context is an optional, non-normative inventory and map of the project.
-It may describe repository structure, entry points, system instances,
-important layers, external/private boundaries, current implementation
-observations, and useful historical notes.
+The local schema has no change-scoped Context artifact or template.
+SpecD project context compilation, `.specd/context.md` project instructions,
+and `.specd-exploration.md` discovery memory remain available. Temporary
+inventory and maps may help discovery during SDD adoption.
 
-Context does **not** define required behavior or system guarantees. It
-may be incomplete or temporarily stale. When it conflicts with normative
-artifacts, Requirements and System Specification take precedence.
-
-Context is most useful during SDD adoption, project discovery, or work
-on areas whose intent and system contract are not yet adequately covered
-by normative artifacts. In the ideal steady state, once the project has
-been fully brought under the SDD process, a separate Context artifact
-should become unnecessary and may be absent.
-
-Do not preserve Context as a parallel current-system description merely
-for self-containment. When implementation changes make Context
-materially stale, either refresh the still-useful non-normative
-orientation, migrate durable knowledge to the proper owning artifact, or
-remove the stale Context material.
+These sources do not define required behavior or system guarantees and must
+not become parallel current-system descriptions. Requirements and System
+Specification take precedence. Refresh useful orientation, move durable
+knowledge to its owning artifact, or remove stale material.
 
 ### 3.2 Requirements
 
@@ -514,11 +503,11 @@ define Specification or downstream work.
 
 ## 6. Forward Flow
 
-### 6.1 Optional Context → Requirements
+### 6.1 Discovery → Requirements
 
-When present, Context supplies orientation and evidence. It does not
-turn existing behavior into a Requirement merely because that behavior
-exists.
+Project guidance and discovery memory supply orientation and evidence. They
+do not turn existing behavior into a Requirement merely because that
+behavior exists.
 
 Requirements come from actual project or user needs.
 
@@ -580,14 +569,14 @@ validate
 A correctness validation failure does not create a separate validation
 plan item while the implementation plan item is still open.
 
-### 6.7 Completion and Optional Context
+### 6.7 Completion and Discovery Memory
 
 Normative artifacts should already describe the intended system before
 implementation completes.
 
-If non-normative Context exists, do not leave it misleading. Refresh the
-still-useful orientation, migrate durable knowledge to the proper owning
-artifact, or remove stale Context material.
+Do not leave non-normative project guidance or discovery memory misleading.
+Refresh useful orientation, migrate durable knowledge to its owning artifact,
+or remove stale material.
 
 Completed Plans remain transition and execution history, not
 alternative current-system documentation.
@@ -777,8 +766,8 @@ Different artifacts have different lifetimes:
   choices were made; superseded ADRs remain history.
 - **Plans:** transition and execution artifacts describing how a
   particular implementation state was moved toward a target state.
-- **Context:** optional non-normative current-state inventory, useful
-  during discovery or SDD adoption and removable when no longer needed.
+- **Project guidance and discovery memory:** non-normative orientation outside
+  the artifact flow, removable when no longer useful.
 
 This separation prevents Plans, old ADRs, and historical implementation
 notes from becoming competing sources of current truth.
@@ -872,7 +861,7 @@ semantics are made first in this English document according to Section 0.
 | How will this transition be validated?                       | Plan                 |
 | What independently completable work unit should be executed? | Plan                 |
 | What code/configuration realizes the change?                 | Implementation       |
-| What temporary orientation is useful during discovery?        | Optional Context     |
+| What temporary orientation is useful during discovery?       | Discovery memory     |
 
 ### 13.2 I Found a Problem — Where Do I Return?
 
