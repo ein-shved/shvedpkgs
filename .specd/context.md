@@ -73,6 +73,16 @@ section.
 
 ## Review Before Structural Validation
 
+- Before requirements, compare proposal with existing needs and process rules.
+  Show only relevant two- or three-word topic-to-artifact lines in the form
+  `<topic> — <artifact>`, optionally `(no-op)`. After every correction, redisplay
+  the entire corrected list and wait for agreement before drafting. Do not
+  prepare requirements, architecture, or plan files beforehand. Reuse an
+  explicitly agreed allocation while applicable; only a material change needs
+  renewed intent review. This is one conversation checkpoint, not an artifact
+  or a gate before every downstream artifact. Intent agreement does not approve
+  later artifact content for structural validation.
+
 - Before human review, reread drafts and merged deltas against their ownership
   and any agreed intent allocation. Apply the artifact-specific self-review
   questions delivered in post-rules after composition checks and before review.

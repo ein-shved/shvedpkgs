@@ -894,7 +894,30 @@ Top-level plan items are integration-safe units of project work. An
 agent may use a much finer temporary TODO list internally; those steps
 are execution mechanics, not automatically plan items.
 
-#### 12.3.1 Artifact Boundary Self-Review
+#### 12.3.1 Intent Review Before Requirements
+
+Before drafting requirements, read the proposal against existing requirements
+and authoritative process rules. Present a minimal allocation in chat, one line
+per relevant proposal point. Each line contains only a two- or three-word topic
+and its destination: `<topic> — <artifact>`. Multiple points may share a
+destination. An unchanged artifact can be marked
+`<topic> — <artifact> (no-op)`. Include only relevant destinations; do not expand
+the list into descriptions, rationale, quotations, or artifact drafts.
+
+After every user correction, redisplay the entire corrected list in the same
+minimal format. An acknowledgement or description of edits does not replace
+that list. Repeat until the user agrees; draft requirements only after that
+agreement. Do not prepare full requirements, architecture, or plan files in
+advance of agreement.
+
+The requirements artifact's schema `rules.pre` delivers this checkpoint. It
+creates no artifact and is not repeated before each downstream artifact. Reuse
+an allocation explicitly agreed during proposal review or an earlier exchange
+while it remains applicable. Only a material change to that allocation needs
+renewed intent review. Agreement on intent alone does not approve later
+artifact content for structural validation.
+
+#### 12.3.2 Artifact Boundary Self-Review
 
 Before presenting a draft for human review, reread it, including the merged
 result for a delta. Check new or changed statements against their artifact's

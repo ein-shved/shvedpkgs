@@ -153,6 +153,30 @@ artifacts:
         matches: '^Scenario:'
         required: true
     rules:
+      pre:
+        - id: review-artifact-intent
+          instruction: |
+            Before drafting requirements, read the proposal against existing
+            requirements and authoritative process rules. Present a minimal
+            allocation in chat: one line per relevant proposal point, with
+            only a two- or three-word topic and its destination, in the form
+            <topic> — <artifact>. Multiple points may share a destination.
+            An unchanged artifact may be marked <topic> — <artifact> (no-op).
+            Include only relevant destinations. Do not expand the list into
+            descriptions, rationale, quotations, or artifact drafts.
+
+            After every user correction, redisplay the entire corrected list
+            in that same minimal format. An acknowledgement or description of
+            edits does not replace the updated list. Repeat until the user
+            agrees; draft requirements only after that agreement. Do not
+            prepare full requirements, architecture, or plan files in advance.
+
+            This is one conversation checkpoint before requirements, not a new
+            artifact or repeated gate before downstream artifacts. Reuse an
+            allocation already explicitly agreed during proposal review or an
+            earlier exchange while it remains applicable. Only a material
+            allocation change needs renewed intent review. Agreement on intent
+            alone does not approve later artifact content for validation.
       post:
         - id: boundary-self-review
           instruction: |
