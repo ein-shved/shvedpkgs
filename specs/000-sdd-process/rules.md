@@ -392,6 +392,19 @@ self-contained commits. A plan item does not have to equal one commit.
 A completed Plan is primarily transition history. Current system truth
 remains in Requirements and Specification.
 
+During implementation, the approved Plan may change only by marking completed
+work from `[ ]` to `[x]`. Add no prose, steps, execution reports, or
+embellishments. Agents neither ask permission nor proactively propose to
+append to it. Temporary execution tracking and chat progress remain outside
+the Plan. Verification and archive guidance respect the same boundary.
+
+An actual design error must be surfaced to the user. Wait for explicit user
+permission before returning to designing, then correct the earliest affected
+artifact. Routine implementation choices do not trigger design revisions.
+The local schema normalizes completion marks before hashing the Plan, so
+progress preserves its approved hash while other edits cause drift; this is
+drift detection, not a filesystem write restriction.
+
 ### 3.5 Implementation
 
 Implementation executes top-level plan items in code, configuration,
@@ -721,6 +734,10 @@ transition or implementation approach rather than a bounded correction.
 If behavior was missing from Specification, correct Specification before
 planning the fix. If the underlying need was missing, correct
 Requirements first.
+
+Amendments to a completed Plan are design work. They do not authorize
+additions while implementing an approved Plan: surface the actual design
+error and obtain explicit user permission before returning to designing.
 
 ### 8.5 Regression Validation
 

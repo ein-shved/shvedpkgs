@@ -258,6 +258,16 @@ artifacts:
       agreed state. Smaller execution steps may be nested under a plan item
       when helpful, but they are local execution structure rather than separate
       process artifacts.
+
+      During implementation, edits to the approved plan are limited to marking
+      completed work from [ ] to [x]. Add no prose, steps, execution reports, or
+      embellishments. Neither ask permission nor proactively propose to append
+      to the plan. Keep temporary execution tracking and chat progress outside
+      it. Retain this boundary during verification and archive.
+
+      Surface an actual design error and wait for explicit user permission
+      before returning to designing to correct the earliest affected artifact.
+      Routine implementation choices do not trigger design revisions.
     rules:
       post:
         - id: upstream-coverage
@@ -359,9 +369,16 @@ workflow:
           instruction: |
             Read requirements, system, validate, and plan before coding.
             Implement top-level plan items in order and mark checkboxes
-            complete as work is done. If implementation reveals upstream
-            defects, return to designing and correct the earliest affected
-            artifact.
+            complete as work is done. Edits to the approved plan are limited
+            to completed [ ] -> [x] marks. Add no prose, steps, execution
+            reports, or embellishments. Neither ask permission nor proactively
+            propose to append to the plan. Keep temporary tracking and chat
+            progress outside it.
+
+            If implementation reveals an actual design error, surface it and
+            wait for explicit user permission before returning to designing
+            to correct the earliest affected artifact. Routine implementation
+            choices do not trigger design revisions.
 
   - step: verifying
     requires: [proposal, requirements, system, validate, plan]
@@ -373,8 +390,12 @@ workflow:
             Run or inspect the validation checks described by validate. Confirm
             that acceptance scenarios in requirements are covered by technical
             evidence. If checks fail because code is wrong, return to
-            implementing. If checks fail because artifacts are wrong, return to
-            designing.
+            implementing. If checks reveal an actual design error, surface it
+            and wait for explicit user permission before returning to designing
+            to correct the earliest affected artifact. Keep progress outside
+            the approved plan; during implementation, only completed checkbox
+            marks may change. Add no prose or steps and neither ask permission
+            nor proactively propose to append to the plan.
 
   - step: archiving
     requires: [proposal, requirements, system, validate, plan]
@@ -388,8 +409,12 @@ workflow:
             artifacts.
 
             If implementation reveals that requirements, system specification,
-            validation, or ADRs are incomplete or stale, return to designing
-            and correct the earliest affected artifact before archive.
+            validation, or ADRs contain an actual design error, surface it and
+            wait for explicit user permission before returning to designing
+            to correct the earliest affected artifact before archive. Keep
+            progress outside the approved plan; during implementation, only
+            completed checkbox marks may change. Add no prose or steps and
+            neither ask permission nor proactively propose to append to it.
       post:
         - id: summarise-archive
           instruction: |

@@ -59,6 +59,18 @@ section.
   the upstream standard schema.
 - Do not commit changes unless the user explicitly asks.
 
+## Approved Plan During Implementation
+
+- Change the approved plan only by marking completed work from `[ ]` to `[x]`.
+  Add no prose, steps, execution reports, or embellishments. Neither ask
+  permission nor proactively propose to append to the plan. Keep temporary
+  tracking and chat progress outside it; verification and archive respect this.
+- Surface an actual design error and wait for explicit user permission before
+  returning to designing to correct the earliest affected artifact. Routine
+  implementation choices do not trigger design revisions.
+- Checkbox normalization preserves the approved plan hash for progress marks;
+  other edits cause drift. This is not a filesystem write restriction.
+
 ## Useful Repository References
 
 - `specs/000-sdd-process/rules.md` describes the repository's SDD process.

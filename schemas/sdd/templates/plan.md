@@ -1,5 +1,14 @@
 # Plan: {{change.name}}
 
+<!-- During implementation, edit the approved plan only to mark completed work
+     from [ ] to [x]. Add no prose, steps, execution reports, or embellishments.
+     Neither ask permission nor proactively propose to append to the plan.
+     Temporary tracking and chat progress stay outside it. Surface an actual
+     design error and wait for explicit user permission before returning to
+     designing to correct the earliest affected artifact. Routine implementation
+     choices do not trigger design revisions. Verification/archive respect this
+     boundary too. -->
+
 ## Goal
 
 <!-- What target state should this transition reach? -->
