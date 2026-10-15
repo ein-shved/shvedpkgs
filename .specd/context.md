@@ -30,6 +30,25 @@ section.
   this `.specd/context.md`, and `.specd-exploration.md` discovery memory remain
   available for orientation outside the artifact flow.
 
+## Artifact Boundaries
+
+- Proposal owns motivation, direction, scope, and relevant technical context.
+  Attach affected specs even when existing needs stay unchanged; use a `no-op`
+  requirements delta rather than inventing a new need for every design fix.
+- Requirements describe independent needs and own acceptance scenarios. Patch
+  constraints, defect descriptions, and proposed fixes stay with their owners.
+- System explains how components, relationships, interactions, and mechanisms
+  realize requirements and where contracts are defined. Each architecture point
+  links to its owning requirement at the section, definition, or list item.
+  A section-level link covers one coherent point, not independent points.
+- Validate gives each check a Covers owner link, concrete Method, and expected
+  Evidence. Notes contain only setup, prerequisites, or execution limits.
+  Coverage overviews list references only; omit purpose and motivation prose.
+- Use resolvable Markdown links to owning requirement or system headings;
+  cross-spec links include the owning spec's relative path. Do not copy owners.
+- Plan owns the implementation transition; ADRs own significant choices and
+  rationale. Keep current needs and mechanisms in requirements and system.
+
 ## Agent Rules
 
 - In Codex, invoke SpecD skills with `$specd-*`, not `/specd-*`.

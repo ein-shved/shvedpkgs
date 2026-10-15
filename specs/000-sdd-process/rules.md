@@ -139,6 +139,19 @@ downstream artifacts.
 
 ## 3. Artifact Model
 
+### 3.0 Local SpecD Artifact Flow
+
+The local schema operationalizes the process as
+`proposal -> requirements -> system -> validate -> plan`, with optional
+spec-scoped `adrs` depending on requirements and system. Proposal and plan
+are change-scoped; requirements, system, validate, and ADRs are spec-scoped.
+Plan is the only task-bearing artifact.
+
+Proposal explains motivation, current problems, proposed direction, scope,
+impact, and relevant technical context. It identifies affected specs even
+when their requirements remain unchanged. It does not replace the owning
+requirements or system design.
+
 ### 3.1 Project Guidance and Discovery Memory
 
 The local schema has no change-scoped Context artifact or template.
@@ -182,6 +195,13 @@ steps, architectural history, or implementation decomposition.
 A Requirement may use domain concepts meaningful to its consumer. The
 System Specification maps those concepts to the current system model
 where necessary.
+
+First check existing requirements and the authoritative process rules. A
+schema or design defect can be fixed while the underlying need stays
+unchanged: attach the owning spec and use a `no-op` requirements delta.
+Patch constraints, defect descriptions, and proposed fixes do not become
+requirements merely because the user mentioned them. Place them in proposal,
+system, or plan according to their responsibility.
 
 #### 3.2.1 Acceptance Scenarios
 
@@ -238,6 +258,11 @@ A useful conformance test is:
 Specification is not a formal restatement of Requirements. Requirements
 express independent needs; Specification forms a coherent system model
 capable of satisfying their set.
+
+System Specification also explains HOW components, relationships,
+interactions, and mechanisms realize Requirements, and identifies where
+contracts are defined. Restated obligations or abstract guarantees alone
+are insufficient. Technical check procedures belong in validate.
 
 For example, a Requirement may state that users must be able to
 reproduce the same package or dependency set on another machine. That
@@ -726,6 +751,18 @@ Specification validation asks whether implementation conforms to the
 normative contract. Evidence may include tests, evaluation, inspection,
 static checks, runtime behavior, or other appropriate mechanisms.
 
+The `validate.md` artifact specifies concrete checks. Each check has:
+
+- `Covers`: a resolvable Markdown link to the owning requirement or relevant
+  system heading;
+- `Method`: the concrete action to perform, such as a command, test, build,
+  evaluation, or inspection;
+- `Evidence`: the expected result of that action;
+- optional `Notes`: only needed setup, prerequisites, or execution limits.
+
+Any coverage overview lists references only. Purpose and motivation prose
+stay outside validate; acceptance scenarios stay in requirements.
+
 ### 9.3 Plan Validation Strategy
 
 A Plan defines how correctness of its transition will be demonstrated.
@@ -798,6 +835,15 @@ correspondence between layers**.
 
 Traceability should be sufficient to navigate causality without becoming
 bureaucracy that duplicates artifact content.
+
+Each architecture point links explicitly to its owning requirement at the
+owning section, definition, or list item. A section-level reference covers
+one coherent point; independent points each carry their own references.
+Use resolvable Markdown links to requirement headings, for example
+`[REQ-001](requirements.md#req-001-title)`. A validation check links to its
+owning requirement or relevant `system.md` heading. Cross-spec references
+include the owning spec's relative path. Identify owners without copying
+their content.
 
 ## 12. Agent Interaction and Tooling
 

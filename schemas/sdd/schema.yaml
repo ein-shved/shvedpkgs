@@ -31,6 +31,12 @@ artifacts:
       - Impact
       - Technical context
       - Open questions
+
+      Identify affected specs even when their requirements stay unchanged.
+      A schema or design defect can be fixed under an existing need; attach
+      that spec and use a no-op requirements delta when appropriate. Keep
+      motivation, current problems, direction, scope, and relevant technical
+      context here without replacing requirements or system design.
     rules:
       post:
         - id: resolve-open-questions
@@ -58,6 +64,12 @@ artifacts:
       Acceptance scenarios are part of requirements. They describe observable
       satisfaction conditions in requirement-level language, not implementation
       mechanics or system-design internals.
+
+      First check existing requirements and authoritative process rules.
+      A defect in their realization does not necessarily introduce a new need.
+      Use a no-op requirements delta when the owning needs remain unchanged.
+      Patch constraints, defect descriptions, and proposed fixes belong with
+      proposal, system, or plan according to their responsibility.
 
       Keep requirement prose concise. A reader should be able to understand the
       core need first, then return to scenarios for nuance, boundary cases,
@@ -125,6 +137,18 @@ artifacts:
       concepts, interfaces, invariants, layers, host classification, package
       buckets, validation outputs, and other current contracts.
 
+      Explain HOW components, relationships, interactions, and mechanisms
+      realize requirements. Identify where contracts are defined; restated
+      obligations or abstract guarantees alone are insufficient. Put significant
+      choice rationale in ADRs and technical check procedures in validate.
+
+      At each architecture point's owning section, definition, or list item,
+      link explicitly to its owning requirement heading. Use resolvable
+      Markdown links, for example `[REQ-001](requirements.md#req-001-title)`;
+      cross-spec links include the owning spec's relative path. A section-level
+      reference covers one coherent point; independent points each need their
+      own references. Reference owners without copying their content.
+
       Do not put implementation sequencing or plan-item checklist detail here;
       that belongs in the plan.
     deltaInstruction: |
@@ -160,6 +184,14 @@ artifacts:
       Do not write acceptance scenarios here. Acceptance scenarios belong in
       requirements. Validation may reference those scenarios, but it must focus
       on technical evidence and coverage.
+
+      Each check must have a Covers link to its owning requirement heading or
+      relevant system.md heading, a Method specifying the concrete action to
+      perform, and Evidence describing the expected result. Use resolvable
+      Markdown links; cross-spec links include the owning spec's relative path.
+      Notes hold only needed setup, prerequisites, or execution limits.
+      A coverage overview lists references only. Do not include purpose or
+      motivation prose in this artifact.
     deltaInstruction: |
       For modified validation content, write a delta file at
       `{{change.path}}/deltas/<workspace>/<capability-path>/validate.md.delta.yaml`.

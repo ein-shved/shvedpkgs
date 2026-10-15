@@ -28,10 +28,11 @@
 
 ### Modified specs
 
-<!-- Existing specs whose requirements are changing. Each needs a delta file.
-     Only list if spec-level behaviour changes — not just implementation. -->
+<!-- Existing specs affected by the change, including fixes whose owning needs
+     stay unchanged. Attach those specs and use a no-op requirements delta when
+     appropriate; do not invent a new need for every schema or design fix. -->
 
-- `<workspace>:<capability-path>`: <!-- what requirement is changing and why -->
+- `<workspace>:<capability-path>`: <!-- affected behavior/design; unchanged needs if applicable -->
   - Depends on (added): <!-- new dependencies introduced by this change, or "none" -->
 
 ## Impact

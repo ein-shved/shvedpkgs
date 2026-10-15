@@ -1,5 +1,10 @@
 # Requirements
 
+<!-- Check existing needs and authoritative process rules first. A defect in
+     their realization may need a system or plan change with a no-op requirements
+     delta. Patch constraints, defect descriptions, and proposed fixes do not
+     become requirements merely because the user mentioned them. -->
+
 ## Requirement: {{first requirement}}
 
 <!-- Describe the need or obligation. Keep implementation details out unless
