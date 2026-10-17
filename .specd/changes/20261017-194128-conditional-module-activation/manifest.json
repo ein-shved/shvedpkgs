@@ -1,0 +1,552 @@
+{
+  "name": "conditional-module-activation",
+  "createdAt": "2026-10-17T19:41:28.898Z",
+  "description": "Complete config-selected, disabled-by-default behavior across reusable modules so project-aware NixOS tests can select only the functionality they need.",
+  "schema": {
+    "name": "sdd",
+    "version": 1
+  },
+  "specIds": [
+    "default:001-project-architecture"
+  ],
+  "artifacts": [
+    {
+      "type": "proposal",
+      "optional": false,
+      "requires": [],
+      "state": "complete",
+      "files": [
+        {
+          "key": "proposal",
+          "filename": "proposal.md",
+          "state": "complete",
+          "validatedHash": "sha256:850b7866e5c1a9e5915c42b9504e28847605ebc07a106d4a766bafffc47ec960"
+        }
+      ]
+    },
+    {
+      "type": "requirements",
+      "optional": false,
+      "requires": [
+        "proposal"
+      ],
+      "state": "complete",
+      "files": [
+        {
+          "key": "default:001-project-architecture",
+          "filename": "deltas/default/001-project-architecture/requirements.md.delta.yaml",
+          "state": "complete",
+          "validatedHash": "sha256:bb5c9ba10490dcec116a928c11e17eae0b58ca89350045eef5be5d2a7416ee00"
+        }
+      ]
+    },
+    {
+      "type": "system",
+      "optional": false,
+      "requires": [
+        "requirements"
+      ],
+      "state": "complete",
+      "files": [
+        {
+          "key": "default:001-project-architecture",
+          "filename": "deltas/default/001-project-architecture/system.md.delta.yaml",
+          "state": "complete",
+          "validatedHash": "sha256:229885dd502eb57b4b2dec962586833fe2094c89163e24ab70a054293b65e467"
+        }
+      ]
+    },
+    {
+      "type": "validate",
+      "optional": false,
+      "requires": [
+        "requirements",
+        "system"
+      ],
+      "state": "complete",
+      "files": [
+        {
+          "key": "default:001-project-architecture",
+          "filename": "deltas/default/001-project-architecture/validate.md.delta.yaml",
+          "state": "complete",
+          "validatedHash": "sha256:fe26cad8b0a18f5b1145c415c7dd2b49bdbd4bdc160ea23f5014b0e3babab71c"
+        }
+      ]
+    },
+    {
+      "type": "adrs",
+      "optional": true,
+      "requires": [
+        "requirements",
+        "system"
+      ],
+      "state": "skipped",
+      "files": [
+        {
+          "key": "default:001-project-architecture",
+          "filename": "deltas/default/001-project-architecture/adrs.md.delta.yaml",
+          "state": "skipped",
+          "validatedHash": "__skipped__"
+        }
+      ]
+    },
+    {
+      "type": "plan",
+      "optional": false,
+      "requires": [
+        "requirements",
+        "system",
+        "validate"
+      ],
+      "state": "complete",
+      "files": [
+        {
+          "key": "plan",
+          "filename": "plan.md",
+          "state": "complete",
+          "validatedHash": "sha256:85d185530fedfab6468d0778bfa63213cefd387b2aa7582779be003e5ceb9eac"
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "optional": true,
+      "requires": [
+        "proposal"
+      ],
+      "state": "skipped",
+      "files": [
+        {
+          "key": "context",
+          "filename": "context.md",
+          "state": "skipped",
+          "validatedHash": "__skipped__"
+        }
+      ]
+    }
+  ],
+  "history": [
+    {
+      "type": "created",
+      "at": "2026-10-17T19:41:28.898Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "specIds": [
+        "default:001-project-architecture"
+      ],
+      "schemaName": "sdd",
+      "schemaVersion": 1
+    },
+    {
+      "type": "artifacts-synced",
+      "at": "2026-10-17T19:41:28.907Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "typesAdded": [
+        "proposal",
+        "requirements",
+        "system",
+        "validate",
+        "adrs",
+        "plan",
+        "context"
+      ],
+      "typesRemoved": [],
+      "filesAdded": [
+        {
+          "type": "proposal",
+          "key": "proposal"
+        },
+        {
+          "type": "requirements",
+          "key": "default:001-project-architecture"
+        },
+        {
+          "type": "system",
+          "key": "default:001-project-architecture"
+        },
+        {
+          "type": "validate",
+          "key": "default:001-project-architecture"
+        },
+        {
+          "type": "adrs",
+          "key": "default:001-project-architecture"
+        },
+        {
+          "type": "plan",
+          "key": "plan"
+        },
+        {
+          "type": "context",
+          "key": "context"
+        }
+      ],
+      "filesRemoved": []
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-17T19:45:52.757Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "drafting",
+      "to": "designing"
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-10-17T20:13:19.438Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "cause": "artifact-drift",
+      "message": "Invalidated because validated artifacts drifted: system [default:001-project-architecture]",
+      "affectedArtifacts": [
+        {
+          "type": "system",
+          "files": [
+            "default:001-project-architecture"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-10-17T20:17:36.252Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "cause": "artifact-drift",
+      "message": "Invalidated because validated artifacts drifted: system [default:001-project-architecture]",
+      "affectedArtifacts": [
+        {
+          "type": "system",
+          "files": [
+            "default:001-project-architecture"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "artifact-skipped",
+      "at": "2026-10-17T20:27:01.861Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "artifactId": "adrs"
+    },
+    {
+      "type": "artifact-skipped",
+      "at": "2026-10-17T20:29:47.943Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "artifactId": "context"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-17T20:30:08.764Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "designing",
+      "to": "ready"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-17T20:31:14.144Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "ready",
+      "to": "implementing"
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-10-17T20:51:54.444Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "cause": "artifact-review-required",
+      "message": "Invalidated because the change returned to designing and all artifacts require review.",
+      "affectedArtifacts": [
+        {
+          "type": "proposal",
+          "files": [
+            "proposal"
+          ]
+        },
+        {
+          "type": "requirements",
+          "files": [
+            "default:001-project-architecture"
+          ]
+        },
+        {
+          "type": "system",
+          "files": [
+            "default:001-project-architecture"
+          ]
+        },
+        {
+          "type": "validate",
+          "files": [
+            "default:001-project-architecture"
+          ]
+        },
+        {
+          "type": "adrs",
+          "files": [
+            "default:001-project-architecture"
+          ]
+        },
+        {
+          "type": "plan",
+          "files": [
+            "plan"
+          ]
+        },
+        {
+          "type": "context",
+          "files": [
+            "context"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-17T20:51:54.444Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "implementing",
+      "to": "designing"
+    },
+    {
+      "type": "artifact-skipped",
+      "at": "2026-10-17T20:53:04.994Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "artifactId": "adrs",
+      "reason": "No architecture decision changed by removal of reverse-proxy work"
+    },
+    {
+      "type": "artifact-skipped",
+      "at": "2026-10-17T20:53:05.266Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "artifactId": "context",
+      "reason": "Existing artifacts and explicit user scope correction provide the required context"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-17T20:53:24.746Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "designing",
+      "to": "ready"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-17T20:53:32.536Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "ready",
+      "to": "implementing"
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-10-17T21:01:48.236Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "cause": "artifact-review-required",
+      "message": "Invalidated because the change returned to designing and all artifacts require review.",
+      "affectedArtifacts": [
+        {
+          "type": "proposal",
+          "files": [
+            "proposal"
+          ]
+        },
+        {
+          "type": "requirements",
+          "files": [
+            "default:001-project-architecture"
+          ]
+        },
+        {
+          "type": "system",
+          "files": [
+            "default:001-project-architecture"
+          ]
+        },
+        {
+          "type": "validate",
+          "files": [
+            "default:001-project-architecture"
+          ]
+        },
+        {
+          "type": "adrs",
+          "files": [
+            "default:001-project-architecture"
+          ]
+        },
+        {
+          "type": "plan",
+          "files": [
+            "plan"
+          ]
+        },
+        {
+          "type": "context",
+          "files": [
+            "context"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-17T21:01:48.236Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "implementing",
+      "to": "designing"
+    },
+    {
+      "type": "artifact-skipped",
+      "at": "2026-10-17T21:02:31.521Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "artifactId": "adrs",
+      "reason": "Shared CIFS selection preserves existing host behavior; no new architecture decision"
+    },
+    {
+      "type": "artifact-skipped",
+      "at": "2026-10-17T21:02:31.806Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "artifactId": "context",
+      "reason": "Current artifacts and explicit user correction supply the context"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-17T21:05:59.317Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "designing",
+      "to": "ready"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-17T21:06:00.979Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "ready",
+      "to": "implementing"
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-10-17T21:07:54.199Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "cause": "artifact-drift",
+      "message": "Invalidated because validated artifacts drifted: system [default:001-project-architecture]",
+      "affectedArtifacts": [
+        {
+          "type": "system",
+          "files": [
+            "default:001-project-architecture"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-17T21:07:54.199Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "from": "implementing",
+      "to": "designing"
+    },
+    {
+      "type": "artifact-skipped",
+      "at": "2026-10-17T21:08:14.184Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "artifactId": "adrs",
+      "reason": "Whitespace cleanup does not change architecture decisions"
+    },
+    {
+      "type": "artifact-skipped",
+      "at": "2026-10-17T21:08:14.464Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "artifactId": "context",
+      "reason": "Existing context remains sufficient after whitespace cleanup"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-17T21:08:15.878Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "designing",
+      "to": "ready"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-17T21:08:17.570Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "ready",
+      "to": "implementing"
+    }
+  ]
+}

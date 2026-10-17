@@ -1,0 +1,84 @@
+- op: modified
+  description: Extend optional-module validation coverage beyond user/HM.
+  selector:
+    type: section
+    matches: '^Artifact Status$'
+  content: |
+    These sections define checks for public package access (REQ-004),
+    primary-user behavior (REQ-002), and reusable-module optionality
+    (REQ-006), including Reusable Module Selection. Other architecture
+    contracts still need validation coverage.
+
+- op: added
+  description: Check module selection, dependency laziness and host policy.
+  position:
+    parent:
+      type: section
+      matches: '^Validation: Project Architecture$'
+    after:
+      type: section
+      matches: '^Validation: Primary User and Optional Modules$'
+  content: |
+    ## Validation: Conditional Module Activation
+
+    Covers all five REQ-006 scenarios and Reusable Module Selection.
+
+    ### Evidence
+
+    Provide actual-module evaluation fixtures in
+    `tests/modules/conditional-module-activation.nix`, using locked inputs.
+    Run them through:
+
+    ```sh
+    bash tests/modules/conditional-module-activation.sh
+    ```
+
+    Compare reusable-only configurations with an upstream baseline using
+    identical support modules, without `config/` or host policy. Force
+    actual effects, not only enable flags. The runner records expected
+    and observed values, exits nonzero on failure, and checks specific
+    diagnostics for expected errors in separate Nix processes.
+
+    ### Checks
+
+    For each changed feature, evaluate default-off, explicit-off and
+    enabled configurations. Disabled fixtures omit feature-only inputs;
+    enabled fixtures supply them. Verify an enabled independent feature
+    still works alongside disabled features. Inspect static imports.
+
+    - Power: inspect `wakeOnPowerButtonOnly` and logind settings with
+      development policy on/off and with explicit overrides.
+    - CIFS/keyutils: inspect request-key activation, generated config and
+      package selection; verify shared policy selects it on development
+      and non-development hosts, preserving existing host behavior.
+      An explicit disable removes its effects for either role.
+    - AVR: inspect USBasp udev rules for both selections and host roles.
+    - STM32: inspect udev rules and installed packages for both selections
+      and host roles; `pkgs.st-gpio.drvPath` remains independently usable.
+    - KL: inspect system certificates, session variables and generated
+      NSS activation. Exercise each switch, KL/graphical policy and
+      explicit overrides. With HM off, unused NSS dependencies stay lazy
+      while independently selected system trust remains available.
+    - Image formats: compare format configurations with upstream-only
+      support and with repository policy. Customizations belong only to
+      the policy case; inspect generated settings without image builds.
+    - Gerrit: inspect service, settings, credentials and firewall effects.
+      Disabled evaluation succeeds without VPS domain or server identity;
+      enabled evaluation rejects missing required values by name. Test
+      VPS policy and an ordinary explicit service disable.
+    - Drive standby: inspect services and timers for empty, disabled and
+      mixed drive collections. Disabled entries need no timeout; forcing
+      an enabled entry without it reports `standby.timeout` as missing.
+    - Gaming: inspect controller modules, Steam settings and firewall
+      effects across gaming/Steam selections, including independent Steam.
+
+    ### Regression
+
+    Run `bash tests/modules/primary-user-hm.sh`. Update certificate fixture
+    selections to the agreed KL policy; retain account/HM independence
+    checks. Check unchanged browser and LUKS selectors in module fixtures.
+
+    For the active hosts listed in Existing host user and HM regression,
+    compare affected settings against the agreed development/KL/VPS policy
+    and repeat its validation-only toplevel evaluation and build planning.
+    Private stubs remain test-only. Do not build generic systems or images.

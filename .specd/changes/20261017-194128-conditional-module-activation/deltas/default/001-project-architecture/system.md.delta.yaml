@@ -1,0 +1,78 @@
+- op: added
+  description: >-
+    List affected modules and their selectors; leave purposes for later.
+  position:
+    parent:
+      type: section
+      matches: '^System Concepts$'
+    after:
+      type: section
+      matches: '^Project Layers$'
+  content: |
+    ## Reusable Module Selection
+
+    ### Power (`modules/hardware/power/default.nix`)
+
+    Purpose: TBD.
+
+    Enabled by `hardware.power.wakeOnPowerButtonOnly.enable`
+    (policy: `hardware.isDevelopment`). Logind settings move to `config/`,
+    selected by `hardware.isDevelopment`.
+
+    ### CIFS/keyutils (`modules/os-specific/linux/keyutils/default.nix`)
+
+    Purpose: TBD.
+
+    Enabled by `services.cifsKeyutils.enable`
+    (reusable default: `false`; repository policy: `lib.mkDefault true`
+    for every host, preserving existing behavior). An explicit `false`
+    overrides repository policy.
+
+    ### AVR (`modules/hardware/development/programmers/avr/default.nix`)
+
+    Purpose: TBD.
+
+    Enabled by `hardware.programmers.avr.enable`
+    (policy: `hardware.isDevelopment`).
+
+    ### STM32 (`modules/hardware/development/programmers/stm32/default.nix`)
+
+    Purpose: TBD.
+
+    Enabled by `hardware.programmers.stm32.enable`
+    (policy: `hardware.isDevelopment`).
+
+    ### KL certificates and tokens (`modules/security/ca.nix`)
+
+    Purpose: TBD.
+
+    Enabled by `kl.trust.enable`, `kl.nss.certificates.enable`,
+    `kl.nss.tokens.enable` (policy: `kl.enable`; NSS additionally requires
+    `hardware.isGraphic`). Each switch can be overridden.
+
+    ### Image formats (`modules/hardware/bootable/default.nix`)
+
+    Purpose: TBD.
+
+    Enabled by `formatConfigs.<format>` in `config/`; repository image policy
+    moves out of the reusable collection.
+
+    ### Gerrit (`modules/services/gerrit/default.nix`)
+
+    Purpose: TBD.
+
+    Enabled by `services.gerrit.enable`
+    (policy: `hardware.isVps`, overrideable).
+
+    ### Drive standby (`modules/hardware/hdparm/default.nix`)
+
+    Purpose: TBD.
+
+    Enabled by `hardware.drives.<device>.standby.enable`.
+
+    ### Gaming (`modules/applications/misc/gaming/default.nix`)
+
+    Purpose: TBD.
+
+    Enabled by `environment.gaming.enable`; Steam additions also require
+    `programs.steam.enable`.

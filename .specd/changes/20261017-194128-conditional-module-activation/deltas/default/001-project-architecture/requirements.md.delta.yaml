@@ -1,0 +1,9 @@
+- op: no-op
+  description: >-
+    REQ-006 and its five acceptance scenarios already cover default inactivity,
+    explicit disablement, unused dependencies of disabled functionality,
+    rejection of enabled functionality with missing required dependencies,
+    and independence of other selected functionality. This change completes
+    that existing contract across the remaining reusable modules; it introduces
+    no new requirement or acceptance condition. All architecture requirements
+    remain unchanged.
