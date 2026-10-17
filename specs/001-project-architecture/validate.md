@@ -2,13 +2,16 @@
 
 ## Scope
 
-Coverage: [primary user](system.md#primary-user),
+[Primary user](system.md#primary-user),
 [Home Manager integration](system.md#primary-user-home-manager-integration),
-[user/HM consumer optionality](system.md#modules), and
+[user/HM consumer optionality](system.md#modules),
+[module selection](system.md#reusable-module-selection),
 [public package access](system.md#public-package-interface).
-Other architecture contracts and module families remain outside this coverage.
-Run commands from the repository root on `x86_64-linux`. Package checks evaluate
-`generic` or build its exported packages; its system, VM and images are excluded.
+
+## Notes
+
+Run checks from the repository root on `x86_64-linux`. Package checks use
+`generic` only for exported packages; its system, VM and images are excluded.
 
 ## Automated Checks
 
@@ -45,7 +48,6 @@ Cases:
   generation; inactive refresh remains lazy.
 - Account/HM snapshots, toplevel evaluation and build planning for
   `ShvedGaming`, `ShvedMedia`, `gerrit`, `testA`, `testB`, `testNas` and `testVps`.
-
 - Evidence: The runner exits zero only when its assertions and expected-error
   checks pass. Fixtures use locked inputs, actual modules and the real HM type;
   case details are owned by
@@ -53,6 +55,22 @@ Cases:
   [primary-user-hm-hosts.nix](../../tests/modules/primary-user-hm-hosts.nix).
 - Notes: Private-value substitutes are confined to
   [validation configurations](../003-testing-infrastructure/system.md).
+
+### Conditional module activation
+
+- Covers: [REQ-006](requirements.md#req-006-reusable-modules-are-optional-and-disabled-by-default),
+  [module selection](system.md#reusable-module-selection).
+- Method: Run `bash tests/modules/conditional-module-activation.sh`.
+  Its `hardware`, `kl`, `services`, `formats`, `collection` and `hosts`
+  groups assert selector effects, policy overrides, dependency laziness,
+  independent functionality, generated image settings and host policy.
+  Separate processes check missing Gerrit domain/server ID and standby timeout.
+  Run [user/HM regression](#primary-user-home-manager-and-host-regression)
+  for account compatibility, host toplevel evaluation and build planning.
+- Evidence: Exit zero; all group assertions are true and expected failures
+  match their named missing-option diagnostics.
+- Notes: Fixtures use locked inputs and
+  [validation-only configurations](../003-testing-infrastructure/system.md).
 
 ## Manual Checks
 
@@ -159,3 +177,14 @@ in {
     follow feature enablement; consumers add no dependency assertions. Mixed
     modules preserve independent system behavior.
   - Private-value substitutes enter through validation outputs only.
+
+### Reusable collection wiring
+
+- Covers: [module boundary](system.md#modules),
+  [module selection](system.md#reusable-module-selection).
+- Method: Inspect `modules/nixos.nix`, its imported modules and
+  `config/nixos.nix`. Compare feature effects and feature-only reads with
+  their owning selectors; inspect the separation of enable defaults and guards.
+- Evidence: Imports and option declarations remain independent of evaluated
+  configuration; effects and feature-only dependencies follow final selections.
+  Image customization is imported through the policy layer.
