@@ -161,6 +161,113 @@ Repository policy consumes options from NixOS, Home Manager, nixpkgs modules
 and this repository's `modules` layer. Files SHOULD NOT introduce reusable
 options; a needed interface belongs in `modules` and is consumed here.
 
+## Reusable Module Selection
+
+Defaults and dependencies follow the [module boundary](#modules) and
+[HM alias contract](#alias-contract). Repository policy in `config/default.nix`
+and `config/services/default.nix` uses overrideable `lib.mkDefault` values.
+
+### Power
+
+Source: [modules/hardware/power/default.nix](../../modules/hardware/power/default.nix).
+
+Purpose: TBD.
+
+Selection: `hardware.power.wakeOnPowerButtonOnly.enable`.
+Repository policy: `hardware.isDevelopment`; logind policy follows that role independently.
+
+Reference: [REQ-006](requirements.md#req-006-reusable-modules-are-optional-and-disabled-by-default).
+
+### CIFS/keyutils
+
+Source: [modules/os-specific/linux/keyutils/default.nix](../../modules/os-specific/linux/keyutils/default.nix).
+
+Purpose: TBD.
+
+Selection: `services.cifsKeyutils.enable`.
+Repository policy: `true` on every repository host; reusable default: `false`.
+
+Reference: [REQ-006](requirements.md#req-006-reusable-modules-are-optional-and-disabled-by-default).
+
+### AVR
+
+Source: [modules/hardware/development/programmers/avr/default.nix](../../modules/hardware/development/programmers/avr/default.nix).
+
+Purpose: TBD.
+
+Selection: `hardware.programmers.avr.enable`.
+Repository policy: `hardware.isDevelopment`.
+
+Reference: [REQ-006](requirements.md#req-006-reusable-modules-are-optional-and-disabled-by-default).
+
+### STM32
+
+Source: [modules/hardware/development/programmers/stm32/default.nix](../../modules/hardware/development/programmers/stm32/default.nix).
+
+Purpose: TBD.
+
+Selection: `hardware.programmers.stm32.enable`.
+Repository policy: `hardware.isDevelopment`.
+
+Reference: [REQ-006](requirements.md#req-006-reusable-modules-are-optional-and-disabled-by-default).
+
+### KL certificates and tokens
+
+Source: [modules/security/ca.nix](../../modules/security/ca.nix).
+
+Purpose: TBD.
+
+Selection: `kl.trust.enable`, `kl.nss.certificates.enable`, `kl.nss.tokens.enable`.
+Repository policy: Trust: `kl.enable`; NSS: `kl.enable && hardware.isGraphic`.
+
+Reference: [REQ-006](requirements.md#req-006-reusable-modules-are-optional-and-disabled-by-default).
+
+KL system trust is independent of Home Manager activation.
+
+### Image formats
+
+Source: [config/hardware/bootable/default.nix](../../config/hardware/bootable/default.nix).
+
+Purpose: TBD.
+
+Selection: `formatConfigs.<format>`.
+Repository policy: Image customization is imported through `config/nixos.nix`.
+
+Reference: [REQ-006](requirements.md#req-006-reusable-modules-are-optional-and-disabled-by-default).
+
+### Gerrit
+
+Source: [modules/services/gerrit/default.nix](../../modules/services/gerrit/default.nix).
+
+Purpose: TBD.
+
+Selection: Final `services.gerrit.enable`.
+Repository policy: `hardware.isVps`.
+
+Reference: [REQ-006](requirements.md#req-006-reusable-modules-are-optional-and-disabled-by-default).
+
+### Drive standby
+
+Source: [modules/hardware/hdparm/default.nix](../../modules/hardware/hdparm/default.nix).
+
+Purpose: TBD.
+
+Selection: `hardware.drives.<device>.standby.enable`.
+Repository policy: Per-device selection.
+
+Reference: [REQ-006](requirements.md#req-006-reusable-modules-are-optional-and-disabled-by-default).
+
+### Gaming
+
+Source: [modules/applications/misc/gaming/default.nix](../../modules/applications/misc/gaming/default.nix).
+
+Purpose: TBD.
+
+Selection: `environment.gaming.enable`; Steam additions also require final `programs.steam.enable`.
+Repository policy: Selected by host policy.
+
+Reference: [REQ-006](requirements.md#req-006-reusable-modules-are-optional-and-disabled-by-default).
+
 ## Packages sources
 
 ### Nixpkgs stable
