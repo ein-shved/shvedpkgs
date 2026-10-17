@@ -27,14 +27,13 @@ let
   };
 
   mkServiceName =
-    name:
-    "hard-drive-standby-${replaceStrings [ "/" ] [ "-" ] (removePrefix "/" name)}";
+    name: "hard-drive-standby-${replaceStrings [ "/" ] [ "-" ] (removePrefix "/" name)}";
 
   mkDrives =
     foo:
-    mapAttrs' (
-      name: value: nameValuePair (mkServiceName name) (foo name value)
-    ) config.hardware.drives;
+    mapAttrs' (name: value: nameValuePair (mkServiceName name) (foo name value)) (
+      lib.filterAttrs (_: value: value.standby.enable) config.hardware.drives
+    );
 in
 {
   options = {

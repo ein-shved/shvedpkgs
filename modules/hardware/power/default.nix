@@ -1,13 +1,8 @@
+{ config, lib, ... }:
 {
-  config = {
-    services = {
-      logind.settings.Login = {
-        # Suspend on pressing power key
-        HandlePowerKey = "suspend";
-        # Ignore lid switch
-        HandleLidSwitch = "ignore";
-      };
-    };
+  options.hardware.power.wakeOnPowerButtonOnly.enable =
+    lib.mkEnableOption "wake only on the power button";
+  config = lib.mkIf config.hardware.power.wakeOnPowerButtonOnly.enable {
     systemd.services.wakeOnPowerButtonOnly = {
       # Wake up only on pressing power key
       script = ''

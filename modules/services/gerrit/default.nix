@@ -32,9 +32,8 @@ in
       default = 8080;
     };
   };
-  config = {
+  config = lib.mkIf cfg.enable {
     services.gerrit = {
-      enable = config.hardware.isVps;
       plugins = with pkgs; [
         gerrit-oauth-plugin
         gerrit-admin-console-plugin
