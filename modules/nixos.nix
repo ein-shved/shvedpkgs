@@ -8,7 +8,6 @@
     ./employment/kl
     ./employment/kl/domain
     ./employment/kl/remote
-    ./hardware/bootable
     ./hardware/crypto
     ./hardware/development/programmers/avr
     ./hardware/development/programmers/stm32

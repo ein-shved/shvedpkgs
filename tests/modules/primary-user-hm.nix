@@ -224,7 +224,12 @@ let
       environment.printing3d.enable = false;
     }
   ];
-  repoGraphic = repoActive [ { hardware.isGraphic = true; } ];
+  repoGraphic = repoActive [
+    {
+      hardware.isGraphic = true;
+      kl.enable = true;
+    }
+  ];
   repoPrinting = repoActive [ { environment.printing3d.enable = true; } ];
   repoNoPass = repoActive [ { programs.pass.enable = lib.mkForce false; } ];
   repoNoTransmission = repoActive [ { services.transmission.enable = false; } ];
@@ -238,7 +243,13 @@ let
   repoBrowser = repoUnmanaged { programs.firefox.enable = true; };
   repoChromium = repoUnmanaged { programs.chromium.enable = lib.mkForce true; };
   repoPass = repoUnmanaged { programs.pass.enable = true; };
-  repoGraphicOff = repoUnmanaged { hardware.isGraphic = true; };
+  repoTrust = repoUnmanaged { kl.trust.enable = true; };
+  repoGraphicOff = repoUnmanaged {
+    hardware.isGraphic = true;
+    kl.trust.enable = true;
+    kl.nss.certificates.enable = true;
+    kl.nss.tokens.enable = true;
+  };
   repoPrintingOff = repoUnmanaged {
     user.name = "alice";
     environment.printing3d.enable = true;
@@ -506,7 +517,8 @@ in
     independent =
       repoAbsent.config.services.openssh.enable
       && repoAbsent.config.programs.ssh.startAgent
-      && repoAbsent.config.security.pki.certificateFiles != [ ]
+      && repoAbsent.config.security.pki.certificateFiles == [ ]
+      && repoTrust.security.pki.certificateFiles != [ ]
       && !(builtins.elem "alice" repoAbsent.config.nix.settings.trusted-users)
       && repoAbsent.config.environment.systemPackages != [ ]
       && repoAbsent.config.users.users.secondary.home == "/srv/secondary";

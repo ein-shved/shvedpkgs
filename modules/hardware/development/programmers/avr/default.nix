@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   programmers = [
     {
@@ -13,12 +18,11 @@ let
     ATTRS{idProduct}=="${prog.pid}", \
     GROUP="dialout"
   '';
-  collectRules = progs:
-    builtins.foldl' (all: prog: all + formUdevRule prog) "" progs;
+  collectRules = progs: builtins.foldl' (all: prog: all + formUdevRule prog) "" progs;
 in
 {
-  config = {
+  options.hardware.programmers.avr.enable = lib.mkEnableOption "AVR programmer support";
+  config = lib.mkIf config.hardware.programmers.avr.enable {
     services.udev.extraRules = collectRules programmers;
   };
 }
-

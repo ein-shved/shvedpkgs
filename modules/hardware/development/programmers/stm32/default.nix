@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   bbname = "BluePill";
   bmonster = "bmonster";
@@ -53,89 +58,92 @@ let
     Example: "uart pin_a10 up" sets gpio pin pa10 up
   '';
 
-  st-gpio = pkgs: pkgs.writeShellScriptBin "st-gpio" ''
-    set -e
-    legacy=0
-    prefix="gpio "
-    dev="/dev/${bmonster}_control"
-    if ! [ -e $dev ]; then
-      dev="$(eval echo "/dev/${bbname}_*" | sed 's/\s/\n/' | head -1)"
-      if [ -e "$dev" ]; then
-        prefix=""
-        legacy=1
+  st-gpio =
+    pkgs:
+    pkgs.writeShellScriptBin "st-gpio" ''
+      set -e
+      legacy=0
+      prefix="gpio "
+      dev="/dev/${bmonster}_control"
+      if ! [ -e $dev ]; then
+        dev="$(eval echo "/dev/${bbname}_*" | sed 's/\s/\n/' | head -1)"
+        if [ -e "$dev" ]; then
+          prefix=""
+          legacy=1
+        fi
       fi
-    fi
 
-    if [ "$1" == "help" ] || [ -z "$1" ]; then
-      if [ $legacy == 1 ]; then
-        echo "${usage_legacy}"
-      else
-        echo "${usage_bmonster}"
+      if [ "$1" == "help" ] || [ -z "$1" ]; then
+        if [ $legacy == 1 ]; then
+          echo "${usage_legacy}"
+        else
+          echo "${usage_bmonster}"
+        fi
+        exit 0
       fi
-      exit 0
-    fi
 
 
-    ${pkgs.coreutils}/bin/stty -F "$dev"  115200 -icrnl && exec echo "$prefix""$@" > $dev
-  '';
+      ${pkgs.coreutils}/bin/stty -F "$dev"  115200 -icrnl && exec echo "$prefix""$@" > $dev
+    '';
 
 in
 {
-  config = {
-    nixpkgs.overlays = [(self: super: { st-gpio = st-gpio self; })];
-    environment.systemPackages = with pkgs; [
+  options.hardware.programmers.stm32.enable = lib.mkEnableOption "STM32 programmer support";
+  # Publishing a package does not select it for installation.
+  config.nixpkgs.overlays = [ (self: super: { st-gpio = st-gpio self; }) ];
+  config.environment.systemPackages = lib.mkIf config.hardware.programmers.stm32.enable (
+    with pkgs;
+    [
       stlink
       pkgs.st-gpio
-    ];
-    services.udev.extraRules = ''
-      # ST-LINK V2
-      SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3748", \
-        MODE="660", TAG+="uaccess", GROUP="tty", SYMLINK+="stlinkv2_%n"
+    ]
+  );
+  config.services.udev.extraRules = lib.mkIf config.hardware.programmers.stm32.enable ''
+    # ST-LINK V2
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3748", \
+      MODE="660", TAG+="uaccess", GROUP="tty", SYMLINK+="stlinkv2_%n"
 
-      # ST-LINK V2.1
-      SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374b", \
-        MODE="660", TAG+="uaccess", GROUP="tty", SYMLINK+="stlinkv2-1_%n"
-      SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3752", \
-        MODE="660", TAG+="uaccess", GROUP="tty", SYMLINK+="stlinkv2-1_%n"
+    # ST-LINK V2.1
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374b", \
+      MODE="660", TAG+="uaccess", GROUP="tty", SYMLINK+="stlinkv2-1_%n"
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3752", \
+      MODE="660", TAG+="uaccess", GROUP="tty", SYMLINK+="stlinkv2-1_%n"
 
-      # ST-LINK V3
-      SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374d", \
-        MODE="660", TAG+="uaccess", GROUP="tty", SYMLINK+="stlinkv3loader_%n"
-      SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374e", \
-        MODE="660", TAG+="uaccess", GROUP="tty", SYMLINK+="stlinkv3_%n"
-      SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374f", \
-        MODE="660", TAG+="uaccess", GROUP="tty", SYMLINK+="stlinkv3_%n"
-      SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3753", \
-        MODE="660", TAG+="uaccess", GROUP="tty", SYMLINK+="stlinkv3_%n"
+    # ST-LINK V3
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374d", \
+      MODE="660", TAG+="uaccess", GROUP="tty", SYMLINK+="stlinkv3loader_%n"
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374e", \
+      MODE="660", TAG+="uaccess", GROUP="tty", SYMLINK+="stlinkv3_%n"
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374f", \
+      MODE="660", TAG+="uaccess", GROUP="tty", SYMLINK+="stlinkv3_%n"
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3753", \
+      MODE="660", TAG+="uaccess", GROUP="tty", SYMLINK+="stlinkv3_%n"
 
-      SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", \
-        MODE="660", TAG+="uaccess", SYMLINK+="${bbname}_%n"
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", \
+      MODE="660", TAG+="uaccess", SYMLINK+="${bbname}_%n"
 
-      SUBSYSTEMS=="usb", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="fffe", \
-        GOTO="bb_serial_monster"
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="fffe", \
+      GOTO="bb_serial_monster"
 
-      SUBSYSTEMS=="usb" GOTO="bb_serial_monster_end"
+    SUBSYSTEMS=="usb" GOTO="bb_serial_monster_end"
 
-      LABEL="bb_serial_monster"
+    LABEL="bb_serial_monster"
 
-      SUBSYSTEMS=="usb", ATTRS{bInterfaceNumber}=="00", \
-        MODE="660", TAG+="uaccess", \
-        SYMLINK+="${bmonster}_1", SYMLINK+="${bmonster}_control", \
-        TAG+="${bmonster}_1"
+    SUBSYSTEMS=="usb", ATTRS{bInterfaceNumber}=="00", \
+      MODE="660", TAG+="uaccess", \
+      SYMLINK+="${bmonster}_1", SYMLINK+="${bmonster}_control", \
+      TAG+="${bmonster}_1"
 
-      SUBSYSTEMS=="usb", ATTRS{bInterfaceNumber}=="02", \
-        MODE="660", TAG+="uaccess", \
-        SYMLINK+="${bmonster}_2", \
-        TAG+="${bmonster}_2"
+    SUBSYSTEMS=="usb", ATTRS{bInterfaceNumber}=="02", \
+      MODE="660", TAG+="uaccess", \
+      SYMLINK+="${bmonster}_2", \
+      TAG+="${bmonster}_2"
 
-      SUBSYSTEMS=="usb", ATTRS{bInterfaceNumber}=="04", \
-        MODE="660", TAG+="uaccess", \
-        SYMLINK+="${bmonster}_3", \
-        TAG+="${bmonster}_3"
+    SUBSYSTEMS=="usb", ATTRS{bInterfaceNumber}=="04", \
+      MODE="660", TAG+="uaccess", \
+      SYMLINK+="${bmonster}_3", \
+      TAG+="${bmonster}_3"
 
-      LABEL="bb_serial_monster_end"
-    '';
-  };
-
+    LABEL="bb_serial_monster_end"
+  '';
 }
-
