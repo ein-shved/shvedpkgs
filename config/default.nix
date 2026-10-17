@@ -1,7 +1,18 @@
 { config, lib, ... }:
 {
   config = {
+    kl.trust.enable = lib.mkDefault config.kl.enable;
+    kl.nss.certificates.enable = lib.mkDefault (config.kl.enable && config.hardware.isGraphic);
+    kl.nss.tokens.enable = lib.mkDefault (config.kl.enable && config.hardware.isGraphic);
+    hardware.power.wakeOnPowerButtonOnly.enable = lib.mkDefault config.hardware.isDevelopment;
+    hardware.programmers.avr.enable = lib.mkDefault config.hardware.isDevelopment;
+    hardware.programmers.stm32.enable = lib.mkDefault config.hardware.isDevelopment;
     services = {
+      cifsKeyutils.enable = lib.mkDefault true;
+      logind.settings.Login = lib.mkIf config.hardware.isDevelopment {
+        HandlePowerKey = lib.mkDefault "suspend";
+        HandleLidSwitch = lib.mkDefault "ignore";
+      };
       blueman.enable = config.hardware.bluetooth.enable;
       openssh = {
         enable = true;

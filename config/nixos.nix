@@ -29,6 +29,7 @@
     ./desktop/xdg
     ./desktop/xdg/mime
     ./exceptions
+    ./hardware/bootable
     ./media
     ./media/mpv
     ./media/pipewire
