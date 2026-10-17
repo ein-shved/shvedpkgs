@@ -29,33 +29,75 @@ repository.
 - AND the same definition does not need to be duplicated in each host's code
 - AND each host can still keep its own purpose, hardware profile, deployment context, and capability differences
 
-## REQ-002: User-facing behavior is scoped to the host primary user
+## REQ-002: Hosts select a primary user for user-facing behavior
 
-When a requirement refers to tools, packages, or environment visible to "the
-user", the repository must have a stable way to identify the primary user for
-the evaluated host.
+When a host has a primary user, the repository must provide a stable way
+to identify that account. Guarantees referring to tools, packages or an
+environment for "the user" apply to that host's primary user within the
+conditions of the owning requirement.
 
-User-facing guarantees apply to that primary user on that host. They must not
-implicitly require the same environment for unrelated users or for every host in
-the repository.
+Such guarantees must not implicitly extend to unrelated users or every
+host in the repository, or force a primary account onto a host that does
+not need one.
+
+Hosts must be able to configure the primary account's identity, home,
+password and supplementary access, retaining established default
+privileges. The account is created only when its login is configured.
 
 ### Scenario: User-facing guarantee applies to the host primary user
 
-- WHEN a requirement promises a tool, package, or environment to "the user" on an evaluated host
+- WHEN an applicable requirement promises a tool, package or environment to
+  "the user" on a host with a primary account
 - THEN the promise applies to that host's primary user
-- AND the evaluated host provides a stable way to identify that primary user
+- AND the host provides a stable way to identify that account
 
 ### Scenario: Other users are not implicitly covered
 
 - WHEN a host has users other than the primary user
-- THEN user-facing guarantees for "the user" do not automatically apply to those other users
-- AND those users require separate requirements if they need the same guarantee
+- THEN guarantees for "the user" do not automatically apply to those other
+  users
+- AND those users require separate requirements if they need the same
+  guarantee
 
 ### Scenario: Other hosts are not implicitly covered
 
-- WHEN another host in the repository has a different primary user environment or purpose
-- THEN a user-facing guarantee for one host does not automatically require the same environment on that other host
-- AND that other host requires its own applicable requirement or host-purpose selection
+- WHEN another host has a different primary user environment or purpose
+- THEN a guarantee for one host does not automatically require the same
+  environment on the other host
+- AND applicability is determined by that other host's requirements and
+  purpose
+
+### Scenario: Configured login selects the primary account
+
+- WHEN a host configures a primary-user login
+- THEN a normal-user account with that login is created
+- AND its home directory is created
+- AND that account is identified as the host's primary user
+
+### Scenario: Account details are configurable
+
+- WHEN a host specifies the primary user's display name, home directory,
+  password, additional groups or personal metadata
+- THEN the primary account and applicable user-facing functionality use
+  those configured details
+- AND a host can supply different details from another host
+
+### Scenario: Default privileges preserve established access
+
+- WHEN a primary account is created with default access settings
+- THEN it receives administrative access and the established supplementary
+  access for terminal, serial devices, keys, audio, Android debugging,
+  containers, input devices and Nix builds
+- AND explicitly configured additional groups extend that default access
+
+### Scenario: No login means no primary account
+
+- WHEN a host has no configured primary-user login
+- AND no enabled functionality requires a primary account
+- THEN no primary account or its home directory is created
+- AND the host remains a valid configuration
+- AND independently configured accounts and system functionality remain
+  available
 
 ## REQ-003: Host environments are selected by purpose and capability
 
@@ -111,3 +153,48 @@ writing Nix snippets or changing a host configuration.
 - WHEN the user requests the variant available to a particular host
 - THEN the user can identify and obtain that variant with a single command
 - AND the user does not need to reproduce the host's package configuration in a snippet
+
+## REQ-006: Reusable modules are optional and disabled by default
+
+Every reusable module provided under `modules/` must allow its
+functionality to be disabled and must leave it disabled by default.
+Making a module available must not by itself select its functionality.
+Hosts must be able to select the functionality they need without
+requiring dependencies of disabled functionality.
+
+### Rationale
+
+Reusing the module collection must not force an account, personal
+environment, service or other optional capability onto every host.
+
+### Scenario: Available modules do not activate functionality by default
+
+- WHEN a host makes a reusable module available without enabling its
+  functionality
+- THEN that functionality remains disabled
+- AND the module does not apply the effects of that functionality
+
+### Scenario: Selected functionality can be disabled
+
+- WHEN a host disables a reusable module's functionality
+- THEN that functionality does not apply to the host
+- AND the module can remain available for configuration
+
+### Scenario: Disabled functionality does not require its dependencies
+
+- WHEN functionality is disabled
+- THEN it does not access or require dependencies needed only for that
+  functionality
+- AND absence of those dependencies does not prevent configuration assembly
+
+### Scenario: Enabled functionality requires its dependencies
+
+- WHEN enabled functionality requires an unavailable dependency
+- THEN the host configuration is rejected as incomplete
+- AND the functionality is not silently omitted
+
+### Scenario: Independent functionality remains usable
+
+- WHEN a host disables an optional capability
+- AND other selected functionality does not depend on that capability
+- THEN the other functionality remains available

@@ -2,14 +2,185 @@
 
 ## Primary User
 
-For each host configuration, the primary user is the user identified by:
+The optional primary account is owned by `modules/home/user.nix`.
+Properties referring to "the primary user" apply to this account on
+the evaluated host. Other accounts remain independently configurable.
 
-```nix
-config.user.name
-```
+### Selection and identity
 
-System properties that refer to "the primary user" apply to that account on
-the evaluated host configuration.
+`user.name` is a login string with no default. Leaving the option
+undefined means that no primary account is selected. Reading its value
+without a definition produces the standard missing-option-value error.
+
+Account creation is conditional on `options.user.name.isDefined`,
+without reading `config.user.name` to test presence. No separate
+`user.enable` option is exposed. Imports remain independent of the
+evaluated login and enablement.
+
+When enabled, the module defines `users.users.${config.user.name}` as
+a normal account, creates its home directory and applies its configured
+identity, password and supplementary groups. When disabled, the module
+contributes no account or home-directory creation.
+
+### Account fields
+
+- `user.humanName`: string; defaults to the selected login.
+  It supplies the account description when the account is enabled.
+- `user.home`: string; defaults to `/home/<login>` and supplies
+  the account's home directory.
+- `user.password`: nullable string; defaults to `null` and is forwarded
+  to the account password option. A supplied clear-text password has
+  the underlying NixOS option's store-visibility semantics.
+- `user.extraGroups`: list of strings, defaulting to an empty list;
+  extends the account's default supplementary groups.
+- `user.mail`: nullable string, defaulting to `null`; personal metadata
+  for consumers that use an email address.
+- `user.domainName`: string; defaults to
+  `user.domainNameMaker user.humanName`.
+- `user.domainNameMaker`: function from a string to a string. Its
+  default lowercases the human name and selects its surname using
+  the repository's name helpers.
+
+Derived defaults remain lazy. Disabled functionality MUST NOT force
+them. Reading a login-dependent default without a configured login
+produces the standard missing-option-value error rather than a null
+result or a placeholder. No separate dependency assertions are added.
+
+Default supplementary groups are `wheel`, `tty`, `dialout`, `keys`,
+`audio`, `adbusers`, `docker`, `input` and `nixbld`. Account optionality
+does not change these defaults or introduce new service enablement.
+
+Traceability: satisfies `REQ-002`, including selection, configurable
+account details, established default access and the absent-login case.
+
+## Primary User Home Manager Integration
+
+### Module boundary and enablement
+
+`flake.nix` imports the pinned Home Manager NixOS module as part of
+the common module collection. The Home Manager input follows the
+repository's nixpkgs input. Import makes its interfaces available;
+it does not by itself select a managed primary-user environment.
+
+`modules/home/homedir.nix` owns `home.enable`, a boolean defaulting to
+`false`. Enabling it requires `options.user.name.isDefined`. A NixOS
+assertion enforces `home.enable -> options.user.name.isDefined`.
+Enabling the environment without a configured primary login is invalid.
+
+Profile creation and evaluated alias reads require both `home.enable`
+and a defined login. This guard avoids forcing an undefined login
+before the assertion can report the invalid configuration. It does
+not silently accept an enabled environment without its account.
+
+When active, the integration creates the primary entry under
+`home-manager.users.<login>`, selects `home-manager.useGlobalPkgs`
+and defaults its `home.stateVersion` to `system.stateVersion`.
+Home Manager obtains the account username and home directory from
+the corresponding NixOS account through its NixOS integration.
+
+When inactive, this integration contributes no primary Home Manager
+entry, activation or global-package selection. Other explicitly
+configured Home Manager users remain governed by the upstream interface.
+
+`home.refresh-profile.enable` remains a separate boolean defaulting to
+`false`. It requests primary-user activation before `installPackages`
+that initializes the modern Nix profile when `manifest.json` is absent.
+This activation is a home declaration. When the primary environment
+is inactive, it is not applied and its profile dependencies are not
+evaluated, even if the refresh flag is true.
+
+### Alias contract
+
+Writes through `hm` declare the desired primary home environment.
+They do not themselves enable that environment. The integration owns
+the single condition deciding whether to apply these declarations.
+
+The `hm` option is declared statically with `types.deferredModule`
+and an empty declaration default. Its input is kept as module
+definitions, separate from its evaluated read value. Attribute-based
+declarations such as `hm.programs.git.enable = true` remain valid.
+Function modules and module imports use the same deferred input path.
+
+When active, definitions through `hm` and direct definitions under
+`home-manager.users.<primary-login>` participate in the same HM module
+evaluation. The destination receives raw alias definitions through
+module-system definition forwarding, preserving priorities such as
+`mkDefault` and `mkForce`, and list ordering.
+It MUST NOT receive the already evaluated `config.hm` value.
+
+Forwarding retains each definition's original source file. HM option
+type errors identify the declaring module; conflicts identify both
+alias and direct definition sources. Normal Nix diagnostic limitations
+for exact line numbers continue to apply.
+
+Reads through `config.hm` expose the final merged destination,
+including direct definitions. The option's read projection is separate
+from the raw definitions used for forwarding, preventing a cycle
+between reading the destination and constructing it.
+
+When inactive, writes are accepted as unapplied declarations. The
+integration does not instantiate or validate them as an HM user,
+forward them to any user, or force their nested values or module
+bodies. They create no dummy account, primary HM entry or activation.
+This remains true with no login, with an account but HM disabled,
+and when unrelated HM users exist. HM option validation takes place
+when declarations are applied to an active primary environment.
+
+An evaluated read of `config.hm` while inactive fails with a central
+evaluation error identifying that the primary HM environment is not
+active. It does not expose raw declarations, an empty configuration,
+an unrelated user or an independently defined primary-name HM entry.
+Reads contained only in unused declaration values remain unevaluated.
+
+The integration MUST NOT make its imports or option names conditional
+on `config`, force an undefined login to construct a destination, or
+use an empty login as a fallback. Conditional application and the
+evaluated read projection belong in `modules/home/homedir.nix`.
+
+`lib.hm` exposes Home Manager library helpers. It is independent of
+the configuration alias and remains available when `home.enable` is
+false. Its presence does not establish that `config.hm` can be read.
+
+### Consumers and repository policy
+
+A consumer may write `hm.*` without checking primary-account presence
+or `home.enable`. Existing feature and role conditions still select
+its contributions when the home environment is active; these
+conditions may remain on nested HM options. No condition around the
+complete alias assignment is required solely for alias availability.
+
+Settings and reads used only inside an unapplied home declaration do
+not require the primary account or an evaluated HM environment. A
+disabled home integration retaining these declarations satisfies
+REQ-006: retaining configuration input does not enable functionality.
+
+System-side reads of `config.hm` or `config.user.*` remain actual
+dependencies of the selected system behavior. Disabled behavior does
+not evaluate those reads. Enabled behavior requiring missing values
+fails through ordinary evaluation or option errors, without a guard
+that silently drops it or a consumer-specific dependency assertion.
+The integration-level login assertion remains the explicit exception.
+
+Mixed modules preserve system packages, certificates and services that
+can operate independently of the managed environment. System policy
+specifically providing a primary-home workflow may follow the home
+integration's enablement; this does not require wrapping every HM
+declaration in that same condition.
+
+Host and profile policy explicitly enables `home.enable` for existing
+hosts to select their intended environment. Each named host selects it
+beside its hardware role flags in its own configuration; the shared
+primary-user defaults in `hosts/default.nix` do not select it. Boot and
+test profiles select it in their individual definitions. The synthetic
+generic host keeps its selection in its existing inline definition in
+`hosts/default.nix`, alongside its identity and hardware role flags.
+
+Other explicitly configured accounts and HM users remain independent.
+Library helper `lib.hm` remains usable regardless of primary integration
+enablement.
+
+Traceability: realizes primary-user environment selection under
+`REQ-002` and the optional-module and dependency contracts of `REQ-006`.
 
 ## Project Layers
 
@@ -50,12 +221,35 @@ configuration layer.
 
 ### modules
 
-The `modules` layer defines reusable NixOS module interfaces and the behavior
-owned by those interfaces.
+The `modules` layer defines reusable NixOS module interfaces and the
+behavior owned by those interfaces.
 
-Files under `modules` SHOULD introduce or own options and may implement
-configuration derived from those options. They SHOULD NOT be used for broad
-repository policy that merely consumes existing options.
+Files under `modules` SHOULD introduce or own options. They SHOULD NOT
+implement broad repository policy that merely consumes existing options.
+
+Importing this layer makes interfaces available without enabling their
+optional functionality. Each module's behavior has an enablement
+condition that is false by default and can be disabled. Selection may
+use a boolean flag or an explicitly supplied value, such as the primary
+login; a separate boolean per source file is not required. Collection
+modules and fragments use the enablement of their owning functionality.
+
+Disabled behavior contributes no feature configuration and does not
+evaluate dependencies needed only by that behavior. Enabled behavior
+retains its dependency obligations; missing dependencies are reported
+by ordinary configuration evaluation and option validation.
+
+Deferred home declarations are inputs to the home integration. Keeping
+them while that integration is disabled does not apply home behavior
+or require their unused dependencies. Their application and evaluated
+reads follow the Primary User Home Manager Integration contract.
+
+Host roles remain governed by `default:002-host-classification`.
+`config/` and host/profile modules select reusable functionality through
+its public interfaces. Their selections do not change module defaults.
+
+Traceability: satisfies `REQ-006`; host-purpose selection continues
+to be governed by `REQ-003` and the host-classification specification.
 
 ### config
 
