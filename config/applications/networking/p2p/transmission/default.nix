@@ -1,5 +1,6 @@
 {
   config,
+  options,
   pkgs,
   lib,
   ...
@@ -14,10 +15,12 @@ let
 
 in
 {
-  config = mkIf (!config.kl.domain.enable) {
+  config = {
     # Sometimes we need to download Linux images from official torrents
     services.transmission = {
-      enable = true;
+      enable = lib.mkDefault (
+        config.home.enable && options.user.name.isDefined && !config.kl.domain.enable
+      );
       user = user.name;
       home = "${user.home}";
       package = pkgs.transmission_4;
@@ -41,32 +44,36 @@ in
       openFirewall = true;
       openRPCPort = true;
     };
-    environment.graphicPackages = [
+    environment.graphicPackages = mkIf cfg.enable [
       pkgs.transmission-remote-gtk
     ];
-    systemd.services.transmission = {
+    systemd.services.transmission = mkIf (cfg.enable && config.home.enable) {
       after = [ "home-manager-${user.name}.service" ];
     };
 
-    user.extraGroups = [
+    user.extraGroups = mkIf cfg.enable [
       cfg.group
     ];
-    system.activationScripts.transmission-daemon = lib.mkForce "";
+    system.activationScripts.transmission-daemon = mkIf (cfg.enable && config.home.enable) (
+      lib.mkForce ""
+    );
 
-    hm.home.activation.transmission-daemon = lib.hm.dag.entryAfter [ "writeBoundary" ] (
-      ''
-        install -d -m 700 -o '${cfg.user}' -g '${cfg.group}' '${cfg.home}/${settingsDir}'
-      ''
-      + optionalString (cfg.downloadDirPermissions != null) ''
-        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.download-dir}'
+    hm.home.activation.transmission-daemon = mkIf cfg.enable (
+      lib.hm.dag.entryAfter [ "writeBoundary" ] (
+        ''
+          install -d -m 700 -o '${cfg.user}' -g '${cfg.group}' '${cfg.home}/${settingsDir}'
+        ''
+        + optionalString (cfg.downloadDirPermissions != null) ''
+          install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.download-dir}'
 
-        ${optionalString cfg.settings.incomplete-dir-enabled ''
-          install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.incomplete-dir}'
-        ''}
-        ${optionalString cfg.settings.watch-dir-enabled ''
-          install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.watch-dir}'
-        ''}
-      ''
+          ${optionalString cfg.settings.incomplete-dir-enabled ''
+            install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.incomplete-dir}'
+          ''}
+          ${optionalString cfg.settings.watch-dir-enabled ''
+            install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.watch-dir}'
+          ''}
+        ''
+      )
     );
   };
 }

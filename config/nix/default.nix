@@ -1,5 +1,7 @@
 {
   config,
+  options,
+  lib,
   pkgs,
   ...
 }:
@@ -22,7 +24,7 @@
         "nix-command"
         "flakes"
       ];
-      trusted-users = [ config.user.name ];
+      trusted-users = lib.optional options.user.name.isDefined config.user.name;
       secret-key-files = "/etc/nix/private-key";
       builders-use-substitutes = true;
     };

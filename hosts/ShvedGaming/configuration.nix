@@ -5,6 +5,7 @@
     ./desktop
   ];
 
+  home.enable = true;
   hardware.isVpsClient = true;
   hardware.isGraphic = true;
   hardware.isDevelopment = true;

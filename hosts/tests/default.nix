@@ -11,6 +11,7 @@
           humanName = "Alice Cooper";
           password = "alice";
         };
+        home.enable = true;
         hardware.isGraphic = true;
         hardware.isDevelopment = true;
         kl.remote.enable = true;
@@ -26,6 +27,7 @@
           humanName = "Bob";
           password = "bob";
         };
+        home.enable = true;
         hardware.isGraphic = true;
         hardware.isDevelopment = true;
         environment.printing3d.enable = true;
@@ -42,6 +44,7 @@
           humanName = "Nas";
           password = "nas";
         };
+        home.enable = true;
         hardware.isNas = true;
       }
     ];
@@ -55,6 +58,7 @@
           humanName = "Vps";
           password = "vps";
         };
+        home.enable = true;
         hardware.isVps = true;
         services.gerrit.serverId = "24247d56-4f56-473f-99f0-6680a185b369";
       }

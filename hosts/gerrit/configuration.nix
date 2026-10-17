@@ -7,6 +7,7 @@
   user.name = "gerrit-admin";
   user.humanName = "The Gerrit";
   networking.hostName = "gerrit";
+  home.enable = true;
   hardware.isVps = true;
 
   boot.loader.grub.enable = true;

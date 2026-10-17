@@ -26,6 +26,7 @@ tests
   generic = {
     modules = [
       {
+        home.enable = true;
         user.name = "NixOS";
         hardware.isGraphic = true;
         hardware.isDevelopment = true;

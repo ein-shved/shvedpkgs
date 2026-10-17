@@ -6,6 +6,7 @@
       ./desktop
     ];
 
+  home.enable = true;
   hardware.isGraphic = true;
   hardware.isDevelopment = true;
 

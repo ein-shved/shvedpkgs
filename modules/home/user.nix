@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   ...
 }:
@@ -69,7 +70,7 @@ in
 
   ## Configurations #######################################
 
-  config = {
+  config = lib.mkIf options.user.name.isDefined {
     users.users = {
       ${cfg.name} = {
         inherit (cfg) home name password;

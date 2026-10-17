@@ -14,6 +14,7 @@ in
     ./hardware-configuration.nix
   ];
 
+  home.enable = true;
   hardware.isNas = true;
   hardware.isVpsClient = true;
 

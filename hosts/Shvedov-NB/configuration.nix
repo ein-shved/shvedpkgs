@@ -9,6 +9,7 @@ in
     ./desktop
   ];
 
+  home.enable = true;
   hardware.isLaptop = true;
   hardware.isGraphic = true;
   hardware.isDevelopment = true;

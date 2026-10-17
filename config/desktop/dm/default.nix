@@ -44,7 +44,12 @@ in
             cursorTheme = {
               inherit (config.hm.home.pointerCursor) package name size;
             };
-            inherit (config.hm.gtk) theme iconTheme;
+            theme = {
+              inherit (config.hm.gtk.theme) package name;
+            };
+            iconTheme = {
+              inherit (config.hm.gtk.iconTheme) package name;
+            };
             extraConfig = ''
               [greeter]
               xft-dpi = 144

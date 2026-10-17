@@ -5,7 +5,6 @@
   ...
 }:
 let
-  user = config.user.name;
   monitors = config.hardware.aliasedMonitors;
 
   # Disabling due to switching to niri
@@ -35,16 +34,15 @@ in
       swaynotificationcenter
     ];
 
-    home-manager.users.${user} = {
+    hm = lib.mkIf config.programs.hyprland.enable {
       wayland.windowManager.hyprland = {
-        enable = hyprlandEnabled;
+        enable = true;
         systemd.enable = true;
         extraConfig =
           let
             monName = name: lib.optionalString (name != "default") name;
             mkMonitor =
-              name: value:
-              "monitor = ${monName name}, ${value.resolution}, ${value.position}, ${value.scale}";
+              name: value: "monitor = ${monName name}, ${value.resolution}, ${value.position}, ${value.scale}";
             monitors' = lib.foldlAttrs (
               acc: name: value:
               acc + "\n${mkMonitor name value}"

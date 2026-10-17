@@ -6,6 +6,7 @@ in
     modules = [
       {
         inherit user;
+        home.enable = true;
         hardware.isGraphic = true;
         hardware.isDevelopment = true;
         hardware.bluetooth.enable = true;
@@ -16,6 +17,7 @@ in
     modules = [
       {
         inherit user;
+        home.enable = true;
         hardware.isGraphic = true;
         hardware.isDevelopment = true;
         hardware.bluetooth.enable = true;
@@ -36,6 +38,7 @@ in
     modules = [
       {
         inherit user;
+        home.enable = true;
         hardware.isVps = true;
         # hardware.isNas = true; # TODO
         services.gerrit.serverId = "24247d56-4f56-473f-99f0-6680a185b369";
