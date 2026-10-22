@@ -3,160 +3,46 @@ name: "specd-archive"
 description: "Archive a specd change by merging validated deltas into workspace specs."
 ---
 
-# specd-archive — finalize and archive
+# specd-archive
 
-Read @../\_specd-shared/shared.md before doing anything.
+Before any shared-notes lookup or glob discovery, check referenced exact paths.
+Resolve relative paths against the referring resource and known values such as
+`changePath` against live CLI output. Test/read the resolved path first; use
+`rg --files --hidden` or glob fallback only when it is genuinely absent. Apply
+this to shared resources, `.context`, and `.specd-exploration.md` too.
 
-## What this does
+Start or resume a separate manager with [manager.md](../_specd-shared/manager.md),
+the invoked skill `specd-archive`, arguments, project root/config, and relevant source
+pointers. The manager loads [the procedure](../_specd-shared/workflows/specd-archive.md)
+and [shared notes](../_specd-shared/shared.md). Ask for the current bounded
+assignment; do not load the full procedure into the author context by default.
+Do not spawn a manager from a worker already assigned that manager role.
 
-Reviews deltas and archives the change. Archiving merges deltas into project specs
-and is irreversible. The change MUST already be in `archivable` state — the signoff
-gate is handled by `/specd-verify`, not by this skill.
+As executor, independently read the assigned sources and applicable criteria,
+perform the bounded work, self-review, and report the output/revision to the
+manager. Follow its live ownership, scope, hooks, review, approval, and stop
+conditions. It cannot expand user authorization or filesystem permissions.
+Preserve sequential task completion and the approved plan's checkbox-only rule.
+For design, resolve participation before authoring; in delegated mode the main
+session loads [coordinator.md](../_specd-shared/coordinator.md) and launches a
+separate scoped executor, including handoff of any unfinished main-authored draft.
 
-## Steps
+At the manager's three review triggers, launch a separate arbiter with
+[arbiter.md](../_specd-shared/arbiter.md) and its concise source/revision assignment.
+The arbiter reads sources directly and never edits artifacts. Sequential owner
+comments use executor self-review; retain one arbiter within a launched cycle.
+Final review and decision-owner acceptance cover the same revision before
+structural validation or subscope closure. Human-only CLI gates remain human.
 
-### 1. Load change state
+Use the client's supported independent-agent tools and available slots. For
+KiloCode, use independent task/subagent facilities when exposed;
+start workers without inherited conversation. Stop workers before a group
+handoff. If independent contexts are unavailable, save continuation under the
+live change path and report the limitation. Manual user-created primary
+sessions support involved-mode handoff; compaction or role relabeling does not.
+Continue design with `/specd-design <name>` when the manager names that boundary.
+Invoke skills with `/specd-archive` (and other `/specd-*` names); translate slash-style
+CLI recommendations to this client syntax.
 
-```bash
-specd changes status <name> --format text
-```
-
-Identify any high-visibility blockers from the **blockers:** section (e.g. `ARTIFACT_DRIFT`,
-`OVERLAP_CONFLICT`, `REVIEW_REQUIRED`) and inform the user. Follow the **next action:**
-command recommendation.
-
-Extract the `path:` field from the "lifecycle:" section.
-
-If the status output shows `review: required: yes`, tell the user:
-
-> Artifacts need review before archiving. Run `/specd-design <name>` to update them.
-
-**Stop — do not continue.**
-
-If state is not `archivable`, this is the wrong skill.
-Redirect based on the **next action:** `target` recommendation.
-
-**Stop — do not continue.**
-
-### 2. Load context
-
-```bash
-specd changes context <name> archiving --follow-deps --depth 1 --format text [--fingerprint <stored-value>]
-```
-
-Pass `--fingerprint <stored-value>` if you have a `contextFingerprint` from a previous `changes context` call in this conversation (see `shared.md` — "Fingerprint mechanism"). If output says `unchanged`, use the context already in memory.
-
-**MUST follow** — project context entries are binding directives. If lazy mode returns
-summary specs, evaluate and load any that are relevant (see `shared.md` — "Processing
-`changes context` output").
-
-### 3. Ask before archiving
-
-> **Ready to archive `<name>`.** This will merge all deltas into your project specs
-> and move the change to the archive. This cannot be undone.
->
-> Say **"archive"** to proceed, or request changes first.
-
-**Do NOT proceed until the user explicitly says "archive" or equivalent.**
-
-### 4. Pre-archive hooks
-
-```bash
-specd changes run-hooks <name> archiving --phase pre
-specd changes hook-instruction <name> archiving --phase pre --format text
-```
-
-Follow guidance — review deltas to ensure specs match what was built.
-
-When reviewing spec-scoped deltas, inspect merged output with
-`specd changes spec-preview <name> <specId> --format text` if overlap, drift, or
-stale-base risk exists, or if you have only read raw delta files. Raw deltas are not
-enough to confirm the archived spec will preserve important existing content.
-If only one merged spec-scoped artifact is needed for review, use
-`specd changes spec-preview <name> <specId> --artifact <artifactId> --format text`.
-
-### 5. Archive
-
-```bash
-specd changes archive <name> --skip-hooks all --format toon
-```
-
-If the command fails with a `SpecOverlapError` (spec overlap detected), other active
-changes target the same specs as this change. When this happens:
-
-1. Show the user the overlapping specs and the other changes involved.
-2. Explain the risk.
-3. Ask the user whether to proceed or abort.
-
-If the user confirms, re-run the command with `--allow-overlap`:
-
-```bash
-specd changes archive <name> --skip-hooks all --allow-overlap --format toon
-```
-
-### 6. Post-archive hooks
-
-```bash
-specd changes run-hooks <name> archiving --phase post
-specd changes hook-instruction <name> archiving --phase post --format text
-```
-
-Follow guidance.
-
-### 7. Regenerate metadata
-
-```bash
-specd specs generate-metadata --all --write --status stale,missing
-```
-
-### 8. Check LLM optimization
-
-```bash
-specd project status --format toon
-```
-
-Reuse a fresh `project status` result from this archive execution if it already
-contains `approvals.llmOptimized`; otherwise run the command.
-
-If `approvals.llmOptimized` is `true`, suggest running `/specd-spec-metadata` for each
-spec in the change.
-
-### 9. Done
-
-> Change `<name>` archived. Deltas merged into specs.
-
-**Stop.**
-Do not invoke any follow-up skill automatically; wait for explicit user confirmation.
-
-## Session tasks
-
-1. `Load state & context`
-2. `Pre-archive review`
-3. `Archive change`
-4. `Post-archive & metadata`
-
-## Handling failed transitions
-
-When `changes transition` fails, it renders a **Repair Guide** in text mode.
-Follow the recommended repair command based on the target recommendation.
-
-## Returning to design
-
-If during the pre-archive review you discover that the artifacts need revision, stop and explain.
-If the user agrees:
-
-```bash
-specd changes transition <name> designing --skip-hooks all
-```
-
-> Specs need revision before archiving. Run `/specd-design <name>` to update them.
-
-**Stop — do not archive.**
-
-## Guardrails
-
-- **Always ask before archiving** — it's irreversible
-- Review deltas before confirming — specs should match what was built
-- Any time a fresh `changes status` shows `review: required: yes`, stop
-  archiving and redirect to `/specd-design <name>`
-
+The manager names the terminal boundary. Stop there and suggest the next skill;
+do not invoke another lifecycle skill without an explicit user request.

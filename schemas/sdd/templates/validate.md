@@ -11,7 +11,18 @@
 <!-- List only coverage references to owning requirements/scenarios and system
      headings. Do not add purpose or motivation prose. Delete when unnecessary. -->
 
-## Technical Checks
+## Automated Checks
+
+### Check: {{automated check name}}
+
+- Covers: {{Markdown link to owning requirement or relevant system heading}}
+- Method: {{actual runner/test and the cases its executable assertions cover}}
+- Evidence: {{expected result of that runner}}
+
+<!-- Inspect execution and assertions before claiming coverage; fixture/snapshot
+     presence is insufficient. Keep assertion detail in tests. Delete empty groups. -->
+
+## Manual Checks
 
 ### Check: {{check name}}
 
@@ -22,4 +33,7 @@
 
 <!-- Use resolvable links, e.g. [REQ-001](requirements.md#req-001-title) or
      [Contract](system.md#contract). Cross-spec links include the owning spec's
-     relative path. References identify owners without copying their content. -->
+     relative path. References identify owners without copying their content.
+     Retain manual actions and expected results for uncovered conditional runtime
+     duties. Checks work without change history; migration and before/after
+     comparisons belong in plan. -->

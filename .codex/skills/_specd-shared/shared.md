@@ -1,5 +1,29 @@
 # specd shared notes
 
+## Resource and role entry
+
+Check exact referenced paths before glob discovery: resolve against the referring
+resource and live values such as `changePath`, then test/read directly. Only a
+genuinely absent path justifies fallback discovery. This applies before shared
+lookup and to discovery/continuation notes.
+
+Entry skills launch/resume a separate manager (`manager.md`). It loads only the
+invoked procedure from `workflows/<skill>.md` and returns bounded executor work.
+For design it applies the proposal category and participation. The independent
+arbiter (`arbiter.md`) reviews only at first draft, current-content owner
+acceptance, or explicit request; sequential owner comments use author self-review.
+Keep the same arbiter inside its correction cycle. Final success and actual
+owner acceptance cover the same content revision. Delegated design uses a
+persistent main coordinator (`coordinator.md`) and separate scoped authors.
+Human-only CLI approvals below remain human in both participation modes.
+
+Large design groups hand off through concise change-local `.context`; involved
+mode recommends fresh primary sessions, delegated mode launches fresh author
+contexts without inherited discussion. Small work may retain one group. Report
+unavailable independent contexts and preserve resumable state; no role labels
+or compaction substitute for isolation. Procedure details belong in manager
+resources; authors and arbiters load the applicable source/rule subset.
+
 Read this file at the start of every specd skill invocation.
 
 ## Mental model

@@ -3,275 +3,46 @@ name: "specd-verify"
 description: "Verify implementation against spec scenarios for a change."
 ---
 
-# specd-verify — check implementation against specs
-
-Read @../\_specd-shared/shared.md before doing anything.
-
-## What this does
-
-Runs through verification scenarios for each spec in the change. If all pass,
-transitions to `done`. If any fail, loops back to implementing.
-
-## Steps
-
-### 1. Load change state
-
-```bash
-specd changes status <name> --format text
-```
-
-Identify any high-visibility blockers from the **blockers:** section (e.g. `ARTIFACT_DRIFT`,
-`OVERLAP_CONFLICT`, `REVIEW_REQUIRED`) and inform the user. Follow the **next action:**
-command recommendation.
-
-Extract the `path:` field from the "lifecycle:" section.
-
-If the status output shows `review: required: yes`, tell the user:
-
-> Artifacts need review before verification can continue. Run `/specd-design <name>`.
-
-**Stop — do not continue.**
-
-If not in `implementing`, `verifying`, or `done`, this is the wrong skill.
-Redirect based on the **next action:** `target` recommendation.
-
-**Stop — do not continue.**
-
-### 2. Enter verification (or resume)
-
-**If in `implementing`** (normal entry from `/specd-implement`):
-
-Run pre-hooks and transition:
-
-```bash
-specd changes run-hooks <name> verifying --phase pre
-specd changes hook-instruction <name> verifying --phase pre --format text
-```
-
-Follow guidance.
-
-```bash
-specd changes transition <name> verifying --skip-hooks all
-```
-
-If it fails, follow the **Repair Guide** output.
-
-**If in `verifying`** (resuming): run pre-hooks but skip the transition:
-
-```bash
-specd changes run-hooks <name> verifying --phase pre
-specd changes hook-instruction <name> verifying --phase pre --format text
-```
-
-**If in `done`**: skip directly to step 6a (transition to archivable path).
-
-Continue to step 3.
-
-### 3. Load verification context
-
-Use a single-pass context policy: choose one profile before calling `changes context`
-and avoid running both profiles in the same verification cycle unless a hard blocker
-forces a retry.
-
-Choose one profile:
-
-- `light` (lower token cost): use when verification can run primarily from merged
-  scenarios and already-loaded artifacts.
-- `full` (higher coverage): use when you already know rules/constraints/dependency
-  context will be needed.
-
-`light` profile:
-
-```bash
-specd changes context <name> verifying --include-change-specs --scenarios --format text [--fingerprint <stored-value>]
-```
-
-`full` profile:
-
-```bash
-specd changes context <name> verifying --include-change-specs --follow-deps --depth 1 --rules --constraints --scenarios --format text [--fingerprint <stored-value>]
-```
-
-Pass `--fingerprint <stored-value>` if you have a `contextFingerprint` from a previous `changes context` call in this conversation (see `shared.md` — "Fingerprint mechanism"). If output says `unchanged`, use the context already in memory.
-
-**MUST follow** — project context entries are binding directives. If lazy mode returns
-summary specs, evaluate each one and load any that are relevant to the scenarios you're
-about to verify (see `shared.md` — "Processing `changes context` output").
-
-### 3b. Get merged specs with deltas applied
-
-Use merged spec-scoped artifact content for verification. If the context read(s)
-already returned the full merged content needed for the spec-scoped requirement and
-scenario artifacts, use that output. If context is still incomplete (summaries/metadata
-only or missing required merged details), if raw deltas are the only artifact content
-you have, or if overlap/drift/stale-base risk exists, use `spec-preview` to get the
-final merged spec-scoped artifacts with deltas applied:
-
-```bash
-specd changes spec-preview <name> <specId> --format toon
-```
-
-If you only need one merged spec-scoped artifact, prefer:
-
-```bash
-specd changes spec-preview <name> <specId> --artifact <artifactId> --format toon
-```
-
-This merged view is what you should verify against. Raw delta inspection alone is not
-equivalent to merged preview review.
-
-### 4. Verify each scenario
-
-For each spec in the change, read the merged spec content from step 3b. Then verify
-each scenario against:
-
-1. The **merged spec-scoped content** (from `changes context` when it returned the
-   needed full merged content, otherwise from `spec-preview`)
-2. The **verification scenarios** in the merged scenario-bearing artifact
-
-For each scenario:
-
-- Inspect the implementation code
-- Run relevant tests if applicable
-- Confirm GIVEN/WHEN/THEN conditions are satisfied using the merged spec content
-
-### 5. Run exit hooks — immediately after last scenario verified
-
-The moment all scenarios have been evaluated, run the post-verifying hooks:
-
-```bash
-specd changes run-hooks <name> verifying --phase post
-specd changes hook-instruction <name> verifying --phase post --format text
-```
-
-Follow guidance. If hooks fail, fix and re-run.
-
-### 6. Report results and transition
-
-Present findings to the user.
-
-**If any fail:**
-
-First classify the failure:
-
-- **Implementation-only failure** —artifacts still correct
-- **Artifact review required** — desired behavior changed or artifacts wrong
-
-Before choosing a transition, reload status:
-
-```bash
-specd changes status <name> --format text
-```
-
-If the fresh status shows `review: required: yes`, do NOT route back to
-`implementing`. Tell the user to run `/specd-design <name>` and **stop**.
-
-If this is an implementation-only failure:
-
-```bash
-specd changes transition <name> implementing --skip-hooks all
-```
-
-Tell the user to run `/specd-implement <name>` to fix the implementation. **Stop.**
-
-If this is artifact review required:
-
-```bash
-specd changes transition <name> designing --skip-hooks all
-```
-
-Tell the user to run `/specd-design <name>` to update them. **Stop.**
-
-**If all pass:** transition through `done` and the signoff gate to reach `archivable`.
-
-#### 6a. Transition to done
-
-Run done pre-hooks, then transition:
-
-```bash
-specd changes run-hooks <name> done --phase pre
-specd changes hook-instruction <name> done --phase pre --format text
-```
-
-Follow guidance.
-
-```bash
-specd changes transition <name> done --skip-hooks all
-```
-
-Run done post-hooks:
-
-```bash
-specd changes run-hooks <name> done --phase post
-specd changes hook-instruction <name> done --phase post --format text
-```
-
-#### 6b. Handle signoff gate
-
-Run `changes status <name> --format text` and check `approvals:` line.
-
-**If signoff=off:** no signoff needed — run archivable hooks and transition:
-
-```bash
-specd changes run-hooks <name> archivable --phase pre
-specd changes hook-instruction <name> archivable --phase pre --format text
-```
-
-Follow guidance.
-
-```bash
-specd changes transition <name> archivable --skip-hooks all
-```
-
-```bash
-specd changes run-hooks <name> archivable --phase post
-specd changes hook-instruction <name> archivable --phase post --format text
-```
-
-**If signoff=on:** transition routes to `pending-signoff`. Tell user:
-
-> Signoff required. Run: `specd changes approve signoff <name> --reason "..."`
-> Then: `/specd-archive <name>`
-
-**Stop.**
-Do not invoke `/specd-archive` automatically; wait for explicit user confirmation.
-
-> All scenarios pass. Change is ready to archive. Run `/specd-archive <name>`.
-
-**Stop.**
-Do not invoke `/specd-archive` automatically; wait for explicit user confirmation.
-
-## Session tasks
-
-1. `Load state & hooks`
-2. `Load verification context`
-3. For each spec: `Verify: <specId>`
-4. `Report results & transition`
-
-## Handling failed transitions
-
-When `changes transition` fails, it renders a **Repair Guide** in text mode.
-Follow the recommended repair command based on the target recommendation.
-
-**Stop — do not continue after redirecting.**
-
-## Returning to design
-
-If during verification you discover that the artifacts need revision, stop and explain.
-If the user agrees:
-
-```bash
-specd changes transition <name> designing --skip-hooks all
-```
-
-> Artifacts need revision. Run `/specd-design <name>` to update them.
-
-**Stop — do not continue verifying.**
-
-## Guardrails
-
-- Verify against scenarios from the compiled context
-- Run actual tests where applicable
-- Any time a fresh `changes status` shows `review: required: yes`, stop
-  verification and redirect to `/specd-design <name>`
-
+# specd-verify
+
+Before any shared-notes lookup or glob discovery, check referenced exact paths.
+Resolve relative paths against the referring resource and known values such as
+`changePath` against live CLI output. Test/read the resolved path first; use
+`rg --files --hidden` or glob fallback only when it is genuinely absent. Apply
+this to shared resources, `.context`, and `.specd-exploration.md` too.
+
+Start or resume a separate manager with [manager.md](../_specd-shared/manager.md),
+the invoked skill `specd-verify`, arguments, project root/config, and relevant source
+pointers. The manager loads [the procedure](../_specd-shared/workflows/specd-verify.md)
+and [shared notes](../_specd-shared/shared.md). Ask for the current bounded
+assignment; do not load the full procedure into the author context by default.
+Do not spawn a manager from a worker already assigned that manager role.
+
+As executor, independently read the assigned sources and applicable criteria,
+perform the bounded work, self-review, and report the output/revision to the
+manager. Follow its live ownership, scope, hooks, review, approval, and stop
+conditions. It cannot expand user authorization or filesystem permissions.
+Preserve sequential task completion and the approved plan's checkbox-only rule.
+For design, resolve participation before authoring; in delegated mode the main
+session loads [coordinator.md](../_specd-shared/coordinator.md) and launches a
+separate scoped executor, including handoff of any unfinished main-authored draft.
+
+At the manager's three review triggers, launch a separate arbiter with
+[arbiter.md](../_specd-shared/arbiter.md) and its concise source/revision assignment.
+The arbiter reads sources directly and never edits artifacts. Sequential owner
+comments use executor self-review; retain one arbiter within a launched cycle.
+Final review and decision-owner acceptance cover the same revision before
+structural validation or subscope closure. Human-only CLI gates remain human.
+
+Use the client's supported independent-agent tools and available slots. For
+KiloCode, use independent task/subagent facilities when exposed;
+start workers without inherited conversation. Stop workers before a group
+handoff. If independent contexts are unavailable, save continuation under the
+live change path and report the limitation. Manual user-created primary
+sessions support involved-mode handoff; compaction or role relabeling does not.
+Continue design with `/specd-design <name>` when the manager names that boundary.
+Invoke skills with `/specd-verify` (and other `/specd-*` names); translate slash-style
+CLI recommendations to this client syntax.
+
+The manager names the terminal boundary. Stop there and suggest the next skill;
+do not invoke another lifecycle skill without an explicit user request.

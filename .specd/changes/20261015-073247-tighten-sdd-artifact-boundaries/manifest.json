@@ -1,7 +1,7 @@
 {
   "name": "tighten-sdd-artifact-boundaries",
   "createdAt": "2026-10-15T07:32:47.545Z",
-  "description": "Tighten SDD artifact boundaries: remove change context, restrict implementation to plan checkboxes, require user review before specd validation, and make system and validation artifacts concrete and traceable.",
+  "description": "Make SDD artifacts concise and scope design by independent decisions, with involved or delegated participation, coordinator/executor/manager/arbiter roles, fresh author contexts, staged subsystem design, and revision-specific review before validation.",
   "schema": {
     "name": "sdd",
     "version": 1
@@ -20,7 +20,7 @@
           "key": "proposal",
           "filename": "proposal.md",
           "state": "pending-review",
-          "validatedHash": "sha256:2345bea38c95d2291060d8eaef0e9d574b0cca8f458f3159ddfed87d2f9b79ed"
+          "validatedHash": "sha256:0e8fb874eb4236a9f2af0d4ebcce69093c1c2cb01889b09e8947f3c6c4c73d22"
         }
       ]
     },
@@ -30,13 +30,13 @@
       "requires": [
         "proposal"
       ],
-      "state": "pending-review",
+      "state": "drifted-pending-review",
       "files": [
         {
           "key": "default:000-sdd-process",
           "filename": "deltas/default/000-sdd-process/requirements.md.delta.yaml",
-          "state": "pending-review",
-          "validatedHash": "sha256:8d377307a93a19482f3f37a404e10d3d5ef6d12a8a31c2afc9fff1f32702e215"
+          "state": "drifted-pending-review",
+          "validatedHash": "sha256:32c93cc7b3cdd41e79f73cd8a76d3e3682ec8306a234d6f75c01aaf2f1446d11"
         }
       ]
     },
@@ -46,13 +46,13 @@
       "requires": [
         "requirements"
       ],
-      "state": "pending-review",
+      "state": "drifted-pending-review",
       "files": [
         {
           "key": "default:000-sdd-process",
           "filename": "deltas/default/000-sdd-process/system.md.delta.yaml",
-          "state": "pending-review",
-          "validatedHash": "sha256:b228c9916fe1a6898823c691bad5633c7a0a9ad08ed0f2063605c324167e8539"
+          "state": "drifted-pending-review",
+          "validatedHash": "sha256:a5504a2289dbb6b16ce783e89302589866d9a684012c1812236e1ee49b32fd3f"
         }
       ]
     },
@@ -69,7 +69,7 @@
           "key": "default:000-sdd-process",
           "filename": "deltas/default/000-sdd-process/validate.md.delta.yaml",
           "state": "pending-review",
-          "validatedHash": "sha256:625e44da44f11bd7bc1f3dad47a6f748ca1b5d58f2bb3fc646d4d8e461ca21a9"
+          "validatedHash": "sha256:18cb69be55d7c53672bdb80385d13030c0e353d4b5ff7f99aad5dc917370d075"
         }
       ]
     },
@@ -80,13 +80,13 @@
         "requirements",
         "system"
       ],
-      "state": "pending-review",
+      "state": "drifted-pending-review",
       "files": [
         {
           "key": "default:000-sdd-process",
           "filename": "deltas/default/000-sdd-process/adrs.md.delta.yaml",
-          "state": "pending-review",
-          "validatedHash": "__skipped__"
+          "state": "drifted-pending-review",
+          "validatedHash": "sha256:e8eade287c66d2fd6f43ed313916528301fbd7965493c7a169123a12ecde9f47"
         }
       ]
     },
@@ -104,7 +104,7 @@
           "key": "plan",
           "filename": "plan.md",
           "state": "pending-review",
-          "validatedHash": "sha256:c847ad8b463e72f3a8068c5e468616c9b5a4aedbae92a2981094b22d7528266e"
+          "validatedHash": "sha256:393b01f2be9cf1fdd626f73e0fa90e1cf5337f364b60bd84afc140b77825df53"
         }
       ]
     }
@@ -288,6 +288,94 @@
       "by": {
         "name": "Yury Shvedov",
         "email": "y.shvedov@1440.space"
+      },
+      "from": "implementing",
+      "to": "designing"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-22T20:12:49.123Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "designing",
+      "to": "designing"
+    },
+    {
+      "type": "description-updated",
+      "at": "2026-10-22T20:26:30.050Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "description": "Make SDD artifacts concise and proportion design work to decision scope: integrate proposal allocation, executor/manager/arbiter review, fresh-session handoff, and staged subsystem architecture while preserving artifact ownership and content review before structural validation."
+    },
+    {
+      "type": "description-updated",
+      "at": "2026-10-22T21:21:51.217Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "description": "Make SDD artifacts concise and scope design by independent decisions, with involved or delegated participation, coordinator/executor/manager/arbiter roles, fresh author contexts, staged subsystem design, and revision-specific review before validation."
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-22T21:35:21.770Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "designing",
+      "to": "ready"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-23T07:11:46.877Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "y.shvedov@1440.space"
+      },
+      "from": "ready",
+      "to": "implementing"
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-10-23T17:32:06.850Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "cause": "artifact-drift",
+      "message": "Invalidated because validated artifacts drifted: requirements [default:000-sdd-process]; system [default:000-sdd-process]; adrs [default:000-sdd-process]",
+      "affectedArtifacts": [
+        {
+          "type": "requirements",
+          "files": [
+            "default:000-sdd-process"
+          ]
+        },
+        {
+          "type": "system",
+          "files": [
+            "default:000-sdd-process"
+          ]
+        },
+        {
+          "type": "adrs",
+          "files": [
+            "default:000-sdd-process"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-23T17:32:06.850Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
       },
       "from": "implementing",
       "to": "designing"

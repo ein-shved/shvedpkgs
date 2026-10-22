@@ -1,6 +1,113 @@
-- op: no-op
-  description: >
-    Existing requirements remain applicable. REQ-001 makes the SDD process
-    rules authoritative, including artifact responsibilities and minimum
-    useful ceremony. This change corrects schema guidance and workflow;
-    it does not introduce new project or user needs.
+- op: modified
+  selector:
+    type: section
+    matches: '^REQ-003:'
+  content: |
+    ## REQ-003: Developers can find current SDD process rules
+
+    Developers must be able to find a complete human-readable definition of
+    the SDD artifact model: accepted formats, terminology, responsibilities,
+    content boundaries, dependencies, and validation semantics.
+
+    The definition is independent of the tools and workflow used to produce
+    artifacts. Changes to artifact contracts update that definition and its
+    translation; changes only to tooling, coordination, or lifecycle execution
+    update their own instructions while preserving the artifact contracts.
+
+    ### Scenario: Developer finds the artifact model
+
+    - WHEN a developer needs to understand an SDD artifact
+    - THEN the repository's SDD materials lead to the human-readable artifact rules
+    - AND those rules explain its content, format, responsibility, dependencies, and useful examples independently of production tooling
+
+    ### Scenario: Artifact contract changes remain aligned
+
+    - WHEN an accepted change modifies an artifact's format, terminology, responsibility, or content contract
+    - THEN the human-readable artifact rules and their translation are updated
+    - AND authoring instructions remain consistent with the changed contract
+
+    ### Scenario: Workflow changes preserve the artifact model
+
+    - WHEN a change modifies only tooling, coordination, or lifecycle execution
+    - THEN the corresponding operational instructions are updated
+    - AND the human-readable artifact rules retain their existing content contracts
+
+- op: added
+  position:
+    parent:
+      type: section
+      matches: '^Requirements$'
+    after:
+      type: section
+      matches: '^REQ-007:'
+  content: |
+    ## REQ-008: Design context follows decision scope
+
+    Design work must be divided into reviewable scopes proportionate to the
+    independent decisions involved. Each scope must receive the relevant
+    current knowledge and leave enough agreed state for work to continue.
+
+    ### Scenario: Small changes preserve continuity
+
+    - WHEN a change needs only a narrow set of design decisions
+    - THEN the same participants may carry it from proposal through plan
+    - AND they still review each artifact against its own responsibility
+
+    ### Scenario: Broad design receives fresh attention
+
+    - WHEN a change requires several independent architectural decisions
+    - THEN successive design scopes receive fresh participants and context
+    - AND their inputs include the agreed results needed for that scope
+    - AND the user can identify the next scope when the current one closes
+
+    ### Scenario: System design is decomposed coherently
+
+    - WHEN a large design contains several subsystems
+    - THEN their responsibilities, relationships, and interactions are agreed
+      before detailed subsystem design
+    - AND each subsystem receives focused design and review
+    - AND affected earlier contracts are reconsidered when a subsystem exposes
+      a contradiction
+
+    ### Scenario: Continuation does not require discussion history
+
+    - WHEN new participants resume a design scope
+    - THEN they can recover its inputs, unresolved decisions, and next action
+      from current artifacts and concise continuation information
+    - AND rejected drafts and the full earlier discussion are loaded only when
+      needed to resolve a specific question
+
+- op: added
+  position:
+    parent:
+      type: section
+      matches: '^Requirements$'
+    after:
+      type: section
+      matches: '^REQ-008:'
+  content: |
+    ## REQ-009: Users can delegate design participation
+
+    Users must be offered a choice of participation during proposal and be
+    able to delegate routine design decisions and artifact acceptance within
+    their stated goal and constraints.
+
+    ### Scenario: Participation is an informed choice
+
+    - WHEN design begins with a proposal
+    - THEN the user is told they can participate in design or delegate it
+    - AND the selected mode governs subsequent design interactions
+
+    ### Scenario: Delegated design progresses without routine user review
+
+    - WHEN the user chooses delegated design
+    - THEN design can proceed through the implementation plan without requiring
+      the user to decide every design issue or review every intermediate artifact
+    - AND decisions remain within the user's stated goal and constraints
+
+    ### Scenario: Delegating a large change preserves design quality
+
+    - WHEN the user delegates a change with several architectural decisions
+    - THEN scope-appropriate design and independent review still occur
+    - AND the user receives a concise account of the resulting design and
+      unresolved matters that require their participation

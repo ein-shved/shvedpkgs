@@ -1,0 +1,78 @@
+- op: added
+  content: |
+    # Architecture Decision Records: SDD Process
+
+    ## ADR-0001: Coordinate design scopes through agent skills
+
+    Status: Proposed
+
+    ### Context
+
+    The schema already delivers artifact authoring rules, but fresh primary
+    sessions, manager assignments, and independent review span several artifact
+    scopes. The existing clients expose different delegation/session controls.
+    Keeping the whole workflow in the executor's conversation accumulates context.
+
+    ### Decision
+
+    Use thin SpecD entry skills with shared manager and arbiter resources.
+    Deliver artifact authoring instructions through the schema, preserving the
+    tool-independent artifact semantics owned by [rules.md](rules.md). Keep
+    lifecycle truth in SpecD and concise continuation notes in change-local
+    `.context`. Choose group lifetime by
+    decision scope and allow manual creation of a fresh primary session.
+
+    Current contracts are owned by [Design Group Interfaces](system.md#design-group-interfaces),
+    [Group Lifetimes and Handoff](system.md#group-lifetimes-and-handoff), and
+    [Staged System Design](system.md#staged-system-design).
+
+    ### Rationale
+
+    Schema-only coordination cannot itself create a primary client session or
+    limit an agent's tools. A new CLI artifact for every subsystem would couple
+    the design partition to persistent lifecycle identifiers. A mandatory
+    client controller would make the process depend on additional unimplemented
+    infrastructure. Skills can express role assignments and client-specific
+    actions while the existing artifact graph remains stable.
+
+    ### Consequences
+
+    Skill payloads now change alongside schema and process guidance. Existing
+    recursive packaging delivers the new resources. Semantic review and
+    fresh-session boundaries remain agent/client behavior, so behavioral probes
+    and explicit reporting of unsupported actions are required; structural
+    validation alone does not establish them.
+
+    ## ADR-0002: Separate participation from design complexity
+
+    Status: Proposed
+
+    ### Context
+
+    Users differ in how much design discussion they want. Complex work still
+    contains independent decisions even when its user delegates that discussion.
+
+    ### Decision
+
+    Offer involved or delegated participation during proposal. In delegated mode
+    the main session coordinates scoped author groups and accepts design
+    revisions on the user's behalf. Complexity continues to select group
+    lifetimes and subsystem decomposition.
+
+    Current contracts are owned by [Participation Modes](system.md#participation-modes),
+    [Group Lifetimes and Handoff](system.md#group-lifetimes-and-handoff), and
+    [Review Before Structural Validation](system.md#review-before-structural-validation).
+
+    ### Rationale
+
+    A persistent coordinator can carry the user's intent between fresh author
+    groups while those groups receive only their relevant design scope.
+    Separating participation from complexity preserves focused architecture work
+    and lets the user delegate routine decisions and intermediate acceptance.
+
+    ### Consequences
+
+    Skills need a coordinator protocol and explicit decision-owner tracking.
+    Clients must support independent worker contexts for autonomous group
+    launches. Design acceptance can be delegated; human-only CLI gates continue
+    to require the real user.

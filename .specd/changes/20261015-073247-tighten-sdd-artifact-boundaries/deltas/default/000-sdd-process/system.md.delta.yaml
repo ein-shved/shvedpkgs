@@ -21,7 +21,7 @@
     specs/
     ```
 
-    Traceability: [REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state).
+    Owner: [REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state).
 
 - op: modified
   selector:
@@ -35,43 +35,35 @@
     - discarded changes: `.specd/discarded/`
     - archive: `.specd/archive/`
 
-    Traceability: [REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state).
+    Owner: [REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state).
+
+    Runtime/generated SpecD graph and log files are not tracked as durable
+    artifacts.
+
+    Owner: [REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state).
 
 - op: modified
   selector:
     type: section
     matches: '^SpecD-Owned SDD Locations$'
   content: |
-    Steady-state SpecD specs under `specs/` are the machine-readable location for
-    requirements, system specification, validation, and optional ADR artifacts
-    managed by SpecD.
+    Steady-state specs under `specs/` own requirements, system, validation,
+    and optional ADRs. Changes under `.specd/` hold proposal, plan, and
+    spec-scoped deltas. Supporting memory is described in
+    [Context Resources and Delivery](#context-resources-and-delivery).
 
-    Active and archived SpecD changes under `.specd/` hold change-scoped proposal
-    and plan artifacts. Spec-scoped `adrs.md` artifacts hold significant
-    architecture decisions for their owning specs.
+    Owners: [REQ-005](requirements.md#req-005-normative-sdd-artifacts-describe-the-current-architecture), [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts).
 
-    Traceability: [REQ-005](requirements.md#req-005-normative-sdd-artifacts-describe-the-current-architecture),
-    [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts).
+    English [artifact rules](rules.md) define tool-independent artifact semantics,
+    content responsibilities, formats, and dependencies;
+    [rules.ru.md](rules.ru.md) is their full Russian translation.
+    The schema and skills carry instructions for producing, reviewing, and
+    coordinating artifacts; SpecD supplies machine-readable workflow state.
+    `.specd/context.md` supplies repository-specific agent guidance. Operational
+    changes are maintained in those resources; artifact-contract changes update
+    the artifact rules and their translation.
 
-    The human-readable SDD process rules live at:
-
-    ```text
-    specs/000-sdd-process/rules.md
-    ```
-
-    The Russian translation of the same process rules lives at:
-
-    ```text
-    specs/000-sdd-process/rules.ru.md
-    ```
-
-    English process rules define artifact semantics and workflow. The local
-    schema operationalizes those rules through instructions and templates.
-    `.specd/context.md` supplies aligned project guidance to agents. Accepted
-    process changes are made in English and translated in full into Russian.
-
-    Traceability: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative),
-    [REQ-003](requirements.md#req-003-developers-can-find-current-sdd-process-rules).
+    Owners: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative), [REQ-003](requirements.md#req-003-developers-can-find-current-sdd-process-rules).
 
 - op: modified
   selector:
@@ -87,7 +79,7 @@
     while preserving the English process document as authoritative when the two
     versions diverge.
 
-    Traceability: [REQ-003](requirements.md#req-003-developers-can-find-current-sdd-process-rules).
+    Owner: [REQ-003](requirements.md#req-003-developers-can-find-current-sdd-process-rules).
 
 - op: modified
   selector:
@@ -110,239 +102,381 @@
     This ordering supports readable generated views of the SDD model without
     making agents depend on arbitrary filesystem or glob order.
 
-    Traceability: [REQ-004](requirements.md#req-004-specd-owned-sdd-fragments-reconstruct-readable-documents).
+    Owner: [REQ-004](requirements.md#req-004-specd-owned-sdd-fragments-reconstruct-readable-documents).
 
 - op: modified
   selector:
     type: section
     matches: '^SDD Schema$'
   content: |
-    `schemas/sdd/schema.yaml` defines the artifact dependency flow:
+    `schemas/sdd/schema.yaml` defines the dependency graph:
 
     ```text
     proposal -> requirements -> system -> validate -> plan
                                 \-> adrs (optional)
     ```
 
-    `validate` and optional `adrs` both depend on requirements and system;
-    plan depends on requirements, system, and validate. Requirements, system,
-    validate, and adrs are spec-scoped; proposal and plan are change-scoped.
-    Templates under `schemas/sdd/templates/` provide their document scaffolding.
+    Validate and ADRs depend on requirements and system; plan depends on
+    requirements, system, and validate. Proposal and plan are change-scoped;
+    the other artifacts are spec-scoped. Only plan has tasks. Templates under
+    `schemas/sdd/templates/` supply the matching scaffolds. The six artifact
+    identifiers and their scopes remain stable.
 
-    The schema has no change-scoped Context artifact or template. SpecD project
-    context compilation, `.specd/context.md` project instructions, and
-    `.specd-exploration.md` discovery memory remain separate from this artifact
-    set.
+    Owners: [REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state), [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts).
 
-    Traceability: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative),
-    [REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state),
-    [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts).
+    ### Instruction Delivery
 
-    ### Artifact Boundary Instructions
+    Each schema artifact entry supplies `instruction`, `template`,
+    `deltaInstruction`, and ordered `rules.pre`/`rules.post`. The CLI exposes
+    `rulesPre -> instruction/template/delta -> rulesPost` through
+    `changes artifact-instruction`. Artifact responsibilities are defined in
+    [Artifact Model](rules.md#3-artifact-model); schema instructions operationalize
+    them. Project guidance in `.specd/context.md` points to these owners.
 
-    In `schemas/sdd/schema.yaml`, each entry under `artifacts` stores authoring
-    guidance in `instruction`, delta guidance in `deltaInstruction` where
-    applicable, and composition rules in `rules.pre` and `rules.post`. Its
-    `template` field names the document scaffold relative to `schemas/sdd/`.
-    The CLI exposes these as `instruction`, `delta` guidance, `rulesPre`,
-    `rulesPost`, and `template` through `changes artifact-instruction`.
+    Schema post-rules order composition checks, boundary self-review, then
+    content review by the [design decision owner](#participation-modes).
+    Designing hook guidance carries the same review constraint
+    into dependency repairs. The manager applies the delivered rules to its
+    assignment; the executor and arbiter receive the applicable subset.
 
-    The named artifact's instruction and template carry the following content
-    boundaries:
+    Owners: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative), [REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state).
 
-    - `proposal` / `templates/proposal.md` explains why the change exists:
-      motivation, current problems, proposed direction, scope, impact, and
-      relevant technical context. It identifies affected specs, including
-      those whose requirements remain unchanged.
-      References: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative),
-      [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts).
-    - `requirements` / `templates/requirements.md` describes needs,
-      obligations, useful rationale, and requirement-owned acceptance
-      scenarios. An existing requirement can stay
-      unchanged when its realization is defective: the attached spec then uses
-      a `no-op` requirements delta. Proposal and requirements guidance allow
-      this case without inventing a new need for every schema or design fix.
-      References: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative),
-      [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts).
-    - `system` / `templates/system.md` explains how components, relationships,
-      interactions, and mechanisms realize requirements. Concepts, interfaces, naming
-      conventions, invariants, and constraints support that explanation.
-      Restated obligations or abstract guarantees alone are insufficient.
-      Significant choice rationale belongs in ADRs; implementation sequencing
-      belongs in the plan.
-      References: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative),
-      [REQ-005](requirements.md#req-005-normative-sdd-artifacts-describe-the-current-architecture).
-    - `validate` / `templates/validate.md` describes concrete checks. Each
-      check's `Covers` identifies a requirement or architecture point,
-      `Method` specifies the action to
-      perform, and `Evidence` gives the expected result. `Notes` holds only
-      needed setup, prerequisites, or execution limits. Any coverage overview
-      lists references; the artifact contains no purpose or motivation prose.
-      Acceptance scenarios remain in requirements.
-      Reference: [REQ-007](requirements.md#req-007-validation-checks-remain-distinct-from-acceptance-scenarios).
-    - `plan` / `templates/plan.md` describes the concrete implementation
-      transition: approach, sequencing, assumptions, scope, validation strategy,
-      and top-level executable items with completion evidence. Durable system
-      design stays in system; progress edits follow
-      [Approved Plan During Implementation](#approved-plan-during-implementation).
-      References: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative),
-      [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts).
-    - `adrs` / `templates/adrs.md` records significant choices, alternatives,
-      rationale, and consequences as optional durable decision history. Current
-      needs and mechanisms stay in requirements and system respectively.
-      References: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative),
-      [REQ-005](requirements.md#req-005-normative-sdd-artifacts-describe-the-current-architecture).
+    ### Proposal and Classification
 
-    ### Intent Review Before Requirements
+    The proposal instruction and template define this reading order:
+    category with a short reason and participation mode; a very short problem
+    statement; a numbered topic-to-artifact table; a matching numbered
+    explanation with at most two
+    sentences per item. Affected spec IDs and a context link fit in a short
+    footer. Material unresolved questions are resolved during proposal review.
 
-    The requirements artifact has a `review-artifact-intent` rule in
-    `rules.pre`. Through `rulesPre`, it instructs the agent to read the proposal
-    against existing requirements and authoritative process rules, then present
-    a minimal allocation in chat before drafting the requirements artifact.
+    The author estimates independent decisions before drafting and selects
+    `small change` or `large architectural development`. Zero or one new
+    requirement usually suggests small scope; several suggest architecture.
+    This is an estimate, not a cutoff: one broad requirement may hide several
+    decisions. File count and final code size do not determine the category.
 
-    Each line contains only a two- or three-word topic and its destination:
-    `<topic> — <artifact>`. Use one line per relevant proposal point, allowing
-    multiple points to share a destination. An unchanged artifact can be marked
-    `<topic> — <artifact> (no-op)`. Include only relevant destinations; do not
-    expand the list into descriptions, rationale, quotations, or artifact drafts.
+    Examples: a new serialization derive macro, new protocol, protocol generator,
+    or statistics module usually needs architectural work. A bug fix, float
+    support within an established serialization model, a longer statistics window,
+    or generation of an already supported type usually fits a small change.
+    The reason records the actual decision scope rather than copying an example.
 
-    During intent review, after every user correction the agent redisplays the
-    entire corrected list in the same minimal format. An acknowledgement or a
-    description of edits does not replace that updated list. The exchange
-    repeats until the user agrees with the allocation; requirements are drafted
-    only after that agreement. Full requirements, architecture, and plan files
-    are not prepared in advance of it.
+    The numbered table owns intent allocation. Corrections keep existing item
+    numbers and redisplay the full corrected table during proposal review.
+    Requirements authoring consumes that allocation without a separate chat
+    checkpoint. If intent materially changes, revise the proposal through review.
+    Reclassify there if new decisions change the appropriate workflow.
 
-    This is one conversation checkpoint before requirements, not a new artifact
-    or a repeated gate before every downstream artifact. An allocation already
-    explicitly agreed during proposal review or an earlier exchange is reused
-    while it remains applicable. Only a material change to that allocation
-    needs renewed intent review. Approval of the allocation alone does not
-    approve subsequently drafted content for structural validation.
+    Owners: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative), [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts), [REQ-008](requirements.md#req-008-design-context-follows-decision-scope).
 
-    Traceability: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative),
-    [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts).
+    ### Participation Modes
 
-    ### Traceability References
+    Before assigning proposal authoring, the manager-loaded design procedure
+    in `_specd-shared/workflows/specd-design.md` offers "I want to participate
+    in design" (`involved`) or "I delegate design to the agent" (`delegated`),
+    explaining who will make decisions and accept artifacts.
+    Ask once unless the user already chose;
+    an explicit request to handle the design without involving them selects
+    delegated mode. Record `Participation: involved|delegated` in proposal and
+    keep its current pointer in `.context`. The user can change this choice.
 
-    System instructions and templates put an explicit requirement reference at
-    each architecture point's owning section, definition, or list item. A
-    section-level reference covers the whole section only when that section
-    describes one coherent point; independent points each carry their own
-    references.
+    | Mode | Design decision owner | Main session |
+    | --- | --- | --- |
+    | Involved | User | Executor discusses and authors the current scope. |
+    | Delegated | Coordinator acting within the user's goal and constraints | Coordinator launches and directs scoped author groups. |
 
-    References use resolvable Markdown links to the owning requirement heading,
-    such as `[REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative)`.
-    A validation check links to that requirement or to the relevant heading in
-    `system.md`; cross-spec references include the owning spec's relative path.
-    References identify the owner without copying its content.
+    This choice replaces the mandatory one-artifact/all-at-once question.
+    Explicit batching requests remain scheduling preferences within the chosen
+    participation mode. Batch generation alone does not delegate decisions.
+    Complexity classification continues to govern group lifetimes and system
+    decomposition in both modes.
 
-    Traceability: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative),
-    [REQ-005](requirements.md#req-005-normative-sdd-artifacts-describe-the-current-architecture),
-    [REQ-007](requirements.md#req-007-validation-checks-remain-distinct-from-acceptance-scenarios).
+    The coordinator's protocol lives in `_specd-shared/coordinator.md`. It
+    chooses among design alternatives, requests corrections, and reviews and
+    accepts concrete artifact revisions against the same shared criteria.
+    Scoped executors author them; separate arbiters perform independent review.
+    On entering delegated mode, the main agent takes the coordinator role and
+    hands off any unfinished scope, including an existing draft, to a separate
+    executor before accepting it. That executor independently reads the inputs
+    and takes author responsibility for the verified or revised content it
+    returns. Previously completed scopes stay closed when mode alone changes.
 
-    ### Artifact Boundary Self-Review
+    The coordinator resolves routine design questions within the supplied goal
+    and constraints and records durable decisions with their normative owners.
+    It returns to the real user for required information or authority it cannot
+    obtain, and gives a concise result and unresolved matters when design ends.
+    Content delegation applies to design acceptance; existing human-only SpecD
+    spec/signoff approvals remain real-user actions through their CLI gates.
 
-    Each artifact entry has a `boundary-self-review` rule in `rules.post`, after
-    its existing composition checks and before the human-review rule. The CLI
-    delivers it in `rulesPost`. Its instruction requires the agent to reread
-    the draft, including the merged result for a delta, and inspect new or
-    changed statements against that artifact's ownership and any already agreed
-    intent allocation before presenting it to the user.
+    Owners: [REQ-008](requirements.md#req-008-design-context-follows-decision-scope), [REQ-009](requirements.md#req-009-users-can-delegate-design-participation).
 
-    The rule contains questions specific to its artifact:
+    ### Artifact Sufficiency and Readability
 
-    - Proposal: does this explain the change's motivation, direction, and scope
-      without replacing the owning requirements or design?
-    - Requirements: what independent user or project need does each addition
-      express, and is it already covered by an existing requirement or the
-      authoritative process rules? Would it still make sense with a different
-      implementation? Patch constraints, defect descriptions, and proposed
-      fixes do not become requirements merely because the user mentioned them.
-      Unchanged needs can use a `no-op` delta.
-    - System: does each architecture point explain a concrete arrangement or
-      mechanism, identify where its contracts are defined, and reference the
-      owning requirement? Are transition steps and technical check procedures
-      left to plan and validate?
-    - Validate: does each check specify an action, an expected result, and a
-      requirement or architecture reference? Are acceptance conditions and
-      motivation left with their upstream owners?
-    - Plan: does this describe the implementation transition and completion
-      evidence without introducing new needs or significant system design?
-    - ADRs: does this record a significant choice and its rationale without
-      becoming the source of current requirements or system mechanisms?
+    The schema's artifact instructions, templates, and boundary post-rules apply
+    the [one-owner rule](rules.md#33-system-specification) to actual text:
 
-    Self-review identifies specific misplaced or unsupported passages and
-    corrects the draft before human review. A generic assertion of compliance
-    is insufficient. If a correction needs an upstream artifact change, the
-    agent surfaces that dependency instead of silently modifying approved
-    content. Revised content follows the existing human-review boundary.
+    | Artifact | Authoring and review mechanism |
+    | --- | --- |
+    | Requirements | Check existing needs first; keep the core body short and put nuance in scenarios; use no-op for unchanged needs. |
+    | System | State responsibilities, interfaces, interactions, mechanisms, and material conditions once; use tables for repeated entities or states and links for shared definitions. |
+    | Validate | Separate automated coverage from manual actions; retain command, owner, and expected evidence, with executable details owned by tests. |
+    | Plan | Describe executable work with code locations and links to architecture and completion checks. Schema instructions guide detail for reuse and migration. Keep transition checks here and preserve the approved-plan restriction below. |
+    | ADRs | Record significant choices and rationale while linking to current normative owners. |
 
-    The review is part of artifact authoring: it creates no separate report,
-    artifact section, or user confirmation step. User-facing updates mention
-    material corrections or unresolved issues rather than adding routine
-    self-assessment prose to the artifact. Like other composition rules, this
-    is an agent instruction; structural validation does not judge semantic
-    compliance.
+    A dismissed capability or absent obligation does not create a requirement or
+    prohibition. A genuine externally imposed negative constraint remains a need
+    with acceptance scenarios. Check the need and observable violation, not
+    whether the sentence contains a negation.
 
-    Traceability: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative),
-    [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts),
-    [REQ-007](requirements.md#req-007-validation-checks-remain-distinct-from-acceptance-scenarios).
+    An architecture passage is sufficient when its responsibility, interface,
+    interaction, and material behavior distinguish a conforming implementation.
+    Extra prose must resolve a concrete ambiguity. Common rules are defined once;
+    local sections record application and differences. Partial project coverage
+    is marked locally; missing information needed for this change is resolved.
+
+    On every correction, the executor replaces or removes the wrong statement
+    and dependent explanations, leaving a standalone description of the current
+    system. Do not preserve the rejected behavior as a contrast, counterclaim,
+    or newly invented prohibition. A negative statement needs an independent
+    basis in the current requirement or contract; its appearance in an earlier
+    mistake or discussion is not a basis. Correction history stays in chat or
+    relevant discovery notes.
+
+    Before presenting each revision, the executor rereads the whole affected
+    section and removes residual mistakes, contrasts to the rejected account,
+    contradictions, and repetition. The arbiter checks the same criteria at the
+    [defined launch points](#arbiter-launches). It can accept sufficient text;
+    a request to expand it names the incorrect implementation currently
+    permitted. No word or line quota applies beyond the proposal's per-item limit.
+
+    Owners: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative), [REQ-005](requirements.md#req-005-normative-sdd-artifacts-describe-the-current-architecture), [REQ-007](requirements.md#req-007-validation-checks-remain-distinct-from-acceptance-scenarios).
+
+    ### Traceability and Technical Evidence
+
+    System sections, definitions, or list items link to their owning requirement
+    heading. One link covers a coherent contract and its state table; independent
+    contracts have separate owner links. Cross-spec links include the relative
+    spec path and resolve to the actual heading.
+
+    Each validate check has Covers, Method, and Evidence; optional Notes contain
+    setup or execution limits. Automated entries name covered cases and the real
+    runner/test, keeping detailed assertions in executable code. Before reducing
+    a recipe to a reference, inspect that the runner executes and asserts those
+    cases. Fixture or snapshot presence alone is insufficient.
+
+    Manual entries retain concrete actions and expected results, including
+    conditional runtime obligations left uncovered by tests. Permanent validate
+    checks run without recovering change history; migration and before/after
+    comparisons belong in plan. Acceptance scenarios remain with requirements.
+
+    Owners: [REQ-005](requirements.md#req-005-normative-sdd-artifacts-describe-the-current-architecture), [REQ-007](requirements.md#req-007-validation-checks-remain-distinct-from-acceptance-scenarios).
+
+    ### Design Group Interfaces
+
+    The entry skill launches or resumes the manager and asks it for the current
+    assignment. Coordination instructions live in `_specd-shared/manager.md`;
+    the manager loads the invoked skill's detailed procedure from
+    `_specd-shared/workflows/<skill>.md`. Independent review instructions live
+    in `_specd-shared/arbiter.md`, relative to each installed skill tree.
+    The existing `_specd-shared/shared.md` remains a shared reference.
+
+    | Participant | Inputs and outputs |
+    | --- | --- |
+    | Executor, scoped author | Receives bounded work and shared criteria before authoring, discusses content with the decision owner, and reports the result to the manager. |
+    | Manager, separate context | Reads live CLI state and relevant rules; returns scope, exact sources, output path, constraints, completion conditions, and the arbiter assignment. |
+    | Arbiter, separate context | Independently reads the named sources and merged result; returns concrete findings about the specified revision; never edits artifacts. |
+    | Design decision owner | User or delegated coordinator; resolves design questions, requests changes, and accepts the current content revision. |
+
+    In involved mode, the executor starts manager and arbiter through the
+    client's supported agent tools. In delegated mode the main coordinator
+    launches the scoped executor, manager, and arbiter as distinct contexts.
+    Assignments pass the shared applicable criteria to the author before work
+    and to the reviewer. The arbiter reads sources directly;
+    the executor does not relay their full text. Within a review cycle, send a
+    revision pointer rather than repeating the entire assignment. Remarks use
+    `passage -> rule -> ambiguity or repetition -> minimal correction`.
+
+    The manager can request CLI operations from the executor; it does not
+    authorize arbitrary writes or enforce permissions. Conflicts with approved
+    inputs, material user intent, or a nonconverging review loop return to the
+    manager and design decision owner. The executor preserves the user's
+    intended meaning rather than silently undoing it to satisfy review.
+
+    Owners: [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts), [REQ-008](requirements.md#req-008-design-context-follows-decision-scope), [REQ-009](requirements.md#req-009-users-can-delegate-design-participation).
+
+    ### Arbiter Launches
+
+    For each artifact or agreed system-design subscope, launch a fresh arbiter
+    only at these points:
+
+    | Trigger | Review scope |
+    | --- | --- |
+    | First completed draft | Check the draft before presenting it to the design decision owner. |
+    | Design decision owner accepts current content | Perform the final check of that revision before structural validation or subscope closure. |
+    | Explicit user or delegated coordinator request | Check the requested current content, independently of approval. |
+
+    Consecutive decision-owner comments, including substantive changes and typo
+    fixes, are handled by the executor with self-review while executor and manager
+    remain available. They do not automatically launch an arbiter or require
+    the user to bundle comments. The manager applies these triggers rather
+    than classifying each comment as a reason for another review.
+
+    Within one launched review, keep the same arbiter for corrections to its
+    findings. Its assignment identifies the current result, changes since the
+    prior checked revision, relevant user decisions, and applicable criteria.
+    Close it on success or escalation. An explicit review request alone does
+    not approve content. Final success and owner approval must cover the same
+    revision; changes resulting from the final check are shown to that owner
+    before structural validation or subscope closure.
+
+    Owners: [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts), [REQ-008](requirements.md#req-008-design-context-follows-decision-scope), [REQ-009](requirements.md#req-009-users-can-delegate-design-participation).
+
+    ### Group Lifetimes and Handoff
+
+    The manager reads the category from proposal and applies this scope policy:
+
+    | Category | Group lifetime |
+    | --- | --- |
+    | Small change | One executor/manager group may cover proposal through plan; independent artifact reviews still occur. |
+    | Large architectural development | A fresh executor/manager group handles each artifact; system additionally uses the scopes below. |
+
+    The category determines scheduling; each invocation resumes that policy
+    without another generation-mode questionnaire.
+
+    Keep executor and manager through the discussion of their current scope.
+    After decision-owner approval and successful final arbiter review of that
+    revision, perform the applicable structural validation and hooks, record
+    continuation in change-local `.context`, and apply the category's group
+    lifetime policy. During review, present content and substantive issues;
+    do not repeatedly ask whether to proceed.
+
+    In involved mode, at each completed large-design scope the manager gives the
+    executor a strong recommendation to deliver: start a new primary session
+    for the named next scope, using the appropriate `specd-design` invocation
+    and context pointer.
+    It states completion and continuation without adding a second permission
+    question. Manual session creation by the user is sufficient. If a client
+    cannot start a fresh primary session, report that boundary and leave resumable
+    state; do not describe a role switch or compaction as a fresh session.
+    Explicit user-directed batching is recorded as an exception, preserving
+    content-review and validation ordering.
+
+    In delegated mode the coordinator persists in the main session and launches
+    the next large-design group with a fresh executor and manager, followed by
+    independent arbiters at the defined triggers. These workers receive source
+    pointers and scoped inputs without inherited conversation; the coordinator
+    retains only the intent and concise progress needed to direct them. The
+    author's context is replaced while the coordinating session stays alive.
+    Small delegated changes may retain one author group through plan.
+
+    Run one artifact/subsystem group at a time and schedule its roles within the
+    client's available agent slots. If the client cannot supply the required
+    independent contexts, preserve the continuation and report that limitation;
+    role relabeling does not provide context isolation.
+
+    The continuation note contains current/next scope, input links and content
+    revisions, participation mode and decision owner, review/approval status,
+    active decisions and unresolved questions.
+    Stop active workers before handing off. New groups check live state and
+    source freshness and load only relevant artifacts and context sections.
+    `.context` records the decision owner's acceptance of a specific revision;
+    its presence alone grants no approval or normative authority.
+
+    Owners: [REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state), [REQ-008](requirements.md#req-008-design-context-follows-decision-scope), [REQ-009](requirements.md#req-009-users-can-delegate-design-participation).
+
+    ### Staged System Design
+
+    For a large change, the first system group authors the overview: key actors,
+    subsystem responsibilities, external and inter-subsystem interfaces,
+    relationships, main interaction flows, and requirement links. It prepares
+    a section skeleton for each subsystem with its known inputs and open design
+    questions, avoiding speculative detailed solutions.
+
+    The manager records an ordered list of subsystem scopes in `.context`,
+    including overview, subsystem review states, and final integration. This
+    refines the single `system` artifact; it adds no artifact IDs or fake CLI
+    lifecycle states. Incomplete sections are explicitly pending and cannot be
+    used as complete downstream contracts.
+
+    Each subsystem receives a fresh group focused on its section, the overview,
+    and relevant requirements and interfaces. It may revise earlier architecture
+    when necessary, surfacing the affected approved contracts for decision-owner
+    review and reconsidering dependent scopes. It does not silently reopen
+    unrelated areas.
+
+    Overview and subsystem approval cover the identified content revisions;
+    structural validation of `system` waits until all affected subsystem sections
+    are complete and the integrated revision is reviewed. The final subsystem
+    group may perform that integration review and closure; a separate integration
+    group is required only if integration needs its own design decisions.
+    Validate and plan consume the complete system artifact.
+
+    Owners: [REQ-005](requirements.md#req-005-normative-sdd-artifacts-describe-the-current-architecture), [REQ-008](requirements.md#req-008-design-context-follows-decision-scope).
 
     ### Review Before Structural Validation
 
-    Every authored artifact has a schema `rules.post` review rule, including
-    proposal, plan, optional ADRs, and spec deltas or `no-op` decisions. The
-    CLI returns it in `rulesPost`, after artifact-specific composition checks
-    and boundary self-review. The design skill processes that block before its
-    validation step.
-    Designing hook guidance applies the same rule to validation repairs.
+    After author self-review and the first-draft arbiter check, the executor
+    presents the current content to the design decision owner. That owner's
+    approval triggers the final check under [Arbiter Launches](#arbiter-launches).
+    Both approval and final success must cover the revision passed to
+    `specd changes validate`,
+    including optional artifacts and no-op deltas. Intent allocation,
+    generation-mode selection, and arbiter success do not approve artifact
+    content. Delegated mode selection authorizes the coordinator to make these
+    decisions but does not itself approve any draft. A delta is reviewed in
+    merged form. The coordinator records its acceptance of the concrete
+    revision; this is design-content review, not a human-only CLI approval.
 
-    The rule instructs the agent to present the current artifact for review
-    and stop before `specd changes validate`. User approval applies to that
-    artifact's current content. A revision request or selection of a generation
-    mode does not grant approval. For spec deltas, review includes the merged
-    artifact; a `no-op` refers to the unchanged base artifact.
+    If validation requires changed content, show its diff and return it to review
+    by the current decision owner before revalidation. Do not silently edit or
+    validate unapproved upstream content to repair dependencies. Reuse approval
+    while content is unchanged. Whole-batch drafting still requires acceptance
+    of each artifact by its decision owner before structural validation;
+    technical inspections may run earlier.
 
-    After explicit approval, the agent can structurally validate the reviewed
-    content. If validation requires content changes, including upstream
-    repairs, the agent presents the diff and obtains approval of the revised
-    content before validating it. An existing approval remains usable while
-    its reviewed content is unchanged; dependency state changes alone do not
-    require repeating the same content review. No unapproved upstream artifact
-    is silently validated to repair dependency state.
+    These are schema and manager instructions. SpecD structural validation does
+    not assess semantic quality or create a new content-approval state.
 
-    This control is an agent instruction in the local schema. It adds no CLI
-    approval state or separate approval document. Tests and technical checks
-    described by `validate.md` remain distinct from this structural-validation
-    review gate.
-
-    Traceability: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative),
-    [REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state),
-    [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts).
+    Owners: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative), [REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state), [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts), [REQ-009](requirements.md#req-009-users-can-delegate-design-participation).
 
     ### Approved Plan During Implementation
 
-    The implementing pre-hook supplies the plan editing rule before coding.
-    Plan instructions and template guidance carry the same boundary: during
-    implementation, plan edits are limited to marking completed work from
-    `[ ]` to `[x]`. The agent adds no prose, steps, execution reports, or
-    embellishments, and neither asks permission nor proactively proposes to
-    append to the plan. Temporary execution tracking and chat progress reports
-    remain outside the approved plan.
+    Schema plan instructions and implementing skill guidance allow only
+    `[ ] -> [x]` marks for completed work. Add no prose or steps, and do not ask or
+    offer to append them. Tracking and evidence stay outside the approved plan.
 
-    The plan's `preHashCleanup` normalizes completion marks before hashing, so
-    valid progress marks preserve the approved artifact hash. This supports
-    drift detection for other edits; it is not a filesystem write restriction.
+    An actual design error is surfaced to the design decision owner for explicit
+    permission to return to design and correct the earliest affected artifact.
+    Routine implementation
+    choices remain within implementation. Verification and archive instructions
+    preserve this rule. Plan `preHashCleanup` normalizes checkbox completion
+    before hashing, preserving progress hashes while exposing prose drift.
 
-    An actual design error is surfaced to the user. The agent waits for
-    explicit permission before returning to designing and corrects the earliest
-    affected artifact there. Routine implementation choices do not trigger
-    design revisions. Verifying and archiving hook guidance respects the same
-    boundary when design corrections are needed.
+    Owners: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative), [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts), [REQ-009](requirements.md#req-009-users-can-delegate-design-participation).
 
-    Traceability: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative),
-    [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts).
+    ### Context Resources and Delivery
+
+    Change-local `.context` stores supporting evidence and concise continuation
+    notes outside the artifact DAG. Discovery history stays in
+    `.specd-exploration.md`; persistent project instructions stay in
+    `.specd/context.md`. None replaces normative artifacts. The removed
+    change-scoped Context artifact and its template remain absent.
+
+    Before glob discovery, every entry skill checks referenced exact paths,
+    resolving relative bases and known values such as `changePath`. This also
+    applies before looking up shared notes. The manager retrieves specs through
+    the CLI and checks graph freshness before relevant graph queries.
+
+    Local Codex skills and the packaged Codex, OpenCode, and KiloCode skill trees
+    contain coordinator, manager, and arbiter resources plus matching entry
+    instructions.
+    Existing package recursion delivers those resources; manifests preserve each
+    client's destination and invocation syntax. Client-specific instructions
+    describe supported delegation and manual fresh-session fallback without
+    claiming unimplemented session-control capabilities.
+
+    Owners: [REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state), [REQ-005](requirements.md#req-005-normative-sdd-artifacts-describe-the-current-architecture), [REQ-008](requirements.md#req-008-design-context-follows-decision-scope).
 
 - op: modified
   selector:
@@ -366,28 +500,9 @@
     Durable knowledge discovered in them must move to the owning `requirements.md`,
     `system.md`, `validate.md`, or `adrs.md` artifact.
 
-    Traceability: [REQ-005](requirements.md#req-005-normative-sdd-artifacts-describe-the-current-architecture).
+    Owner: [REQ-005](requirements.md#req-005-normative-sdd-artifacts-describe-the-current-architecture).
 
-- op: modified
+- op: removed
   selector:
     type: section
     matches: '^Constraints$'
-  content: |
-    - `specs/000-sdd-process/rules.md` remains the authoritative English SDD
-      process definition.
-      Reference: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative).
-    - `specs/000-sdd-process/rules.ru.md` is the Russian translation and must
-      stay aligned with the English process definition.
-      Reference: [REQ-003](requirements.md#req-003-developers-can-find-current-sdd-process-rules).
-    - SpecD artifacts are allowed to provide machine-readable tracking and context
-      without silently replacing the SDD process.
-      Reference: [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative).
-    - Runtime/generated SpecD graph and log files are not tracked as durable
-      artifacts.
-      Reference: [REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state).
-    - Temporary manual notes must not become parallel normative sources for current
-      requirements, system contracts, validation expectations, or ADR decisions.
-      Reference: [REQ-005](requirements.md#req-005-normative-sdd-artifacts-describe-the-current-architecture).
-    - Reconstructed SDD document views must follow deterministic numeric fragment
-      order.
-      Reference: [REQ-004](requirements.md#req-004-specd-owned-sdd-fragments-reconstruct-readable-documents).

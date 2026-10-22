@@ -5,6 +5,10 @@
      delta. Patch constraints, defect descriptions, and proposed fixes do not
      become requirements merely because the user mentioned them. -->
 
+<!-- Consume the accepted proposal's numbered allocation without another intent
+     checkpoint. An absent obligation or dismissed capability creates no need.
+     Genuine negative constraints retain an observable violation and scenarios. -->
+
 ## Requirement: {{first requirement}}
 
 <!-- Describe the need or obligation. Keep implementation details out unless

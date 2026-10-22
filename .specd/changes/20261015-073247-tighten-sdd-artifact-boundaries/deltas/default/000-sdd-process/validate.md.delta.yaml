@@ -1,195 +1,268 @@
-- op: modified
+- op: removed
   selector:
     type: section
     matches: '^Artifact Status$'
-  rename: Technical Checks
+
+- op: added
+  position:
+    parent:
+      type: section
+      matches: '^Validation: SDD Process$'
   content: |
-    ### Check: Schema and project discovery
+    ## Automated Checks
 
-    - Covers: [SpecD Project
-      Configuration](system.md#specd-project-configuration), [SDD
-      Schema](system.md#sdd-schema),
-      [REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state).
-    - Method: Run `specd schema validate --format text`, `specd schema show
-      --format toon`, and `specd project status --format toon`. Inspect the
-      configured schema's template paths and their files.
-    - Evidence: Schema validation succeeds; the project selects
-      `./schemas/sdd/schema.yaml`; the artifact set is exactly `proposal`,
-      `requirements`, `system`, `validate`, `adrs`, and `plan`. Scopes and
-      dependencies match SDD Schema; only `adrs` is optional and only `plan` has
-      tasks. Every referenced template exists; there is no change Context
-      definition or template.
+    ### Check: Shipped workflow resources
 
-    ### Check: Delivered instructions and rule order
+    - Covers: [Context Resources and Delivery](system.md#context-resources-and-delivery),
+      [SDD Schema](system.md#sdd-schema).
+    - Method: Run `nix build --no-link .#specd-bootstrap.tests.vm`; review the
+      exercised cases in [specd-bootstrap.nix](../../tests/pkgs/specd-bootstrap.nix).
+    - Evidence: Fresh and updated projects receive the six schema artifacts,
+      templates, entry skills, and shared coordinator/manager/arbiter resources
+      for each supported agent, retaining client syntax and configuration. The installed
+      schema matches the source tree.
+    - Notes: This checks resource delivery; agent behavior is checked below.
 
-    - Covers: [Artifact Boundary
-      Instructions](system.md#artifact-boundary-instructions), [Artifact
-      Boundary Self-Review](system.md#artifact-boundary-self-review), [Review
-      Before Structural
-      Validation](system.md#review-before-structural-validation).
-    - Method: For an existing design change, run `specd changes
-      artifact-instruction <change> <artifact> --format toon` for each of the
-      six artifact IDs. Read the expanded instructions, templates, `rulesPre`,
-      and `rulesPost`. Run `specd changes hook-instruction <change> designing
-      --phase pre --format text` and inspect its repair guidance.
-    - Evidence: Each artifact receives its documented content boundaries and
-      template. Requirements receives intent review in `rulesPre`. Every
-      artifact's `rulesPost` orders existing composition checks before boundary
-      self-review and human review last. Review guidance requires
-      current-content approval before structural validation, including optional
-      artifacts, no-op decisions, and upstream repairs. Designing guidance
-      retains that boundary when validation fails.
+- op: added
+  position:
+    parent:
+      type: section
+      matches: '^Validation: SDD Process$'
+    after:
+      type: section
+      matches: '^Automated Checks$'
+  content: |
+    ## Manual Checks
 
-    ### Check: Short intent and correction loop
+    Use a separate temporary Git project for each behavioral probe. Bootstrap
+    the final source payload with `nix run .#specd-bootstrap -- --target
+    <temporary-project> --agent <agent>`, initialize SpecD there, and verify
+    project/code/spec/change/lock paths stay inside that fixture. Invoke fixture
+    CLI calls with explicit working directory and configuration. A fixture-local
+    wrapper records actual CLI calls; the controller also records replies, file
+    revisions, and agent/session identities. Fresh reviewers receive source
+    pointers and staged user messages without inherited conversation or expected
+    answers. Simulated approvals cover fixture content only.
 
-    - Covers: [Intent Review Before
-      Requirements](system.md#intent-review-before-requirements).
-    - Method: In a fresh sub-agent session, supply a proposal to improve schema
-      guidance for needs already covered by the fixture's requirements. Request
-      requirements without previously agreeing an allocation. Inspect the first
-      reply and file/tool activity. Correct one destination, inspect the next
-      reply, then agree the corrected allocation and request continuation.
-    - Evidence: Before drafting, the agent shows only relevant `<two- or
-      three-word topic> — <artifact>` lines. Every correction produces the
-      entire corrected list in that format. Requirements and downstream artifact
-      files are absent until agreement. Already covered needs can produce a
-      `no-op` requirements delta. Continuation reuses the agreed allocation
-      without asking for it again.
-    - Notes: Use the commands below from the source checkout to bootstrap each
-      probe's own temporary Git project with its schema and Codex skills.
-      Before launching the sub-agent, run fixture-local `specd project status`
-      and inspect its `specd.yaml`. Verify its project root, code roots, specs,
-      change storage, and lock location are inside the temporary project.
-      Fixtures have their own changes and no workspace or storage references
-      to the source project. Use explicit fixture working directories and
-      `--config` paths for test CLI calls; each concurrent probe gets its own
-      project. Keep production change state outside the probes. Start the
-      sub-agent without the parent conversation or expected answers.
-      The controlling agent sends the staged user messages and inspects replies,
-      filesystem snapshots, and actual CLI calls recorded by a fixture-local
-      logging wrapper at each stop. Simulated approvals apply only to fixture
-      content. Keep assertions in the controller; schema text inspection alone
-      does not pass this probe.
+    ### Check: Schema instructions and lifecycle
 
-    ```sh
-    SDD_PROBE_ROOT="$(mktemp -d /tmp/specd-probe.XXXXXX)"
-    git init -q "$SDD_PROBE_ROOT"
-    nix run --no-write-lock-file .#specd-bootstrap -- \
-      --target "$SDD_PROBE_ROOT" --agent codex
-    ```
+    - Covers: [Instruction Delivery](system.md#instruction-delivery),
+      [SDD Schema](system.md#sdd-schema).
+    - Method: Run `specd schema validate --format text`, `specd project status
+      --format toon`, and `specd changes artifact-instruction <change>
+      <artifact-id> --format toon` for all six IDs in a disposable design change.
+      Inspect designing, implementing, verifying, and archiving hook instructions.
+    - Evidence: Artifact identities, scopes, dependencies, optionality, and plan
+      task/hash behavior match system. Delivered rules order composition,
+      self-review, and decision-owner review. No change Context artifact is
+      delivered;
+      project context compilation and discovery memory remain usable.
 
-    ### Check: Boundary self-review catches misplaced content
+    ### Check: Proposal classification and intent
 
-    - Covers: [Artifact Boundary
-      Self-Review](system.md#artifact-boundary-self-review), [Artifact Boundary
-      Instructions](system.md#artifact-boundary-instructions).
-    - Method: Supply each draft fragment below to a fresh sub-agent in the
-      relevant design step and ask it to finish authoring the artifact.
-      Inspect the artifact it presents for review and its tool activity before
-      that presentation.
-    - Evidence: The presented drafts contain the corrections below, retain
-      explicit owner references, and contain no added self-assessment section.
-      Any required change to approved upstream content is surfaced rather than
-      silently applied.
+    - Covers: [Proposal and Classification](system.md#proposal-and-classification).
+    - Method: Select involved mode and request proposals for a bug fix, float
+      support, a longer statistics window, and emission of an already supported
+      type; compare with a new derive
+      macro, protocol, generator, and statistics module. Include one broad
+      requirement needing several decisions and a large mechanical diff needing
+      few. Correct one numbered destination, then request requirements.
+    - Evidence: Category/reason follows decision scope. Proposal records the
+      participation mode, short statement, numbered table, and explanations of
+      at most two sentences each; detailed support is in `.context`. Correction preserves
+      item identity and redisplays the whole table. Requirements reuse the table
+      without another allocation checkpoint or premature downstream drafting.
 
-    - Draft fragment: Requirement: "This patch must preserve existing
-      paragraphs." Existing requirements already cover the underlying need.
-      Expected correction: The patch constraint stays out of requirements;
-      unchanged needs use no-op or retain their existing owning requirement.
-    - Draft fragment: System: "The process must preserve approved plans." No
-      mechanism or requirement reference is supplied.
-      Expected correction: The architecture names the schema
-      instruction/hook that governs plan edits and links to its owning
-      requirement.
-    - Draft fragment: Validate: "This check is useful because it protects
-      the design." No action, result, or reference is supplied.
-      Expected correction: A concrete Method, expected Evidence, and Covers
-      reference replace the motivation prose.
+    ### Check: Participation choice and design authority
 
-    - Notes: Use the same isolated sub-agent setup and command recording as
-      [Short intent and correction loop](#check-short-intent-and-correction-loop).
-      Each fragment gets a fresh session; record the presented content and
-      filesystem changes alongside the CLI log.
+    - Covers: [Participation Modes](system.md#participation-modes),
+      [REQ-009](requirements.md#req-009-users-can-delegate-design-participation).
+    - Method: Enter proposal without a participation preference and inspect the
+      offered choices. Exercise involved, explicitly delegated, and all-at-once
+      requests in separate fixtures; resume each and switch to delegated mode
+      after the main agent has authored a current draft. Compare author and
+      accepting-agent identities and inspect handoff before acceptance.
+      Enable a human-only CLI approval gate in
+      a delegated fixture and inspect the actual approval commands.
+    - Evidence: Both participation options and their implications are explained
+      once; a prior clear choice is reused. Proposal and continuation record
+      the mode and decision owner. Batching alone delegates no authority.
+      Initial selection precedes proposal authoring. Switching to delegated
+      mode hands the unfinished scope and draft to a separate executor that
+      independently verifies or revises it before coordinator acceptance;
+      earlier completed scopes stay closed. Author and accepting coordinator
+      have distinct identities for the accepted revision.
+      Involved content waits for the user; delegated content waits for the
+      coordinator's actual revision-specific acceptance and final independent
+      review. Choosing a mode approves no draft. Human-only CLI approvals are
+      left to the real user; the coordinator does not issue those commands.
 
-    ### Check: Content approval precedes structural validation
+    ### Check: Delegated group orchestration
 
-    - Covers: [Review Before Structural
-      Validation](system.md#review-before-structural-validation).
-    - Method: In a fresh isolated sub-agent session, inspect recorded CLI calls
-      after an artifact is presented, after a revision request, and after selecting
-      all-at-once generation without content approval. Then explicitly approve
-      the current artifact content. Exercise the repair path with an explicitly
-      approved, structurally invalid fixture artifact; inspect the response to
-      the validation failure and any resulting edits.
-    - Evidence: No `specd changes validate` call precedes approval of its
-      current content. The approved artifact may then be validated. A repair
-      that changes content is shown as a diff and waits for renewed approval
-      before revalidation. The agent does not silently edit or validate
-      unapproved upstream artifacts. A state-only dependency repair preserves
-      approval of unchanged reviewed content. Tests and technical inspections
-      are not treated as artifact-content approval.
-    - Notes: Use the isolated sub-agent setup from
-      [Short intent and correction loop](#check-short-intent-and-correction-loop).
-      Keep deliberate structural defects in fixture content. Record the tested
-      inputs, validation failure, diff, and command sequence; do not infer this
-      behaviour merely from a successful structural validation.
+    - Covers: [Participation Modes](system.md#participation-modes),
+      [Group Lifetimes and Handoff](system.md#group-lifetimes-and-handoff),
+      [Staged System Design](system.md#staged-system-design).
+    - Method: In delegated mode, run a small change and a large fixture with two
+      interacting subsystems through plan. Give routine design ambiguities,
+      a coordinator revision request, and an upstream contradiction. Inspect
+      coordinator/worker identities, launch contexts, assignments, acceptance
+      records, and CLI calls. Include a client unable to supply the required
+      independent contexts.
+    - Evidence: Complexity classification remains accurate. The main coordinator
+      delegates authoring, resolves in-scope decisions, and accepts revisions
+      without routine human checkpoints. The large fixture uses separate fresh
+      groups per artifact and system overview/subsystem scopes; author groups
+      receive scoped sources without inherited discussion while the coordinator
+      persists. Small work may retain one author group. Arbiters follow the
+      same three triggers with the coordinator as decision owner. The final
+      report is concise; required external input or unavailable client capacity
+      is surfaced with resumable state. No worker impersonates its independent
+      reviewer, and no incomplete system is structurally validated.
 
-    ### Check: Implementation guidance and plan drift
+    ### Check: Roles and independent review
 
-    - Covers: [Approved Plan During
-      Implementation](system.md#approved-plan-during-implementation),
-      [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts).
-    - Method: Run `specd changes hook-instruction <change> <step> --phase pre
-      --format text` for `implementing`, `verifying`, and `archiving`; inspect
-      the emitted plan instruction and template. In a disposable change with an
-      approved, validated plan, record `specd changes status <change> --format
-      text`, change one completed item's `[ ]` to `[x]`, and read status again.
-      Restore that checkbox, append a test sentence to the fixture plan, and
-      read status once more.
-    - Evidence: Guidance permits only completion marks during implementation,
-      prohibits plan additions and requests to append, and requires an actual
-      design error plus user permission for return to design. Checkbox progress
-      preserves the validated plan status and hash; the added sentence produces
-      artifact drift or pending review. Progress reporting remains outside the
-      approved plan.
-    - Notes: Deliberate plan mutations belong only to the disposable CLI
-      fixture, not the implementation plan being executed.
+    - Covers: [Design Group Interfaces](system.md#design-group-interfaces),
+      [Arbiter Launches](system.md#arbiter-launches).
+    - Method: Start an entry skill in an involved-mode fixture. Capture the
+      manager assignment, executor output, arbiter task, and review exchanges.
+      After the first reviewed draft, send separate typo and substantive
+      comments without approval, explicitly request an arbiter check, send
+      another correction, then approve the current content. Include a conflict
+      with an upstream decision and a final-check finding requiring an edit.
+      Inspect launches, session identities, file revisions, and CLI calls.
+    - Evidence: Executor handles content and user dialogue; manager supplies
+      bounded scope, sources, rules, output, and completion conditions. Arbiter
+      independently reads sources and never writes artifacts. Fresh launches
+      occur only for the first draft, content approval, or explicit requests;
+      separate user comments cause none. Corrections within an arbiter cycle
+      reuse that arbiter and source pointers; it closes on success or
+      escalation. Final review and user approval cover the same revision
+      before validation or subscope closure. Changed approved content returns
+      to the user. Contradictions escalate without reversing user intent.
 
-    ### Check: Artifact content and references
+    ### Check: Group lifetimes and resumption
 
-    - Covers: [Traceability References](system.md#traceability-references),
-      [Artifact Boundary
-      Instructions](system.md#artifact-boundary-instructions),
-      [REQ-005](requirements.md#req-005-normative-sdd-artifacts-describe-the-current-architecture),
-      [REQ-007](requirements.md#req-007-validation-checks-remain-distinct-from-acceptance-scenarios).
-    - Method: Inspect each affected spec artifact through `specd changes
-      spec-preview <change> <specId> --artifact <artifact> --format text`. For a
-      no-op whose preview is unavailable, read the base with `specd specs show
-      <specId> --artifact <artifact> --format text`. Follow each architecture
-      point's requirement links and every check's Covers links to their owning
-      headings. Read change-scoped proposal and plan files directly.
-    - Evidence: References resolve at the owning point's granularity. System
-      explains mechanisms; validate checks have a concrete Method, expected
-      Evidence, and Covers reference. Notes contain only execution prerequisites
-      or limits. Acceptance scenarios remain inside their owning requirements,
-      and validation contains no purpose or motivation prose. A no-op retains
-      the base requirements unchanged.
+    - Covers: [Group Lifetimes and Handoff](system.md#group-lifetimes-and-handoff),
+      [REQ-008](requirements.md#req-008-design-context-follows-decision-scope).
+    - Method: In involved mode, finish successive scopes for small and large changes.
+      Resume the large change in a fresh primary session using only its saved
+      pointers; include a stale support note. Exercise a client without automatic
+      session creation and an explicit user request for batch drafting.
+    - Evidence: Small work may retain executor/manager through plan. Large
+      boundaries recommend a new primary session, name the next scope, and stop
+      the current workers. Review contains no repeated continuation questions.
+      Resumption does not introduce another generation-mode questionnaire.
+      New groups verify current state and load relevant inputs without inheriting
+      full history. Stale notes cannot grant approval. Manual fallback and batch
+      exceptions are explicit; compaction is never reported as session replacement.
 
-    ### Check: Human and agent process guidance agree
+    ### Check: Subsystem architecture and integration
 
-    - Covers: [SpecD-Owned SDD Locations](system.md#specd-owned-sdd-locations),
-      [SDD Process Discoverability](system.md#sdd-process-discoverability),
-      [REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative),
-      [REQ-003](requirements.md#req-003-developers-can-find-current-sdd-process-rules).
-    - Method: Read `CONTRIBUTING.md` and follow its process links. Read the
-      English and Russian process documents through `specd specs show
-      default:000-sdd-process --format text`, and project instructions through
-      `specd project context --format text`. Compare their artifact roles,
-      intent review, self-review, validation approval, and implementation plan
-      rules with the emitted schema instructions.
-    - Evidence: Contribution links resolve; English rules remain authoritative;
-      Russian text is a complete aligned translation. Project guidance and both
-      process versions describe the same boundaries and review sequence as the
-      schema. None instructs agents to author a separate change Context
-      artifact. Project context compilation and discovery memory remain
-      available.
+    - Covers: [Staged System Design](system.md#staged-system-design).
+    - Method: In involved mode, design a fixture with two interacting subsystems. Review the
+      overview, then fill each subsystem in a different primary session. Have the
+      second expose a contradiction in an approved interface; inspect review,
+      continuation notes, downstream writes, and validation calls.
+    - Evidence: Overview establishes actors, interfaces, relationships, and flows
+      plus an explicit pending skeleton. Each subsystem group stays focused.
+      Contradiction updates return affected content to review and reconsider
+      dependent scopes. No complete-system validation or downstream design
+      precedes completion and review of the integrated artifact. Subscopes remain
+      inside the existing system artifact.
+
+    ### Check: Sufficiency, corrections, and actual coverage
+
+    - Covers: [Artifact Sufficiency and Readability](system.md#artifact-sufficiency-and-readability),
+      [Traceability and Technical Evidence](system.md#traceability-and-technical-evidence).
+    - Method: Give the author/arbiter drafts with repeated definitions, an incorrect
+      statement followed by its correction, an absent-obligation pseudo-requirement,
+      a real CPU limit, and a sufficient compact contract. Supply a test fixture
+      whose runner omits an assertion plus a conditional manual runtime obligation.
+      Correct a draft with "selection uses a flag, not a name", where only the
+      flag-based selection is agreed; inspect the executor's next revision and
+      its dependent explanations before another arbiter launch.
+    - Evidence: Reviews remove specific repetition and wrong descriptions, retain
+      genuine negative needs and scenarios, and accept sufficient compact text.
+      Expansion requests identify a concrete ambiguity. Automated summaries cite
+      asserted cases; manual and conditional runtime duties survive missing test
+      coverage. Shared rules have one definition and contract-level owner links.
+      The executor directly describes flag-based selection and removes the
+      mistaken account and dependent explanations, without introducing a claim
+      about unsupported name-based selection or narrating the correction.
+      Independently justified negative contracts remain intact. These fixes
+      require no additional arbiter launch during sequential user feedback.
+
+    ### Check: Content review and validation repair
+
+    - Covers: [Review Before Structural Validation](system.md#review-before-structural-validation).
+    - Method: In involved mode, inspect actual CLI calls after drafting, a
+      revision request, batch generation, arbiter success, and explicit user
+      content approval. In an
+      approved fixture, introduce a validation defect requiring changed upstream
+      content; separately exercise a state-only dependency repair.
+    - Evidence: Only approval of the current content permits structural
+      validation. Changed repairs are shown as diffs and reviewed again; unchanged
+      reviewed content retains approval. Unapproved upstream content is never
+      silently edited or validated. Technical inspections run independently.
+
+    ### Check: Approved plan integrity
+
+    - Covers: [Approved Plan During Implementation](system.md#approved-plan-during-implementation).
+    - Method: In a validated disposable plan, compare status/hash after a completion
+      checkbox change and after an added sentence. During implementation, request
+      an unsolicited report append, then expose a real design error.
+    - Evidence: Completed checkbox marks preserve the plan hash; prose causes
+      drift. Guidance rejects additions and proactive append requests, keeps
+      evidence outside plan, and surfaces real design errors for permission to
+      return to design.
+
+    ### Check: Exact sources and aligned guidance
+
+    - Covers: [Context Resources and Delivery](system.md#context-resources-and-delivery),
+      [SpecD-Owned SDD Locations](system.md#specd-owned-sdd-locations),
+      [Ordered SpecD SDD Sections](system.md#ordered-specd-sdd-sections).
+    - Method: Inspect every local and packaged SpecD entry skill before its shared
+      lookup. Supply an existing exact path that a glob would miss, then a genuinely
+      absent path. Read process guidance through `specd specs show
+      default:000-sdd-process --format text`; compare English, Russian, project
+      guidance, schema, role resources, and all supported-agent payloads.
+    - Evidence: Exact resolved paths precede glob fallback, including shared notes
+      and exploration/context. Specs are read through CLI; graph freshness is
+      checked. Artifact links resolve, English owns semantics, Russian is a full
+      aligned translation, and clients share the same process. Numeric spec order,
+      artifact ownership, and bootstrap contracts are preserved.
+    - Notes: Record unsupported behavioral tooling as unexecuted coverage;
+      source inspection or successful resource delivery does not pass a behavioral
+      probe. Keep results outside the approved implementation plan.
+
+- op: added
+  position:
+    parent:
+      type: section
+      matches: '^Validation: SDD Process$'
+    after:
+      type: section
+      matches: '^Manual Checks$'
+  content: |
+    ## Optional Diagnostics
+
+    ### Diagnostic: Paired correction probe
+
+    - Covers: [Artifact Sufficiency and Readability](system.md#artifact-sufficiency-and-readability).
+    - Method: Run two fresh author contexts using the same configured model
+      from an earlier generation with low reasoning. Give both the same brief
+      and sequential correction messages; only treatment receives the explicit
+      correction rule. Snapshot actual files after every turn. Fix the scoring
+      criteria before observing outputs and preserve a genuine negative
+      constraint in the fixture. Record model, common instructions, prompts,
+      agent identities, snapshots, and all observed outcomes.
+    - Evidence: A control that preserves rejected behavior as a contrast,
+      counterclaim, or unsupported prohibition paired with a clean treatment
+      is an illustrative result. If control is already clean, mark the probe
+      non-diagnostic and exclude it from evidence of the rule's benefit.
+      Report any treatment contamination as a defect; a clean control does
+      not hide that outcome.
+    - Notes: This diagnostic does not gate completion. Do not tune prompts
+      repeatedly to manufacture a control failure. A small paired sample
+      supplies no effectiveness estimate. A plain author-editing fixture does
+      not establish full SDD workflow compliance.

@@ -23,14 +23,32 @@ artifacts:
         plan items.
       - ADRs own significant decisions and rationale.
 
-      Include:
-      - Motivation
-      - Current behaviour
-      - Proposed solution
-      - SDD artifacts affected
-      - Impact
-      - Technical context
-      - Open questions
+      Before authoring, select participation through the manager-loaded design
+      procedure: involved (user decides and accepts content) or delegated
+      (coordinator decides and accepts content within the user's goal).
+      Reuse an explicit prior choice; batching alone does not delegate design.
+
+      Estimate independent decisions and start with Category: small change or
+      large architectural development, a short reason, and Participation:
+      involved|delegated. Zero or one new need usually suggests small scope;
+      several suggest architecture, but one broad need may hide many decisions.
+      File count and code volume do not determine category. A new derive macro,
+      protocol, generator, or statistics module usually needs architecture;
+      a bug fix, float support in an established serialization model, a longer
+      statistics window, or emission of an already supported type is usually small.
+
+      Follow with a very short problem statement, a numbered table with columns
+      #, Topic, Owning artifact, and matching numbered explanations of at most
+      two sentences per item. Use short topics and only relevant destinations;
+      unchanged needs may be marked requirements (no-op). Keep existing item
+      numbers on correction and redisplay the entire corrected table in review.
+      This table owns intent allocation; requirements reuse it without another
+      allocation checkpoint. Material intent changes return to proposal review.
+      Reclassify there when new decisions change the appropriate workflow.
+
+      Put affected spec IDs and a link to change-local .context in a short footer.
+      Keep detailed evidence, alternatives, and technical support in that file,
+      outside the artifact DAG. Resolve material questions during proposal review.
 
       Identify affected specs even when their requirements stay unchanged.
       A schema or design defect can be fixed under an existing need; attach
@@ -41,7 +59,7 @@ artifacts:
       post:
         - id: resolve-open-questions
           instruction: |
-            Review the "Open questions" section. Resolve any question that can
+            Review unresolved questions. Resolve any question that can
             change requirements, system specification, validation, or plan
             artifacts
             before proceeding.
@@ -51,26 +69,49 @@ artifacts:
             changed statements against proposal ownership and any agreed intent
             allocation: does this explain motivation, direction, and scope
             without replacing the owning requirements or system design?
+            On every correction, replace or remove the wrong statement and its
+            dependent explanations. Reread the whole affected section: remove
+            residual errors, contradictions, repetition, and contrasts to the
+            rejected account. Describe current behavior directly. A negative
+            contract needs an independent current basis; a prior mistake does
+            not justify a counterclaim or new prohibition. Keep correction
+            history in chat or discovery notes. Accept sufficient compact text;
+            an expansion request must name the incorrect implementation that
+            current wording still permits. No general word or line quota applies.
             Identify specific misplaced or unsupported passages and correct
-            them before human review; a generic compliance assertion is
+            them before decision-owner review; a generic compliance assertion is
             insufficient. Surface any needed upstream change instead of
-            silently modifying approved content. Revised content follows human
+            silently modifying approved content. Revised content follows decision-owner
             review. Add no separate report, section, or confirmation step;
             mention only material corrections or unresolved issues in chat.
         - id: review-before-validation
           instruction: &review-before-validation |
-            Present the current artifact for human review and stop before
-            running specd changes validate. This applies to every authored
+            After self-review and the first-draft independent arbiter check,
+            present the current artifact to the design decision owner: the
+            user in involved mode or the coordinator in delegated mode. Stop
+            before specd changes validate until that owner accepts this revision
+            and a final independent arbiter check succeeds on the same content.
+            Apply the manager's three arbiter triggers: first completed draft,
+            owner acceptance, or explicit user/coordinator request. Consecutive
+            owner comments use executor self-review, not fresh arbiter launches.
+            Reuse the arbiter within its correction cycle; close it on success
+            or escalation. This applies to every authored
             artifact, including optional ADRs, deltas, and no-op decisions.
             For deltas, present the merged artifact; a no-op refers to the
-            unchanged base. Explicit user approval covers only current content.
+            unchanged base. Explicit decision-owner approval covers only current content.
             A revision request or generation-mode selection, including
             all-at-once generation, is not content approval. Intent allocation
             agreement alone does not approve subsequently drafted content.
 
-            After explicit approval, structurally validate the reviewed content.
+            Mode selection approves no draft. Delegated acceptance is recorded
+            for a concrete revision; human-only CLI spec/signoff gates remain
+            real-user actions. System subscopes close after review, but validate
+            the system artifact only after all sections and integration finish.
+
+            After matching approval and final review, structurally validate.
             If validation requires content changes, including upstream repairs,
-            present their diff and wait for approval of revised content before
+            present their diff and wait for decision-owner approval and final
+            review of revised content before
             revalidation. Never silently edit or validate unapproved upstream
             artifacts to repair dependencies. Reuse an existing approval while
             reviewed content is unchanged; state-only dependency changes do not
@@ -102,6 +143,10 @@ artifacts:
       Use a no-op requirements delta when the owning needs remain unchanged.
       Patch constraints, defect descriptions, and proposed fixes belong with
       proposal, system, or plan according to their responsibility.
+
+      An absent obligation or dismissed capability does not create a need or
+      prohibition. Preserve genuinely imposed negative constraints with their
+      observable violation and acceptance scenarios; judge the need, not negation.
 
       Keep requirement prose concise. A reader should be able to understand the
       core need first, then return to scenarios for nuance, boundary cases,
@@ -154,29 +199,14 @@ artifacts:
         required: true
     rules:
       pre:
-        - id: review-artifact-intent
+        - id: consume-proposal-allocation
           instruction: |
-            Before drafting requirements, read the proposal against existing
-            requirements and authoritative process rules. Present a minimal
-            allocation in chat: one line per relevant proposal point, with
-            only a two- or three-word topic and its destination, in the form
-            <topic> — <artifact>. Multiple points may share a destination.
-            An unchanged artifact may be marked <topic> — <artifact> (no-op).
-            Include only relevant destinations. Do not expand the list into
-            descriptions, rationale, quotations, or artifact drafts.
-
-            After every user correction, redisplay the entire corrected list
-            in that same minimal format. An acknowledgement or description of
-            edits does not replace the updated list. Repeat until the user
-            agrees; draft requirements only after that agreement. Do not
-            prepare full requirements, architecture, or plan files in advance.
-
-            This is one conversation checkpoint before requirements, not a new
-            artifact or repeated gate before downstream artifacts. Reuse an
-            allocation already explicitly agreed during proposal review or an
-            earlier exchange while it remains applicable. Only a material
-            allocation change needs renewed intent review. Agreement on intent
-            alone does not approve later artifact content for validation.
+            Read the accepted proposal's numbered allocation against existing
+            requirements and authoritative process rules. Reuse that allocation;
+            do not introduce a separate intent checkpoint. Material changes
+            return to proposal review, preserving item identities and replaying
+            the full corrected table. Intent allocation does not approve later
+            artifact content. Draft only the currently assigned artifact scope.
       post:
         - id: boundary-self-review
           instruction: |
@@ -189,10 +219,19 @@ artifacts:
             constraints, defect descriptions, and proposed fixes do not become
             requirements merely because the user mentioned them. Unchanged
             needs can use a no-op delta.
+            On every correction, replace or remove the wrong statement and its
+            dependent explanations. Reread the whole affected section: remove
+            residual errors, contradictions, repetition, and contrasts to the
+            rejected account. Describe current behavior directly. A negative
+            contract needs an independent current basis; a prior mistake does
+            not justify a counterclaim or new prohibition. Keep correction
+            history in chat or discovery notes. Accept sufficient compact text;
+            an expansion request must name the incorrect implementation that
+            current wording still permits. No general word or line quota applies.
             Identify specific misplaced or unsupported passages and correct
-            them before human review; a generic compliance assertion is
+            them before decision-owner review; a generic compliance assertion is
             insufficient. Surface any needed upstream change instead of
-            silently modifying approved content. Revised content follows human
+            silently modifying approved content. Revised content follows decision-owner
             review. Add no separate report, section, or confirmation step;
             mention only material corrections or unresolved issues in chat.
         - id: review-before-validation
@@ -228,6 +267,23 @@ artifacts:
 
       Do not put implementation sequencing or plan-item checklist detail here;
       that belongs in the plan.
+
+      Describe responsibilities, interfaces, interactions, and material behavior
+      once, concretely enough to distinguish a conforming implementation. Use
+      tables for repeated entities/states and links to shared definitions.
+      Common rules have one owner; local sections give application and differences.
+      Extra prose must resolve a concrete ambiguity. Mark partial coverage locally
+      and resolve missing information needed by this change.
+
+      For large architectural development, first author an overview of actors,
+      subsystem responsibilities, interfaces, relationships, and main flows;
+      prepare pending subsystem skeletons with inputs and open questions.
+      The manager tracks ordered overview/subsystem/integration scopes in
+      change-local .context. Each subsystem gets a fresh focused author group.
+      Surface changed approved interfaces for decision-owner review and
+      reconsider affected earlier/dependent scopes. Keep one system artifact;
+      validate it only after every affected section and integrated revision is
+      complete and reviewed. Validate and plan consume that complete system.
     deltaInstruction: |
       For modified system specification content, write a delta file at
       `{{change.path}}/deltas/<workspace>/<capability-path>/system.md.delta.yaml`.
@@ -249,10 +305,19 @@ artifacts:
             arrangement or mechanism, identify where its contracts are defined,
             and link to its owning requirement? Are transition steps and
             technical check procedures left to plan and validate?
+            On every correction, replace or remove the wrong statement and its
+            dependent explanations. Reread the whole affected section: remove
+            residual errors, contradictions, repetition, and contrasts to the
+            rejected account. Describe current behavior directly. A negative
+            contract needs an independent current basis; a prior mistake does
+            not justify a counterclaim or new prohibition. Keep correction
+            history in chat or discovery notes. Accept sufficient compact text;
+            an expansion request must name the incorrect implementation that
+            current wording still permits. No general word or line quota applies.
             Identify specific misplaced or unsupported passages and correct
-            them before human review; a generic compliance assertion is
+            them before decision-owner review; a generic compliance assertion is
             insufficient. Surface any needed upstream change instead of
-            silently modifying approved content. Revised content follows human
+            silently modifying approved content. Revised content follows decision-owner
             review. Add no separate report, section, or confirmation step;
             mention only material corrections or unresolved issues in chat.
         - id: review-before-validation
@@ -287,6 +352,15 @@ artifacts:
       Notes hold only needed setup, prerequisites, or execution limits.
       A coverage overview lists references only. Do not include purpose or
       motivation prose in this artifact.
+
+      Separate Automated Checks from Manual Checks. Automated entries name
+      asserted cases and the actual runner/test; executable details live in
+      tests. Before replacing a recipe with a reference, inspect that the runner
+      executes and asserts its claimed cases. Fixtures/snapshots alone do not
+      establish coverage. Retain concrete manual actions and expected results,
+      including conditional runtime duties left uncovered by tests. Permanent
+      checks work without change history; migration/before-and-after comparisons
+      belong in plan. Preserve uncovered duties when condensing the artifact.
     deltaInstruction: |
       For modified validation content, write a delta file at
       `{{change.path}}/deltas/<workspace>/<capability-path>/validate.md.delta.yaml`.
@@ -308,10 +382,19 @@ artifacts:
             allocation. Does every check specify a concrete action, an expected
             result, and a requirement or architecture link? Are acceptance
             conditions and motivation left with their upstream owners?
+            On every correction, replace or remove the wrong statement and its
+            dependent explanations. Reread the whole affected section: remove
+            residual errors, contradictions, repetition, and contrasts to the
+            rejected account. Describe current behavior directly. A negative
+            contract needs an independent current basis; a prior mistake does
+            not justify a counterclaim or new prohibition. Keep correction
+            history in chat or discovery notes. Accept sufficient compact text;
+            an expansion request must name the incorrect implementation that
+            current wording still permits. No general word or line quota applies.
             Identify specific misplaced or unsupported passages and correct
-            them before human review; a generic compliance assertion is
+            them before decision-owner review; a generic compliance assertion is
             insufficient. Surface any needed upstream change instead of
-            silently modifying approved content. Revised content follows human
+            silently modifying approved content. Revised content follows decision-owner
             review. Add no separate report, section, or confirmation step;
             mention only material corrections or unresolved issues in chat.
         - id: review-before-validation
@@ -355,10 +438,19 @@ artifacts:
             allocation. Does this record a significant choice and its rationale
             without becoming the source of current requirements or system
             mechanisms?
+            On every correction, replace or remove the wrong statement and its
+            dependent explanations. Reread the whole affected section: remove
+            residual errors, contradictions, repetition, and contrasts to the
+            rejected account. Describe current behavior directly. A negative
+            contract needs an independent current basis; a prior mistake does
+            not justify a counterclaim or new prohibition. Keep correction
+            history in chat or discovery notes. Accept sufficient compact text;
+            an expansion request must name the incorrect implementation that
+            current wording still permits. No general word or line quota applies.
             Identify specific misplaced or unsupported passages and correct
-            them before human review; a generic compliance assertion is
+            them before decision-owner review; a generic compliance assertion is
             insufficient. Surface any needed upstream change instead of
-            silently modifying approved content. Revised content follows human
+            silently modifying approved content. Revised content follows decision-owner
             review. Add no separate report, section, or confirmation step;
             mention only material corrections or unresolved issues in chat.
         - id: review-before-validation
@@ -377,9 +469,35 @@ artifacts:
     instruction: |
       Create the implementation plan for this change.
 
-      The plan owns implementation strategy, sequencing, assumptions,
-      constraints, validation strategy, explicit out-of-scope boundaries, and
-      top-level plan items.
+      Start with an ordered list of executable work items. Each item names
+      concrete work, code locations and any identifiers needed to locate or
+      create the affected modules, plus links to the relevant accepted
+      architecture and completion checks. State dependencies when list order
+      alone does not make them clear.
+
+      Choose detail from the gap between the current implementation and the
+      accepted design, including migration uncertainty and ordering risks.
+      The proposal's small/large category does not determine plan length.
+      For broad new development or a small feature already resolved by the
+      architecture, module order, useful code paths/names, and architecture
+      and validation links may be sufficient. Reference the existing design
+      and checks rather than repeating their contracts or procedures.
+
+      For substantial changes to existing code or internal APIs, identify the
+      affected parts to reuse unchanged, adapt, remove, replace, or write anew.
+      Explain affected callers, migration order,
+      any required compatibility period, and transition/preservation checks
+      sufficiently to make the work unambiguous. A compact old-to-new mapping
+      can help. Significant target-contract decisions remain in system;
+      the plan describes how existing code reaches that accepted design.
+
+      Assumptions, constraints, risks, or scope boundaries belong here when
+      they affect execution. Put them with the affected items or add shared
+      context when it helps several items. The template is a starting task
+      list, not a required section catalogue. Add sections only for useful
+      transition information; avoid empty scaffolding and duplicate summaries.
+      Migration and before/after checks belong here; permanent conformance
+      procedures remain in validate. Preserve uncovered manual duties.
 
       Top-level plan items are the executable work units for implementation.
       Each top-level plan item must be independently completable and must
@@ -394,7 +512,7 @@ artifacts:
       to the plan. Keep temporary execution tracking and chat progress outside
       it. Retain this boundary during verification and archive.
 
-      Surface an actual design error and wait for explicit user permission
+      Surface an actual design error and wait for explicit design-decision-owner permission
       before returning to designing to correct the earliest affected artifact.
       Routine implementation choices do not trigger design revisions.
     rules:
@@ -404,6 +522,9 @@ artifacts:
             Cross-check the plan against requirements, system, and validate
             artifacts. Every requirement, acceptance scenario, and validation
             check must have a path through the plan.
+            Assess coverage through the items' architecture and validation
+            references. One reference may cover a coherent group of obligations;
+            add a separate mapping only when needed to expose a coverage gap.
         - id: boundary-self-review
           instruction: |
             Reread the draft, including its merged result for a delta. Check
@@ -411,10 +532,19 @@ artifacts:
             allocation. Does this describe the implementation transition and
             completion evidence without introducing new needs or significant
             system design?
+            On every correction, replace or remove the wrong statement and its
+            dependent explanations. Reread the whole affected section: remove
+            residual errors, contradictions, repetition, and contrasts to the
+            rejected account. Describe current behavior directly. A negative
+            contract needs an independent current basis; a prior mistake does
+            not justify a counterclaim or new prohibition. Keep correction
+            history in chat or discovery notes. Accept sufficient compact text;
+            an expansion request must name the incorrect implementation that
+            current wording still permits. No general word or line quota applies.
             Identify specific misplaced or unsupported passages and correct
-            them before human review; a generic compliance assertion is
+            them before decision-owner review; a generic compliance assertion is
             insufficient. Surface any needed upstream change instead of
-            silently modifying approved content. Revised content follows human
+            silently modifying approved content. Revised content follows decision-owner
             review. Add no separate report, section, or confirmation step;
             mention only material corrections or unresolved issues in chat.
         - id: review-before-validation
@@ -496,17 +626,11 @@ workflow:
             requirements -> system -> validate -> plan -> implementation.
             Discovery may move upstream; corrections must propagate downstream.
 
-            Present every authored artifact's current content for human review
-            and stop before specd changes validate, including optional artifacts,
-            deltas, and no-op decisions. For deltas review the merged result;
-            for a no-op review the unchanged base. Revision requests, generation
-            mode selection, and intent allocation alone are not content approval.
-            If validation fails and repairs change content, including upstream
-            content, present the diff and wait for explicit approval before
-            revalidation. Do not silently edit or validate unapproved upstream
-            artifacts to repair dependency state. Reuse approval of unchanged
-            reviewed content when only dependency state changes. Tests and
-            technical inspections do not constitute artifact-content approval.
+            Use the proposal's numbered allocation; there is no separate
+            requirements-intent checkpoint. Correct material intent in proposal.
+            Apply the selected participation mode and manager scope policy.
+        - id: review-before-validation
+          instruction: *review-before-validation
 
   - step: ready
     requires: [proposal, requirements, system, validate, plan]
@@ -532,7 +656,7 @@ workflow:
             progress outside it.
 
             If implementation reveals an actual design error, surface it and
-            wait for explicit user permission before returning to designing
+            wait for explicit design-decision-owner permission before returning to designing
             to correct the earliest affected artifact. Routine implementation
             choices do not trigger design revisions.
 
@@ -547,7 +671,7 @@ workflow:
             that acceptance scenarios in requirements are covered by technical
             evidence. If checks fail because code is wrong, return to
             implementing. If checks reveal an actual design error, surface it
-            and wait for explicit user permission before returning to designing
+            and wait for explicit design-decision-owner permission before returning to designing
             to correct the earliest affected artifact. Keep progress outside
             the approved plan; during implementation, only completed checkbox
             marks may change. Add no prose or steps and neither ask permission
@@ -566,7 +690,7 @@ workflow:
 
             If implementation reveals that requirements, system specification,
             validation, or ADRs contain an actual design error, surface it and
-            wait for explicit user permission before returning to designing
+            wait for explicit design-decision-owner permission before returning to designing
             to correct the earliest affected artifact before archive. Keep
             progress outside the approved plan; during implementation, only
             completed checkbox marks may change. Add no prose or steps and

@@ -1,0 +1,462 @@
+# Change context: tighten-sdd-artifact-boundaries
+
+## Current continuation — plan composition guidance (2026-10-26)
+
+The owner requested a minimal executable plan structure and composition
+recommendations in instructions. Detail follows the migration gap, rather than
+the small/large category: resolved new development or a small feature may need
+only ordered modules, code locations/names and architecture/validation links;
+substantial existing-code/API migration needs explicit reuse/adaptation/removal/
+replacement/new work, callers and transition order. This also covers refactoring
+that preserves external behavior.
+
+`schemas/sdd/templates/plan.md` now contains only the existing title and one
+numbered checkbox placeholder. The schema plan instruction owns the conditional
+composition guidance; optional shared notes/sections serve concrete execution
+needs. Coverage can follow coherent architecture/validation references, with a
+separate mapping only when useful to expose a gap. Permanent contracts/checks
+retain their owners. Checkbox-only execution edits and all mechanical plan
+contracts remain unchanged. The system delta's Plan row points to these
+instructions, and approved-plan guidance is attributed to schema/skills rather
+than the removed template boilerplate. Existing skills already load the schema
+instructions; no skill-tree rewrite was needed.
+
+Manager `/root/final_implementation_manager` provided bounded read-only guidance.
+Root completed schema validation (six artifacts/five steps), actual emitted plan
+instruction/template inspection, merged system preview, mechanical-contract
+comparison, and diff checks. Evidence and exact current source hashes:
+`../../probes/tighten-boundaries/plan-guidance/observations.json` and `review.patch`.
+Both rules documents and the approved change plan (including completion marks)
+are unchanged by this follow-up. No client/model probe, installer or commit ran.
+
+The former p8 installed-schema identity no longer describes the changed schema
+and template. Prior coordination evidence remains reusable only for unchanged
+orchestration contracts; this source check claims no new model behavior or
+current bootstrap installation. Live lifecycle remains `designing` with current
+owner review pending from the earlier correction. New source edits/self-review
+supply no artifact acceptance, structural revalidation or lifecycle advance.
+The earlier records below describe their respective prior revisions.
+
+## Artifact-rule ownership correction before plan follow-up
+
+
+The owner explicitly corrected the previous implementation: `rules.md` defines
+what SDD artifacts contain and their relationships, independently of how they
+are produced. Workflow/tooling changes do not change artifact contracts. Remove
+both the current leakage and older operational additions. This instruction
+authorizes the correction and upstream ownership repair; it does not accept
+newly written artifact revisions automatically.
+
+Live CLI now reports `designing`, review required because artifact content
+changed. Canonical designing context was reloaded after that route, fingerprint
+`sha256:932bf4fa27ce64ad2e7fb0c328965cc2f15af78029fd1484fd8614993ba8bea2`.
+The earlier implementation-complete record below applies to the prior revision.
+The approved plan remains unchanged except its existing ten completion marks;
+normalized hash remains `393b01f2be9cf1fdd626f73e0fa90e1cf5337f364b60bd84afc140b77825df53`.
+
+Both rules documents use `6d695f01fffecaf30af8d6df8f4839619a3714b3` as a
+content-contract baseline, with selective removal of tooling leakage rather
+than a whole-file historical restore. Current coordination/readability additions
+were discarded there. Removed SpecD/tool TODOs, local artifact flow, context/file
+mechanics, attach/no-op instructions, approved-plan permission/hash procedures,
+intent/self/final-review procedures, roles, session lifetimes and staged-agent
+scheduling. Preserved requirement/scenario contracts, concrete system mechanisms,
+validation fields, owner links and tool-independent artifact dependency meaning.
+Both languages contain no SpecD names or operational role/CLI directives.
+
+REQ-003 is narrowly revised in the requirements delta so workflow-only changes
+update their operational resources. The system delta assigns content semantics
+to rules and production/review/coordination to schema/skills. ADR-0001 and proposal
+explanations 8–9 now state that same ownership. Proposal table numbering,
+participation and decision scope are unchanged. Project-context pointers match.
+No steady-state requirements/system/ADRs or approved-plan prose were rewritten.
+
+Separate manager `/root/final_implementation_manager` supplied bounded read-only
+correction guidance. Root author completed self-review, actual merged previews,
+English/Russian baseline comparison, file-link and leakage checks, plus
+`git diff --check`. Exact correction evidence/revisions and actual before copies
+are under `../../probes/tighten-boundaries/rules-correction/`; its `review.patch`
+is a concrete current diff, and `observations.json` records the checks.
+Schema/templates/skills are unchanged by this correction; prior payload behavior
+and delivery results remain reusable. No new client launch, installer, behavioral
+probe or commit occurred.
+
+Next boundary: current owner review of the revised proposal, requirements,
+system and ADR content, followed by matching independent final review before
+structural revalidation. Unchanged downstream artifacts need dependency review,
+not silent new acceptance. No revalidation, review-state clearing, readiness,
+verification or archive is claimed for these new revisions. A support note alone
+grants no approval.
+
+## Implementation closure before the owner's correction
+
+
+Implementation is complete; all ten plan items are checked. Live CLI state
+remains `implementing`, with all six artifacts complete and no blockers/drift.
+Immediately after item 10, post-implementing run-hooks succeeded (`no hooks to
+run`), followed by hook-instruction (`no instructions`). Final source/evidence/
+scope reconciliation passed. Approved design content and plan prose are unchanged.
+Fresh separate manager `/root/final_implementation_manager` supplied the bounded
+9/10 closure assignment from live state; the executor is the root session.
+
+Final payload is Rust bootstrap build
+`/nix/store/p8g4r2fl4k5vk3ia524y3s905jcmy2ph-specd-bootstrap-0.1.0`.
+The user limits behavior checks to Codex; OpenCode/Kilo behavior is excluded,
+not passed. Their shipped resources are compared as files. No commit or next
+lifecycle invocation is authorized. Implementation results remain outside plan.
+
+Durable evidence index: `../../probes/tighten-boundaries/evidence-index.md`.
+Current source/contract/link/plan observations and translation review are in its
+`source-reconciliation/` directory. Earlier reboot-lost `/tmp` raw logs remain
+historical summaries below, never reconstructed or relabeled.
+
+Item 9 completed after all four named behavioral checks passed. Small delegated
+fixture reached actual ready through plan after a late independent-author
+handoff. Genuine client capacity exhaustion stopped resumably without authoring.
+Large involved fixture used real distinct primary sessions, rejected stale
+acceptance, reviewed affected interface/dependent repair, and validated integrated
+system `efd2db6f0b0cfec8323182b41b2ee1d170c196d97481a021d7af9a7e647af825`.
+Its explicit same-primary involved batching produced unaccepted validate draft
+`257a1d01…` and stopped before first review, as assigned. Large delegated fixture
+kept coordinator UUID `01a168cd-bacc-76a1-a347-28c6445a963a`, used fresh scoped
+groups and closed all six artifacts through plan; system `5936720c…`, plan
+`081c208e…`. It actually stopped at enabled `pending-spec-approval`, issued no
+human approval and left all seven implementation tasks unchecked. Both large
+native runs exited 0. Root audits agree with actual files, matching
+acceptance/final review/validated hashes, CLI ordering and terminal state.
+
+Exact maps: `large-involved/evidence/fixture-outcome.md` and both large fixtures'
+`evidence/root-controller-observations.json` under the durable probe root.
+Cumulative native histories and capture/source hashes are retained; missing
+external child transcripts are not fabricated. Actual user-reported machine
+sleep led to same-primary restarts; unavailable validate workers were recorded
+honestly and replaced with distinct identities. Completed checks were reused.
+Item 10 reconciled all twelve validation entries against the unchanged p8
+payload, including honest historical raw-log loss and excluded/non-diagnostic
+coverage. Schema mechanical contracts, complete installed file identity, all
+160 skill links, English/Russian alignment, scope and diff checks passed.
+Only own verified CLI autosync changes to the two unrelated manifests were
+restored after the final root CLI call. All native probe processes ended.
+Next: suggest `$specd-verify tighten-sdd-artifact-boundaries` and stop; verification
+was not invoked and no commit was made. Final evidence: durable root
+`final-main-status.txt`, `source-reconciliation/final-reconciliation.json` and
+`restored-autosync.json`. This support note grants no artifact approval.
+
+## Design state
+
+The user requested all design artifacts together, followed by a short process
+overview. After review and the arbiter's successful recheck, the user asked
+to validate structure and finish design. That instruction accepts the current
+six-artifact bundle for structural validation.
+
+The approved design is a large architectural development: coordination,
+participation, proposal ownership, and context boundaries require independent
+decisions. It adds REQ-008 for scope-appropriate design contexts and REQ-009
+for delegation of design participation.
+
+## Sources and evidence
+
+- [.specd-exploration.md](.specd-exploration.md) retains discovery, earlier
+  decisions, later feedback, the three-role workflow, and the readability
+  experiment. Read its relevant sections rather than automatically forwarding
+  the entire history to every participant.
+- Commit `9c8eae3` applied the readability experiment to section 001.
+  The experiment preserved manual refresh/host obligations after review found
+  that fixtures and snapshots alone did not establish their coverage.
+- Current schema and project guidance already remove the change Context
+  artifact and deliver boundary self-review, intent review, review before
+  structural validation, and the approved-plan restriction.
+- Existing plan items 1–6 record that earlier implementation. Preserve their
+  completion history; use pending follow-up items for the current design.
+- Graph index at `9c8eae3` contains six specs and zero code symbols.
+  Search finds the process spec; coupling conclusions require source
+  inspection. Graph LOW results are limited by that absent code coverage.
+- Schema assets and agent payloads are recursively copied by the existing
+  packages. Skill payload changes require no bootstrap delivery redesign.
+
+## Current interpretations
+
+- Categories are `small change` and `large architectural development`.
+  Independent decisions govern the choice; file count and code volume do not.
+  Zero or one new requirement usually suggests small scope; several suggest
+  architecture. One broad requirement may still require architectural work.
+  The overlapping numerical hints in the request are treated as heuristics.
+- Large examples supplied by the user: a serde-like derive macro, support
+  for a new protocol, a protobuf-like code generator, a statistics module.
+  Small examples: a bug fix, float support in an existing serialization model,
+  extending a statistics time window, or emitting an already supported type.
+- `.context` means a hidden change-local support file, outside the artifact
+  DAG. It stores evidence and continuation notes; requirements and system
+  continue to own all durable normative content.
+- Participation is offered once during proposal: involved or delegated,
+  replacing the mandatory one-artifact/all-at-once question. Explicit prior
+  delegation is honored; batching alone grants no design authority.
+- In involved mode a fresh large-design group uses a new primary executor
+  session and manager. In delegated mode the main coordinator persists and
+  launches fresh scoped executor/manager contexts and independent arbiters.
+  Complexity continues to govern group lifetimes and subsystem decomposition.
+- The design decision owner is the user in involved mode or the coordinator
+  in delegated mode. The coordinator accepts actual content revisions and
+  handles in-scope design choices; human-only CLI gates remain real-user actions.
+- During involved review, ask about substantive ambiguity or conflicting intent.
+  Present the artifact for content review without repeatedly asking permission
+  to proceed. At a large-design boundary, state the next scope and strongly
+  recommend a fresh session; manual creation is supported.
+- Launch arbiters only for the first completed draft, the decision owner's current-content
+  approval, or an explicit request. Sequential user comments, including
+  substantive edits, do not trigger launches. Reuse one arbiter within its
+  correction cycle; final success and owner approval must cover the same revision.
+- The current change remains involved, with user-directed batch drafting.
+  Designing the delegated option does not select it for this conversation or
+  constitute an exercise of that future workflow.
+
+## Implementation boundaries
+
+The only attached spec remains `default:000-sdd-process`, in the owned
+repository workspace. Schema/template/process fixes stay local to that spec.
+Agent coordination and the exact-path feedback now require skill payload
+changes; the earlier blanket exclusion of skills is superseded for this work.
+
+Implementation targets:
+- `schemas/sdd/schema.yaml` and its six existing templates.
+- Local `.codex/skills/` and packaged Codex/OpenCode/KiloCode skill trees.
+- Process rules `rules.md` and their full Russian translation, read through
+  SpecD; `.specd/context.md` receives only aligned global guidance.
+- `tests/pkgs/specd-bootstrap.nix` for shipped workflow-resource checks.
+
+Retain plan checkbox hashing, context compilation, schema artifact identity,
+numeric spec ordering, and supported-agent invocation syntax. Section 005
+delivery contracts and package definitions need no change. Leave deferred
+`conditional-module-activation`, metadata summarization, and wider spec
+retrofits outside this implementation.
+
+## Independent Review
+
+A fresh independent arbiter reviewed the current participation/delegation
+addition against all six artifacts, shared/schema instructions, binding context,
+user decisions, exploration, process rules, skills, templates, and delivery code.
+
+It found one P2 issue: entering delegated mode after a main-authored draft
+could let that author become coordinator and accept its own unfinished work.
+The fix places initial selection in the manager-loaded design workflow before
+proposal authoring and hands any unfinished scope/draft to a separate executor
+before coordinator acceptance. The participation probe and plan cover that
+handoff and distinct author/acceptor identities. The same arbiter rechecked
+the fix and reported no remaining findings.
+
+Instructions on clean factual correction remain in the design. Prior review's
+Constraints cleanup remains in place. Reviewed bundle digest:
+`8c057a9bf9fe831adba205772993fea3c54a026b4f4b8b4f44e8729b9b7c2b42`.
+Computed as SHA-256 of `sha256sum` output for proposal, requirements delta,
+system delta, validate delta, ADR delta, and plan, in that order, using paths
+relative to the repository root. This support note is outside that bundle.
+This review grants neither user content approval nor structural validation.
+
+## Continuation
+
+An optional paired correction diagnostic used two fresh gpt-5.6-sol agents
+with low reasoning and no inherited conversation. Both authored the same
+fictional system and received three identical sequential corrections; only
+treatment received the explicit correction rule. Both removed the wrong
+accounts cleanly after every correction and preserved the genuine CPU limit.
+Outcome: non-diagnostic control; excluded from evidence of added-rule benefit.
+Scratch prompts, snapshots, and report are under
+`/tmp/sdd-correction-probe.4h60is/`; this summary is sufficient to resume.
+This tested author editing, not a full SDD lifecycle.
+
+The user accepted the reviewed bundle above by requesting structural validation
+and design completion. All six artifacts passed validation in dependency order;
+the reviewed content stayed unchanged. Merged output was checked, designing
+post-hooks and ready pre/post-hooks completed, and the change entered `ready`.
+System validation emitted seven advisory container-content hints, with no errors.
+The fresh graph impact for all 91 implementation targets was LOW with no indexed
+code symbols; every target is inside the owned default workspace.
+
+That design continuation selected `$specd-implement
+tighten-sdd-artifact-boundaries`, using items 7–10 while preserving items 1–6.
+Implementation subsequently started as recorded in Current continuation.
+Read live lifecycle state from SpecD. This note records the conversation and
+checks; it grants no approval independently of them.
+
+## Implementation session — 2026-10-23
+
+Implementation is active; the earlier continuation's “not started” statement is
+historical. Live SpecD state is `implementing`; pending plan items are 7–10.
+Schema/templates, process translations, project guidance, extracted role and
+workflow resources, and delivery assertions have been implemented. Completion
+marks wait for their actual required evidence.
+
+The user explicitly restricted behavioral validation to Codex and directed that
+OpenCode/Kilo launches stop. Those clients are excluded from this session's
+behavioral coverage; no success is claimed for them. Static resource delivery
+comparisons remain applicable. The VM run uses `checkOpenCodeDiscovery = false`
+so it invokes neither client. The default discovery test remains available for
+other sessions.
+
+Local skills are installed by the repository's Rust `specd-bootstrap`, using
+built source payloads. The rejected separate Python copying installer was not
+run; scratch preparation scripts are not shipped. Current corrected bootstrap:
+`/nix/store/p8g4r2fl4k5vk3ia524y3s905jcmy2ph-specd-bootstrap-0.1.0`.
+
+Evidence lives under `/tmp/tighten-sdd-probes/`: `structure` records emitted
+instructions/hooks and real plan hash/drift checks; `involved` records actual
+Codex manager/author/arbiter sessions and staged fixture-user feedback.
+`/tmp/tighten-workflow-review.md` records independent source findings. These
+notes are execution evidence, not artifact acceptance or normative authority.
+
+Mechanical/static evidence for the corrected payload:
+- Rust bootstrap build and install succeeded; local/Codex packaged skill trees
+  are byte-identical. All eight entry skills pass skill-creator quick validation.
+- VM delivery test passed with `checkOpenCodeDiscovery = false`, both for the
+  full path source and Git-backed flake source. It compares fresh and updated
+  schema/entry/role/procedure trees for every manifest without launching the
+  excluded clients. The existing discovery check remains enabled by default.
+- CLI schema validation passes with six artifacts and five workflow steps.
+  Baseline comparison preserves IDs/scopes/dependencies, optionality, output
+  names, artifact validators, metadata extractors, plan task checks and hash
+  normalization. Post-rules retain composition/self-review/content-review order.
+- Isolated `structure` project captures all six artifact instructions and four
+  lifecycle hook instructions. Its validated plan hash is
+  `6a7d36c89f9546f455df0c42bc603e62f35667da5399a4564c9f11523c0e1e5e`;
+  checkbox completion preserves it, while added prose produces ARTIFACT_DRIFT.
+- Independent source review's retained archive cleanup, unsupported worker APIs,
+  and parallel top-level task findings have been corrected. Final English/Russian
+  inspection also removed a duplicated translated definition and aligned the
+  decision-owner wording in completed-plan correction guidance.
+
+These checks establish delivery and mechanical preservation. Behavioral evidence
+is tracked separately by the Codex controller in
+`/tmp/tighten-sdd-probes/codex-behavior-report.md`; unfinished entries remain open.
+
+Completed Codex behavioral observations:
+- Involved proposal author, manager, and arbiters used separate contexts and
+  direct source reads. Typo and substantive comments caused self-review only;
+  an explicit review request launched an arbiter without content acceptance.
+  A final-check CPU-budget conflict escalated without validation. The owner
+  resolved it, accepted the corrected revision, and a fresh final arbiter passed
+  that same revision before actual proposal validation. Accepted/validated
+  digest: `9432f53c72b59ed3bea56384b0c094a9ff750ad1c97e821adb1afe52c1b4a7e7`.
+  Evidence: `involved/events.md` and `involved/evidence/` under the probe root.
+- The implementation fixture implemented and invoked its output command,
+  observed exactly `ready\n` with exit 0 and empty stderr, marked its sole
+  checkbox, and immediately ran post-implementing hooks. The only plan change
+  was `[ ]` to `[x]`; normalized digest remained
+  `d7b737960473c095b65bca1828df40891363b5d2c5078808f288ebb1af6bd4a0`.
+  An older support note requesting a plan report did not override that boundary.
+  Evidence/report stayed outside the plan; no verification skill was invoked.
+- A subsequent live-input inspection found a deliberately supplied semantic
+  disagreement: system and command said `ready\n`, validation expected `busy\n`.
+  Codex reported the conflict, requested a design-owner decision, and made no
+  repairs or transitions. Fixture state remained `implementing`.
+  Evidence: `implementation/evidence/inspection-{inputs,command,cli}.json`.
+- Classification review passed all ten actual proposals: five small and five
+  architectural. Nine drafts came from fresh native Codex primary thread
+  `01a16820-9a86-72f3-9a82-4094e4a088c3`, using configured defaults and no child
+  roles; the involved bug-fix fixture supplies the tenth. A separate fresh
+  reviewer read factual sources, delivered criteria, and actual output hashes.
+  It reported no findings, with no artifact edits, validation or acceptance.
+  `classification/classification-results.md` and `classification-review.md`
+  retain the cases; `native-events.jsonl` retains the actual native session.
+- That independent reviewer also read the ignored hidden exact criterion
+  before searching, tested an absent exact reference before fallback discovery,
+  and then read the relocated source. Actual ordering is retained in
+  `classification/evidence/source-calls.jsonl`; this proves the bounded exact-source
+  behavior separately from entry-resource source inspection.
+- Sufficiency/correction probe passed in separate `sufficiency` project with
+  fresh Codex author and independent read-only arbiter. Repetition, the wrong
+  CPU account/history and a pseudo-prohibition were removed; genuine aggregate
+  CPU/confidentiality needs and scenarios survived. Compact contracts were
+  accepted without unjustified expansion. Actual runner assertions constrain
+  automated claims; uncovered conditional manual runtime checks remain.
+  Subsequent flag-selection feedback used self-review without another arbiter,
+  replacing the wrong account and dependent explanations directly, without a
+  new name-selection prohibition or correction history. The unchanged script's
+  concrete conformance gaps were reported truthfully. This proves bounded
+  author/reviewer editing, not a complete lifecycle. Actual hashes, snapshots,
+  diffs and review results: `sufficiency/evidence/controller-result.md` and
+  `author-initial-*`, `review-initial-*`, `author-feedback-*` beside it.
+- The involved fixture's state-only dependency repair also passed: the retained
+  manager/executor verified prior owner acceptance and final review at unchanged
+  proposal digest `9432f53c…`, then cleared pending review with actual validation.
+  No new acceptance/arbiter, artifact edit or downstream draft was needed.
+  Evidence: `involved/evidence/state-repair-9-*`, `manager-assignment-9.md`.
+- Requirements reused accepted proposal allocation without another intent or
+  participation checkpoint. Fresh arbiter
+  `/root/involved_probe/involved_requirements_arbiter` found three raw-draft
+  issues, then checked the corrected revision in that same context and closed
+  successfully. Concrete owner acceptance and a separate fresh final arbiter
+  covered `8c5fab6da5fc058e5271ea5b7983fd86f046958224528e59551c11515c5434aa`;
+  only then did requirements-only structural validation pass. No system or
+  downstream content was authored. Actual inputs, findings, revision-pointer
+  recheck, acceptance, final result and CLI outputs are retained in
+  `involved/evidence/requirements-*` and `manager-assignment-{10,11}.md`.
+- Changed-upstream repair passed: the actor presented both the actual correction
+  diff and accepted-to-revised diff/full table, and withheld validation at the
+  new proposal revision. Owner acceptance and a fresh final arbiter covered
+  `9534da615f9c0993837f26d28228ea3040acf76eef76ba6237c6712f14399700` before
+  proposal validation. Dependent requirements remained exactly `8c5fab6d…`;
+  their actual prior acceptance/final review was assessed and reused for
+  state-only revalidation. Both became complete, with no system authoring.
+  Evidence: `involved/evidence/upstream-*`, `proposal-upstream-*.diff` and
+  `manager-assignment-{12,13}.md`.
+
+Plan item 7 completed after the actual schema/lifecycle, classification/intent,
+sufficiency/coverage, approval-repair and plan-integrity evidence above passed.
+Only its checkbox changed. Main change remains implementing without blockers;
+source payload is unchanged from the tested p8 build.
+
+Plan item 8 completed separately after shipped-resource, actual Codex role and
+review scheduling, exact-source behavior and aligned-guidance checks passed.
+The user-requested OpenCode/Kilo behavioral exclusion remains explicit; delivery
+checks are not represented as those clients' behavioral success. Only item 8's
+checkbox changed. Pending items: 9 (participation/lifetimes/staged design) and
+10 (final reconciliation). Prepared final-payload fixtures are `participation`,
+`no-independent`, `large-involved`, and `large-delegated` under the probe root.
+At that item-8 closure no native process was active; classification had ended.
+
+## Continuation after machine reboot
+
+Main source changes, plan marks, Nix build outputs and this summary survived;
+old temporary projects and collaboration workers did not. Historical raw logs
+must not be described as still available. No completed check was reconstructed
+or rerun and relabeled as its old execution.
+
+The non-ephemeral participation primary survived in Codex session history:
+`01a16857-6cd8-7731-9145-76dc94f9d564`. Its actual initial reply offered both
+participation choices and treated “all at once” only as scheduling, with no
+drafting/approval. The original rollout and extracted actual reply are now in
+`participation/evidence/` under the durable probe root. Root resumed that exact
+thread with explicit involved choice and relocated live fixture pointers;
+proposal authoring is pending. A separate deliberately feature-disabled native
+probe is running in `no-independent`; no result is claimed yet.
+
+The resumed primary actually produced proposal `2e5af078514397b6b4df6104d2a58d764a6ba63f767960f2f50f3947f7ba135c`
+with involved participation, without repeating mode selection, and passed a
+fresh first-draft arbiter. Only after reading the full proposal did the fixture
+controller accept that concrete revision and request its final check/validation,
+then requirements drafting. This resumed turn is logged durably under
+`participation/evidence/requirements-native-*`; no requirements acceptance is
+supplied. The current native primary ID remains unchanged.
+
+The feature-disabled control did not establish unavailability: the native
+context reported exposed external collaboration tools accepted a manager and
+began unapproved proposal work. Root interrupted that unsuitable control
+(exit 1), with no validation/approval; its actual partial records remain in
+`no-independent`. It is non-diagnostic for the unavailable-context criterion,
+not a passed fallback test. A separate `capacity` project now exercises actual
+tool capacity exhaustion with reserved workers and a fresh bounded actor;
+only real error/result evidence can satisfy that criterion.
+
+The actual capacity fallback branch passed. Controller reserved two inert
+workers plus the fresh actor; the next spawn returned the real thread-limit
+error. With all four client contexts running, the actor's independent-manager
+spawn also returned `agent thread limit reached`. It saved exact live-path
+continuation, reported the limitation and stopped with the fixture still
+drafting and every artifact missing. No roles were impersonated and no content
+was authored/accepted/validated. Both reservations were released and confirmed
+completed afterward. Actual tasks, responses, statuses, error and actor result:
+`capacity/evidence/controller-events.jsonl`, `controller-condition.json`,
+`actor-observations.json`, `actor-final-status.txt`, `actor-final.md` and the
+fixture's change-local `.context`. This is genuine client capacity exhaustion
+in a worker context, not evidence that default Codex lacks collaboration or a
+claim that a worker is a primary session. Remaining design probes continue.

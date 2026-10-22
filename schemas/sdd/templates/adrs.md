@@ -4,6 +4,7 @@
 
      ADRs explain why significant choices were made. They are not the primary
      source of current required behavior or current system guarantees.
+     Link to those normative owners instead of repeating their contracts.
 
      Use one section per decision:
 

@@ -6,6 +6,7 @@
   specd-bootstrap,
   specd-bootstrap-sdd-schema,
   testers,
+  checkOpenCodeDiscovery ? true,
 }:
 
 let
@@ -79,8 +80,43 @@ testers.runNixOSTest {
     machine.succeed("cd /tmp/specd-bootstrap-opencode && git init")
     machine.succeed("specd-bootstrap --target /tmp/specd-bootstrap-opencode --agent opencode")
     machine.succeed("test -f /tmp/specd-bootstrap-opencode/.opencode/skills/specd/SKILL.md")
-    machine.succeed("grep -F '/specd-new' /tmp/specd-bootstrap-opencode/.opencode/skills/specd/SKILL.md")
-    machine.succeed("cd /tmp/specd-bootstrap-opencode && opencode debug skill | grep -F '\"name\": \"specd-new\"'")
+    machine.succeed("grep -F '/specd-new' /tmp/specd-bootstrap-opencode/.opencode/skills/_specd-shared/workflows/specd.md")
+    if ${if checkOpenCodeDiscovery then "True" else "False"}:
+      machine.succeed("cd /tmp/specd-bootstrap-opencode && opencode debug skill | grep -F '\"name\": \"specd-new\"'")
+
+    agent_sources = {
+      "codex": "${../../pkgs/by-name/sp/specd-bootstrap-agent-codex/src/skills}",
+      "opencode": "${../../pkgs/by-name/sp/specd-bootstrap-agent-opencode/src/skills}",
+      "kilocode": "${../../pkgs/by-name/sp/specd-bootstrap-agent-kilocode/src/skills}",
+    }
+    workflow_skills = [
+      "specd", "specd-new", "specd-design", "specd-implement",
+      "specd-verify", "specd-archive", "specd-compliance", "specd-metadata",
+    ]
+    for agent, source in agent_sources.items():
+      project = f"/tmp/specd-workflow-{agent}"
+      installed = f"{project}/.{agent}/skills"
+      machine.succeed(f"mkdir -p {project} && cd {project} && git init")
+      machine.succeed(f"specd-bootstrap --target {project} --agent {agent}")
+      machine.succeed(f"diff -r {source} {installed}")
+      machine.succeed(f"diff -r {schema_root} {project}/schemas/sdd")
+      for resource in ["shared.md", "manager.md", "arbiter.md", "coordinator.md"]:
+        machine.succeed(f"test -s {installed}/_specd-shared/{resource}")
+      for skill in workflow_skills:
+        machine.succeed(f"test -s {installed}/{skill}/SKILL.md")
+        machine.succeed(f"test -s {installed}/_specd-shared/workflows/{skill}.md")
+
+      # An update replaces stale entry, role, procedure and schema content while
+      # preserving the target project's workspace configuration.
+      machine.succeed(f"printf stale > {installed}/_specd-shared/manager.md")
+      machine.succeed(f"printf stale > {installed}/_specd-shared/workflows/specd-design.md")
+      machine.succeed(f"printf stale > {installed}/specd-design/SKILL.md")
+      machine.succeed(f"printf stale > {project}/schemas/sdd/templates/proposal.md")
+      machine.succeed(f"printf '%s\n' 'schema: ./old/schema.yaml' 'workspaces:' '  - name: default' '    path: docs/specs' > {project}/specd.yaml")
+      machine.succeed(f"specd-bootstrap --target {project} --agent {agent}")
+      machine.succeed(f"diff -r {source} {installed}")
+      machine.succeed(f"diff -r {schema_root} {project}/schemas/sdd")
+      machine.succeed(f"grep -F 'path: docs/specs' {project}/specd.yaml")
 
     machine.succeed("mkdir -p /tmp/specd-bootstrap-custom")
     machine.succeed("cd /tmp/specd-bootstrap-custom && git init")

@@ -1,101 +1,48 @@
 ---
 name: "specd"
 description: "Entry point for specd lifecycle orientation and next-step guidance."
-metadata:
-  opencode/slash: "true"
 ---
 
-# specd — entry point
+# specd
 
-Read @../\_specd-shared/shared.md before doing anything.
+Before any shared-notes lookup or glob discovery, check referenced exact paths.
+Resolve relative paths against the referring resource and known values such as
+`changePath` against live CLI output. Test/read the resolved path first; use
+`rg --files --hidden` or glob fallback only when it is genuinely absent. Apply
+this to shared resources, `.context`, and `.specd-exploration.md` too.
 
-## What this does
+Start or resume a separate manager with [manager.md](../_specd-shared/manager.md),
+the invoked skill `specd`, arguments, project root/config, and relevant source
+pointers. The manager loads [the procedure](../_specd-shared/workflows/specd.md)
+and [shared notes](../_specd-shared/shared.md). Ask for the current bounded
+assignment; do not load the full procedure into the author context by default.
+Do not spawn a manager from a worker already assigned that manager role.
 
-Detects the current state of a change and tells you what to do next.
-This skill does NOT execute lifecycle phases — it routes to the right skill.
+As executor, independently read the assigned sources and applicable criteria,
+perform the bounded work, self-review, and report the output/revision to the
+manager. Follow its live ownership, scope, hooks, review, approval, and stop
+conditions. It cannot expand user authorization or filesystem permissions.
+Preserve sequential task completion and the approved plan's checkbox-only rule.
+For design, resolve participation before authoring; in delegated mode the main
+session loads [coordinator.md](../_specd-shared/coordinator.md) and launches a
+separate scoped executor, including handoff of any unfinished main-authored draft.
 
-## Steps
+At the manager's three review triggers, launch a separate arbiter with
+[arbiter.md](../_specd-shared/arbiter.md) and its concise source/revision assignment.
+The arbiter reads sources directly and never edits artifacts. Sequential owner
+comments use executor self-review; retain one arbiter within a launched cycle.
+Final review and decision-owner acceptance cover the same revision before
+structural validation or subscope closure. Human-only CLI gates remain human.
 
-### 1. Show project welcome
+Use the client's supported independent-agent tools and available slots. For
+OpenCode, use independent task/subagent facilities when exposed;
+start workers without inherited conversation. Stop workers before a group
+handoff. If independent contexts are unavailable, save continuation under the
+live change path and report the limitation. Manual user-created primary
+sessions support involved-mode handoff; compaction or role relabeling does not.
+Continue design with `/specd-design <name>` when the manager names that boundary.
+Invoke skills with `/specd` (and other `/specd-*` names); translate slash-style
+CLI recommendations to this client syntax.
 
-Gather project info and load project context:
-
-```bash
-specd project status --context --graph --format toon
-```
-
-**MUST follow** — the project status output contains workspaces (name, prefix, ownership, codeRoot),
-specs, changes, graph freshness, and approval gates.
-
-The `context` field contains binding directives (instructions and file references).
-Read and absorb them before continuing. If lazy mode returns summary
-specs, evaluate and load any that are relevant (see `shared.md` — "Processing `change
-context` output").
-
-From the results, **print a welcome block** to the user with the structure defined
-in `shared.md`.
-
-If the code graph is stale or not indexed, re-index it in the background:
-
-```bash
-specd graph index --format toon
-```
-
-### 2. Check for existing changes
-
-If the user DID NOT provide a change name as an argument:
-
-1. Check `changes.active` and `changes.drafts` from the `project status` output.
-2. If any exist and `project status` did not include their names/states, list them
-   for the user with their current states.
-
-```bash
-specd changes list --format toon
-specd drafts list --format toon
-```
-
-3. Ask the user:
-
-   > Would you like to:
-   >
-   > - **Continue** an existing change? (select one)
-   > - **Explore** something new to create a change? (run `/specd-new`)
-   > - **Restore** a draft? (select one)
-
-4. **Stop.** Wait for the user to decide.
-
-If a draft is selected to be restored: `specd drafts restore <name>`.
-
-### 3. Route based on state
-
-If a change name is provided (or once selected), run in **text mode** to see the full
-diagnostic context (Artifact DAG, blockers, next action):
-
-```bash
-specd changes status <name> --format text
-```
-
-**Always prioritize high-visibility blockers.** If the **blockers:** section is not
-empty, explain them to the user and suggest following the **next action:** command.
-
-If `review: required: yes` is shown, suggest:
-
-- `/specd-design <name>`
-
-Do NOT suggest implementation, verification, or archive while review is required.
-
-If no review is required, suggest the next skill based on the **next action:** `target`
-and `command` recommendation provided by the CLI. Trust the CLI's dynamic routing
-over manual state tables.
-
-### 4. Present and stop
-
-Show the user what you found and suggest the next action. **Do NOT invoke skills
-automatically** — let the user decide.
-
-## Guardrails
-
-- Do NOT write any code — this skill is read-only for routing
-- Do NOT modify any existing files in the codebase
-- Do NOT create artifacts — that's handled by other skills
-
+The manager names the terminal boundary. Stop there and suggest the next skill;
+do not invoke another lifecycle skill without an explicit user request.

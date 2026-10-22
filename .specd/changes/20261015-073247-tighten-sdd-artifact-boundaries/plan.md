@@ -2,118 +2,98 @@
 
 ## Goal
 
-Align the local SpecD schema and process guidance with the approved
-[system design](deltas/default/000-sdd-process/system.md.delta.yaml), keeping
-requirements unchanged. Complete the eight checks in the
-[validation design](deltas/default/000-sdd-process/validate.md.delta.yaml)
-before marking implementation complete.
+Implement the draft [system](deltas/default/000-sdd-process/system.md.delta.yaml)
+and [REQ-008/009](deltas/default/000-sdd-process/requirements.md.delta.yaml).
+Use the named checks in the merged validation artifact as completion evidence.
+Items 1–6 retain the earlier completed scope; items 7–10 implement this revision.
 
-## Assumptions
+## Assumptions and Constraints
 
-- The `default` workspace owns the repository code root. Product changes stay
-  inside that root; disposable probe projects live under `/tmp` as agreed.
-- Ordered `rules.pre` and `rules.post` reach the existing skills through
-  `changes artifact-instruction`. No skill or SpecD CLI changes are needed.
-- The schema package already copies `schemas/sdd/`; bootstrap built from this
-  checkout therefore installs the updated schema and templates.
+- The owned `default` workspace contains all implementation targets.
+  Disposable behavioral fixtures use separate projects under `/tmp`.
+- Existing packages recursively copy schema and skill trees. Preserve delivery
+  contracts, agent manifests, invocation syntax, artifact IDs, scopes, task
+  checks, numeric spec ordering, and plan checkbox hashing.
+- Keep useful contracts while replacing repetitions and conflicting guidance.
+  Requirements 1–7 stay unchanged; the delta adds REQ-008 and REQ-009.
+- During implementation, edit this plan only to mark completed checkboxes.
+  Keep execution evidence elsewhere; actual design errors require decision-owner
+  permission to return to design.
+- English owns process changes; translate the full updated text into Russian.
 
-## Constraints
+## Current Implementation and Approach
 
-- Preserve useful existing guidance. Add boundary clarification and workflow
-  rules; correct conflicting text and remove the separate Context artifact.
-- Keep the requirements delta `no-op`. Patch mechanics do not become needs.
-- During implementation, change this plan only by marking completed checkboxes.
-  Store execution evidence outside the plan. Surface actual design errors and
-  obtain user permission before returning to design.
-- Keep prose wrapped near 80 columns, allowing indivisible links to exceed it.
-- Make process changes in English and translate the full result into Russian.
+Schema already implements removal of Context, artifact boundaries, review
+before structural validation, self-review, plan preservation, and the separate
+intent checkpoint. It does not implement the latest feedback or group workflow.
+Existing skills contain lifecycle procedures in the executor's entry files.
 
-## Current Implementation Observations
-
-- The schema still defines optional change Context and its template.
-- The requirements instruction already distinguishes needs from implementation,
-  but proposal template wording assumes modified specs change requirements.
-- Review and boundary self-checks are not yet delivered as composition rules.
-- Plan checkbox normalization already exists and should be retained.
-- Graph impact for the ten paths below reports LOW risk with no symbols or
-  dependents. The index has zero code files, so this does not establish complete
-  impact coverage. Source inspection confirms bootstrap consumes this schema
-  tree and skills consume its instructions.
-
-## Implementation Approach
-
-Execute the six items below in order. Each item includes its matching schema,
-template, English/Russian process text, and project-guidance changes, keeping
-the implemented subset aligned before it is marked complete. Retain existing
-validation fields, the plan task model, context compilation, and discovery
-memory.
-
-Once an item's schema and template edits are stable, bootstrap its probes from
-that checkout. Independent documentation work may continue while probes run.
-If the tested payload changes, rerun affected probes against the new payload.
+Proceed through pending items in order. First align schema and prose with the
+compact proposal and readability contracts. Then extract lifecycle procedures
+into manager-loaded resources and switch all supported entry skills to the
+role workflow in one coherent item. Then implement participation selection,
+coordinator authority, group lifetimes, and subsystem resumption. Each item includes aligned
+English/Russian/project guidance and its own validation.
 
 ## Minimal Change Set
 
-- `schemas/sdd/schema.yaml`
-- `schemas/sdd/templates/proposal.md`
-- `schemas/sdd/templates/requirements.md`
-- `schemas/sdd/templates/system.md`
-- `schemas/sdd/templates/validate.md`
-- `schemas/sdd/templates/plan.md`
-- `schemas/sdd/templates/context.md` — delete
-- `.specd/context.md`
-- `specs/000-sdd-process/rules.md`
-- `specs/000-sdd-process/rules.ru.md`
+- `schemas/sdd/schema.yaml`; existing proposal, requirements, system, validate,
+  plan, and ADR templates under `schemas/sdd/templates/`.
+- `.codex/skills/` and the three packaged trees:
+  `pkgs/by-name/sp/specd-bootstrap-agent-{codex,opencode,kilocode}/src/skills/`.
+  Update each SpecD entry skill and `_specd-shared/shared.md`; add
+  `_specd-shared/manager.md`, `_specd-shared/arbiter.md`,
+  `_specd-shared/coordinator.md`, and
+  `_specd-shared/workflows/<skill>.md` for extracted procedures.
+- `.specd/context.md`, and process `rules.md` plus `rules.ru.md` in
+  `default:000-sdd-process`, read through SpecD.
+- `tests/pkgs/specd-bootstrap.nix`: assert fresh/update delivery of new
+  resources for every supported agent.
 
-Read spec content through the SpecD CLI. The existing requirements, system,
-and validation deltas supply the normative changes for archive; do not
-manually replace steady-state schema artifacts during implementation.
+The change deltas supply requirements, system, validation, and ADR content for
+archive. Do not manually replace steady-state SpecD artifacts during implement.
+Change-local `.context` is support/continuation data produced by the workflow,
+rather than a new schema artifact.
 
-## Validation Plan
+## Validation Strategy
 
-Use the named checks from the validation delta, rendered with:
+Read the named checks with `specd changes spec-preview
+tighten-sdd-artifact-boundaries default:000-sdd-process --artifact validate
+--format text`. For each item run its listed subset on the payload it changes;
+before the last item closes, account for all checks against the final payload.
 
-```sh
-specd changes spec-preview tighten-sdd-artifact-boundaries \
-  default:000-sdd-process --artifact validate --format text
-```
+Use isolated probes and actual tool/session records as specified in validate.
+Inspecting instructions proves delivery, not behavioral compliance. Exercise
+client-specific actions on supported tooling and record unavailable probes as
+unexecuted; do not mark their owning item complete. Reuse prior evidence only
+when the tested inputs and contracts are unchanged.
 
-- Run schema/project discovery and inspect delivered instructions for all six
-  artifact IDs, including rule ordering and lifecycle hook guidance.
-- Exercise intent, self-review, and content approval with fresh sub-agents.
-  Follow the bootstrap setup in the validation design: each probe has its own
-  Git root, configuration, specs, changes, and locks. Set explicit fixture
-  working directories and `--config` paths. Give sub-agents only fixture
-  context and staged user messages; keep expected answers in the controller.
-- Record CLI calls through the fixture-local wrapper, replies, and file
-  snapshots at each stop. Simulated approvals apply only to test content.
-  Check actual outcomes against the validation design before reporting pass.
-- Exercise checkbox/hash preservation and prose drift in a disposable plan.
-- Audit artifact boundaries, owner links, and English/Russian/project guidance.
-  Record results and evidence locations in scratch output and the final report,
-  without appending execution notes to this plan.
-- Check `git diff --check`. Inspect the product diff for the ten-path scope;
-  confirm skills and package definitions are unchanged. Compare bootstrapped
-  schema/template contents with the source tree under test.
+Optional diagnostics do not gate completion. Record a clean control as
+non-diagnostic rather than evidence that the added instruction is effective;
+report treatment defects even when the control is clean.
 
-Each item checks the contracts it introduces and preserves. Do not report a
-whole validation-design check as passed when only its item-specific subset was
-exercised. Before the final item closes, account for all eight checks against
-the final payload. Reuse earlier evidence only where the tested contracts and
-fixture conditions remain applicable; rerun affected checks after changes.
+Preservation checks cover existing requirements: authoritative/discoverable
+English rules and aligned translation (REQ-001/003), CLI state and artifact flow
+(REQ-002/006), numeric reconstruction order (REQ-004), normative ownership
+(REQ-005), and requirement-owned scenarios versus technical evidence (REQ-007).
+REQ-008 is exercised by role, lifetime, resumption, and subsystem probes.
+REQ-009 is exercised by participation/authority and delegated-orchestration probes.
 
-Preservation checks for unchanged requirements:
+Run `git diff --check`; inspect scope and local/packaged consistency. Build
+`nix build --no-link .#specd-bootstrap.tests.vm` once the delivery assertions
+are updated. Before completion, compare fresh and updated installed resources
+against the final source trees; rerun affected probes after payload changes.
 
-- `REQ-001` and `REQ-003`: English rules remain authoritative, linked from
-  contribution guidance, and aligned with schema and Russian text.
-- `REQ-002` and `REQ-006`: project/change inspection and the required artifact
-  flow remain usable; plan remains the only task-bearing artifact.
-- `REQ-004`: keep capability directory identifiers and numeric section ordering;
-  confirm the merged system retains its Ordered SpecD SDD Sections contract.
-- `REQ-005` and `REQ-007`: current system truth stays with its normative owner;
-  acceptance scenarios remain in requirements and technical checks in validate.
+Graph queries report LOW impact with no dependents, but the index has zero
+code symbols. Source inspection establishes the real coupling: packages copy
+these trees and skills consume schema instructions. No claim of complete
+code-graph coverage follows from LOW.
 
-## Top-Level Plan Items
+## Completed Plan Items
+
+The following items retain their earlier completion record and original scope.
+Their former intent-checkpoint and routine human-review wording is superseded
+by pending items 7–9 as applicable.
 
 - [x] 1. Remove the separate change Context artifact.
   Scope: schema definition, proposal references, Context template, and matching
@@ -172,10 +152,66 @@ Preservation checks for unchanged requirements:
   preservation/diff checks above pass for the final payload with recorded
   evidence. Keep this item open for failed or unexecuted required checks.
 
+## Top-Level Plan Items
+
+- [x] 7. Integrate compact proposal and artifact readability.
+  Scope: schema instructions/rules, the six templates, and process/project
+  guidance. Move allocation into proposal; add decision-scope classification,
+  participation mode, numbered correction replay, and change-local support
+  context. Apply concise
+  requirements, legitimate-negative-need handling, concrete sufficient system
+  text, replacement of errors without counterclaims or correction history,
+  automated/manual separation, and preservation of uncovered manual duties.
+  Completion: schema/lifecycle, proposal/intent, sufficiency/coverage, approval
+  repair, and plan-integrity checks pass for the affected subset. The artifact
+  graph is unchanged; no additional intent checkpoint remains.
+
+- [x] 8. Establish manager and independent arbiter coordination.
+  Scope: local and all three packaged skill trees, role/procedure resources,
+  bootstrap test assertions, and aligned process/project guidance.
+  Approach: extract current per-skill lifecycle procedures without dropping
+  ownership, scope, hooks, review/approval, or graph/context guards; make entry
+  skills start/resume a manager and execute its bounded assignments. Install
+  the exact-path-first rule before any shared-notes lookup. Keep independent
+  review assignments concise and artifact-specific; replace the mandatory
+  generation-mode question with proposal-time participation selection.
+  Apply the three arbiter triggers from system: first draft, decision-owner
+  acceptance, and explicit request. Keep sequential owner edits with the
+  executor until a trigger occurs; final review and approval cover one revision.
+  Completion: shipped-resource, role/review, exact-source, and aligned-guidance
+  checks pass. The same fixture lifecycle behavior remains available for every
+  supported agent; client-specific limitations are recorded, not hidden.
+
+- [x] 9. Implement participation, group lifetimes, and staged system design.
+  Scope: manager/design workflow, system instruction/template, handoff support,
+  client-specific entry guidance, and matching process/project text.
+  Approach: offer involved/delegated design once during proposal. In involved
+  mode, keep user content acceptance and fresh-primary-session recommendations;
+  in delegated mode, make the main session a coordinator that accepts design
+  revisions and launches scoped author groups. Select participation before
+  proposal authoring; when entering delegated mode later, hand off the current
+  unfinished scope and draft to a separate executor before acceptance.
+  Apply the actual complexity
+  category to group lifetimes and staged system design. Track participation,
+  decision owner, overview/subsystem scopes, revisions, and integration in
+  change-local context while keeping one system artifact.
+  Completion: participation/authority, delegated-orchestration, lifetime/resumption,
+  and subsystem/integration probes pass. Cover human-only CLI gates, independent
+  role contexts, client capacity, stale notes, explicit batching, changed approved
+  interfaces, and no premature complete-system validation.
+
+- [x] 10. Reconcile final guidance and verify the complete delivered workflow.
+  Scope: all touched schema, skill, template, and process resources.
+  Approach: resolve remaining inconsistencies within the approved design and
+  perform final preservation and delivery checks.
+  Completion: every automated/manual validation entry has recorded evidence
+  against the final payload; translation, links, ownership, and scope checks
+  pass. No failed or unavailable required probe is reported as passed.
+  Routine results stay outside this plan.
+
 ## Out Of Scope
 
-- Local and reusable agent skill edits, SpecD CLI changes, and new CLI approval
-  state or approval documents.
-- Bootstrap delivery contracts, package definitions, and section 005 changes.
-- Repository-wide spec retrofits, host configuration changes, commits, or
-  additional permanent test infrastructure.
+SpecD CLI or approval-state changes, a mandatory session controller, bootstrap
+package/manifest redesign, section 005 changes, unrelated host/spec retrofits,
+metadata summaries, and resuming deferred `conditional-module-activation`.
+Commits require a separate explicit user request.

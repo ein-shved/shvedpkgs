@@ -4,13 +4,12 @@
 
 ### 0.1 Scope
 
-This document defines the project’s current working Spec-Driven
-Development (SDD) process.
+This document defines the responsibilities, content, dependency relationships,
+and validation semantics of the project's Spec-Driven Development (SDD)
+artifacts.
 
-The process is under active development.
-
-Until open changes are explicitly adopted, the rest of this document
-defines the current working model.
+The artifact model is under active development. Until open changes are
+explicitly adopted, the rest of this document defines the current working model.
 
 ### 0.2 English and Russian Versions
 
@@ -27,20 +26,11 @@ and should be tracked and corrected as a bug. Until it is resolved,
 
 The primary candidates for future revision are:
 
-- **Artifact lifecycle and status model.** The process needs an explicit
-  model for artifact states and transitions, such as draft, accepted,
-  active, completed, superseded, archived, or equivalent project-specific
-  states. SpecD may provide useful ideas here, but any borrowed model
-  must preserve this document’s artifact responsibilities and dependency
-  structure.
-- **SpecD integration.** SpecD is being introduced as tooling for
-  agent-assisted SDD. Its standard workflow is not assumed to define
-  this methodology. In particular, the separation between Requirements,
-  System Specification, Plans, and other artifacts described here should
-  be preserved unless deliberately revised.
-- **Artifact formats and workflow automation.** File layout, syntax,
-  identifiers, lifecycle states, traceability, and agent-facing workflow
-  may evolve as tooling is introduced.
+- **Artifact lifecycle and status model.** Artifact states and their meaning,
+  such as draft, accepted, active, completed, superseded, and archived, need
+  an explicit model consistent with artifact responsibilities and dependencies.
+- **Artifact formats.** File layout, syntax, identifiers, and traceability
+  conventions may evolve through explicit changes to the artifact model.
 
 ### 0.4 Examples and Technology-Specific Detail
 
@@ -95,7 +85,7 @@ REQ -> SPEC -> PLAN -> IMPLEMENTATION
 
 Non-normative project guidance and discovery memory may support orientation,
 especially while introducing SDD to an existing project. They are outside
-the normative dependency chain; there is no separate change Context artifact.
+the normative dependency chain.
 
 ADR is not a fixed pipeline stage. It may arise while working at any
 layer.
@@ -139,30 +129,15 @@ downstream artifacts.
 
 ## 3. Artifact Model
 
-### 3.0 Local SpecD Artifact Flow
-
-The local schema operationalizes the process as
-`proposal -> requirements -> system -> validate -> plan`, with optional
-spec-scoped `adrs` depending on requirements and system. Proposal and plan
-are change-scoped; requirements, system, validate, and ADRs are spec-scoped.
-Plan is the only task-bearing artifact.
-
-Proposal explains motivation, current problems, proposed direction, scope,
-impact, and relevant technical context. It identifies affected specs even
-when their requirements remain unchanged. It does not replace the owning
-requirements or system design.
-
 ### 3.1 Project Guidance and Discovery Memory
 
-The local schema has no change-scoped Context artifact or template.
-SpecD project context compilation, `.specd/context.md` project instructions,
-and `.specd-exploration.md` discovery memory remain available. Temporary
-inventory and maps may help discovery during SDD adoption.
+Non-normative project guidance, discovery notes, inventories, and maps may
+support orientation during SDD adoption and project exploration.
 
 These sources do not define required behavior or system guarantees and must
 not become parallel current-system descriptions. Requirements and System
-Specification take precedence. Refresh useful orientation, move durable
-knowledge to its owning artifact, or remove stale material.
+Specification take precedence. Durable knowledge belongs in its owning artifact;
+orientation material may be incomplete, temporary, or absent.
 
 ### 3.2 Requirements
 
@@ -196,9 +171,6 @@ A Requirement may use domain concepts meaningful to its consumer. The
 System Specification maps those concepts to the current system model
 where necessary.
 
-First check existing requirements and the authoritative process rules. A
-schema or design defect can be fixed while the underlying need stays
-unchanged: attach the owning spec and use a `no-op` requirements delta.
 Patch constraints, defect descriptions, and proposed fixes do not become
 requirements merely because the user mentioned them. Place them in proposal,
 system, or plan according to their responsibility.
@@ -391,19 +363,6 @@ self-contained commits. A plan item does not have to equal one commit.
 
 A completed Plan is primarily transition history. Current system truth
 remains in Requirements and Specification.
-
-During implementation, the approved Plan may change only by marking completed
-work from `[ ]` to `[x]`. Add no prose, steps, execution reports, or
-embellishments. Agents neither ask permission nor proactively propose to
-append to it. Temporary execution tracking and chat progress remain outside
-the Plan. Verification and archive guidance respect the same boundary.
-
-An actual design error must be surfaced to the user. Wait for explicit user
-permission before returning to designing, then correct the earliest affected
-artifact. Routine implementation choices do not trigger design revisions.
-The local schema normalizes completion marks before hashing the Plan, so
-progress preserves its approved hash while other edits cause drift; this is
-drift detection, not a filesystem write restriction.
 
 ### 3.5 Implementation
 
@@ -735,10 +694,6 @@ If behavior was missing from Specification, correct Specification before
 planning the fix. If the underlying need was missing, correct
 Requirements first.
 
-Amendments to a completed Plan are design work. They do not authorize
-additions while implementing an approved Plan: surface the actual design
-error and obtain explicit user permission before returning to designing.
-
 ### 8.5 Regression Validation
 
 A bug fix should close both the implementation defect and, when present,
@@ -862,135 +817,9 @@ owning requirement or relevant `system.md` heading. Cross-spec references
 include the owning spec's relative path. Identify owners without copying
 their content.
 
-## 12. Agent Interaction and Tooling
+## 12. Practical Decision Guide
 
-### 12.1 Repository State as Agent Context
-
-Agents should primarily derive project intent and process state from
-repository artifacts.
-
-A healthy process should allow a fresh agent to continue without a large
-handoff duplicating repository knowledge.
-
-Prompts may therefore remain concise when conventions are established,
-for example:
-
-``` text
-Create a Plan for REQ-001.
-```
-
-Quality should come from artifacts and process rules, not months of
-conversation history.
-
-### 12.2 Ambiguity and Discovery
-
-Agents should not silently invent mappings or decisions to close
-upstream gaps. Material ambiguity should be surfaced and resolved at the
-owning layer.
-
-### 12.3 Plan Items vs Agent Execution Steps
-
-Top-level plan items are integration-safe units of project work. An
-agent may use a much finer temporary TODO list internally; those steps
-are execution mechanics, not automatically plan items.
-
-#### 12.3.1 Intent Review Before Requirements
-
-Before drafting requirements, read the proposal against existing requirements
-and authoritative process rules. Present a minimal allocation in chat, one line
-per relevant proposal point. Each line contains only a two- or three-word topic
-and its destination: `<topic> — <artifact>`. Multiple points may share a
-destination. An unchanged artifact can be marked
-`<topic> — <artifact> (no-op)`. Include only relevant destinations; do not expand
-the list into descriptions, rationale, quotations, or artifact drafts.
-
-After every user correction, redisplay the entire corrected list in the same
-minimal format. An acknowledgement or description of edits does not replace
-that list. Repeat until the user agrees; draft requirements only after that
-agreement. Do not prepare full requirements, architecture, or plan files in
-advance of agreement.
-
-The requirements artifact's schema `rules.pre` delivers this checkpoint. It
-creates no artifact and is not repeated before each downstream artifact. Reuse
-an allocation explicitly agreed during proposal review or an earlier exchange
-while it remains applicable. Only a material change to that allocation needs
-renewed intent review. Agreement on intent alone does not approve later
-artifact content for structural validation.
-
-#### 12.3.2 Artifact Boundary Self-Review
-
-Before presenting a draft for human review, reread it, including the merged
-result for a delta. Check new or changed statements against their artifact's
-ownership and any already agreed intent allocation:
-
-- Proposal: does it explain motivation, direction, and scope without replacing
-  the owning requirements or system design?
-- Requirements: what independent need does each addition express? Is it
-  already covered by requirements or authoritative process rules? Would it
-  still make sense with a different implementation? Patch constraints, defect
-  descriptions, and proposed fixes do not become requirements merely because
-  the user mentioned them. Unchanged needs can use a no-op delta.
-- System: does each architecture point explain a concrete arrangement or
-  mechanism, identify where its contracts are defined, and link to its owning
-  requirement? Do transition steps and check procedures stay in plan/validate?
-- Validate: does each check give an action, expected result, and requirement
-  or architecture link? Do acceptance conditions and motivation stay upstream?
-- Plan: does it describe the transition and completion evidence without
-  introducing new needs or significant system design?
-- ADRs: does it record a significant choice and rationale without owning
-  current requirements or system mechanisms?
-
-Identify specific misplaced or unsupported passages and correct them before
-human review. A generic assertion of compliance is insufficient. If correction
-needs an upstream change, surface that dependency instead of silently changing
-approved content. Revised content follows the human-review boundary.
-
-Schema `rules.post` delivers this self-review after existing composition checks
-and before human review. It adds no separate report, artifact section, or user
-confirmation step. Keep routine self-assessment out of artifacts; chat mentions
-material corrections or unresolved issues. Structural validation does not judge
-semantic compliance with this agent instruction.
-
-### 12.4 Review Before Structural Validation
-
-Present each authored artifact's current content for human review and stop
-before `specd changes validate`. This includes proposal, plan, optional ADRs,
-spec deltas, and `no-op` decisions. Review includes the merged result of a
-delta; a no-op refers to the unchanged base artifact.
-
-Explicit user approval applies to current content. A revision request or
-generation-mode selection, including all-at-once generation, does not approve
-content. Agreement on intent allocation alone does not approve later drafts.
-
-After approval, structurally validate the reviewed content. If validation
-requires content changes, including upstream repairs, present their diff and
-wait for approval of revised content before revalidation. Never silently edit
-or validate unapproved upstream artifacts to repair dependency state. Reuse
-approval while reviewed content stays unchanged; state-only dependency changes
-do not require repeating that review.
-
-Every artifact's schema `rules.post` delivers this rule after composition
-checks; designing hook guidance applies it to repairs too. This is an agent
-instruction, not a new CLI approval state or separate approval document.
-Tests and technical inspections are distinct from artifact-content approval.
-
-### 12.5 Tooling
-
-Tooling may assist artifact creation/navigation, dependencies and
-traceability, structural validation, change/delta workflows, agent
-context assembly, lifecycle, and archival operations.
-
-**The methodology defines artifact semantics and responsibilities;
-tooling implements or assists the workflow around them.**
-
-SpecD is currently used in this role. Its workflow assists the
-repository's SDD process, but this document remains the authority for
-artifact semantics and responsibilities. Tooling changes that alter those
-semantics are made first in this English document according to Section 0.
-
-## 13. Practical Decision Guide
-
-### 13.1 Where Does This Belong?
+### 12.1 Where Does This Belong?
 
 | Question                                                     | Primary artifact     |
 |--------------------------------------------------------------|----------------------|
@@ -1006,7 +835,7 @@ semantics are made first in this English document according to Section 0.
 | What code/configuration realizes the change?                 | Implementation       |
 | What temporary orientation is useful during discovery?       | Discovery memory     |
 
-### 13.2 I Found a Problem — Where Do I Return?
+### 12.2 I Found a Problem — Where Do I Return?
 
 | Discovery                                               | Return to                                                     |
 |---------------------------------------------------------|---------------------------------------------------------------|
