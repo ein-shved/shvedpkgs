@@ -1,0 +1,6 @@
+- op: no-op
+  description: >
+    Existing requirements remain applicable. REQ-001 makes the SDD process
+    rules authoritative, including artifact responsibilities and minimum
+    useful ceremony. This change corrects schema guidance and workflow;
+    it does not introduce new project or user needs.
