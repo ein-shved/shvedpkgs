@@ -1,33 +1,24 @@
 # Requirements
 
-<!-- Check existing needs and authoritative process rules first. A defect in
-     their realization may need a system or plan change with a no-op requirements
-     delta. Patch constraints, defect descriptions, and proposed fixes do not
-     become requirements merely because the user mentioned them. -->
+<!-- Reuse existing needs; a realization defect may use a no-op delta. -->
 
 ## Requirement: {{first requirement}}
 
-<!-- Describe the need or obligation. Keep implementation details out unless
-     they are part of the external contract. Keep this prose concise: explain
-     the core need first and put nuance, examples, boundary cases, and
-     clarifications in scenarios. Treat an overly long body as a warning sign.
-     If a proposed requirement mostly refines this one, convert it into a
-     scenario instead of making a separate requirement. Acceptance scenarios are
-     mandatory, belong to this requirement, and must use requirement-level
-     concepts, not internal implementation or design mechanisms. -->
+<!-- State the need, obligation, scope and useful rationale in consumer language.
+     Would it remain meaningful if the internal mechanism or configuration
+     interface changed? A technology, format or interface belongs here when it
+     is itself the required external contract. System owns current mechanisms;
+     implementation owns concrete coding and migration choices. Put nuance,
+     examples and boundary cases in requirement-owned scenarios. -->
 
 ### Scenario: {{acceptance scenario}}
 
-<!-- Describe observable satisfaction using requirement language.
-     GIVEN is optional. WHEN and THEN are required. Use AND after any clause
-     for additional preconditions, actions, conditions, or expected outcomes.
-     Good: a development host user can invoke codex and see the expected
-     OpenAI TUI.
-     Bad: hardware.development=true causes pkgs.codex to appear in
-     environment.systemPackages. -->
-
 - GIVEN {{requirement-level precondition}} <!-- optional -->
 - WHEN {{observable action or condition}}
-- AND {{additional action or condition}} <!-- optional -->
 - THEN {{observable expected outcome}}
 - AND {{additional expected outcome}} <!-- optional -->
+
+<!-- WHEN and THEN are mandatory. AND may extend GIVEN, WHEN or THEN.
+     Each requirement needs at least one scenario expressing observable
+     satisfaction in its consumer's language. Executable evidence lives with
+     implementation; requested special-check descriptions reference their owner. -->

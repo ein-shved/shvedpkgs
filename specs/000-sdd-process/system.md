@@ -1,126 +1,192 @@
 # System Specification
 
-## SpecD Project Configuration
+## External Interface
 
-The repository contains a SpecD project configuration at:
+The process is managed through the [specd](https://getspecd.dev) utility.
+Agents use the SpecD skills and schema supplied by this project's
+[`specd-bootstrap`](../005-development-host-tooling/system.md#specd-bootstrap-support)
+utility.
 
-```text
-specd.yaml
-```
+## SDD Artifacts
 
-The configuration points to a local SDD schema:
+`proposal → requirements → system → adrs (optional)`
 
-```text
-./schemas/sdd/schema.yaml
-```
+- **Proposal:** change intent and allocation of content among artifacts.
+  Deleted after change archiving.
+- **Requirements:** independent needs and acceptance scenarios.
+- **System:** current interfaces and architecture.
+- **ADRs:** significant decisions and their rationale; optional, created
+  only at the user's direction.
 
-The default workspace stores steady-state SpecD specs under:
+### Specification order
 
-```text
-specs/
-```
+SpecD specification directory names begin with numeric prefixes that
+define a stable, general-to-specific reading order.
 
-## SpecD Change Storage
+[Artifact rules](rules.md).
 
-Active and historical change state is stored under `.specd/`:
+## Change Types
 
-- active changes: `.specd/changes/`
-- drafts: `.specd/drafts/`
-- discarded changes: `.specd/discarded/`
-- archive: `.specd/archive/`
+- **Update:** applies established project mechanisms without requiring
+  new architectural decisions. The proposal allocates needed changes
+  to artifacts and code.
+- **Architectural change:** requires new project architecture or a
+  substantial change to its structure. The proposal adds a system outline
+  whose points also serve as the implementation plan.
 
-## SpecD-Owned SDD Locations
+### Classification
 
-Steady-state SpecD specs under `specs/` are the machine-readable location for
-requirements, system specification, validation, and optional ADR artifacts
-managed by SpecD.
+1. Before drafting the proposal, the main agent examines the task and
+   existing SDD artifacts.
+2. It checks whether established mechanisms suffice or project architecture
+   must be designed, then records the type. Feature novelty and code volume
+   do not determine it.
+3. The user reviews the type as part of proposal review. Discoveries that
+   change the scope lead to revised classification and affected artifacts.
 
-Active and archived SpecD changes under `.specd/` hold change-scoped proposal,
-plan, and context artifacts. Spec-scoped `adrs.md` artifacts hold significant
-architecture decisions for their owning specs.
+[REQ-003](requirements.md#req-003-sdd-minimally-delays-the-start-of-coding).
 
-The human-readable SDD process rules live at:
+## Process
 
-```text
-specs/000-sdd-process/rules.md
-```
+### Architectural change
 
-The Russian translation of the same process rules lives at:
+1. **Proposal** contains:
+   - Change type, a brief problem statement and scope.
+   - A numbered topic-to-artifact table with one-sentence explanations.
+   - A short proposed-system outline.
+   - Affected spec IDs.
+2. **Requirements** are written according to the [artifact rules](rules.md).
+3. **Design**:
+   1. Describe the external API and create the system skeleton from the
+      proposal's outline; its items serve as the implementation plan.
+   2. Develop each item's design together with its implementation;
+      specification work for later items can wait until needed.
 
-```text
-specs/000-sdd-process/rules.ru.md
-```
+### Update
 
-## SDD Process Discoverability
+1. **Proposal** contains:
+   - Change type, a brief problem statement and scope.
+   - A numbered topic-to-artifact table with one-sentence explanations.
+   - Affected spec IDs.
+2. **Other SDD artifacts:** make any necessary changes; none may be needed.
+3. **Code:** make any necessary changes.
 
-The repository root `CONTRIBUTING.md` file is the developer-facing entry
-point for contribution and process guidance.
+Artifact and code changes take the form the user and/or agent deem
+appropriate.
 
-`CONTRIBUTING.md` must link to the authoritative English SDD process rules
-at `specs/000-sdd-process/rules.md`. It may also link to the Russian
-translation at `specs/000-sdd-process/rules.ru.md` for reader convenience,
-while preserving the English process document as authoritative when the two
-versions diverge.
+### Verification and archiving
 
-## Ordered SpecD SDD Sections
+A change is ready for archiving once all applicable checks required by
+the project, change artifacts, SpecD processes and/or the user have passed.
+It is archived only on the user's command.
 
-SpecD-owned SDD content is split by capability directories under `specs/`.
-Capability directories that participate in SDD document ordering use stable
-three-digit numeric prefixes in their directory names.
+[REQ-003](requirements.md#req-003-sdd-minimally-delays-the-start-of-coding).
 
-The numeric prefix is part of the section identifier and records the
-human-readable order from general to specific. For example,
-`000-sdd-process/` precedes project-level architecture, host classification,
-testing, generic host tooling, and development-host tooling sections.
+## User Involvement
 
-Document-shaped views such as `requirements.md` and `system.md` follow the
-numeric section order when presenting split SpecD artifacts for validation or
-review.
+After the proposal is written, the user selects one of three involvement
+levels. The user may change the selected level at any time.
 
-This ordering supports readable generated views of the SDD model without
-making agents depend on arbitrary filesystem or glob order.
+### Full involvement
 
-## SDD Schema
+- Agents present artifacts one at a time and wait for user approval before
+  proceeding.
+- During design and implementation, the user reviews and approves each
+  stage, including transitions from design to code and back.
 
-The local SDD schema defines first-class artifacts for:
+### Partial involvement
 
-- requirements with requirement-owned acceptance scenarios
-- system specification
-- validation design
-- implementation plan with top-level plan items
-- optional context
-- optional spec-scoped ADRs
+1. Agents prepare the initial artifacts and design independently:
+   - **Architectural change:** the external API and design skeleton/plan.
+   - **Update:** necessary changes to design artifacts, if any.
+2. The user reviews and approves the initial design.
+3. Agents implement independently and return the implementation to the
+   user.
 
-## Transitional Orientation Documents
+### Full delegation
 
-The repository is still migrating from manually maintained project knowledge to
-the SDD process and its normative artifact set.
+Agents develop artifacts and code independently and deliver a result ready
+for archiving.
 
-During this transition, the project keeps two non-normative documents under
-`specs/001-project-architecture/`:
+### Significant inconsistencies
 
-- [`inventory.md`](../001-project-architecture/inventory.md): temporary
-  project inventory and repository map.
-- [`todo.md`](../001-project-architecture/todo.md): temporary open questions,
-  cleanup candidates, and SDD preparation tasks.
+At any involvement level, agents must stop when they discover a serious
+inconsistency, explain it to the user and ask how to proceed. Work resumes
+after the user's decision.
 
-These documents help humans and agents navigate the transition, but they are
-not SpecD schema artifacts and they do not own current requirements, current
-system contracts, validation expectations, or architecture decisions.
-Durable knowledge discovered in them must move to the owning `requirements.md`,
-`system.md`, `validate.md`, or `adrs.md` artifact.
+[REQ-003](requirements.md#req-003-sdd-minimally-delays-the-start-of-coding).
 
-## Constraints
+## Validation and Subagents
 
-- `specs/000-sdd-process/rules.md` remains the authoritative English SDD
-  process definition.
-- `specs/000-sdd-process/rules.ru.md` is the Russian translation and must
-  stay aligned with the English process definition.
-- SpecD artifacts are allowed to provide machine-readable tracking and context
-  without silently replacing the SDD process.
-- Runtime/generated SpecD graph and log files are not tracked as durable
-  artifacts.
-- Temporary manual notes must not become parallel normative sources for current
-  requirements, system contracts, validation expectations, or ADR decisions.
-- Reconstructed SDD document views must follow deterministic numeric fragment
-  order.
+### Proposal
+
+The main agent uses only SDD artifacts. If they are insufficient, it
+launches a research subagent to gather the necessary context.
+
+### Before artifact review
+
+Before submitting an SDD artifact for review, an independent arbiter checks:
+
+- Compliance with artifact requirements, including simplicity/readability.
+- Consistency with other artifacts and user requests.
+
+Findings are resolved before submission.
+
+### Design and implementation
+
+Subagents write the code. For architectural changes, a separate subagent
+develops the detailed design and implementation of each plan item.
+
+For an Update, once the proposal is written:
+
+- If the main agent understands what to change and where, it updates the
+  design itself.
+- Otherwise, a subagent researches and updates the design; the same
+  subagent may then implement the change.
+
+### Design and code validation
+
+The same independent arbiters check design and code in this order:
+
+1. **Design:** before implementation, check new or updated design for
+   consistency with other subsystems' requirements and design.
+2. **Code:** check that the implementation preserves those requirements
+   and design.
+3. **Cleanliness:** check code according to language and project conventions.
+
+Design findings are resolved before coding; code findings before
+implementation review.
+
+### User review corrections
+
+Changes requested during user review must be made by the original author.
+
+## Process development and validation
+
+### Testing
+
+#### Coverage
+
+Process changes must be tested against standard scenarios, with particular
+attention to edge cases.
+
+#### Execution
+
+For each case, launch a separate tester subagent that:
+
+1. Acts as the user and invents a task in a fictional project.
+2. Launches an executor subagent to perform the task.
+3. Monitors the executor's behaviour against the case's expectations.
+
+The executor receives the task and normal working context, but must not
+know it is being tested or receive the tester's expected behaviour.
+
+#### Results
+
+Keep all test artifacts after testing. Give the user a list of cases with
+results and links to each test's root directory.
+
+### Feedback
+
+When process problems are discovered, prefer reporting them through
+[this project's GitHub issues](https://github.com/ein-shved/shvedpkgs/issues).

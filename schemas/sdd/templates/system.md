@@ -1,22 +1,23 @@
 # System Specification
 
-## System Concepts
+## External Interface
 
-<!-- Describe current concepts, contracts, interfaces, invariants, and layer
-     responsibilities that satisfy the requirements. Explain HOW components,
-     relationships, interactions, and mechanisms realize those requirements,
-     and identify where contracts are defined. Restated obligations and abstract
-     guarantees alone are insufficient. Keep choice rationale in ADRs, transition
-     steps in plan, and technical check procedures in validate.
+<!-- The designed entity's relevant external contract. Link to existing
+     requirement headings, e.g. [REQ-001](requirements.md#req-001-title). -->
 
-     Each architecture point links to its owning requirement at its section,
-     definition, or list item, e.g. [REQ-001](requirements.md#req-001-title).
-     A section-level reference covers one coherent point; independent points
-     each need their own references. Cross-spec links include the relative
-     path to the owning spec. Reference owners without copying their content. -->
+<!-- Architectural change: add sections matching the proposal outline's
+     names/order; its points also serve as the implementation plan. Develop
+     each point's brief design together with code: role, named participants,
+     relationships and material dependencies. Later points may remain pending
+     until needed.
 
-## Constraints
+     Update: add only necessary sections, preserving sufficient contracts;
+     a no-op may suffice. No outline/skeleton is required.
 
-<!-- List hard system constraints with owning requirement links when applicable.
-     Delete when empty. -->
-
+     Use short paragraphs, lists and subsections. Describe current interfaces
+     and mechanisms; link shared definitions rather than repeating them. Omit
+     routine coding steps, familiar idioms and discussion history. Distinctive
+     key properties should be mentioned. Special-check descriptions and ADR
+     creation/amendment require explicit user request. A request to write/run
+     tests alone does not request special-check prose here; ordinary tests and
+     usage docs remain with the related solution part's implementation. -->

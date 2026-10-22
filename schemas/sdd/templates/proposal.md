@@ -1,59 +1,23 @@
-<!-- AI guidance: explain WHY this change is needed. Cover motivation, current pain,
-     proposed solution, and scope. Do not write requirements here. -->
-
 # Proposal: {{change.name}}
 
-## Motivation
+**Type:** Update <!-- or Architectural change; classify by design decisions. -->
 
-<!-- What problem are we solving? Why does it need to be solved now? -->
+<!-- Brief problem statement and scope. -->
 
-## Current behaviour
+| # | Topic | Artifact |
+| - | ----- | -------- |
+| 1 | Name | system |
 
-<!-- Describe the current state. What happens today? What is missing or broken? -->
+1. One sentence explaining this topic's actual content and destination.
 
-## Proposed solution
+<!-- Each row <=80 characters; topics use one or two words. Destinations are
+     live schema artifact IDs plus code and context. Rows allocate content,
+     not tasks. Rules, templates and skills are code; orientation is context. -->
 
-<!-- High-level description of what we want to build or change. -->
+<!-- Architectural change ONLY: add a short proposed-system outline whose
+     points describe solution parts and also serve as the implementation plan.
+     Ordinary tests/docs stay with each part's implementation, not extra points.
+     Update has no required plan.
+     Keep progress and the user's explicit involvement choice in continuation. -->
 
-## Specs affected
-
-### New specs
-
-<!-- Specs to be created. Each gets SDD artifacts under
-     specs/<workspace>/<capability-path>/, starting with requirements.md,
-     system.md, and validate.md. -->
-
-- `<workspace>:<capability-path>`: <!-- brief description of what this spec covers -->
-  - Depends on: <!-- list spec IDs this spec depends on, or "none" -->
-
-### Modified specs
-
-<!-- Existing specs affected by the change, including fixes whose owning needs
-     stay unchanged. Attach those specs and use a no-op requirements delta when
-     appropriate; do not invent a new need for every schema or design fix. -->
-
-- `<workspace>:<capability-path>`: <!-- affected behavior/design; unchanged needs if applicable -->
-  - Depends on (added): <!-- new dependencies introduced by this change, or "none" -->
-
-## Impact
-
-<!-- Affected code areas, APIs, data models, or external dependencies. -->
-
-## Technical context
-
-<!-- Capture technical insights, constraints, and decisions discussed during the
-     proposal conversation that should inform specs and design. Record what was
-     actually discussed — if concrete structures, file paths, or interfaces came
-     up, include them. Focus on:
-     - Technical constraints discovered (API limitations, performance bounds, compatibility)
-     - Alternatives evaluated and why they were ruled out
-     - Architectural direction agreed upon (patterns, layers, boundaries)
-     - Domain modelling decisions (entity vs value object, aggregate boundaries)
-     - Concrete structures or interfaces discussed, even if preliminary
-     This section preserves conversational context so it is not lost between
-     sessions. Do not invent design details that were not discussed — only
-     record what was actually agreed or explored with the user. -->
-
-## Open questions
-
-<!-- Any unresolved questions or decisions that need to be made before spec work begins. -->
+**Affected specs:** <!-- Qualified workspace:capability-path IDs. -->

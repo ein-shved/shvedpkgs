@@ -1,148 +1,183 @@
 kind: schema
 name: sdd
 version: 1
-description: Repository SDD workflow — requirements → system → validate → plan.
+description: Concise Updates and incremental architectural changes.
 
 artifacts:
   - id: proposal
     scope: change
     output: proposal.md
-    description: Change proposal explaining why the work exists and which SDD artifacts it affects
+    description: Change intent, type and allocation among artifacts
     template: templates/proposal.md
     requires: []
     instruction: |
-      Create the proposal document that establishes WHY this change is needed.
+      Write a short problem statement, scope and change type. Classify the
+      architecture necessarily designed for this project's own solution,
+      not the novelty of its feature or an adopted product's topology.
 
-      Preserve the repository SDD model:
-      - Requirements own needs and satisfaction conditions.
-      - Acceptance scenarios belong inside requirements and use only
-        requirement-level concepts.
-      - System owns current system contracts and interfaces.
-      - Validate owns technical validation design for system conformance.
-      - Plan owns implementation strategy, validation strategy, and top-level
-        plan items.
-      - ADRs own significant decisions and rationale.
+      - Update applies existing contracts and established mechanisms, including
+        packaging or configuring a ready integration in its supplied topology.
+      - Architectural change requires a concrete necessary new project-owned
+        model or substantial restructuring: responsibilities, data ownership,
+        lifecycle or interactions, for example. A merely possible redesign or
+        refactoring chosen by the author does not establish this necessity.
 
-      Include:
-      - Motivation
-      - Current behaviour
-      - Proposed solution
-      - SDD artifacts affected
-      - Impact
-      - Technical context
-      - Open questions
+      Existing extension points do not alone establish Update: a task may
+      require new project-owned architecture within them. A new package,
+      feature, API, CLI option or changed contract alone does not establish
+      Architectural change.
 
-      Identify affected specs even when their requirements stay unchanged.
-      A schema or design defect can be fixed under an existing need; attach
-      that spec and use a no-op requirements delta when appropriate. Keep
-      motivation, current problems, direction, scope, and relevant technical
-      context here without replacing requirements or system design.
+      Code volume and file, component or spec counts do not determine the type.
+      When needed, give a concise reason in the existing problem/type text;
+      do not add a mandatory classification section or checklist.
+
+      The main agent uses SDD artifacts only. If facts are insufficient,
+      delegate necessary context to a researcher; do not invent a decision
+      or default to either type merely because the facts are missing.
+
+      Allocate actual content in a compact table: number, one- or two-word topic,
+      destination. Each complete row is at most 80 characters. Follow it with a
+      numbered list using the same numbers and exactly one explanatory sentence
+      per topic. Destinations are live schema artifact IDs, plus code for
+      implementation (including rules/schema/skills) and context for supporting
+      orientation files. Concrete filenames belong in explanations when useful.
+      Allocation topics are not implementation tasks.
+
+      For Architectural change only, add a short proposed-system outline whose
+      points describe solution parts and also serve as the implementation plan.
+      Ordinary tests and usage docs stay with the related part's implementation,
+      not standalone outline points. Update needs no outline or
+      plan and may leave all other SDD artifacts unchanged. List affected spec
+      IDs, including owning specs whose needs remain unchanged. Keep research,
+      progress and continuation outside the artifact dependency graph.
+
+      After writing the proposal, ask the user to select full involvement,
+      partial involvement or full delegation unless they already selected a
+      level maximally explicitly. Never infer a selection from indirect signals.
+      Record the explicit choice in continuation and reuse it on resume. The
+      user can change it at any time; apply changes immediately to remaining work.
+      Full involvement waits for user approval of successive artifacts and each
+      design/code stage and transition in either direction. Partial involvement
+      independently prepares initial design (architectural API/skeleton, or needed
+      Update design), obtains user review, then independently implements and
+      returns the result. Full delegation independently delivers ready for
+      archiving. An independent nonauthor arbiter checks every artifact before
+      user review; resolve findings first. Use the same independent arbiters for
+      design then code. Archive only at the user's command in every mode.
     rules:
-      post:
-        - id: resolve-open-questions
-          instruction: |
-            Review the "Open questions" section. Resolve any question that can
-            change requirements, system specification, validation, or plan
-            artifacts
-            before proceeding.
-        - id: boundary-self-review
-          instruction: |
-            Reread the draft, including its merged result for a delta. Check
-            changed statements against proposal ownership and any agreed intent
-            allocation: does this explain motivation, direction, and scope
-            without replacing the owning requirements or system design?
-            Identify specific misplaced or unsupported passages and correct
-            them before human review; a generic compliance assertion is
-            insufficient. Surface any needed upstream change instead of
-            silently modifying approved content. Revised content follows human
-            review. Add no separate report, section, or confirmation step;
-            mention only material corrections or unresolved issues in chat.
-        - id: review-before-validation
-          instruction: &review-before-validation |
-            Present the current artifact for human review and stop before
-            running specd changes validate. This applies to every authored
-            artifact, including optional ADRs, deltas, and no-op decisions.
-            For deltas, present the merged artifact; a no-op refers to the
-            unchanged base. Explicit user approval covers only current content.
-            A revision request or generation-mode selection, including
-            all-at-once generation, is not content approval. Intent allocation
-            agreement alone does not approve subsequently drafted content.
+      pre:
+        - id: sufficient-content
+          instruction: &sufficient-content |
+            Reduce semantic load by removing unnecessary details and repetition,
+            not by reducing the document's line count or packing facts together.
+            Follow this artifact's responsibility and required format.
 
-            After explicit approval, structurally validate the reviewed content.
-            If validation requires content changes, including upstream repairs,
-            present their diff and wait for approval of revised content before
-            revalidation. Never silently edit or validate unapproved upstream
-            artifacts to repair dependencies. Reuse an existing approval while
-            reviewed content is unchanged; state-only dependency changes do not
-            require repeating that review. Tests and technical inspections are
-            distinct from artifact-content approval. This is an agent rule,
-            not a new CLI approval state or separate approval document.
+            - Retain necessary needs/contracts; do not invent guarantees or
+              edge-case prose for exhaustiveness. Define each contract once and
+              reference its owner from other uses.
+            - Separate distinct topics with headings. Use lists and subpoints
+              for independent properties, conditions and steps; more source lines
+              are acceptable when they make the selected content easier to read.
+            - Keep each ordinary prose paragraph to at most three Markdown source
+              lines, each at most 80 source characters. Apply the same limits
+              inside list items; do not hide a dense enumeration in a long bullet.
+            - Every table row must fit within 80 source characters. If it cannot,
+              replace the table with lists; do not compress necessary meaning or
+              use cell line-break tricks to preserve the table.
+            - Code blocks and standalone public signatures are outside prose
+              limits. Preserve indivisible path/URL spans; only the span is
+              exempt, not its surrounding prose or paragraph. Inline signatures
+              do not exempt a paragraph. Table rows have no length exception.
+
+            Choose layout for the selected content; do not add sections merely
+            to fill a format or preserve every draft paragraph. Judge whether a
+            domain-familiar owner can readily understand the resulting artifact.
+      post:
+        - id: content-review
+          instruction: &content-review |
+            Reread the affected artifact, using the merged result for a delta.
+            Correct misplaced content, contradictions and unsupported statements.
+            Reject ordinary tests/docs promoted into architectural outline or
+            system sections. A request to write/run tests alone does not request
+            special-check prose in system; require that description explicitly.
+            Replace the wrong account and dependent explanations; keep correction
+            history outside current contracts. Keep only text that resolves a
+            concrete ambiguity. Apply the proposal's review boundary or, for
+            downstream content, this change's recorded involvement mode.
+            Check the sufficient-content pre-rule: remove repetition and ordinary
+            implementation recipes while preserving necessary contracts. Verify
+            that meaning was simplified, not compressed into denser prose. Check
+            prose paragraphs, including those in lists: at most three source
+            lines, each at most 80 characters; table rows also at most 80. Replace
+            oversized tables with lists instead of compacting text or splitting
+            cells. Limit prose exceptions to code blocks, standalone signatures
+            and indivisible path/URL spans, never the surrounding paragraph.
+            Ordinary readability findings are normal internal review work, not
+            a final process failure or a reason to stop at a FAIL report.
+            The independent arbiter gives concrete findings; the original author
+            corrects them; the same arbiter inspects the updated merged artifact.
+            Repeat until ordinary findings are resolved before user review,
+            respecting the current involvement level's user checkpoints. Serious
+            actual requirement conflicts or a needed hack/workaround still stop
+            for the user's decision; this correction loop does not bypass them.
+        - id: classification-review
+          instruction: |
+            The independent proposal arbiter reconstructs necessary project-owned
+            architectural decisions from the task, SDD and available research.
+            Do not merely repeat the author's label or decomposition into parts.
+
+            Check why established contracts and mechanisms suffice or do not.
+            Architectural change needs a concrete necessary new model or
+            substantial restructuring, not adoption of upstream topology alone.
+
+            Distinguish required architecture from an optional author-chosen
+            redesign. Existing extension points may host genuinely new project
+            architecture; their presence does not settle classification either.
+
+            Reject feature/package/API novelty and size or file/component/spec
+            counts as stand-alone evidence. Missing facts use the existing
+            researcher route only as needed; do not require routine extra research.
+
+            Return concrete findings through the original-author/same-arbiter
+            correction loop. A short reason in existing proposal text suffices;
+            require no extra section or checklist.
 
   - id: requirements
     scope: spec
     output: requirements.md
-    description: SDD requirements describing needs, obligations, rationale, and requirement-level acceptance scenarios
+    description: Needs, obligations and requirement-owned acceptance scenarios
     template: templates/requirements.md
-    requires:
-      - proposal
+    requires: [proposal]
     delta: true
     instruction: |
-      Create or update the requirements artifact for every spec affected by the
-      proposal.
+      Follow the user's explicit involvement level after proposal preparation.
+      Full involvement requires proposal approval before the next artifact;
+      partial involvement and full delegation prepare initial artifacts
+      independently. Do not guess a missing level or ignore unresolved comments.
 
-      Requirements describe WHAT need or obligation the system must satisfy.
-      They do not own implementation files, package placement, migration steps,
-      internal module structure, or historical implementation notes.
-      Acceptance scenarios are part of requirements. They describe observable
-      satisfaction conditions in requirement-level language, not implementation
-      mechanics or system-design internals.
+      Describe independent user/project needs and satisfaction conditions for
+      each affected spec. Reuse existing requirements and authoritative artifact
+      rules; use a no-op delta when the needs remain unchanged. A defect in their
+      realization may be corrected under an existing requirement. Ask whether
+      the need remains meaningful if its internal mechanism or configuration
+      interface changes. State imposed negative constraints with their observable
+      violation and acceptance scenarios.
 
-      First check existing requirements and authoritative process rules.
-      A defect in their realization does not necessarily introduce a new need.
-      Use a no-op requirements delta when the owning needs remain unchanged.
-      Patch constraints, defect descriptions, and proposed fixes belong with
-      proposal, system, or plan according to their responsibility.
-
-      Keep requirement prose concise. A reader should be able to understand the
-      core need first, then return to scenarios for nuance, boundary cases,
-      examples, and clarifications.
-      Treat an overly long requirement body as a warning sign: move details,
-      examples, edge cases, and clarifications into scenarios unless they are
-      essential to understanding the requirement itself.
-
-      Every requirement must have at least one acceptance scenario. If a
-      proposed requirement mostly clarifies, narrows, or gives an example of
-      another requirement, treat it as a candidate for conversion into a
-      scenario under that requirement instead of creating a separate
-      requirement.
-
-      Format requirements:
-      - Top-level heading: `# Requirements`
-      - Each requirement uses `## REQ-<n>: <name>` or
-        `## Requirement: <name>`.
-      - Include rationale where it helps future readers.
-      - Express satisfaction with mandatory `### Scenario: <name>` sections
-        inside the owning requirement.
-      - Each scenario belongs to exactly one requirement: place it under the
-        owning requirement, not as a file-level section.
-      - Use OpenSpec-style scenario clauses:
-        - `GIVEN` is optional.
-        - `WHEN` is required.
-        - `THEN` is required.
-        - `AND` may extend any preceding `GIVEN`, `WHEN`, or `THEN` clause.
-        - Multiple scenarios per requirement are allowed and encouraged when
-          they make nuance easier to read.
-      - Acceptance scenarios must use the terms available to the requirement's
-        consumer. Do not mention implementation configuration, package buckets,
-        internal module names, or design-only concepts unless they are part of
-        the requirement itself.
+      Keep the existing requirements format:
+      - Start with # Requirements.
+      - Use ## REQ-<n>: <name> or ## Requirement: <name> for each requirement.
+      - State the core need concisely; add rationale when useful.
+      - Give every requirement at least one ### Scenario: <name> section inside it.
+      - GIVEN is optional; WHEN and THEN are required; AND may extend any clause.
+      - Use the consumer's requirement-level language. Internal configuration,
+        module/file choices and migration mechanics belong elsewhere unless they
+        are themselves part of the required external contract.
+      Put examples, nuances and boundary cases in scenarios. A proposed requirement
+      that merely refines another is usually a scenario under its existing owner.
     deltaInstruction: |
-      For modified requirements, write a delta file at
-      `{{change.path}}/deltas/<workspace>/<capability-path>/requirements.md.delta.yaml`.
-
+      Write deltas at {{change.path}}/deltas/<workspace>/<capability-path>/requirements.md.delta.yaml.
       Target whole requirement sections. Modified operations replace the body
-      under the existing heading. Added operations include the full requirement
-      heading and body.
+      under the existing heading; added operations include the heading and body.
     validations:
       - id: has-requirement
         type: section
@@ -154,278 +189,189 @@ artifacts:
         required: true
     rules:
       pre:
-        - id: review-artifact-intent
-          instruction: |
-            Before drafting requirements, read the proposal against existing
-            requirements and authoritative process rules. Present a minimal
-            allocation in chat: one line per relevant proposal point, with
-            only a two- or three-word topic and its destination, in the form
-            <topic> — <artifact>. Multiple points may share a destination.
-            An unchanged artifact may be marked <topic> — <artifact> (no-op).
-            Include only relevant destinations. Do not expand the list into
-            descriptions, rationale, quotations, or artifact drafts.
-
-            After every user correction, redisplay the entire corrected list
-            in that same minimal format. An acknowledgement or description of
-            edits does not replace the updated list. Repeat until the user
-            agrees; draft requirements only after that agreement. Do not
-            prepare full requirements, architecture, or plan files in advance.
-
-            This is one conversation checkpoint before requirements, not a new
-            artifact or repeated gate before downstream artifacts. Reuse an
-            allocation already explicitly agreed during proposal review or an
-            earlier exchange while it remains applicable. Only a material
-            allocation change needs renewed intent review. Agreement on intent
-            alone does not approve later artifact content for validation.
+        - id: sufficient-content
+          instruction: *sufficient-content
       post:
-        - id: boundary-self-review
+        - id: content-review
+          instruction: *content-review
+        - id: requirements-review
           instruction: |
-            Reread the draft, including its merged result for a delta or the
-            unchanged base for a no-op. Check changed statements against
-            requirements ownership and any agreed intent allocation. What
-            independent user or project need does each addition express? Is it
-            already covered by requirements or authoritative process rules?
-            Would it still make sense with a different implementation? Patch
-            constraints, defect descriptions, and proposed fixes do not become
-            requirements merely because the user mentioned them. Unchanged
-            needs can use a no-op delta.
-            Identify specific misplaced or unsupported passages and correct
-            them before human review; a generic compliance assertion is
-            insufficient. Surface any needed upstream change instead of
-            silently modifying approved content. Revised content follows human
-            review. Add no separate report, section, or confirmation step;
-            mention only material corrections or unresolved issues in chat.
-        - id: review-before-validation
-          instruction: *review-before-validation
+            Complete independent requirements review and corrections in every mode.
+            Full involvement requires user approval before proceeding. Partial
+            involvement includes requirements in the initial-design review;
+            full delegation proceeds independently.
 
   - id: system
     scope: spec
     output: system.md
-    description: SDD system specification describing current contracts, concepts, layers, and interfaces
+    description: External interface and concise architecture developed by work item
     template: templates/system.md
-    requires:
-      - requirements
+    requires: [requirements]
     delta: true
     instruction: |
-      Create or update the system specification artifact for every affected
-      spec.
+      Follow the user's explicit involvement level and resolve affected comments.
 
-      The system specification maps requirements to the current system model:
-      concepts, interfaces, invariants, layers, host classification, package
-      buckets, validation outputs, and other current contracts.
+      Start the affected system content with the designed entity's external
+      interface. For Architectural change, create a skeleton matching the short
+      proposed-system outline; its points also serve as the implementation plan.
+      External means the entity's relevant boundary: public types/functions,
+      REST, UI, CLI, protobuf, IOCTL, or another interface. Preserve and reference
+      sufficient existing contracts; a narrow fix may use a no-op system delta.
 
-      Explain HOW components, relationships, interactions, and mechanisms
-      realize requirements. Identify where contracts are defined; restated
-      obligations or abstract guarantees alone are insufficient. Put significant
-      choice rationale in ADRs and technical check procedures in validate.
+      System owns current concepts, interfaces, configuration contracts, behavior,
+      guarantees and invariants. For each item, record its role, named key
+      participants, relationships with other modules and material external
+      dependencies. Explain the arrangement or mechanism that realizes requirements
+      and where its contracts are defined, so a reader can determine whether an
+      implementation conforms. Define shared concepts once and keep architecture
+      sufficient to distinguish a conforming implementation.
 
-      At each architecture point's owning section, definition, or list item,
-      link explicitly to its owning requirement heading. Use resolvable
-      Markdown links, for example `[REQ-001](requirements.md#req-001-title)`;
-      cross-spec links include the owning spec's relative path. A section-level
-      reference covers one coherent point; independent points each need their
-      own references. Reference owners without copying their content.
+      Select composition, relationships and material decisions needed to
+      understand this solution. Retain relevant API signatures, error contracts
+      and private participants when they resolve a material ambiguity; ordinary
+      shell/library idioms and private helper recipes remain in code. Do not
+      restate a shared contract separately for storage, API and CLI; reference
+      its definition. Structure the selected content, rather than expanding it
+      to fill a diagram, table or set of subsections.
 
-      Do not put implementation sequencing or plan-item checklist detail here;
-      that belongs in the plan.
+      Example: remove routine detail, then expose the remaining meaning.
+
+      Overloaded draft:
+        CLI calls Library, whose loader loops into local arrays, saves options
+        and restores them on return. CLI, API and storage all validate before
+        writing; rejected input changes no data and the caller's state is safe.
+
+      Readable result:
+        ### Shared write boundary
+        CLI and API use Library to access local records.
+
+        - Library validates before writing; rejected input changes no data.
+        - The sourceable API preserves the caller's shell state.
+
+      Helper recipes stay in code; callers reference this shared boundary.
+      Necessary API and storage contracts remain in their owning sections.
+
+      Distinguish a reusable contract from values selected for an instance,
+      deployment, policy or dataset. General framework contracts describe the
+      reusable model; values defining a concrete delivered system may be part
+      of that system's contract. An explicitly requested ADR records significant
+      choice rationale; routine coding steps and temporary migration mechanics
+      belong in implementation.
+
+      Authoring examples use an illustrative host-update CLI with cli, config,
+      deployment and completion modules.
+
+      Good examples:
+      - "host-update <host> --config <path> updates one configured target."
+        Defines an external interface and target-selection contract.
+      - "cli::Args uses clap to parse the public command."
+        Names a module role and its argument-parsing library dependency.
+      - "config::load produces Target; deployment::run consumes it; completion
+        reads the shared command definition." Identifies module relationships
+        and data flow.
+      - "Deployment starts activation only after a successful build."
+        States a material, assessable ordering invariant.
+      - "Target contains public target settings; credentials remain in the SSH
+        agent." Defines a data boundary and its external participant.
+      - "A lock file records exact dependency revisions for deployment builds."
+        Names a reproducibility mechanism whose underlying need can remain stable
+        when the mechanism changes.
+
+      Bad examples of System prose:
+      - "Users can update their hosts." Repeats a need without its architecture.
+      - "Create a map, loop over hosts and append each result."
+        Gives ordinary coding steps that belong in implementation.
+      - "The utility prints usage for an invalid set of arguments."
+        Conventional correct CLI behavior and recitals of parsing-library
+        facilities alone add no project-specific architecture.
+      - "The function returns the constructed object as Result<Object, Error>."
+        A standalone Rust idiom does not itself expose a significant contract;
+        actual external API definitions and material error behavior can belong
+        in system.
+      - "Deployment may use SSH or a new service; the choice comes later."
+        Leaves a material choice unresolved in a finished item's contract;
+        pending questions belong with unfinished work.
+      - "We first chose A, then the reviewer suggested B."
+        Records discussion history instead of the current contract and mechanism.
+      - "A reusable deployment framework always updates office before home."
+        Selects an installation's policy for a generic contract; that order may
+        belong in the contract of a concrete delivered instance.
+      - "The process has no Plan and Validate steps."
+        Describes absent entities rather than the current system.
+
+      Each coherent architecture point links to its owning requirement heading,
+      for example [REQ-001](requirements.md#req-001-title). Independent points need
+      their own links; cross-spec links include the owning spec's relative path.
+      Check actual headings in the merged artifact: modified deltas retain the
+      base heading. Reference owners without duplicating their contents.
+
+      Develop system architecture and code together by work item. Revisit and
+      correct proposal or requirements when necessary. Pending item sections are
+      allowed during implementation. Complete only the current item's design
+      before coding it; later sections may remain pending. In every mode, an
+      independent design arbiter reviews the item and corrections are resolved.
+      Full involvement requires user approval of every design/code stage and
+      transition, including back to design. Partial involvement requires user
+      review of the initial API/skeleton, then autonomous detailed design/code;
+      for Update review necessary design changes before autonomous code.
+      The same independent nonauthor arbiters check new or updated design before
+      code, then preservation of other subsystems' requirements/design in code,
+      then code cleanliness for the language/project. Resolve findings first.
+      Final system validation uses complete designs and reviewed implementation;
+      initial structural validation does not prevent later design evolution.
+      Add a brief special-check description only when the user explicitly asks
+      for that description in system. Asking to write or run tests alone does
+      not do so; ordinary checks and usage docs stay with implementation.
+      Ordinary tests and code review are part of implementation.
+      Create ADRs, including amendments and superseding records, only on explicit
+      user request.
     deltaInstruction: |
-      For modified system specification content, write a delta file at
-      `{{change.path}}/deltas/<workspace>/<capability-path>/system.md.delta.yaml`.
-
-      Target complete sections by heading. Keep the updated section complete
-      enough to remain correct after archive.
+      Write deltas at {{change.path}}/deltas/<workspace>/<capability-path>/system.md.delta.yaml.
+      Target complete sections by heading and preserve unaffected contracts.
+      Before final validation, replace pending markers with the implemented design.
     validations:
       - id: has-system-heading
         type: section
         level: 1
         required: true
     rules:
+      pre:
+        - id: sufficient-content
+          instruction: *sufficient-content
       post:
-        - id: boundary-self-review
-          instruction: |
-            Reread the draft, including its merged result for a delta. Check
-            changed statements against system ownership and any agreed intent
-            allocation. Does each architecture point explain a concrete
-            arrangement or mechanism, identify where its contracts are defined,
-            and link to its owning requirement? Are transition steps and
-            technical check procedures left to plan and validate?
-            Identify specific misplaced or unsupported passages and correct
-            them before human review; a generic compliance assertion is
-            insufficient. Surface any needed upstream change instead of
-            silently modifying approved content. Revised content follows human
-            review. Add no separate report, section, or confirmation step;
-            mention only material corrections or unresolved issues in chat.
-        - id: review-before-validation
-          instruction: *review-before-validation
-
-  - id: validate
-    scope: spec
-    output: validate.md
-    description: Technical validation design for system conformance
-    template: templates/validate.md
-    requires:
-      - requirements
-      - system
-    delta: true
-    instruction: |
-      Create or update the technical validation artifact for the affected
-      requirements and system contracts.
-
-      This artifact owns HOW the implementation will be checked against the
-      requirements and system model. It may name concrete tests, commands,
-      inspections, fixtures, validation configurations, and validation support
-      described by other system artifacts.
-
-      Do not write acceptance scenarios here. Acceptance scenarios belong in
-      requirements. Validation may reference those scenarios, but it must focus
-      on technical evidence and coverage.
-
-      Each check must have a Covers link to its owning requirement heading or
-      relevant system.md heading, a Method specifying the concrete action to
-      perform, and Evidence describing the expected result. Use resolvable
-      Markdown links; cross-spec links include the owning spec's relative path.
-      Notes hold only needed setup, prerequisites, or execution limits.
-      A coverage overview lists references only. Do not include purpose or
-      motivation prose in this artifact.
-    deltaInstruction: |
-      For modified validation content, write a delta file at
-      `{{change.path}}/deltas/<workspace>/<capability-path>/validate.md.delta.yaml`.
-
-      Target complete validation sections by heading. Keep each section precise
-      about what is checked, what command/test/inspection provides evidence,
-      and which requirement or system contract it covers.
-    validations:
-      - id: has-validation-heading
-        type: section
-        level: 1
-        required: true
-    rules:
-      post:
-        - id: boundary-self-review
-          instruction: |
-            Reread the draft, including its merged result for a delta. Check
-            changed statements against validate ownership and any agreed intent
-            allocation. Does every check specify a concrete action, an expected
-            result, and a requirement or architecture link? Are acceptance
-            conditions and motivation left with their upstream owners?
-            Identify specific misplaced or unsupported passages and correct
-            them before human review; a generic compliance assertion is
-            insufficient. Surface any needed upstream change instead of
-            silently modifying approved content. Revised content follows human
-            review. Add no separate report, section, or confirmation step;
-            mention only material corrections or unresolved issues in chat.
-        - id: review-before-validation
-          instruction: *review-before-validation
+        - id: content-review
+          instruction: *content-review
 
   - id: adrs
     scope: spec
     optional: true
     output: adrs.md
-    description: Durable architecture decision records for significant spec decisions
+    description: Explicitly requested significant decision rationale and history
     template: templates/adrs.md
-    requires:
-      - requirements
-      - system
+    requires: [requirements, system]
     delta: true
     instruction: |
-      Create or update ADRs only when the affected spec has significant
-      decisions whose rationale must remain durable after the change is
-      archived.
-
-      ADRs preserve decision history and rationale. They are not the primary
-      source of current required behavior or current system guarantees; those
-      belong in requirements and system artifacts. If an ADR changes current
-      system truth, update the owning requirements, system, and validation
-      artifacts as well.
-
-      Store multiple decisions as sections in this single artifact. Preserve
-      superseded decisions instead of rewriting history.
+      Create ADRs only on explicit user request, including amendments and
+      superseding records. In a requested ADR, record a significant choice, status,
+      context, relevant alternatives, rationale and consequences in one section per
+      decision. Requirements and system own current needs and contracts; adopt a
+      decision's current consequences there. Existing ADRs preserve the reasons
+      and history of choices arising during requirements, architecture or
+      implementation. Preserve superseded decisions with a link to their
+      replacement. Clarifications explain the original decision and identify later
+      knowledge accurately. A user-requested amendment or superseding ADR records
+      material changes to the choice, decisive rationale or trade-off.
     deltaInstruction: |
-      For modified ADR content, write a delta file at
-      `{{change.path}}/deltas/<workspace>/<capability-path>/adrs.md.delta.yaml`.
-
-      Target complete ADR sections by heading. Added operations include the full
-      ADR section with status, context, decision, rationale, and consequences.
+      For an explicitly requested ADR, write deltas at
+      {{change.path}}/deltas/<workspace>/<capability-path>/adrs.md.delta.yaml.
+      Target whole ADR sections; added operations include the section heading.
     rules:
+      pre:
+        - id: sufficient-content
+          instruction: *sufficient-content
       post:
-        - id: boundary-self-review
-          instruction: |
-            Reread the draft, including its merged result for a delta. Check
-            changed statements against ADR ownership and any agreed intent
-            allocation. Does this record a significant choice and its rationale
-            without becoming the source of current requirements or system
-            mechanisms?
-            Identify specific misplaced or unsupported passages and correct
-            them before human review; a generic compliance assertion is
-            insufficient. Surface any needed upstream change instead of
-            silently modifying approved content. Revised content follows human
-            review. Add no separate report, section, or confirmation step;
-            mention only material corrections or unresolved issues in chat.
-        - id: review-before-validation
-          instruction: *review-before-validation
-
-  - id: plan
-    scope: change
-    hasTasks: true
-    output: plan.md
-    description: SDD implementation plan with validation strategy and top-level plan items
-    template: templates/plan.md
-    requires:
-      - requirements
-      - system
-      - validate
-    instruction: |
-      Create the implementation plan for this change.
-
-      The plan owns implementation strategy, sequencing, assumptions,
-      constraints, validation strategy, explicit out-of-scope boundaries, and
-      top-level plan items.
-
-      Top-level plan items are the executable work units for implementation.
-      Each top-level plan item must be independently completable and must
-      include or reference the validation needed to prove that item reaches an
-      agreed state. Smaller execution steps may be nested under a plan item
-      when helpful, but they are local execution structure rather than separate
-      process artifacts.
-
-      During implementation, edits to the approved plan are limited to marking
-      completed work from [ ] to [x]. Add no prose, steps, execution reports, or
-      embellishments. Neither ask permission nor proactively propose to append
-      to the plan. Keep temporary execution tracking and chat progress outside
-      it. Retain this boundary during verification and archive.
-
-      Surface an actual design error and wait for explicit user permission
-      before returning to designing to correct the earliest affected artifact.
-      Routine implementation choices do not trigger design revisions.
-    rules:
-      post:
-        - id: upstream-coverage
-          instruction: |
-            Cross-check the plan against requirements, system, and validate
-            artifacts. Every requirement, acceptance scenario, and validation
-            check must have a path through the plan.
-        - id: boundary-self-review
-          instruction: |
-            Reread the draft, including its merged result for a delta. Check
-            changed statements against plan ownership and any agreed intent
-            allocation. Does this describe the implementation transition and
-            completion evidence without introducing new needs or significant
-            system design?
-            Identify specific misplaced or unsupported passages and correct
-            them before human review; a generic compliance assertion is
-            insufficient. Surface any needed upstream change instead of
-            silently modifying approved content. Revised content follows human
-            review. Add no separate report, section, or confirmation step;
-            mention only material corrections or unresolved issues in chat.
-        - id: review-before-validation
-          instruction: *review-before-validation
-    preHashCleanup:
-      - id: normalize-checkboxes
-        pattern: '^([ \t]*-\s+)\[x\]'
-        replacement: '$1[ ]'
-    taskCompletionCheck:
-      incompletePattern: '^\s*-\s+\[ \]'
-      completePattern: '^\s*-\s+\[x\]'
+        - id: content-review
+          instruction: *content-review
 
 metadataExtraction:
   title:
@@ -485,94 +431,92 @@ metadataExtraction:
         selector: { type: section, level: 1 }
         extract: content
 
+
 workflow:
   - step: designing
     requires: []
     hooks:
       pre:
-        - id: designing-guidance
+        - id: initial-artifacts
           instruction: |
-            Preserve the SDD dependency direction:
-            requirements -> system -> validate -> plan -> implementation.
-            Discovery may move upstream; corrections must propagate downstream.
-
-            Present every authored artifact's current content for human review
-            and stop before specd changes validate, including optional artifacts,
-            deltas, and no-op decisions. For deltas review the merged result;
-            for a no-op review the unchanged base. Revision requests, generation
-            mode selection, and intent allocation alone are not content approval.
-            If validation fails and repairs change content, including upstream
-            content, present the diff and wait for explicit approval before
-            revalidation. Do not silently edit or validate unapproved upstream
-            artifacts to repair dependency state. Reuse approval of unchanged
-            reviewed content when only dependency state changes. Tests and
-            technical inspections do not constitute artifact-content approval.
+            The main agent uses SDD artifacts for proposal preparation; launch a
+            researcher for additional context. Classify Update or Architectural
+            change and follow the proposal's live format instructions. After
+            writing it obtain an explicit involvement choice, unless already
+            maximally explicitly supplied; never guess or ask again on resume.
+            The user may change the level at any time. Apply the current level's
+            checkpoints and independent artifact review before user review.
+            Full involvement reviews successive artifacts and design/code stages.
+            Partial involvement reviews the initial design, then delegates code.
+            Full delegation delivers ready for archiving. Stop for the user's
+            decision on serious inconsistencies, including issues requiring a
+            hack or workaround even when they do not block progress.
 
   - step: ready
-    requires: [proposal, requirements, system, validate, plan]
+    requires: [proposal, requirements]
     hooks:
       pre:
-        - id: ready-guidance
+        - id: incremental-readiness
           instruction: |
-            Verify that requirements, system, validate, and plan are all complete
-            and aligned before implementation starts.
+            Use validated proposal/requirements and the selected involvement
+            level's reviews. Architectural change needs the external API and
+            system skeleton/plan; Update needs only necessary artifact changes,
+            which may be none. Reuse sufficient contracts with no-op deltas.
+            Later architectural details do not delay a reviewed item's code.
 
   - step: implementing
-    requires: [proposal, requirements, system, validate, plan]
+    requires: [proposal, requirements]
     hooks:
       pre:
-        - id: implementing-guidance
+        - id: implementation-roles
           instruction: |
-            Read requirements, system, validate, and plan before coding.
-            Implement top-level plan items in order and mark checkboxes
-            complete as work is done. Edits to the approved plan are limited
-            to completed [ ] -> [x] marks. Add no prose, steps, execution
-            reports, or embellishments. Neither ask permission nor proactively
-            propose to append to the plan. Keep temporary tracking and chat
-            progress outside it.
+            The main agent never writes code or architectural details. Assign
+            each architectural plan item to its own subagent for design and code.
+            For Update, the main agent may edit design when it already knows the
+            needed change; otherwise a researcher updates design and may then
+            implement. Subagents write all code. Keep original authors resumable:
+            user corrections must return to them, including the main agent for
+            artifacts it authored; report unavailable authors instead of replacing.
 
-            If implementation reveals an actual design error, surface it and
-            wait for explicit user permission before returning to designing
-            to correct the earliest affected artifact. Routine implementation
-            choices do not trigger design revisions.
+            The same independent nonauthor arbiters first check new or updated
+            design against other subsystems' requirements/design before coding;
+            next check code preserves those contracts, then language/project
+            cleanliness. Resolve findings before implementation review. Apply
+            the current explicit involvement level, including user switches.
+            Stop on serious inconsistencies, including hacks or workarounds,
+            and ask the user how to proceed. Do not silently work around them.
+            Durable links must survive archive. Commit only when authorized.
 
   - step: verifying
-    requires: [proposal, requirements, system, validate, plan]
-    requiresTaskCompletion: [plan]
+    requires: [proposal, requirements, system]
     hooks:
       pre:
-        - id: verifying-guidance
+        - id: verify-result
           instruction: |
-            Run or inspect the validation checks described by validate. Confirm
-            that acceptance scenarios in requirements are covered by technical
-            evidence. If checks fail because code is wrong, return to
-            implementing. If checks reveal an actual design error, surface it
-            and wait for explicit user permission before returning to designing
-            to correct the earliest affected artifact. Keep progress outside
-            the approved plan; during implementation, only completed checkbox
-            marks may change. Add no prose or steps and neither ask permission
-            nor proactively propose to append to the plan.
+            Confirm complete aligned system and reviewed implementation. Pass
+            all applicable project, change-artifact, SpecD and user checks; these
+            sources accumulate obligations. Process changes need standard and
+            especially edge-case scenario tests: one tester per case launches
+            its own executor with normal task/process context, no test framing
+            or expected behaviour. Keep expectations outside executor context.
+            Preserve every case's artifacts and report results with root links.
+            Resolve reviews under the current explicit involvement level and
+            route corrections to original authors. Archive only on user command.
 
   - step: archiving
-    requires: [proposal, requirements, system, validate, plan]
-    requiresTaskCompletion: [plan]
+    requires: [proposal, requirements, system]
     hooks:
       pre:
-        - id: archiving-guidance
+        - id: archive-current-contracts
           instruction: |
-            Confirm archived requirements and system specification will match
-            the implemented behavior. Do not archive stale or incomplete
-            artifacts.
-
-            If implementation reveals that requirements, system specification,
-            validation, or ADRs contain an actual design error, surface it and
-            wait for explicit user permission before returning to designing
-            to correct the earliest affected artifact before archive. Keep
-            progress outside the approved plan; during implementation, only
-            completed checkbox marks may change. Add no prose or steps and
-            neither ask permission nor proactively propose to append to it.
+            Require the user's explicit archive command, all applicable checks,
+            reviewed implementation and aligned validated current contracts.
+            Preserve optional ADR history and durable links. Configured human-only
+            approvals remain human-only. Do not infer archive authority from mode.
       post:
         - id: summarise-archive
           instruction: |
-            Summarize the archived SDD artifacts and the requirements/system
-            contracts that changed.
+            After native archive succeeds, delete only proposal.md at the exact
+            returned archivePath (relative to the project root when not absolute),
+            preserving all other history and test artifacts.
+            Report the archive result and remaining limits.
