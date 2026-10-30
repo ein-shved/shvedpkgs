@@ -1,0 +1,294 @@
+{
+  "name": "autostart-codex-remote-control",
+  "createdAt": "2026-10-30T19:56:55.197Z",
+  "description": "Automatically run the shared Codex daemon with remote control for the primary user on development hosts.",
+  "schema": {
+    "name": "sdd",
+    "version": 1
+  },
+  "specIds": [
+    "default:development-host-tooling",
+    "default:project-inventory"
+  ],
+  "artifacts": [
+    {
+      "type": "proposal",
+      "optional": false,
+      "requires": [],
+      "state": "complete",
+      "files": [
+        {
+          "key": "proposal",
+          "filename": "proposal.md",
+          "state": "complete",
+          "validatedHash": "sha256:c78342b62ff31e07abf9860d0735030dcdb431b23e6473c58e21511099dba3d0"
+        }
+      ]
+    },
+    {
+      "type": "requirements",
+      "optional": false,
+      "requires": [
+        "proposal"
+      ],
+      "state": "complete",
+      "files": [
+        {
+          "key": "default:development-host-tooling",
+          "filename": "deltas/default/development-host-tooling/requirements.md.delta.yaml",
+          "state": "complete",
+          "validatedHash": "sha256:ce58df33b1a39b034fb2ca0237bd9e58210d1a85f5ea439340b6abed809b0df3"
+        },
+        {
+          "key": "default:project-inventory",
+          "filename": "deltas/default/project-inventory/requirements.md.delta.yaml",
+          "state": "complete",
+          "validatedHash": "sha256:576e1312aa33f2f94ec1c68b11e43eeeed5683e1661482f54328ab5e6a3338a8"
+        }
+      ]
+    },
+    {
+      "type": "system",
+      "optional": false,
+      "requires": [
+        "requirements"
+      ],
+      "state": "complete",
+      "files": [
+        {
+          "key": "default:development-host-tooling",
+          "filename": "deltas/default/development-host-tooling/system.md.delta.yaml",
+          "state": "complete",
+          "validatedHash": "sha256:dc964c4adb5ad398e2fd0e30b1f1bb7973886ff3497d1e04697c2698c9e03cd4"
+        },
+        {
+          "key": "default:project-inventory",
+          "filename": "deltas/default/project-inventory/system.md.delta.yaml",
+          "state": "complete",
+          "validatedHash": "sha256:576e1312aa33f2f94ec1c68b11e43eeeed5683e1661482f54328ab5e6a3338a8"
+        }
+      ]
+    },
+    {
+      "type": "verify",
+      "optional": false,
+      "requires": [
+        "requirements",
+        "system"
+      ],
+      "state": "complete",
+      "files": [
+        {
+          "key": "default:development-host-tooling",
+          "filename": "deltas/default/development-host-tooling/verify.md.delta.yaml",
+          "state": "complete",
+          "validatedHash": "sha256:aa877b58c1fc0dc7fdf61728c94b3e5130bd39f0a65eae22cd2628067ff7bd7c"
+        },
+        {
+          "key": "default:project-inventory",
+          "filename": "deltas/default/project-inventory/verify.md.delta.yaml",
+          "state": "complete",
+          "validatedHash": "sha256:576e1312aa33f2f94ec1c68b11e43eeeed5683e1661482f54328ab5e6a3338a8"
+        }
+      ]
+    },
+    {
+      "type": "inventory",
+      "optional": true,
+      "requires": [
+        "requirements",
+        "system"
+      ],
+      "state": "complete",
+      "files": [
+        {
+          "key": "default:development-host-tooling",
+          "filename": "deltas/default/development-host-tooling/inventory.md.delta.yaml",
+          "state": "complete",
+          "validatedHash": "sha256:59fd3c593fd8603fe0e27c7499550d93396505e2805321056c78e97e069a59eb"
+        },
+        {
+          "key": "default:project-inventory",
+          "filename": "deltas/default/project-inventory/inventory.md.delta.yaml",
+          "state": "complete",
+          "validatedHash": "sha256:59fd3c593fd8603fe0e27c7499550d93396505e2805321056c78e97e069a59eb"
+        }
+      ]
+    },
+    {
+      "type": "adrs",
+      "optional": true,
+      "requires": [
+        "requirements",
+        "system"
+      ],
+      "state": "skipped",
+      "files": [
+        {
+          "key": "default:development-host-tooling",
+          "filename": "deltas/default/development-host-tooling/adrs.md.delta.yaml",
+          "state": "skipped",
+          "validatedHash": "__skipped__"
+        },
+        {
+          "key": "default:project-inventory",
+          "filename": "deltas/default/project-inventory/adrs.md.delta.yaml",
+          "state": "skipped",
+          "validatedHash": "__skipped__"
+        }
+      ]
+    },
+    {
+      "type": "plan",
+      "optional": false,
+      "requires": [
+        "requirements",
+        "system",
+        "verify"
+      ],
+      "state": "complete",
+      "files": [
+        {
+          "key": "plan",
+          "filename": "plan.md",
+          "state": "complete",
+          "validatedHash": "sha256:6b4232f0469f5aa7714dafe53cae03a4d05f41e6cecd23f7a67d8fc0325e5c77"
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "optional": true,
+      "requires": [
+        "proposal"
+      ],
+      "state": "skipped",
+      "files": [
+        {
+          "key": "context",
+          "filename": "context.md",
+          "state": "skipped",
+          "validatedHash": "__skipped__"
+        }
+      ]
+    }
+  ],
+  "history": [
+    {
+      "type": "created",
+      "at": "2026-10-30T19:56:55.197Z",
+      "by": {
+        "name": "Юрий Шведов",
+        "email": "mestofel13@gmail.com"
+      },
+      "specIds": [
+        "default:development-host-tooling",
+        "default:project-inventory"
+      ],
+      "schemaName": "sdd",
+      "schemaVersion": 1
+    },
+    {
+      "type": "artifacts-synced",
+      "at": "2026-10-30T19:56:55.217Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "typesAdded": [
+        "proposal",
+        "requirements",
+        "system",
+        "verify",
+        "inventory",
+        "adrs",
+        "plan",
+        "context"
+      ],
+      "typesRemoved": [],
+      "filesAdded": [
+        {
+          "type": "proposal",
+          "key": "proposal"
+        },
+        {
+          "type": "requirements",
+          "key": "default:development-host-tooling"
+        },
+        {
+          "type": "requirements",
+          "key": "default:project-inventory"
+        },
+        {
+          "type": "system",
+          "key": "default:development-host-tooling"
+        },
+        {
+          "type": "system",
+          "key": "default:project-inventory"
+        },
+        {
+          "type": "verify",
+          "key": "default:development-host-tooling"
+        },
+        {
+          "type": "verify",
+          "key": "default:project-inventory"
+        },
+        {
+          "type": "inventory",
+          "key": "default:development-host-tooling"
+        },
+        {
+          "type": "inventory",
+          "key": "default:project-inventory"
+        },
+        {
+          "type": "adrs",
+          "key": "default:development-host-tooling"
+        },
+        {
+          "type": "adrs",
+          "key": "default:project-inventory"
+        },
+        {
+          "type": "plan",
+          "key": "plan"
+        },
+        {
+          "type": "context",
+          "key": "context"
+        }
+      ],
+      "filesRemoved": []
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-10-30T19:59:47.087Z",
+      "by": {
+        "name": "Юрий Шведов",
+        "email": "mestofel13@gmail.com"
+      },
+      "from": "drafting",
+      "to": "designing"
+    },
+    {
+      "type": "artifact-skipped",
+      "at": "2026-10-30T20:00:02.127Z",
+      "by": {
+        "name": "Юрий Шведов",
+        "email": "mestofel13@gmail.com"
+      },
+      "artifactId": "adrs"
+    },
+    {
+      "type": "artifact-skipped",
+      "at": "2026-10-30T20:00:02.774Z",
+      "by": {
+        "name": "Юрий Шведов",
+        "email": "mestofel13@gmail.com"
+      },
+      "artifactId": "context"
+    }
+  ]
+}

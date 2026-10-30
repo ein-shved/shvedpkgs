@@ -1,0 +1,3 @@
+- op: no-op
+  description: The new Codex service is covered by SDD artifacts and does not change any existing inventory
+    material.

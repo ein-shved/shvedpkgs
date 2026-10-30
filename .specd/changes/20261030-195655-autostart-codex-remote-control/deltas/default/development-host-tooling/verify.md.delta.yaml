@@ -1,0 +1,120 @@
+- op: added
+  position:
+    parent:
+      type: section
+      matches: ^Requirements$
+    after:
+      type: section
+      matches: ^Requirement:\ Tooling\ selection\ belongs\ to\ development\ host\ configuration$
+  content: |
+    ### Requirement: Development hosts start Codex remote control before user login
+
+    #### Scenario: Evaluated unit implements boot startup
+
+    - GIVEN a development-host NixOS configuration with an existing primary user
+    - WHEN its evaluated `services.codex` options and generated `codex.service` are inspected
+    - THEN the service and remote control are enabled by default
+    - AND the unit is wanted by `multi-user.target` and wants and follows `network-online.target`
+    - AND `RequiresMountsFor` covers the configured home and Codex state directory
+    - AND the unit uses `Type=simple`, `Restart=on-failure`, and `RestartSec=5s`
+    - AND its foreground command runs the selected package's `codex app-server --remote-control --listen unix://`
+    - AND it does not invoke managed daemon bootstrap or depend on a user login target
+
+    #### Scenario: Daemon is available before login and after logout
+
+    - GIVEN a NixOS development host or VM with the primary user's authentication configured and network connectivity available
+    - WHEN it boots without a local login by that user
+    - THEN `systemctl is-active codex.service` reports `active`
+    - AND `systemctl show codex.service -p MainPID -p User` identifies the supervised process and primary account
+    - AND an authorised remote client can submit work and receive a successful result
+    - WHEN the primary user subsequently logs in and logs out
+    - THEN the service remains active and the remote client can still submit work
+    - AND `journalctl -u codex.service -b` shows no shutdown caused by logout
+- op: added
+  position:
+    parent:
+      type: section
+      matches: ^Requirements$
+    after:
+      type: section
+      matches: ^Requirement:\ Development\ hosts\ start\ Codex\ remote\ control\ before\ user\ login$
+  content: |
+    ### Requirement: Remote control uses the primary user's Codex environment
+
+    #### Scenario: Service identity and state match the primary user
+
+    - GIVEN a development-host configuration with a declared primary-user home
+    - WHEN the evaluated service environment and unit are inspected
+    - THEN `User` selects that account and `WorkingDirectory` and `HOME` select its home
+    - AND `CODEX_HOME` selects the configured Codex state directory
+    - AND the process PATH provides the host's installed development commands
+    - WHEN an authorised remote client resumes a session saved by that user and submits a command reporting `id -un`, `pwd`, and a selected development command's availability
+    - THEN execution uses the primary account on the development host and the requested workspace
+    - AND the saved conversation remains available
+    - AND startup has not replaced the user's configuration, authentication, or session history
+- op: added
+  position:
+    parent:
+      type: section
+      matches: ^Requirements$
+    after:
+      type: section
+      matches: ^Requirement:\ Remote\ control\ uses\ the\ primary\ user's\ Codex\ environment$
+  content: |
+    ### Requirement: Remote sessions do not require a local interactive Codex process
+
+    #### Scenario: Remote client starts and resumes useful work independently
+
+    - GIVEN an authenticated running daemon with no local interactive Codex client
+    - AND a resumable session saved in the primary user's Codex environment
+    - WHEN an authorised remote client creates a new session and submits a turn
+    - THEN the turn completes and returns a result
+    - WHEN the remote client resumes the saved session and submits another turn
+    - THEN its existing conversation is retained and the new turn completes
+    - AND neither operation requires launching a local `codex` or `codex resume` process
+    - AND a running PID, an existing socket, or successful connection alone does not count as passing this scenario
+- op: added
+  position:
+    parent:
+      type: section
+      matches: ^Requirements$
+    after:
+      type: section
+      matches: ^Requirement:\ Remote\ sessions\ do\ not\ require\ a\ local\ interactive\ Codex\ process$
+  content: |
+    ### Requirement: Codex daemon autostart follows development-host classification
+
+    #### Scenario: Host policy enables only development hosts by default
+
+    - GIVEN otherwise equivalent configurations with `hardware.development` set to true and false
+    - WHEN their evaluated service options and system units are compared
+    - THEN the development configuration enables Codex and remote control for the primary user
+    - AND the non-development configuration has no enabled Codex unit unless explicitly requested
+    - WHEN the development configuration explicitly sets `services.codex.enable = false`
+    - THEN no Codex service is generated
+    - AND existing independent development-package selection is preserved
+
+    #### Scenario: Reusable module works independently of development classification
+
+    - GIVEN a minimal NixOS configuration importing the Codex module with an existing account, without repository primary-user or development-host modules
+    - WHEN `services.codex.enable = true` and the account are configured
+    - THEN evaluation succeeds and creates the system service
+    - AND `environment.systemPackages` includes the selected `services.codex.package`
+    - AND the unit executable comes from that same package
+    - AND remote control defaults to disabled and its flag is absent from the command
+    - WHEN the module is disabled and no other module selects the package
+    - THEN it contributes neither the package nor the service
+
+    #### Scenario: Custom environment and listener options reach the service
+
+    - GIVEN the module is enabled with an alternate package, home, Codex state directory, and absolute socket path whose parent is writable by the selected user
+    - WHEN its generated unit is inspected and started in a NixOS test environment
+    - THEN the package, identity, environment, and `--listen unix://<socketPath>` argument reflect those options with correct argument escaping
+    - AND a local client explicitly selecting that endpoint can communicate with the app-server
+    - AND no public TCP listener or firewall opening is added by the module
+
+    #### Scenario: Invalid service identity is rejected
+
+    - GIVEN an enabled Codex service with a missing or nonexistent user, or an invalid home value
+    - WHEN the NixOS configuration is evaluated and its assertions are checked
+    - THEN configuration validation fails with a diagnostic identifying the invalid service setting

@@ -1,0 +1,109 @@
+- op: added
+  position:
+    parent:
+      type: section
+      matches: ^Requirements$
+    after:
+      type: section
+      matches: ^Requirement:\ Tooling\ selection\ belongs\ to\ development\ host\ configuration$
+  content: |
+    ## Requirement: Development hosts start Codex remote control before user login
+
+    Development hosts must automatically start the shared Codex daemon with
+    remote control enabled for the primary user when the computer boots.
+    Startup must not require that user to log in or manually start Codex.
+    Logging out must not stop the daemon solely because the user's login
+    session ended.
+
+    Rationale: remote access must remain available when nobody is logged in
+    locally, including after a reboot or the end of a local login session.
+
+    ### Scenario: Startup without a local login
+
+    - GIVEN a development host with the primary user's Codex authentication already configured
+    - WHEN the computer boots and the required network connectivity is available
+    - THEN the shared Codex daemon starts with remote control enabled
+    - AND the primary user need not log in locally or issue a daemon startup command
+
+    ### Scenario: Availability after logout
+
+    - GIVEN the primary user's shared Codex daemon is running on a development host
+    - WHEN the primary user logs out of their local login session
+    - THEN the daemon remains running independently of that login session
+- op: added
+  position:
+    parent:
+      type: section
+      matches: ^Requirements$
+    after:
+      type: section
+      matches: ^Requirement:\ Development\ hosts\ start\ Codex\ remote\ control\ before\ user\ login$
+  content: |
+    ## Requirement: Remote control uses the primary user's Codex environment
+
+    The automatically started daemon must serve the primary user's Codex
+    environment, using that user's Codex configuration, authentication, and
+    stored sessions. Remote work must execute on the development host in
+    that user's environment.
+
+    Rationale: the remote client needs access to the same development work
+    and session history that the primary user uses locally.
+
+    ### Scenario: Primary-user session history is available remotely
+
+    - GIVEN the primary user has a stored resumable Codex session on a development host
+    - AND that user's remote-control authentication is configured
+    - WHEN an authorised remote client connects to the automatically started daemon
+    - THEN the client can access that user's stored session
+    - AND work submitted through it executes on the development host as the primary user
+- op: added
+  position:
+    parent:
+      type: section
+      matches: ^Requirements$
+    after:
+      type: section
+      matches: ^Requirement:\ Remote\ control\ uses\ the\ primary\ user's\ Codex\ environment$
+  content: |
+    ## Requirement: Remote sessions do not require a local interactive Codex process
+
+    An authorised remote client must be able to create a new Codex session
+    or resume a stored resumable session through the daemon without the
+    primary user first launching an interactive Codex client locally.
+
+    Rationale: requiring a local `codex resume` would prevent useful remote
+    operation before the primary user logs in.
+
+    ### Scenario: New session without a local client
+
+    - GIVEN the primary user's daemon and remote-control authentication are available
+    - AND no local interactive Codex client is running
+    - WHEN an authorised remote client creates a new session and submits work
+    - THEN the daemon accepts that session and work without a local client being launched
+
+    ### Scenario: Resume an inactive saved session
+
+    - GIVEN the primary user's daemon and remote-control authentication are available
+    - AND a stored resumable session is not active in a local interactive client
+    - WHEN an authorised remote client resumes that session and submits work
+    - THEN the stored session can continue without a local `codex resume` process
+- op: added
+  position:
+    parent:
+      type: section
+      matches: ^Requirements$
+    after:
+      type: section
+      matches: ^Requirement:\ Remote\ sessions\ do\ not\ require\ a\ local\ interactive\ Codex\ process$
+  content: |
+    ## Requirement: Codex daemon autostart follows development-host classification
+
+    Automatic startup of the Codex remote-control daemon introduced by this
+    change must apply only to development hosts. It must not enable the
+    daemon automatically on non-development hosts.
+
+    ### Scenario: Non-development host retains its existing startup behaviour
+
+    - GIVEN a host is not classified as a development host
+    - WHEN its configuration is applied and the computer boots
+    - THEN this development-host feature does not automatically start a Codex remote-control daemon

@@ -1,0 +1,152 @@
+- op: modified
+  selector:
+    type: section
+    matches: ^Required Tool Sources$
+  content: |
+    Development tooling packages are provided from the selected nixpkgs
+    package set unless an exception is specified below.
+
+    ### SpecD
+
+    `specd` is provided by the repository package-set attribute `pkgs.specd`.
+    It packages the genuine SpecD CLI from the `@specd/cli` project and must
+    remain an ordinary package-set member without host-specific installation
+    policy.
+- op: added
+  position:
+    parent:
+      type: section
+      matches: ^System\ Specification$
+    after:
+      type: section
+      matches: ^Required\ Tool\ Sources$
+  content: |
+    ## Reusable Codex Service Module
+
+    The Codex module exposes `services.codex` and creates
+    `systemd.services.codex` only when `services.codex.enable` is true.
+    When enabled, it also adds `services.codex.package` to
+    `environment.systemPackages`. The installed CLI and service executable
+    therefore come from the same selected package. When disabled, the module
+    adds neither the service nor the package; other package selections remain
+    independent.
+    It does not read `hardware.development` or the repository's primary-user
+    options. It can be enabled for any existing local user on any host.
+
+    The module manages the systemd service and its process environment.
+    Host configuration separately decides whether to enable it and which user
+    and package to select. Module placement and imports belong in the implementation
+    plan rather than this system contract.
+- op: added
+  position:
+    parent:
+      type: section
+      matches: ^System\ Specification$
+    after:
+      type: section
+      matches: ^Reusable\ Codex\ Service\ Module$
+  content: |
+    ## Service Options
+
+    The public module interface is:
+
+    | Option | Type | Default / meaning |
+    | --- | --- | --- |
+    | `enable` | boolean | `false`; enable the system service |
+    | `package` | package | `pkgs.codex`; package installed system-wide and used by the service |
+    | `user` | string | Required when enabled; an existing local account |
+    | `home` | absolute path string | Home declared for the selected account |
+    | `codexHome` | absolute path string | The standard Codex state directory within `home` |
+    | `socketPath` | null or absolute path string | `null` selects Codex's standard socket; otherwise use the supplied Unix socket path |
+    | `remoteControl.enable` | boolean | `false`; enable Codex's remote-control transport |
+
+    All names above are under `services.codex`. Enabling the service requires an
+    existing user and a valid home. A custom socket's parent must exist and be
+    writable by that user. The module does not create accounts or supply credentials.
+- op: added
+  position:
+    parent:
+      type: section
+      matches: ^System\ Specification$
+    after:
+      type: section
+      matches: ^Service\ Options$
+  content: |
+    ## Foreground Systemd Service
+
+    The system unit uses `Type=simple`. It runs the configured package's
+    `codex app-server` in the foreground. Append `--remote-control` only
+    when `remoteControl.enable` is true. The listener argument is `--listen unix://`
+    for the default socket, or `--listen unix://<socketPath>` for a custom one.
+    Construct arguments with proper escaping.
+
+    Use `Restart=on-failure`, `RestartSec=5s`, normal SIGTERM shutdown,
+    and journal logging. Manage the process through `systemctl` for
+    `codex.service` and inspect it with `journalctl -u codex`.
+
+    Direct foreground startup with the app-server `--remote-control` flag
+    avoids the standalone-install assumptions and updater
+    of managed `remote-control start` / `daemon bootstrap`. NixOS controls
+    the executable version.
+- op: added
+  position:
+    parent:
+      type: section
+      matches: ^System\ Specification$
+    after:
+      type: section
+      matches: ^Foreground\ Systemd\ Service$
+  content: |
+    ## Boot and Process Environment
+
+    The system service is wanted by `multi-user.target`, wants and follows
+    `network-online.target`, and uses `RequiresMountsFor` for the configured
+    home and Codex state directory. Its lifetime is independent of user login;
+    no user lingering or graphical session is required.
+
+    Set systemd `User` from `services.codex.user`, `WorkingDirectory`
+    and `HOME` from `home`, and `CODEX_HOME` from `codexHome`.
+    Provide the host system PATH for development commands. Configuration,
+    authentication, and saved threads remain user-owned runtime state.
+    The service does not overwrite that state. Additional authentication recovery
+    policy remains deferred.
+- op: added
+  position:
+    parent:
+      type: section
+      matches: ^System\ Specification$
+    after:
+      type: section
+      matches: ^Boot\ and\ Process\ Environment$
+  content: |
+    ## Development-Host Configuration Policy
+
+    Repository configuration enables `services.codex.enable` and
+    `services.codex.remoteControl.enable` by default on development hosts.
+    It supplies the primary user's name and home through the module interface.
+    The reusable module does not know how the host selected those values.
+
+    Use overridable defaults for the development-host enablement policy.
+    On other hosts that policy does not enable the service; an explicit
+    `services.codex.enable = true` remains supported independently of host
+    classification. Existing development package selection is preserved.
+- op: added
+  position:
+    parent:
+      type: section
+      matches: ^System\ Specification$
+    after:
+      type: section
+      matches: ^Development\-Host\ Configuration\ Policy$
+  content: |
+    ## Client Connections
+
+    With the default socket, local shared-daemon clients discover the standard
+    control socket for the selected Codex environment. When `socketPath` is
+    overridden, local clients must explicitly select that Unix endpoint, for example
+    with `codex --remote`; automatic default-socket discovery is not assumed.
+
+    Remote clients use Codex's built-in outbound remote-control transport when
+    enabled. The module exposes no public TCP listener or firewall port.
+    The app-server offers `thread/start`, `thread/resume`, and `turn/start`
+    without requiring a local interactive client.
