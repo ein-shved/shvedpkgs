@@ -20,6 +20,7 @@
     ./media
     ./os-specific/linux/keyutils
     ./security/ca.nix
+    ./services/codex
     ./services/gerrit
     ./services/navidrome
     ./services/networking/cntlm-gss

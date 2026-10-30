@@ -11,7 +11,7 @@ This section intentionally does not describe bootstrap-tool validation.
 
 Covers the `REQ-001` scenario "Codex CLI stays current enough for repository
 workflow" and the Codex source contract in
-[Development Host Tooling](system.md#development-host-tooling).
+[Codex Service](system.md#codex-service).
 
 ### Check: Installed Codex version
 
@@ -31,6 +31,27 @@ codex-cli 0.162.1
 Expected release: [OpenAI Codex 0.162.1](https://github.com/openai/codex/releases/tag/rust-v0.162.1),
 checked on 2026-10-14. This check exercises the installed command through
 the user's PATH.
+
+## Validation: Codex Service
+
+### Automated Checks
+
+#### Check: codex-service
+
+Covers: [Codex Service](system.md#codex-service);
+[REQ-003](requirements.md#req-003-persistent-primary-user-codex-remote-control).
+
+- Method: Project NixOS case `codex-service` boots a development VM with
+  the genuine pinned Codex package, attaches and disconnects a local CLI,
+  then opens and closes a primary-user console session.
+- Evidence: The service starts before login with the expected user, home,
+  environment and writable Codex state. Its Unix socket exists; remote
+  control and restart-on-failure are configured. The CLI reaches
+  authentication onboarding and reports the pinned version in the login
+  shell. One app-server keeps its PID with zero restarts after client
+  disconnect and logout.
+- Notes: Real credential setup and authenticated remote-session testing
+  are excluded; these checks establish repository integration only.
 
 ## Validation: SpecD Bootstrap Support
 

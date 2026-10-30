@@ -6,6 +6,7 @@
 let
   cases = [
     ./modules/project-arguments.nix
+    ./modules/codex-service.nix
     ./modules/cifs-keyutils.nix
     ./modules/avr.nix
     ./modules/stm32.nix
@@ -48,6 +49,7 @@ let
     }) cases
   );
 in
-tests // {
+tests
+// {
   allTests = linkFarmFromDrvs "all-tests" (builtins.attrValues tests);
 }
