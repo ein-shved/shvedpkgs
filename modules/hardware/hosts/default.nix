@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, ... }@args:
 {
   options = {
     hardware = {
@@ -93,7 +93,7 @@
   };
 
   config = {
-    nixpkgs.overlays = [
+    nixpkgs.overlays = lib.mkIf (!(args.projectTestConfig.node.pkgsReadOnly or false)) [
       (final: prev: {
         isLaptop = config.hardware.isLaptop;
         isGraphic = config.hardware.isGraphic;

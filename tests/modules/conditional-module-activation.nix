@@ -6,10 +6,14 @@ let
     modules:
     inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      specialArgs = {
+      specialArgs = rec {
         inherit lib;
         flake-inputs = inputs;
         pkgsUnstable = import inputs.unstable { system = "x86_64-linux"; };
+        extensions = {
+          inherit modules flake-inputs pkgsUnstable;
+          configs = [ ];
+        };
       };
       modules = [
         {

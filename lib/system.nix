@@ -37,25 +37,31 @@ lib: prev: {
   mkExtendableSystems =
     self:
     {
+      # Define options and implement features shared by hosts and project tests.
       modules ? [ ],
+      # Select and configure features for hosts only; project tests omit these modules.
+      configs ? [ ],
       validationModules ? [
         ../tests/modules/stubs/private-values
       ],
       specialArgs ? { },
       prefix ? [ ],
       hosts ? { },
+      # Flat checks for defaultSystem; matching names override inherited checks.
+      checks ? { },
       ...
     }@extraArgs:
     let
       mkNixosConfigurations =
         extraModules:
         builtins.mapAttrs (
-          name: config:
+          name: host:
           let
-            hostconfig = config // {
-              specialArgs = (config.specialArgs or { }) // extendedSelf.specialArgs;
-              modules = (config.modules or [ ]) ++ extendedSelf.modules ++ extraModules;
-              prefix = (config.prefix or [ ]) ++ extendedSelf.prefix;
+            hostconfig = host // {
+              specialArgs = (host.specialArgs or { }) // extendedSelf.specialArgs;
+              modules = (host.modules or [ ]) ++ extendedSelf.modules;
+              configs = (host.configs or [ ]) ++ extendedSelf.configs ++ extraModules;
+              prefix = (host.prefix or [ ]) ++ extendedSelf.prefix;
             };
           in
           extendedSelf.mkSystem ({ inherit (extendedSelf) defaultSystem; } // hostconfig)
@@ -69,10 +75,15 @@ lib: prev: {
         // extraArgs
         // {
           modules = (self.modules or [ ]) ++ modules;
+          configs = (self.configs or [ ]) ++ configs;
           validationModules = (self.validationModules or [ ]) ++ validationModules;
           specialArgs = (self.specialArgs or { }) // specialArgs;
           prefix = (self.prefix or [ ]) ++ prefix;
           hosts = (self.hosts or { }) // hosts;
+          checks = (self.checks or { }) // {
+            ${extendedSelf.defaultSystem} =
+              (self.checks.${extendedSelf.defaultSystem} or { }) // checks;
+          };
 
           nixosConfigurations = nixosConfigurations;
           nixosValidationConfigurations = nixosValidationConfigurations;

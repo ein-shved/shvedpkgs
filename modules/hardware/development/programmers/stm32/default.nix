@@ -3,7 +3,7 @@
   lib,
   config,
   ...
-}:
+}@args:
 let
   bbname = "BluePill";
   bmonster = "bmonster";
@@ -90,7 +90,9 @@ in
 {
   options.hardware.programmers.stm32.enable = lib.mkEnableOption "STM32 programmer support";
   # Publishing a package does not select it for installation.
-  config.nixpkgs.overlays = [ (self: super: { st-gpio = st-gpio self; }) ];
+  config.nixpkgs.overlays = lib.mkIf (!(args.projectTestConfig.node.pkgsReadOnly or false)) [
+    (self: super: { st-gpio = st-gpio self; })
+  ];
   config.environment.systemPackages = lib.mkIf config.hardware.programmers.stm32.enable (
     with pkgs;
     [

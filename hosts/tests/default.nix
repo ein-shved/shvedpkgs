@@ -3,7 +3,7 @@
   # nixos-rebuild build-vm --flake .#testA && \
   # QEMU_NET_OPTS="hostfwd=tcp::2221-:22" ./result/bin/run-nixos-vm
   testA = {
-    modules = [
+    configs = [
       ./vm/configuration.nix
       {
         user = {
@@ -19,7 +19,7 @@
     ];
   };
   testB = {
-    modules = [
+    configs = [
       ./vm/configuration.nix
       {
         user = {
@@ -36,7 +36,7 @@
     ];
   };
   testNas = {
-    modules = [
+    configs = [
       ./vm/configuration.nix
       {
         user = {
@@ -50,7 +50,7 @@
     ];
   };
   testVps = {
-    modules = [
+    configs = [
       ./vm/configuration.nix
       {
         user = {
