@@ -116,3 +116,30 @@ agent-specific calling conventions explicit.
 - WHEN a user requests an agent target that the bootstrap tool does not support
 - THEN the command makes that unsupported target visible to the user
 - AND it does not silently install skills for a different agent target
+
+## REQ-003: Persistent primary-user Codex remote control
+
+Development hosts must make Codex remote control available automatically
+from boot, before local login, and keep it available after local logout.
+Remote work must use the primary user's Codex environment.
+
+### Scenario: Remote control is available before local login
+
+- GIVEN a development host with a primary user and the necessary Codex authentication configured
+- AND required network connectivity and upstream services are available
+- WHEN the host finishes booting before any local user logs in
+- THEN the primary user can access Codex remotely without manually starting it on the host
+
+### Scenario: Local logout preserves remote-control access
+
+- GIVEN Codex remote control is available on a development host
+- AND the necessary authentication, network connectivity and upstream services remain available
+- WHEN the primary user logs out of their local session
+- THEN Codex remote-control access remains available without a local logged-in session
+
+### Scenario: Remote work shares the primary user's Codex environment
+
+- GIVEN a development host with working Codex remote-control access
+- AND the primary user has existing Codex configuration, authentication and persistent state
+- WHEN the primary user works through Codex remote control
+- THEN remote work uses the same Codex configuration, authentication and persistent state as their local Codex work

@@ -6,14 +6,9 @@ For every [development host](#development-host), the
 [primary user](#primary-user) has these development tools available in
 the command lookup path:
 
-- `codex`
 - `specd`
 
-`codex` is provided from [nixpkgs unstable](#nixpkgs-unstable) through
-`pkgsUnstable.codex`. The stable package is too old for the repository
-workflow. The unstable revision is pinned by the repository flake lock.
-
-Development-host policy selects this package through
+Development-host policy selects these packages through
 `environment.developmentPackages`.
 
 `specd` is provided by the repository package-set attribute
@@ -28,6 +23,32 @@ Traceability:
 
 - Satisfies
   [`REQ-001: Development hosts expose required workflow tools`](requirements.md#req-001-development-hosts-expose-required-workflow-tools).
+
+## Codex Service
+
+The repository provides the NixOS service `services.codex` for
+[REQ-003](requirements.md#req-003-persistent-primary-user-codex-remote-control).
+
+| Option | Default / meaning |
+| --- | --- |
+| `enable` | `false` |
+| `package` | `pkgs.codex` |
+| `user` | Required existing account. |
+| `home` | Selected account's home. |
+| `codexHome` | `${home}/.codex`; Codex configuration, authentication and state. |
+| `socketPath` | `null`: standard Unix socket; otherwise an absolute custom socket path. |
+| `remoteControl.enable` | `false`; enables outbound remote control. |
+
+For `hardware.isDevelopment`, development policy enables the service and
+remote control for the primary user with `pkgsUnstable.codex`. When enabled,
+the module installs the selected package system-wide
+([REQ-001](requirements.md#req-001-development-hosts-expose-required-workflow-tools)).
+
+Systemd runs the selected package approximately as
+`codex app-server [--remote-control] --listen unix://[<socketPath>]`.
+It starts at boot as `user`, with `home` as working directory and `HOME`,
+and `codexHome` as `CODEX_HOME`. It prepares the state directory, stays
+running after logout and restarts on failure.
 
 ## SpecD CLI Package
 
