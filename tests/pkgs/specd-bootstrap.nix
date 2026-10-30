@@ -32,8 +32,6 @@ testers.runNixOSTest {
         specd
         specd-bootstrap
       ];
-
-      system.stateVersion = "26.05";
     };
 
   testScript = ''

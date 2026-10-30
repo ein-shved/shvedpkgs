@@ -14,8 +14,6 @@ testers.runNixOSTest {
         gitMinimal
         specd
       ];
-
-      system.stateVersion = "26.05";
     };
 
   testScript = ''

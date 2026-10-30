@@ -58,6 +58,7 @@ in
         }
       });
     '';
+    users.groups.pkcs11 = { };
     users.users."${login}".extraGroups = [
       "pkcs11" # Can ask about secure keys
     ];
