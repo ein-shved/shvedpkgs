@@ -3,7 +3,7 @@ let
 in
 {
   bootWork = {
-    modules = [
+    configs = [
       {
         inherit user;
         home.enable = true;
@@ -14,7 +14,7 @@ in
     ];
   };
   bootGaming = {
-    modules = [
+    configs = [
       {
         inherit user;
         home.enable = true;
@@ -35,7 +35,7 @@ in
     ];
   };
   bootServer = {
-    modules = [
+    configs = [
       {
         inherit user;
         home.enable = true;

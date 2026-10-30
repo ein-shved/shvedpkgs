@@ -10,7 +10,7 @@ let
     };
   mkHost = name: {
     "${name}" = {
-      modules = [
+      configs = [
         (./. + "/${name}/configuration.nix")
         userconfig
       ];
@@ -24,7 +24,7 @@ tests
 // boots
 // {
   generic = {
-    modules = [
+    configs = [
       {
         home.enable = true;
         user.name = "NixOS";

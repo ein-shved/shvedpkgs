@@ -62,7 +62,6 @@
       lib = import ./lib flake-inputs;
 
       nixosModules = [
-        ./config/nixos.nix
         ./modules/nixos.nix
         ./pkgs
 
@@ -87,16 +86,26 @@
           system ? defaultSystem,
           specialArgs ? { },
           modules ? [ ],
+          configs ? [ ],
           prefix ? [ ],
           defaultSystem,
         }:
-        nixpkgs.lib.nixosSystem {
-          inherit system modules prefix;
-          specialArgs = specialArgs // {
-            inherit flake-inputs lib;
+        let
+          extensions = (specialArgs.extensions or { }) // {
+            inherit modules configs flake-inputs;
             pkgsUnstable = import unstable { inherit system; };
           };
+        in
+        nixpkgs.lib.nixosSystem {
+          inherit system prefix;
+          modules = modules ++ configs;
+          specialArgs = specialArgs // {
+            inherit extensions flake-inputs lib;
+            inherit (extensions) pkgsUnstable;
+          };
         };
+
+      defaultSystem = "x86_64-linux";
     in
     /*
         generic usage:
@@ -105,7 +114,7 @@
           hosts = {
             newHost = {
               system = "aarch64-linux"; # "x86_64-linux" by default
-              modules = [
+              configs = [
                 ./newHostSpecialModule.nix;
               ];
             };
@@ -113,14 +122,19 @@
           modules = [
             ./newGenericModule.nix
           ];
+          configs = [
+            ./newGenericConfiguration.nix
+          ];
+          checks.myCheck = someDerivation;
           defaultHost = "newHost"; # To force current hosts's packages be default
         };
     */
     lib.mkExtendableSystems {
       modules = nixosModules;
+      configs = [ ./config/nixos.nix ];
       hosts = import ./hosts;
-      inherit mkSystem;
-      defaultSystem = "x86_64-linux";
+      inherit mkSystem defaultSystem;
       defaultHost = "generic";
+      checks.${defaultSystem}.tests = flake-inputs.self.packages.${defaultSystem}.projectTests.allTests;
     } { };
 }
