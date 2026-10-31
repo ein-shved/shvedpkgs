@@ -7,14 +7,26 @@ in the primary user's command lookup path.
 
 The required tools are:
 
-- `codex`
-- `specd`
+- Android platform tools
+- Bear
+- Clang tools
+- OpenAI Codex CLI
+- Docker
+- GDB
+- GitHub CLI
+- `git-clang-format`
+- `man`
+- `niv`
+- `nix-tree`
+- `nixpkgs-review`
+- shUnit2
+- SpecD CLI
 
-Each listed command must resolve to the widely recognized developer tool
-identified by that command name at the time the command is added to this
+Commands for each listed tool must resolve to the widely recognized developer tool
+identified by that tool's name at the time the tool is added to this
 list. For example, `codex` means the genuine Codex CLI originated by
 OpenAI, and `git` means the distributed version control system originally
-created by Linus Torvalds. Listed commands must not resolve to stubs,
+created by Linus Torvalds. These commands must not resolve to stubs,
 placeholders, or unrelated executables unless this document explicitly says
 otherwise.
 
@@ -32,8 +44,8 @@ reproducible across development machines.
 
 ### Scenario: Required tool commands resolve to the expected tools
 
-- WHEN the primary user invokes a listed workflow-tool command on a development host
-- THEN the command resolves to the widely recognized developer tool identified by that command name
+- WHEN the primary user invokes a command for a listed workflow tool on a development host
+- THEN the command resolves to the widely recognized developer tool identified by the listed tool's name
 - AND it does not resolve to a stub, placeholder, or unrelated executable unless this requirement explicitly allows it
 
 ### Scenario: Codex CLI stays current enough for repository workflow

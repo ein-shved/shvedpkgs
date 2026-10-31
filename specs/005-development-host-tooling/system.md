@@ -6,6 +6,20 @@ For every [development host](#development-host), the
 [primary user](#primary-user) has these development tools available in
 the command lookup path:
 
+- `android-tools`
+- `bear`
+- `clang-tools`
+- `docker`
+- `gdb`
+- `gh`
+- `libclang.python`
+- `man`
+- `man-pages`
+- `man-pages-posix`
+- `niv`
+- `nix-tree`
+- `nixpkgs-review`
+- `shunit2`
 - `specd`
 
 Development-host policy selects these packages through
