@@ -19,6 +19,7 @@ The required tools are:
 - `niv`
 - `nix-tree`
 - `nixpkgs-review`
+- Repository-defined [`nixos`](../007-host-deployment/requirements.md#req-001-updating-the-local-or-a-named-remote-host) host deployment tool
 - shUnit2
 - SpecD CLI
 
