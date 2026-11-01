@@ -76,16 +76,6 @@ fn empty_invocation_shows_help_successfully() {
 }
 
 #[test]
-fn deployment_is_unimplemented() {
-    let output = binary().arg("switch").output().unwrap();
-    assert_eq!(output.status.code(), Some(1));
-    assert!(output.stdout.is_empty());
-    assert!(String::from_utf8(output.stderr)
-        .unwrap()
-        .starts_with("Error: unimplemented\n"));
-}
-
-#[test]
 fn catalog_decodes_settings_and_resolves_only_the_selected_target() {
     let fixture = Fixture::new(
         r#"{
@@ -110,7 +100,8 @@ fn catalog_decodes_settings_and_resolves_only_the_selected_target() {
         Some(&HostConfig {
             target_host: "server.example".into(),
             user: None,
-            use_sudo: false,
+            use_sudo: true,
+            ask_sudo_password: true,
         }),
     );
     let invocation = cli::parse(["nixos", "gerrit", "switch"], catalog.names()).unwrap();
@@ -124,6 +115,7 @@ fn catalog_decodes_settings_and_resolves_only_the_selected_target() {
             target_host: "192.0.2.10".into(),
             user: Some("operator".into()),
             use_sudo: true,
+            ask_sudo_password: true,
         }),
     );
     assert!(matches!(
