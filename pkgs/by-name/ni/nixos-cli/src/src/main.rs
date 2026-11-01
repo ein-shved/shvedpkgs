@@ -2,7 +2,7 @@
 
 //! Manage local and named NixOS rebuilds.
 
-use nixos_cli::{cli, config::Catalog};
+use nixos_cli::{cli, config::Catalog, deployment};
 
 fn main() -> anyhow::Result<()> {
     let catalog = Catalog::from_env()?;
@@ -14,6 +14,9 @@ fn main() -> anyhow::Result<()> {
         cli::Target::Local => None,
         cli::Target::Host(name) => Some(name.as_str()),
     };
-    let _target_config = catalog.resolve(name)?;
-    anyhow::bail!("unimplemented")
+    let target_config = catalog.resolve(name)?;
+    Err(
+        anyhow::Error::new(deployment::exec(target_config, &invocation.rebuild_args))
+            .context("cannot execute nixos-rebuild"),
+    )
 }
