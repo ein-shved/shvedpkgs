@@ -6,6 +6,56 @@
 }:
 let
   cfg = config.programs.pass;
+  passExt = pkgs.pass.withExtensions (exts: [ exts.pass-otp ]);
+  key = "${cfg.gpgid}/gpg.id";
+  hasKey = cfg.gpgid != null;
+  hasRemote = cfg.giturl != null;
+
+  passSetupScript = pkgs.writeShellApplication {
+    name = "pass-setup";
+    runtimeInputs = [
+      pkgs.gnupg
+      pkgs.pass
+      pkgs.gawk
+      pkgs.git
+    ];
+    text = ''
+      passKeyFingerprint="$(gpg --batch --with-colons \
+        --import-options show-only --import "${key}" | \
+        awk -F: \
+          '$1 == "fpr" && !found { print $10; found = 1 }')"
+      if [ -z "$passKeyFingerprint" ]; then
+        echo "pass: the supplied GPG key has no fingerprint" >&2
+        exit 1
+      fi
+      if ! gpg --batch --with-colons \
+        --list-secret-keys "$passKeyFingerprint" 2>/dev/null | \
+        awk -F: \
+          '$1 == "sec" { found = 1 } END { exit !found }'; then
+        gpg --batch --import "${key}"
+      fi
+    ''
+    + lib.optionalString hasRemote ''
+      if ! pass git rev-parse --git-dir >/dev/null 2>&1; then
+        git clone -- ${lib.escapeShellArg cfg.giturl} \
+          "''${PASSWORD_STORE_DIR:-$HOME/.password-store}"
+      fi
+    '';
+  };
+
+  passSetupService = {
+    Unit = {
+      Description = "Prepare the user's pass key and repository";
+      After = [ "sockets.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      # Start GPG only after the user manager has created runtime sockets.
+      ExecStart = lib.getExe passSetupScript;
+    };
+    Install.WantedBy = [ "default.target" ];
+  };
 in
 {
   options = with lib; {
@@ -23,61 +73,9 @@ in
       };
     };
   };
-  config =
-    let
-      passExt = pkgs.pass.withExtensions (exts: [ exts.pass-otp ]);
-    in
-    lib.mkIf cfg.enable {
-      environment.systemPackages = [
-        passExt
-      ];
-      hm.home.activation =
-        let
-          key = "${cfg.gpgid}/gpg.id";
-          pass = "${pkgs.pass}/bin/pass";
-          hasKey = cfg.gpgid != null;
-          hasRemote = cfg.giturl != null;
-          gpg2 = "${pkgs.gnupg}/bin/gpg";
-          keyHash = ''
-            k="$(${gpg2} --import-options show-only \
-                --list-options show-notations \
-                --import "${key}" | grep -v '^\S' | xargs)"
-          '';
-        in
-        {
-          installPassGpgKey = lib.hm.dag.entryAfter [ "writeBoundary" ] (
-            if !hasKey then
-              "true"
-            else
-              ''
-                ${keyHash}
-                ${gpg2} -K "$k" 2>/dev/null >/dev/null || \
-                  ${gpg2} --import "${key}"
-              ''
-          );
-          preparePassDb = lib.hm.dag.entryAfter [ "installPassGpgKey" ] (
-            if !hasRemote || !hasKey then
-              "true"
-            else
-              ''
-                ${keyHash}
-
-                u="${cfg.giturl}"
-                if ! r="$(${pass} git remote -v)"; then
-                  ${pass} init "$k"
-                  ${pass} git init -b master
-                  ${pass} git checkout -b _stash
-                  ${pass} git commit -m _stash
-                  ${pass} git remote add origin "$u"
-                  ${pass} git checkout master
-                  ${pass} git branch --set-upstream-to origin/master
-                  ${pass} git pull --rebase=true origin master
-                fi
-              ''
-          );
-        };
-      programs = {
-        gnupg.agent.enable = true;
-      };
-    };
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ passExt ];
+    hm.systemd.user.services.pass-setup = lib.mkIf hasKey passSetupService;
+    programs.gnupg.agent.enable = true;
+  };
 }

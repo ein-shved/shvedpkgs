@@ -9,7 +9,7 @@ let
 in
 {
   config = {
-    services.gnome.gnome-keyring.enable = lib.mkForce false;
+    services.gnome.gnome-keyring.enable = lib.mkDefault config.hardware.isGraphic;
     fonts = mkGraphic {
       packages = with pkgs; [
         jetbrains-mono

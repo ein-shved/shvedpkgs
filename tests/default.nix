@@ -28,6 +28,7 @@ let
     ./modules/kitty-config.nix
     ./modules/top-config.nix
     ./modules/pass.nix
+    ./modules/keyring-storage.nix
     ./modules/kl-trust.nix
     ./modules/kl-nss-certificates.nix
     ./modules/browser-firefox.nix
