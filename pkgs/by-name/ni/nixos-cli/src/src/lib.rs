@@ -1,5 +1,6 @@
 #![deny(warnings, missing_docs)]
 
-//! Parse NixOS rebuild invocations with local and named host selection.
+//! Select NixOS rebuild targets and load their connection settings.
 
 pub mod cli;
+pub mod config;
