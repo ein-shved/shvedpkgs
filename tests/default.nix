@@ -42,6 +42,7 @@ let
     ./modules/transmission-disabled.nix
     ./pkgs/specd.nix
     ./pkgs/specd-bootstrap.nix
+    ./pkgs/nixos-cli.nix
   ];
   tests = builtins.listToAttrs (
     map (file: {
