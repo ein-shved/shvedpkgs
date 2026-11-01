@@ -57,8 +57,19 @@ lib: prev: {
         builtins.mapAttrs (
           name: host:
           let
+            hostSpecialArgs = host.specialArgs or { };
             hostconfig = host // {
-              specialArgs = (host.specialArgs or { }) // extendedSelf.specialArgs;
+              specialArgs =
+                hostSpecialArgs
+                // extendedSelf.specialArgs
+                // {
+                  extensions =
+                    (hostSpecialArgs.extensions or { })
+                    // (extendedSelf.specialArgs.extensions or { })
+                    // {
+                      inherit nixosConfigurations;
+                    };
+                };
               modules = (host.modules or [ ]) ++ extendedSelf.modules;
               configs = (host.configs or [ ]) ++ extendedSelf.configs ++ extraModules;
               prefix = (host.prefix or [ ]) ++ extendedSelf.prefix;
@@ -81,8 +92,7 @@ lib: prev: {
           prefix = (self.prefix or [ ]) ++ prefix;
           hosts = (self.hosts or { }) // hosts;
           checks = (self.checks or { }) // {
-            ${extendedSelf.defaultSystem} =
-              (self.checks.${extendedSelf.defaultSystem} or { }) // checks;
+            ${extendedSelf.defaultSystem} = (self.checks.${extendedSelf.defaultSystem} or { }) // checks;
           };
 
           nixosConfigurations = nixosConfigurations;

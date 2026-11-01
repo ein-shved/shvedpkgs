@@ -6,6 +6,7 @@
 let
   cases = [
     ./modules/project-arguments.nix
+    ./modules/nixos-cli-module.nix
     ./modules/codex-service.nix
     ./modules/cifs-keyutils.nix
     ./modules/avr.nix

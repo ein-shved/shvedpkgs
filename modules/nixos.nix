@@ -28,5 +28,6 @@
     ./services/nginx/proxies
     ./services/vps
     ./tools/security/pass
+    ./tools/nixos-cli
   ];
 }
