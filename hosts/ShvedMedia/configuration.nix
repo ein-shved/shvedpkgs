@@ -23,6 +23,7 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "ShvedMedia"; # Define your hostname.
+  programs.nixos-cli.remoteAddress = "media.home.shved.org";
 
   time.timeZone = "Europe/Moscow";
 

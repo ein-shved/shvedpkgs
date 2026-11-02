@@ -7,6 +7,7 @@
   user.name = "gerrit-admin";
   user.humanName = "The Gerrit";
   networking.hostName = "gerrit";
+  programs.nixos-cli.remoteAddress = "gerrit.shved.org";
   home.enable = true;
   hardware.isVps = true;
 
