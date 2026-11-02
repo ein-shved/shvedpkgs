@@ -2,10 +2,13 @@
 
 //! Manage local and named NixOS rebuilds.
 
-use nixos_cli::{cli, config::Catalog, deployment};
+use nixos_cli::{cli, completion, config::Catalog, deployment};
 
 fn main() -> anyhow::Result<()> {
     let catalog = Catalog::from_env()?;
+    if completion::from_env(&catalog)? {
+        return Ok(());
+    }
     let invocation = match cli::parse(std::env::args_os(), catalog.names()) {
         Ok(invocation) => invocation,
         Err(error) => error.exit(),

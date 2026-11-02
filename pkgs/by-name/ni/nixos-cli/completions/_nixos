@@ -1,0 +1,22 @@
+#compdef nixos
+
+_nixos() {
+    local -a response own
+    response=("${(@0)$(NIXOS_CLI_COMPLETE=zsh @nixos@ "$CURRENT" "${words[@]}")}")
+    (( ${#response} >= 2 )) || return 1
+    # Splitting the final NUL produces one extra empty field in Zsh.
+    response[-1]=()
+    local count=${response[2]}
+    own=("${(@)response[count+3,-1]}")
+    local -a words=("${(@)response[3,count+2]}")
+    local CURRENT=${response[1]}
+    local result=1
+    # The pinned provider invokes its function when sourced in file context.
+    source @upstream@/share/zsh/site-functions/_nixos-rebuild && result=0
+    if (( ${#own} )); then
+        compadd -- "${own[@]}" && result=0
+    fi
+    return $result
+}
+
+_nixos "$@"
