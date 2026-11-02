@@ -47,7 +47,7 @@ struct Cli {
     rebuild_args: Vec<OsString>,
 }
 
-fn command(host_names: impl IntoIterator<Item = impl Into<String>>) -> Command {
+pub(crate) fn command(host_names: impl IntoIterator<Item = impl Into<String>>) -> Command {
     // Named subcommands let clap choose a host before the opaque upstream tail.
     // The separator stays reserved even if the catalog contains that name.
     let command = Cli::command().subcommands(
