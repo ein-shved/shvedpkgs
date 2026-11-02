@@ -14,7 +14,6 @@
       killall
       minicom
       nix-bash-completions
-      nixos-script
       nixos-option
       psmisc
       screen

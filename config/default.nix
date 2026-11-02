@@ -7,6 +7,7 @@
     hardware.power.wakeOnPowerButtonOnly.enable = lib.mkDefault config.hardware.isDevelopment;
     hardware.programmers.avr.enable = lib.mkDefault config.hardware.isDevelopment;
     hardware.programmers.stm32.enable = lib.mkDefault config.hardware.isDevelopment;
+    programs.nixos-cli.enable = lib.mkDefault config.hardware.isDevelopment;
     services = {
       cifsKeyutils.enable = lib.mkDefault true;
       logind.settings.Login = lib.mkIf config.hardware.isDevelopment {
