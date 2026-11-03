@@ -1,126 +1,82 @@
 # System Specification
 
-## SpecD Project Configuration
+## External Interface
 
-The repository contains a SpecD project configuration at:
+The local `specd.yaml` selects `schemas/sdd/schema.yaml`; durable specs live
+under `specs/`, and change state under `.specd/`. The SpecD CLI exposes status,
+artifact instructions, merged previews and structural validation. Entry skills
+start or resume work using the client's native skill syntax.
+[REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state).
 
-```text
-specd.yaml
-```
+[CONTRIBUTING.md](../../CONTRIBUTING.md) leads to the authoritative English
+[artifact rules](rules.md) and their [Russian translation](rules.ru.md).
+Schema and skills own production and lifecycle instructions.
+[REQ-003](requirements.md#req-003-developers-can-find-current-sdd-process-rules).
 
-The configuration points to a local SDD schema:
+Spec directories use stable three-digit prefixes. Reconstructed documents
+follow their numeric order from general to specific.
+[REQ-004](requirements.md#req-004-specd-owned-sdd-fragments-reconstruct-readable-documents).
 
-```text
-./schemas/sdd/schema.yaml
-```
+A proposal contains ordered high-level work items. Requirements retain their
+acceptance scenarios. System starts with the designed entity's external
+interface and the same work-item skeleton. Architecture and implementation
+then develop together by item; discoveries may also require revising the
+proposal or requirements and aligning their dependents.
+[REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts).
 
-The default workspace stores steady-state SpecD specs under:
+## Artifacts
 
-```text
-specs/
-```
+`rules.md` and its Russian translation own artifact content and responsibility
+boundaries; `schemas/sdd/schema.yaml` owns production instructions and lifecycle
+gates. Proposal owns numbered one-word work items and uses `hasTasks` with
+checkbox hash normalization. Requirements own independent needs and acceptance
+scenarios in consumer language. System defines current concepts, contracts
+and mechanisms, starting with the external interface and matching item sections.
+It develops together with code; proposal and requirements may also be revised
+when necessary. Sufficient existing contracts permit no-op deltas. ADRs are
+created only on explicit user request, including amendments and superseding
+records; they preserve significant choices, alternatives, rationale and history.
+Existing ADR history remains durable.
+The acyclic artifact dependency chain is proposal → requirements → system →
+optional ADRs. `ready` and `implementing` require proposal and requirements;
+`verifying` and `archiving` also require complete system and completed proposal
+tasks.
+[REQ-001](requirements.md#req-001-existing-sdd-process-remains-authoritative),
+[REQ-003](requirements.md#req-003-developers-can-find-current-sdd-process-rules).
 
-## SpecD Change Storage
+Good and bad content examples live in the rules and reach executors through
+the schema's System authoring instruction. Authors and reviewers use them to
+judge content, abstraction and concision. Expanding the examples refines these
+criteria and helps prevent recurring poor approaches.
+[REQ-003](requirements.md#req-003-developers-can-find-current-sdd-process-rules),
+[REQ-008](requirements.md#req-008-each-work-item-receives-focused-design-and-code-review).
 
-Active and historical change state is stored under `.specd/`:
+Explicitly requested special checks receive brief descriptions in system,
+referencing their acceptance or architecture owner. Ordinary tests and code
+review are part of implementation.
+[REQ-007](requirements.md#req-007-validation-checks-remain-distinct-from-acceptance-scenarios).
 
-- active changes: `.specd/changes/`
-- drafts: `.specd/drafts/`
-- discarded changes: `.specd/discarded/`
-- archive: `.specd/archive/`
+## Agents
 
-## SpecD-Owned SDD Locations
+The main session prepares initial artifacts and coordinates work directly.
+Each item executor proposes its brief system section for independent design
+review, then develops that design and its implementation together and resolves
+findings from a separate code reviewer. Proposal
+checkboxes track reviewed completion; the complete system is validated after
+item reviews. Shared skill notes preserve CLI context, ownership and human gates.
+Original executors remain available through user review; the main session
+forwards later questions and corrections to them without substituting authors.
+[REQ-008](requirements.md#req-008-each-work-item-receives-focused-design-and-code-review),
+[REQ-009](requirements.md#req-009-users-choose-review-involvement).
 
-Steady-state SpecD specs under `specs/` are the machine-readable location for
-requirements, system specification, validation, and optional ADR artifacts
-managed by SpecD.
+## Delivery
 
-Active and archived SpecD changes under `.specd/` hold change-scoped proposal,
-plan, and context artifacts. Spec-scoped `adrs.md` artifacts hold significant
-architecture decisions for their owning specs.
-
-The human-readable SDD process rules live at:
-
-```text
-specs/000-sdd-process/rules.md
-```
-
-The Russian translation of the same process rules lives at:
-
-```text
-specs/000-sdd-process/rules.ru.md
-```
-
-## SDD Process Discoverability
-
-The repository root `CONTRIBUTING.md` file is the developer-facing entry
-point for contribution and process guidance.
-
-`CONTRIBUTING.md` must link to the authoritative English SDD process rules
-at `specs/000-sdd-process/rules.md`. It may also link to the Russian
-translation at `specs/000-sdd-process/rules.ru.md` for reader convenience,
-while preserving the English process document as authoritative when the two
-versions diverge.
-
-## Ordered SpecD SDD Sections
-
-SpecD-owned SDD content is split by capability directories under `specs/`.
-Capability directories that participate in SDD document ordering use stable
-three-digit numeric prefixes in their directory names.
-
-The numeric prefix is part of the section identifier and records the
-human-readable order from general to specific. For example,
-`000-sdd-process/` precedes project-level architecture, host classification,
-testing, generic host tooling, and development-host tooling sections.
-
-Document-shaped views such as `requirements.md` and `system.md` follow the
-numeric section order when presenting split SpecD artifacts for validation or
-review.
-
-This ordering supports readable generated views of the SDD model without
-making agents depend on arbitrary filesystem or glob order.
-
-## SDD Schema
-
-The local SDD schema defines first-class artifacts for:
-
-- requirements with requirement-owned acceptance scenarios
-- system specification
-- validation design
-- implementation plan with top-level plan items
-- optional context
-- optional spec-scoped ADRs
-
-## Transitional Orientation Documents
-
-The repository is still migrating from manually maintained project knowledge to
-the SDD process and its normative artifact set.
-
-During this transition, the project keeps two non-normative documents under
-`specs/001-project-architecture/`:
-
-- [`inventory.md`](../001-project-architecture/inventory.md): temporary
-  project inventory and repository map.
-- [`todo.md`](../001-project-architecture/todo.md): temporary open questions,
-  cleanup candidates, and SDD preparation tasks.
-
-These documents help humans and agents navigate the transition, but they are
-not SpecD schema artifacts and they do not own current requirements, current
-system contracts, validation expectations, or architecture decisions.
-Durable knowledge discovered in them must move to the owning `requirements.md`,
-`system.md`, `validate.md`, or `adrs.md` artifact.
-
-## Constraints
-
-- `specs/000-sdd-process/rules.md` remains the authoritative English SDD
-  process definition.
-- `specs/000-sdd-process/rules.ru.md` is the Russian translation and must
-  stay aligned with the English process definition.
-- SpecD artifacts are allowed to provide machine-readable tracking and context
-  without silently replacing the SDD process.
-- Runtime/generated SpecD graph and log files are not tracked as durable
-  artifacts.
-- Temporary manual notes must not become parallel normative sources for current
-  requirements, system contracts, validation expectations, or ADR decisions.
-- Reconstructed SDD document views must follow deterministic numeric fragment
-  order.
+Schema and client-skill packages recursively include their source trees.
+`specd-bootstrap` replaces the installed schema and selected client skill
+directories with the packaged trees. Copied files gain owner write permission
+while retaining their other permission bits. It selects the delivered
+schema in `specd.yaml` while preserving the project's workspace configuration.
+The bootstrap VM test exercises installation, replacement and the incremental
+lifecycle through the installed schema for the supported clients.
+[REQ-002](requirements.md#req-002-specd-provides-machine-readable-workflow-state),
+[REQ-005](requirements.md#req-005-normative-sdd-artifacts-describe-the-current-architecture).

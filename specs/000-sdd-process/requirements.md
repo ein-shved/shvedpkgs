@@ -2,26 +2,19 @@
 
 ## REQ-001: Existing SDD process remains authoritative
 
-The repository must continue to treat `specs/000-sdd-process/rules.md` as
-the normative definition of the SDD process unless a future accepted process
-change says otherwise.
+The human-readable artifact rules define the meaning and boundaries of SDD
+artifacts independently of the tools and agents used to produce them.
 
-SpecD artifacts may restate, index, or operationalize SDD content for agent
-workflow purposes, but they must not silently redefine the responsibilities
-of Requirements, System Specification, Plans, Implementation, Verification,
-Context, or `adrs.md`.
+### Scenario: Artifact meaning is discoverable
 
-### Scenario: Process rules govern SDD meaning
+- WHEN a developer interprets an SDD artifact
+- THEN the artifact rules define its responsibility and content
+- AND tooling instructions remain consistent with those rules
 
-- WHEN an agent or human interprets the repository SDD process
-- THEN `specs/000-sdd-process/rules.md` provides the normative process meaning
-- AND SpecD artifacts may only restate or operationalize that meaning without silently changing it
+### Scenario: Artifact contracts change explicitly
 
-### Scenario: Process changes are explicit
-
-- WHEN the repository needs to change the responsibilities of an SDD artifact type
-- THEN the change is represented as an accepted process change
-- AND dependent SpecD artifacts are updated to match the new process meaning
+- WHEN an accepted change revises an artifact's responsibility or format
+- THEN its rules and dependent authoring instructions are updated together
 
 ## REQ-002: SpecD provides machine-readable workflow state
 
@@ -43,29 +36,21 @@ blockers, and next artifact instructions through the SpecD CLI.
 
 ## REQ-003: Developers can find current SDD process rules
 
-A developer working on the repository must have access to a complete
-human-readable SDD process description and must be able to find it easily
-from the repository's SDD materials.
+Developers must be able to find the human-readable artifact model and the
+instructions for using it. Artifact rules and their Russian translation own
+content contracts; operational resources own agent and lifecycle behavior.
 
-The process description must explain artifact responsibilities, dependency
-direction, lifecycle expectations, artifact boundaries, and examples needed
-for humans and agents to apply the schema consistently.
+### Scenario: Developer finds the artifact model
 
-When the schema changes, the human-readable process description must be
-updated so it does not preserve obsolete artifact formats, terminology, or
-workflow rules.
+- WHEN a developer needs an artifact's format or responsibility
+- THEN the repository's SDD materials lead to its human-readable rules
+- AND those rules can be understood independently of production tooling
 
-### Scenario: Developer finds the current process description
+### Scenario: Changes update their owners
 
-- WHEN a developer needs to understand the repository's SDD process
-- THEN the developer can find the human-readable process description from the repository's SDD materials
-- AND the description explains the current SpecD schema artifact responsibilities, dependency direction, lifecycle expectations, artifact boundaries, and useful examples
-
-### Scenario: Process description is updated with schema changes
-
-- WHEN a change modifies the SpecD schema, accepted artifact format, artifact terminology, or lifecycle workflow
-- THEN the human-readable SDD process description is updated as part of that change
-- AND obsolete process text is removed or rewritten so the description matches the current schema
+- WHEN artifact contracts or operational behavior change
+- THEN the resources owning the changed meaning are updated
+- AND changes to artifact contracts update both language versions of the rules
 
 ## REQ-004: SpecD-owned SDD fragments reconstruct readable documents
 
@@ -90,78 +75,138 @@ visible rather than hiding them behind arbitrary filesystem or glob order.
 
 ## REQ-005: Normative SDD artifacts describe the current architecture
 
-The repository's normative SDD artifacts must fully describe the current
-project architecture at the level needed for agents and humans to make changes
-without relying on stale inventory, manual notes, or conversation history.
+Current needs and satisfaction conditions belong in requirements; current
+interfaces, contracts and architecture belong in system. ADRs are created
+only on the user's explicit request and preserve the context, alternatives
+and rationale of significant decisions.
+These artifacts must suffice for the affected work without conversation history.
 
-Current requirements must live in `requirements.md`, current system contracts
-must live in `system.md`, validation expectations must live in `validate.md`,
-and significant decisions and rationale must live in `adrs.md`.
+### Scenario: Current architecture is understandable
 
-Temporary inventory and TODO documents may exist while the project is still
-migrating to the SDD process, but they must not be required to understand the
-current architecture once the migration is complete.
+- WHEN a developer changes a covered capability
+- THEN its requirements and system explain the needs and relevant current design
+- AND temporary notes do not replace those contracts
 
-### Scenario: Current architecture is understandable from normative artifacts
+### Scenario: User controls decision records
 
-- WHEN an agent or human needs to understand the current project architecture
-- THEN the normative SDD artifacts describe the requirements, system contracts, validation expectations, and durable decisions needed for the work
-- AND stale inventory, manual notes, or conversation history are not required to recover current architectural truth
+- WHEN an architectural choice is made during a change
+- THEN an ADR is created only on the user's explicit request
 
-### Scenario: Temporary notes do not become hidden authority
+### Scenario: Code documentation references durable truth
 
-- WHEN temporary inventory or TODO documents remain in the repository
-- THEN they may provide orientation during migration
-- AND they must not override or replace the owning normative SDD artifacts
+- WHEN code or its permanent documentation links to a specification
+- THEN the target document and any referenced heading exist in durable specs
+- AND the link remains meaningful after the change is archived
 
 ## REQ-006: Changes that modify behavior pass through SpecD artifacts
 
-Future repository changes that modify expected behavior should be represented
-as SpecD changes with requirements, system, validation, and plan artifacts
-before implementation proceeds.
+A change starts with a short proposal and requirements, then develops its
+architecture and implementation together by high-level work item. Reviewed
+items can proceed to code while later design remains open.
+Discoveries may also require revising the proposal or requirements.
 
-The plan artifact must contain the implementation strategy, validation
-strategy, and top-level plan items needed to execute the transition. Top-level
-plan items are the task-bearing units for implementation; there is no separate
-steady process artifact for tasks.
+### Scenario: Begin implementation incrementally
 
-If an existing steady-state SpecD spec already covers the behavior, the change
-should attach that spec and use deltas or no-op deltas as appropriate. If no
-SpecD spec covers the behavior, the change should introduce one.
+- WHEN the initial requirements and external-interface skeleton are available
+- AND a work item's brief design passes independent review
+- THEN that item's implementation can start without completing later items' design
 
-### Scenario: Behavior change starts from SpecD artifacts
+### Scenario: Revisit earlier artifacts when needed
 
-- WHEN a repository change modifies expected behavior
-- THEN the change is represented with requirements, system, validation, and plan artifacts before implementation proceeds
-- AND implementation work can trace back to the expected behavior described by those artifacts
+- WHEN joint architecture and implementation work reveals a needed change in intent or requirements
+- THEN the proposal or requirements are revised as appropriate
+- AND affected architecture and implementation are aligned with that revision
 
-### Scenario: Existing specs are reused when they own the behavior
+### Scenario: Small changes stay small
 
-- WHEN an existing steady-state SpecD spec already covers the behavior being changed
-- THEN the change attaches that spec
-- AND the change uses a delta or no-op delta according to whether that artifact needs to change
+- WHEN a narrow fix is already covered by current requirements and architecture
+- THEN it uses one work item and may leave those contracts unchanged
+- AND a requested regression check can be its only spec addition
 
-### Scenario: New specs are introduced for uncovered behavior
+### Scenario: Existing behavior reuses its owners
 
-- WHEN no existing SpecD spec covers the behavior being changed
-- THEN the change introduces a spec for that behavior
-- AND the new spec carries the required SDD artifacts for future work
+- WHEN an existing spec covers the changed behavior
+- THEN the change attaches it and revises only the affected contracts
+- AND uncovered behavior receives an owning spec
 
 ## REQ-007: Validation checks remain distinct from acceptance scenarios
 
-Requirement-owned acceptance scenarios are the repository's requirements
-acceptance format. Technical validation artifacts may reference those
-scenarios and may describe checks in a scenario-like form, but they must not
-redefine acceptance conditions outside the owning requirement.
+Acceptance scenarios remain inside their requirements. Special technical
+check descriptions belong in system only when explicitly requested by the user.
+Implementation receives appropriate tests and independent code review.
 
-### Scenario: Acceptance conditions stay in requirements
+### Scenario: Record a requested special check
 
-- WHEN an acceptance condition defines whether a requirement is satisfied
-- THEN that condition is expressed as an acceptance scenario inside the owning requirement
-- AND validation artifacts may reference it without replacing it
+- WHEN the user asks to preserve an unusual check or regression case
+- THEN system describes that case briefly
+- AND its acceptance meaning remains with the owning requirement
 
-### Scenario: Validation describes evidence
+### Scenario: Routine implementation checks
 
-- WHEN a validation artifact describes how requirement conformance is checked
-- THEN it describes the technical evidence, check, command, inspection, or fixture used for validation
-- AND it does not introduce a separate acceptance-criteria model outside requirements
+- WHEN an implementation is checked against its requirements and design
+- THEN appropriate tests and independent code review establish conformance
+- AND special check descriptions in system reflect explicit user requests
+
+## REQ-008: Each work item receives focused design and code review
+
+Work items share the system's external interface and receive focused design,
+implementation, and independent review. Architecture records the key roles,
+participants and dependencies needed to understand the solution concisely.
+
+### Scenario: Review and implement one item
+
+- WHEN an executor develops a work item
+- THEN an independent reviewer checks its brief design and can ask implementation questions
+- AND the same executor implements it after design review
+- AND a separate reviewer checks the resulting code
+
+### Scenario: Keep architecture sufficient and brief
+
+- WHEN a design question is resolved
+- THEN system retains only the architectural decision needed to understand the solution
+- AND familiar idioms, rejected alternatives and routine implementation detail do not inflate it
+
+### Scenario: Original executor handles user feedback
+
+- WHEN the user questions or requests changes to an item's code or design
+- THEN the coordinating session routes that feedback to the item's original executor
+- AND the original executor handles the response and corrections through user review
+- AND an unavailable original executor is reported rather than silently replaced
+
+### Scenario: Resolve findings proportionately
+
+- WHEN implementation reveals a minor issue in an earlier item
+- THEN the executor may correct it and align the affected design
+
+### Scenario: Significant inconsistency needs a decision
+
+- WHEN a significant inconsistency requires a design decision
+- THEN work pauses for the user's decision
+
+### Scenario: Resume focused work
+
+- WHEN a new participant resumes an item
+- THEN current artifacts and concise continuation identify its inputs, progress and unresolved questions
+
+## REQ-009: Users choose review involvement
+
+Before implementation users can choose review by item, review of the completed
+change together, or delegation of routine review. Work honors that choice and
+surfaces significant inconsistencies in every mode.
+
+### Scenario: Review by item
+
+- WHEN the user chooses item review
+- THEN completed items are presented individually before proceeding to the next item
+
+### Scenario: Review the result together
+
+- WHEN the user chooses batch review
+- THEN routine design and implementation proceed without intermediate user approval
+- AND the user receives the completed architecture and implementation together
+
+### Scenario: Delegate routine review
+
+- WHEN the user delegates participation
+- THEN routine decisions and independent reviews proceed within the user's goal
+- AND the user receives a change ready for closure
