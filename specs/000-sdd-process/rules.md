@@ -1,145 +1,45 @@
-# Spec-Driven Development Process
+# Spec-Driven Development Artifact Rules
 
-## 0. Document Status
+## Scope and authority
 
-### 0.1 Scope
+These rules define artifact meaning, content and relationships independently
+of the tools and agents that produce them. Production roles, review routing and
+CLI lifecycle mechanics belong in operational instructions and the schema.
 
-This document defines the responsibilities, content, dependency relationships,
-and validation semantics of the project's Spec-Driven Development (SDD)
-artifacts.
+Artifact-model changes are authored in this English document, and the accepted
+content is translated in full into [Russian](rules.ru.md). English is authoritative
+while a translation defect is being corrected.
 
-The artifact model is under active development. Until open changes are
-explicitly adopted, the rest of this document defines the current working model.
+The content model is `proposal → requirements → system ↔ implementation`.
+System architecture and implementation develop together by work item. Proposal
+and requirements may also be revisited and corrected when necessary. ADRs created
+on explicit user request preserve significant decisions. The artifact dependency graph remains acyclic.
+Requirements and system are the durable current truth; conversation and temporary
+notes are supporting context.
 
-### 0.2 English and Russian Versions
+## Proposal
 
-**Process changes are made only in this English document.** After an
-accepted change, this document is translated in full into the
-[Russian version](rules.ru.md). The Russian document is not
-developed independently.
+A proposal explains the problem and affected scope briefly and contains the
+ordered high-level work items for the change. Each item has a stable number, a
+one-word name, one short sentence describing its purpose and a completion
+checkbox, for example:
 
-If the English and Russian documents diverge, the divergence is a defect
-and should be tracked and corrected as a bug. Until it is resolved,
-**the English document is authoritative**.
-
-### 0.3 Open Questions and TODO
-
-The primary candidates for future revision are:
-
-- **Artifact lifecycle and status model.** Artifact states and their meaning,
-  such as draft, accepted, active, completed, superseded, and archived, need
-  an explicit model consistent with artifact responsibilities and dependencies.
-- **Artifact formats.** File layout, syntax, identifiers, and traceability
-  conventions may evolve through explicit changes to the artifact model.
-
-### 0.4 Examples and Technology-Specific Detail
-
-Examples may use concrete technologies when doing so makes the process
-boundary clearer. A reader must not need prior knowledge of that
-technology to understand the example. If a technology-specific term is
-important to the example, include enough local explanation for the
-example to stand on its own.
-
-Prefer the smallest concrete example that clarifies the process rule.
-Do not let technology explanation grow until it obscures the SDD concept
-being illustrated.
-
-## 1. Purpose and Principles
-
-The process makes project intent, the current system contract, important
-decisions, implementation transitions, and executable work explicit
-enough that humans and agents can reconstruct the project without
-relying on accumulated conversation history.
-
-Core principles:
-
-1.  **Repository artifacts are the durable process context.**
-    Conversation and agent context are temporary aids.
-2.  **Artifacts have distinct responsibilities.** Requirements,
-    Specification, ADRs, Plans, and Implementation must not silently
-    absorb each other’s roles.
-3.  **The main dependency direction is
-    `REQ → SPEC → PLAN → IMPLEMENTATION`.** This is a dependency
-    model, not an irreversible waterfall.
-4.  **Discovery may move upstream.** Downstream work can reveal that an
-    earlier artifact is wrong, ambiguous, or incomplete.
-5.  **Corrections propagate downstream.** Correct the earliest affected
-    artifact, then reconsider dependent artifacts in order.
-6.  **Significant decisions are explicit.** ADRs preserve important
-    choices and their rationale.
-7.  **Completed work ends in an agreed and validated state.** Validation
-    establishes completion; it is not ceremony performed after
-    completion.
-8.  **Use the minimum useful ceremony.** An artifact or boundary should
-    exist because it carries distinct useful information.
-
-## 2. Process Model
-
-The primary dependency flow is:
-
-``` text
-REQ -> SPEC -> PLAN -> IMPLEMENTATION
-       ^       ^
-       +-- ADR-+
+```markdown
+- [ ] 1. **Interface** — Supported configuration becomes available to callers.
 ```
 
-Non-normative project guidance and discovery memory may support orientation,
-especially while introducing SDD to an existing project. They are outside
-the normative dependency chain.
+Item selection and allocation of needs to requirements and current interfaces
+and architecture to system occur together. The proposal lists affected spec IDs
+even when their requirements remain unchanged. Item identities remain stable on
+correction. A small change may have one item. Supporting evidence, alternatives and temporary
+continuation belong outside the normative artifact chain.
 
-ADR is not a fixed pipeline stage. It may arise while working at any
-layer.
+The proposal describes this change's intent and work. Requirements and system
+own current needs and design. A completed checkbox means the item
+has reached a checked, coherent state; required correctness checks cannot remain
+pending. Completed proposals remain change history.
 
-The arrows express dependency, not permitted direction of work. Later
-work may expose missing information upstream:
-
-``` text
-REQ -> SPEC -> PLAN -> IMPLEMENTATION
-       ^       ^       |
-       +-------+-------+
-                 discovery
-```
-
-When this happens, identify the earliest artifact whose correct content
-should have prevented the problem. Correct it first, then reconsider
-affected downstream artifacts.
-
-> **Discovery moves upstream; corrections propagate downstream.**
-
-### 2.1 Optional Discovery/Spike Branch
-
-When the project has enough known or suspected need to investigate, but
-the Requirements, system contract, or significant design direction are
-still too uncertain to stabilize Specification responsibly, an optional
-Discovery/Spike branch may appear:
-
-``` text
-REQ -> [DISCOVERY/SPIKE] -> SPEC -> PLAN -> IMPLEMENTATION
-```
-
-Discovery/Spike is not a normal mandatory stage and is not production
-implementation. It exists to compare alternatives, build limited
-prototypes when useful, validate assumptions, and produce evidence for
-Requirements, Specification, and ADRs.
-
-Discovery/Spike may reveal that Requirements were incomplete, wrong, or
-too vague. When that happens, use the same upstream discovery rule:
-correct Requirements first, then reconsider Discovery/Spike outputs and
-downstream artifacts.
-
-## 3. Artifact Model
-
-### 3.1 Project Guidance and Discovery Memory
-
-Non-normative project guidance, discovery notes, inventories, and maps may
-support orientation during SDD adoption and project exploration.
-
-These sources do not define required behavior or system guarantees and must
-not become parallel current-system descriptions. Requirements and System
-Specification take precedence. Durable knowledge belongs in its owning artifact;
-orientation material may be incomplete, temporary, or absent.
-
-### 3.2 Requirements
+## Requirements
 
 Requirements describe needs the system or project must satisfy.
 
@@ -153,7 +53,7 @@ A useful test is:
 > still make sense?
 
 If yes, the statement is likely a Requirement. If no, it may be
-Specification, Plan, or Implementation detail instead.
+System or Implementation detail instead.
 
 This test is not a ban on concrete technologies in Requirements. A
 technology, file format, or interface may belong in a Requirement when
@@ -172,10 +72,17 @@ System Specification maps those concepts to the current system model
 where necessary.
 
 Patch constraints, defect descriptions, and proposed fixes do not become
-requirements merely because the user mentioned them. Place them in proposal,
-system, or plan according to their responsibility.
+requirements merely because the user mentioned them. They belong in proposal,
+system, or implementation according to their responsibility.
 
-#### 3.2.1 Acceptance Scenarios
+The core need is concise; nuance, examples and boundary cases belong in
+scenarios. Genuinely imposed negative constraints retain their observable
+violation and acceptance scenarios.
+
+A statement that mainly refines an existing requirement usually belongs in an
+acceptance scenario under that requirement.
+
+### Acceptance Scenarios
 
 The current process uses **requirement-owned acceptance scenarios** to
 express conditions under which a Requirement is satisfied.
@@ -184,9 +91,8 @@ An acceptance scenario belongs inside the Requirement it validates. It
 uses Requirement-level concepts and should test the need or obligation
 rather than encode unnecessary implementation or system-design detail.
 
-Use scenario headings to name the observable condition being covered,
-then describe the trigger and expected outcome in concise bullets. The
-normal shape is:
+Scenario headings name the observable condition being covered; concise bullets
+describe the trigger and expected outcome. The normal shape is:
 
 ``` text
 ### Scenario: <observable condition>
@@ -199,657 +105,218 @@ normal shape is:
 Scenarios must not duplicate technical validation commands, fixture
 setup, package layout, module wiring, or other implementation mechanics
 unless that detail is itself part of the Requirement's external contract.
-Technical evidence for checking the scenario belongs in validation
-artifacts.
+Technical evidence for checking the scenario belongs in implementation
+and its checks. Explicitly requested special-check descriptions in system
+reference the owning requirement.
 
-### 3.3 System Specification
+## System
 
-The System Specification is the normative description of the current
-system contract.
-
-It owns:
+System is the normative description of the current system contract. It owns:
 
 - stable system concepts and definitions;
 - system interfaces and configuration contracts;
-- normative system behavior and guarantees;
+- normative behavior and guarantees;
 - relationships and invariants between concepts;
 - relevant external contracts;
-- mappings from abstract Requirement concepts to the current system
-  model.
+- mappings from requirement concepts to the current system model.
 
 It answers:
 
-> **What must be true about this system, given its current model and
-> interfaces?**
-
-A useful conformance test is:
-
-> Given an implementation of the current system, can we determine
-> whether it conforms to this statement?
-
-Specification is not a formal restatement of Requirements. Requirements
-express independent needs; Specification forms a coherent system model
-capable of satisfying their set.
-
-System Specification also explains HOW components, relationships,
-interactions, and mechanisms realize Requirements, and identifies where
-contracts are defined. Restated obligations or abstract guarantees alone
-are insufficient. Technical check procedures belong in validate.
-
-For example, a Requirement may state that users must be able to
-reproduce the same package or dependency set on another machine. That
-need can remain stable if the project changes the mechanism used to
-provide it.
-
-The Specification describes the current system contract that satisfies
-that need, such as a lock file that records exact dependency versions, a
-generated package index that consumers read, or another current
-interface. If that interface changes while the underlying need remains,
-the Requirement may remain stable while the Specification changes.
-
-The relationship is naturally many-to-many:
-
-``` text
-REQ-001 --+
-REQ-002 --+--> System Concept / Contract A
-REQ-003 --+              |
-                          +--> Behavior X
-REQ-004 -----------------+
-```
-
-One Specification concept may participate in satisfying several
-independent Requirements, and one Requirement may depend on several
-Specification sections.
-
-Significant concepts should have one owning definition location. Other
-sections reference them instead of redefining them.
-
-The appropriate level of concreteness in Specification depends on the
-kind of system and contract being defined. A concrete value is not
-automatically Specification, and it is not automatically outside
-Specification.
-
-Ask whether the statement defines a reusable system contract, interface,
-invariant, or guarantee, or whether it selects a value for a particular
-instance, deployment, policy, dataset, package set, or other application
-of that contract.
-
-For universal systems and frameworks, concrete values usually belong to
-instances of the system rather than to the system Specification. For
-systems whose purpose is to define a concrete delivered instance, some
-values may be part of the accepted contract. In both cases, avoid
-letting the project’s dominant perspective decide the boundary
-implicitly.
-
-Specification does not own the rationale for choosing one significant
-design over alternatives, the concrete transition from existing
-implementation, file-by-file implementation instructions, or temporary
-migration mechanics. Those belong to ADRs and Plans.
-
-### 3.4 Implementation Plan
-
-A Plan describes a concrete transition from the current implementation
-to a state conforming to the relevant Requirements, Specification, and
-accepted decisions.
-
-A Plan may contain related artifacts, goal, assumptions, constraints,
-current implementation observations, implementation approach, minimal
-change set, scope/out-of-scope, migration order, risks, validation
-strategy, and top-level plan items.
-
-It answers:
-
-> **How will the current implementation be changed so that it conforms
-> to the agreed system contract?**
-
-Plans may name concrete files, modules, packages, configuration options,
-commands, and migration steps.
-
-Top-level plan items decompose the transition into executable units.
-
-> **A top-level plan item is the minimum practically useful unit of
-> planned implementation work that can move the project from one agreed
-> state to another agreed and validated state.**
-
-Each top-level plan item is expected to leave the system in an agreed
-and validated state. Validation is a completion criterion of the plan
-item, not a separate correctness-validation item.
-
-A plan item may be subdivided into smaller work items when useful for
-execution. Those work items are local execution structure, not separate
-process artifacts. The plan item is marked complete only when the whole
-item, including its final validation, has reached one agreed and
-validated state.
-
-A good top-level plan item boundary is a point at which work can safely
-stop.
-
-Preparatory or non-mutating plan items are valid when their result is
-independently complete and they do not leave the project degraded.
-Capturing a baseline for a later migration is one example.
-
-If a proposed plan item is too large to execute or review practically,
-split it into smaller top-level plan items. If smaller execution
-structure would help without changing the process boundary, subdivide
-the plan item into work items.
-
-A Plan must not silently introduce new normative system behavior. If
-planning reveals a missing concept, interface, or guarantee, return to
-Specification. If it reveals a previously unknown need, return to
-Requirements. If it requires a significant choice whose rationale should
-survive the change, create or update an ADR.
-
-Use this boundary test:
-
-> If a statement must remain true after the transition is complete, it
-> should not live only in the Plan.
-
-Plans may describe how the project reaches a target state, why a
-particular transition order is safe, and what validation will prove the
-transition. The durable target state belongs in Requirements and
-Specification.
-
-The Plan’s validation strategy describes evidence that the transition is
-correct, including intended changes and preservation of behavior that
-should remain unchanged.
-
-Top-level plan items derive decisions from the Plan rather than
-introducing new significant design decisions. If execution exposes a
-missing decision, work returns to the appropriate upstream layer.
-
-If implementation work is committed, the execution artifact should be
-either one atomic self-contained commit or a chain of atomic
-self-contained commits. A plan item does not have to equal one commit.
-
-A completed Plan is primarily transition history. Current system truth
-remains in Requirements and Specification.
-
-### 3.5 Implementation
-
-Implementation executes top-level plan items in code, configuration,
-tests, generated artifacts, or other project material.
-
-Local decisions that do not alter the agreed system model or significant
-design may be made during implementation.
-
-Implementation must not hide upstream discoveries:
-
-- new need → Requirements;
-- missing system concept/contract → Specification;
-- significant choice → appropriate owning layer and possibly ADR;
-- wrong transition approach → Plan;
-- unsafe work boundary → Plan.
-
-Implementation of a plan item is complete only when that item’s
-completion criteria, including validation, are satisfied.
-
-## 4. Architecture Decision Records
-
-### 4.1 Role
-
-An Architecture Decision Record (ADR) preserves a significant decision,
-its context, relevant alternatives, and the rationale for the selected
-direction.
-
-It answers:
-
-> **Why was this significant choice made?**
-
-ADR is historical decision evidence, not the primary source of current
-system truth.
-
-### 4.2 When an ADR Appears
-
-ADR is **not a pipeline stage**.
-
-It may arise while defining Requirements, Specification, or a Plan, or
-during plan item execution when discovery exposes a previously unmade
-significant decision.
-
-In the latter case, do not bury the decision in code. Return to the
-appropriate design level, record the decision, and update downstream
-work as necessary.
-
-Not every technical choice requires an ADR. Use ADRs when preserving the
-rationale independently has value.
-
-### 4.3 ADR vs Specification vs Plan
-
-- **Specification:** what is true about the system.
-- **ADR:** why a significant choice was made.
-- **Plan:** how this particular implementation transition will be
-  performed.
-
-An ADR may cause normative consequences in Specification and concrete
-actions in a Plan.
-
-### 4.4 Lifecycle and Supersession
-
-ADRs preserve history. Do not rewrite old ADRs to pretend later
-decisions were known earlier.
-
-Clarifying an ADR is allowed when it preserves the decision and its
-substantive rationale. Later work may uncover a concrete example,
-evidence, or wording that better explains a rationale already present in
-the ADR.
-
-Such edits should not make later knowledge appear to have been known at
-decision time. If the clarification materially changes the decision,
-adds a new decisive rationale, or changes the trade-off being recorded,
-create an amendment or superseding ADR instead.
-
-When replaced, an ADR remains and is explicitly marked superseded,
-preferably referencing its replacement.
-
-Use Specification for current system truth; use ADRs for reasoning and
-evolution.
-
-### 4.5 Lightweight Discovery Inside an ADR
-
-Small discovery work may be contained inside an ADR instead of becoming
-a separate Discovery/Spike branch.
-
-Use this when the question is narrow enough that the ADR can record the
-alternatives, evidence, and decision without obscuring the decision
-itself. For example, an ADR may compare two small performance examples
-or prototype two localized API shapes before recording the selected
-direction.
-
-If the work needs multiple substantial prototypes, broad validation, or
-may materially reshape Specification, use an explicit Discovery/Spike
-process instead.
-
-## 5. Discovery and Spike Process
-
-Discovery/Spike is an optional process for high-uncertainty discovery
-and design work. It is used when the project has enough known or
-suspected need to investigate, but cannot yet responsibly stabilize the
-Requirements, system contract, or significant design direction.
-
-It answers:
-
-> **What must we learn before choosing the system contract or design
-> direction?**
-
-Discovery/Spike may define candidate approaches, representative cases,
-prototype scope, validation criteria, expected evidence, and explicit
-stop conditions.
-
-It may produce:
-
-- explored alternatives;
-- validation results;
-- concrete findings and rejected assumptions;
-- risks and open questions;
-- prototype code;
-- a recommendation for Specification and ADRs.
-
-Discovery/Spike does **not** define normative behavior by itself.
-Prototype code is not production implementation merely because it
-exists. If prototype code is reused, it must be adopted through the
-normal Specification, Plan, and Implementation flow.
-
-Completion of Discovery/Spike means that the agreed questions were
-answered well enough to continue. The result should feed an ADR when a
-significant direction is chosen, and should feed Specification when the
-current system contract becomes clear.
-
-If Discovery/Spike reveals that the underlying need was missing,
-incomplete, or wrong, correct Requirements before using its results to
-define Specification or downstream work.
-
-## 6. Forward Flow
-
-### 6.1 Discovery → Requirements
-
-Project guidance and discovery memory supply orientation and evidence. They
-do not turn existing behavior into a Requirement merely because that
-behavior exists.
-
-Requirements come from actual project or user needs.
-
-### 6.2 Requirements → Optional Discovery/Spike
-
-When Requirements or suspected needs identify an area of work but
-competing system contracts or design directions remain plausible, use
-Discovery/Spike before writing a normative Specification.
-
-If uncertainty is narrow, it may be handled inside an ADR. If it is
-broad, expensive, or likely to reshape Specification, make it an
-explicit Discovery/Spike process.
-
-### 6.3 Requirements and Discovery → Specification
-
-Specification transforms independent needs into a coherent
-current-system contract. It identifies shared concepts, maps
-terminology, defines interfaces/invariants/behavior, avoids duplicating
-shared design across Requirements, and surfaces ambiguity instead of
-silently inventing mappings.
-
-A significant choice needed to form the model may produce an ADR.
-
-### 6.4 Specification → Plan
-
-Planning compares the normative target with current implementation and
-determines what changes, what must remain unchanged, which
-implementation areas are affected, relevant assumptions/risks, and how
-correctness will be demonstrated.
-
-If Specification cannot adequately describe the intended result, correct
-Specification before continuing the Plan.
-
-### 6.5 Plan Decomposition
-
-Decompose the Plan into top-level plan items along safe execution
-boundaries.
-
-Plan item granularity is determined by coherent validated states, not
-file count, line count, or the desire to make every action a checkbox.
-
-When useful for execution, a top-level plan item may be subdivided into
-smaller work items without making those work items separate process
-artifacts.
-
-### 6.6 Plan → Implementation
-
-Normal plan item execution is:
-
-``` text
-implement
-   |
-   v
-validate
-   |-- failure -> fix within the open plan item -> validate again
-   +-- success -> plan item complete
-```
-
-A correctness validation failure does not create a separate validation
-plan item while the implementation plan item is still open.
-
-### 6.7 Completion and Discovery Memory
-
-Normative artifacts should already describe the intended system before
-implementation completes.
-
-Do not leave non-normative project guidance or discovery memory misleading.
-Refresh useful orientation, migrate durable knowledge to its owning artifact,
-or remove stale material.
-
-Completed Plans remain transition and execution history, not
-alternative current-system documentation.
-
-## 7. Backward Flow and Upstream Discovery
-
-Later work often reveals information that could not be confidently known
-earlier. This is expected.
-
-The governing rule is:
-
-> **Find the first bad artifact.**
-
-The first bad artifact is the earliest layer that is incorrect,
-ambiguous, or incomplete with respect to the newly understood truth.
-
-Examples:
-
-``` text
-Planning reveals a missing system contract
--> correct SPEC
--> reconsider PLAN
-```
-
-``` text
-Implementation reveals a significant unmade design decision
--> update PLAN and/or create ADR
--> continue implementation
-```
-
-``` text
-Implementation reveals a previously unknown project need
--> update REQ
--> update SPEC
--> update PLAN
--> implementation
-```
-
-Do not patch a downstream artifact merely because that is where the
-problem became visible.
-
-After correcting the earliest affected artifact, propagate consequences
-downstream. A downstream artifact need not change if review confirms it
-remains valid.
-
-## 8. Defect and Bug Handling
-
-### 8.1 Classification
-
-A defect may be a:
-
-- **Requirement defect** — need, scope, or satisfaction condition is
-  wrong/incomplete;
-- **Specification defect** — system contract/model is wrong, ambiguous,
-  or incomplete;
-- **decision/design defect** — a significant direction is wrong or its
-  rationale/constraints are missing;
-- **Plan defect** — transition approach, assumptions, scope,
-  decomposition, or validation strategy is insufficient;
-- **implementation defect** — implementation violates correct upstream
-  artifacts;
-- **validation defect** — validation cannot detect a relevant violation.
-
-Categories may overlap. The useful question is which earliest artifact
-must change.
-
-### 8.2 Defects Found During an Open Plan Item
-
-If validation fails, the plan item remains open.
-
-Fix implementation and validate again. If the failure reveals an
-upstream defect, correct that artifact first and propagate the change
-back to the Plan.
-
-Do not complete implementation and create a separate
-correctness-validation plan item.
-
-### 8.3 Defects Found After Completion
-
-A defect may appear after plan items were completed, committed, pushed,
-deployed, or integrated:
-
-``` text
-PLAN -> plan item -> validation OK -> commit/push -> deployment -> bug
-```
-
-Completion means work was agreed and validated against the knowledge and
-validation model available at that time. It does not make completed
-artifacts infallible.
-
-Investigate using the same first-bad-artifact rule.
-
-### 8.4 Correcting Completed Artifacts
-
-Do not silently rewrite historical artifacts so that newly discovered
-knowledge appears to have been known originally.
-
-If the original approach remains valid but a completed Plan had
-incomplete validation or needs a bounded correction, add an explicit
-follow-up/amendment to that Plan with new plan items.
-
-The follow-up should record:
-
-- what was discovered;
-- what original assumption, implementation detail, or validation
-  coverage was insufficient;
-- what correction is required;
-- what regression validation is required.
-
-Do not reopen completed plan items merely because new information
-appeared later. They were completed according to their then-current
-definition of done. Represent corrective work explicitly.
-
-Create a new Plan when discovery requires a materially different
-transition or implementation approach rather than a bounded correction.
-
-If behavior was missing from Specification, correct Specification before
-planning the fix. If the underlying need was missing, correct
-Requirements first.
-
-### 8.5 Regression Validation
-
-A bug fix should close both the implementation defect and, when present,
-the validation gap that allowed it to pass.
-
-Regression validation should demonstrate the newly understood failure
-case or an equivalent invariant so the same class of defect becomes
-detectable.
-
-## 9. Validation Model
-
-Validation has different responsibilities at different layers.
-
-### 9.1 Requirement Satisfaction
-
-Requirement-owned acceptance scenarios define the conditions under which
-a Requirement is satisfied. They describe expected behavior, boundaries,
-or satisfaction outcomes in requirement-level language.
-
-Validation artifacts may reference those scenarios and describe the
-technical evidence used to check them, but they do not introduce a
-second acceptance model outside the owning Requirement.
-
-### 9.2 Specification Conformance
-
-Specification validation asks whether implementation conforms to the
-normative contract. Evidence may include tests, evaluation, inspection,
-static checks, runtime behavior, or other appropriate mechanisms.
-
-The `validate.md` artifact specifies concrete checks. Each check has:
-
-- `Covers`: a resolvable Markdown link to the owning requirement or relevant
-  system heading;
-- `Method`: the concrete action to perform, such as a command, test, build,
-  evaluation, or inspection;
-- `Evidence`: the expected result of that action;
-- optional `Notes`: only needed setup, prerequisites, or execution limits.
-
-Any coverage overview lists references only. Purpose and motivation prose
-stay outside validate; acceptance scenarios stay in requirements.
-
-### 9.3 Plan Validation Strategy
-
-A Plan defines how correctness of its transition will be demonstrated.
-It may verify intended new behavior, absence of unintended behavior,
-preservation of unaffected behavior, migration safety, and assumptions.
-
-For behavior-preserving transitions, use strong equivalence evidence
-when it is cheap and its meaning is clear. For example, a reproducible
-build system is expected to produce the same output for the same inputs,
-so it may sometimes allow comparison of output hashes or other build
-identities before and after a structural migration. This is
-project-specific evidence, not a universal SDD requirement.
-
-### 9.4 Plan Item Completion Validation
-
-Plan item validation is part of definition of done. A plan item cannot
-be complete while required correctness validation is pending.
-
-### 9.5 Deployment and Operational Feedback
-
-Deployment and operation provide additional evidence and may expose
-cases earlier validation missed.
-
-This does not automatically make deployment a mandatory formal
-validation stage. Classify the discovered gap and update the earliest
-artifact that should contain the new knowledge.
-
-> **Validation is part of establishing an agreed state, not a ceremonial
-> phase following implementation.**
-
-## 10. Artifact Evolution and History
-
-Different artifacts have different lifetimes:
-
-- **Requirements and Specification:** living normative artifacts
-  describing current accepted needs and system contract.
-- **ADRs:** historical decision artifacts preserving why significant
-  choices were made; superseded ADRs remain history.
-- **Plans:** transition and execution artifacts describing how a
-  particular implementation state was moved toward a target state.
-- **Project guidance and discovery memory:** non-normative orientation outside
-  the artifact flow, removable when no longer useful.
-
-This separation prevents Plans, old ADRs, and historical implementation
-notes from becoming competing sources of current truth.
-
-## 11. Traceability
-
-Traceability should expose relationships without forcing artificial
-one-to-one mappings:
-
-``` text
-REQ --+
-REQ --+--> SPEC concepts/contracts --> PLAN --> commits
-REQ --+             ^
-                    |
-                   ADR
-```
-
-Valid relationships include:
-
-- one Requirement → several Specification sections;
-- several Requirements → one shared Specification concept;
-- one Plan → changes arising from several Specification sections/ADRs;
-- one top-level plan item → several internal work items;
-- one top-level plan item → several atomic commits.
-
-Artifacts are organized by responsibility, **not to force one-to-one
-correspondence between layers**.
-
-Traceability should be sufficient to navigate causality without becoming
-bureaucracy that duplicates artifact content.
-
-Each architecture point links explicitly to its owning requirement at the
-owning section, definition, or list item. A section-level reference covers
-one coherent point; independent points each carry their own references.
-Use resolvable Markdown links to requirement headings, for example
-`[REQ-001](requirements.md#req-001-title)`. A validation check links to its
-owning requirement or relevant `system.md` heading. Cross-spec references
-include the owning spec's relative path. Identify owners without copying
-their content.
-
-## 12. Practical Decision Guide
-
-### 12.1 Where Does This Belong?
-
-| Question                                                     | Primary artifact     |
-|--------------------------------------------------------------|----------------------|
-| Why does the project/user need this?                         | Requirement          |
-| What need or obligation must be satisfied?                   | Requirement          |
-| What does the current system guarantee?                      | System Specification |
-| What system concept/interface does this map to?              | System Specification |
-| What must be learned before choosing a system contract?      | Discovery/Spike      |
-| Why was this significant design choice made?                 | ADR                  |
-| How will current implementation be changed?                  | Plan                 |
-| How will this transition be validated?                       | Plan                 |
-| What independently completable work unit should be executed? | Plan                 |
-| What code/configuration realizes the change?                 | Implementation       |
-| What temporary orientation is useful during discovery?       | Discovery memory     |
-
-### 12.2 I Found a Problem — Where Do I Return?
-
-| Discovery                                               | Return to                                                     |
-|---------------------------------------------------------|---------------------------------------------------------------|
-| Underlying need is wrong or missing                     | Requirement                                                   |
-| Required behavior/concept/interface is missing or wrong | Specification                                                 |
-| A significant unresolved choice is required             | Owning layer + ADR                                            |
-| Transition or validation strategy is wrong              | Plan                                                          |
-| Work is decomposed across an unsafe boundary            | Plan                                                          |
-| Upstream artifacts are correct but code is wrong        | Implementation                                                |
-| A completed change missed a relevant failure case       | Find first bad artifact; add regression validation downstream |
-
-When uncertain, ask:
-
-> **What is the earliest artifact which, if it had contained the truth I
-> know now, would have prevented this problem?**
-
-Correct that artifact first.
+> What must be true about this system, given its current model and interfaces?
+
+A useful conformance criterion is:
+
+> Given an implementation of the current system, can we determine whether it
+> conforms to this statement?
+
+Requirements express independent needs; system forms a coherent model capable of
+satisfying their set. It explains how components, relationships, interactions and
+mechanisms realize those needs, and identifies where contracts are defined.
+Concrete arrangements make conformance assessable.
+
+One system concept may satisfy several requirements, and one requirement may
+depend on several system sections. Significant concepts have one owning
+definition; other sections reference it. Tables support comparison of repeated
+entities or states.
+
+### Examples of system content
+
+These examples use an illustrative host-update CLI with `cli`, `config`,
+`deployment` and `completion` modules.
+
+#### Good examples
+
+- "`host-update <host> --config <path>` updates one configured target." This
+  defines the utility's external interface and its target-selection contract.
+- "`cli::Args` uses clap to parse the public command." This names a module's role
+  and its key dependency, an argument-parsing library.
+- "`config::load` produces `Target`; `deployment::run` consumes it; `completion`
+  reads the shared command definition." This identifies relationships and data
+  flow between key modules.
+- "Deployment starts activation only after a successful build." This states a
+  material ordering invariant against which implementation can be checked.
+- "`Target` contains public target settings; credentials remain in the SSH agent."
+  This defines a data boundary and its relationship with an external participant.
+- "A lock file records the exact dependency revisions used by deployment builds."
+  This identifies a mechanism for reproducibility; the underlying need can remain
+  stable if that mechanism changes.
+
+#### Bad examples
+
+- "Users can update their hosts." This repeats a need without describing an
+  interface, component or mechanism that realizes it.
+- "Create a map, loop over hosts and append each result." This is a coding recipe
+  whose ordinary implementation steps belong in code.
+- "The utility prints usage for an invalid set of arguments." Conventional
+  correct CLI behavior and recitals of a parsing library's facilities alone add
+  no project-specific architecture.
+- "The function returns the constructed object as `Result<Object, Error>`." This
+  standalone Rust idiom does not itself expose a significant system contract;
+  actual external API definitions and material error behavior can belong in system.
+- "Deployment may use SSH or a new service; the choice comes later." This leaves
+  a material choice unresolved in a finished item's contract; pending design
+  questions belong with the unfinished work.
+- "We first chose A, then the reviewer suggested B." This records discussion
+  history; system describes the current contract and mechanism.
+- "The process has no Plan and Validate steps." This describes absent entities
+  rather than the current system.
+- "A reusable deployment framework always updates `office` before `home`." This
+  selects an installation's policy for a generic contract; that order may belong
+  in the contract of a concrete delivered instance.
+
+### Level of concreteness
+
+The appropriate concreteness depends on the system and contract being defined.
+The boundary question is:
+
+> Does this statement define a reusable contract, interface, invariant or
+> guarantee, or select a value for an instance, deployment, policy, dataset,
+> package set or other application of that contract?
+
+For a general system or framework, concrete values usually belong to its
+instances. For a system whose purpose is to define a concrete delivered instance,
+values that define that delivery may be part of its accepted contract. An explicit
+definition of the entity being specified keeps this boundary independent of the
+project's dominant perspective.
+
+User-requested ADRs contain significant choice rationale and relevant alternatives. Concrete
+coding steps, file-by-file instructions and temporary migration mechanics belong
+to implementation. System retains the resulting current contract and the material
+mechanisms needed to understand it.
+
+### Work-item architecture and checks
+
+The affected system content starts with the designed entity's external interface
+and sections matching exactly the proposal's work-item names and order. The external
+interface is relative to that entity: public library types/functions, REST, UI,
+CLI, protobuf, IOCTL or another relevant boundary. Each item section records its
+role, named key participants, relationships with other modules and material
+external dependencies needed to understand the solution.
+
+Architecture and implementation develop together by work item. Item sections may
+initially be pending and become complete alongside implementation. References
+preserve sufficient existing contracts; a narrow fix may leave system unchanged. Completed system content describes the implemented current design and
+resolves the design needed by that change. It contains architectural decisions and
+mechanisms that distinguish a conforming implementation; routine coding choices
+remain in code. Additional text resolves a concrete ambiguity.
+
+An explicit user request adds a brief special-check description to system. It
+identifies the case and expected evidence and references its requirement or
+system owner. Acceptance conditions remain in requirements. Ordinary tests and
+correctness checks are part of implementation.
+
+## Optional architecture decision records
+
+An architecture decision record (ADR) is created only on explicit user request.
+This applies to new records, amendments and superseding records. A requested ADR
+preserves a significant decision, its context, relevant alternatives and the
+rationale for the selected direction. It answers:
+
+> Why was this significant choice made?
+
+ADRs are optional historical decision evidence. Their value is the independent
+preservation of a choice and its reasoning. Decisions can arise while working on
+requirements, system architecture or implementation. Their current consequences
+belong in requirements and system; an explicitly requested ADR records the choice
+and its reasoning.
+
+The responsibilities are distinct:
+
+- Requirements express the need and its satisfaction conditions.
+- System defines what is true about the current system and how it is realized.
+- ADR explains why a significant direction was selected over relevant alternatives.
+- Implementation realizes those contracts in code, configuration and tests.
+
+Each decision has one section, including status, context, decision, rationale and
+consequences. References identify current normative owners for behavior and
+contracts. Relevant alternatives clarify a significant choice; ordinary local
+coding choices remain in implementation.
+
+### History and supersession
+
+Existing ADRs preserve decision history. Clarifying an ADR may add an example,
+evidence or wording that better explains the original decision and substantive
+rationale. The time of that clarification remains clear so later knowledge is
+attributed accurately. An amendment or superseding ADR created on explicit user
+request records a material revision to the decision, a new decisive rationale or
+a change to the recorded trade-off.
+
+A replaced ADR remains in history, is marked superseded and references its
+replacement. Requirements and system continue to describe the current accepted
+needs and contracts; ADRs explain their reasoning and evolution.
+
+### Focused discovery
+
+An explicitly requested ADR may contain a narrow investigation when its
+alternatives, evidence and decision fit clearly together. For example, it may
+compare two small performance cases or prototype two localized API shapes before
+recording the selected direction. Broader research and prototypes may use
+temporary supporting material; their adopted conclusions enter the appropriate
+normative owner.
+
+## Traceability and ordering
+
+Each coherent architecture point links to its owning requirement heading at its
+section, definition or list item. Independent points need their own links.
+For example, `[REQ-001](requirements.md#req-001-title)` identifies an owner without
+copying its content; cross-spec links include the owning spec's relative path.
+Anchors correspond to the actual target headings.
+
+Relationships are naturally many-to-many: one requirement may need several
+system sections, several requirements may share one system concept, and one
+work item may affect several contracts. Coverage follows these relationships
+without a forced one-to-one mapping or duplicate prose.
+
+Links from code, docstrings and permanent code documentation resolve to existing
+enduring documents and any named headings. Suitable targets include the owning
+requirements and system under `specs/`. Targets remain meaningful after archive;
+links support useful navigation.
+
+Document views assembled from capability specs use stable three-digit numeric
+capability prefixes in general-to-specific order, for example `000-sdd-process`
+before project and host details. Each document kind follows that deterministic
+order rather than filesystem or glob traversal order.
+
+## Corrections, evidence and history
+
+A defect belongs to its earliest incorrect, ambiguous or incomplete owner: need
+or satisfaction condition → requirements; current contract or mechanism → system;
+recorded significant-choice rationale → its ADR; incorrect realization →
+implementation. A correction updates that owner and includes reconsideration of
+affected dependents. A correct dependent need not change.
+
+A correction replaces wrong current statements and their dependent explanations,
+removing contradictions and obsolete rationale from the affected section.
+Correction history belongs in change context or historical records. A correction
+does not justify an unsupported counterclaim or new prohibition.
+
+Tests, builds, static checks, inspection and runtime behavior may establish
+requirement satisfaction and system conformance. A bug fix also closes a relevant
+validation gap with regression evidence. Deployment and operation may supply
+further evidence. Discoveries after completion receive explicit corrective work
+while current contracts are updated as needed.
+
+Requirements and system remain living current contracts. ADRs and completed
+proposals preserve history. Temporary guidance and discovery notes may be
+refreshed or removed when no longer useful; they must not become competing
+sources of current system truth.

@@ -279,7 +279,16 @@ fn copy_dir_contents(source: &Path, dest: &Path) -> io::Result<()> {
             fs::create_dir_all(&dest_path)?;
             copy_dir_contents(&entry.path(), &dest_path)?;
         } else if file_type.is_file() {
-            fs::copy(entry.path(), dest_path)?;
+            fs::copy(entry.path(), &dest_path)?;
+            let mut permissions = fs::metadata(&dest_path)?.permissions();
+            #[cfg(unix)]
+            {
+                use std::os::unix::fs::PermissionsExt;
+                permissions.set_mode(permissions.mode() | 0o200);
+            }
+            #[cfg(not(unix))]
+            permissions.set_readonly(false);
+            fs::set_permissions(dest_path, permissions)?;
         } else if file_type.is_symlink() {
             let target = fs::read_link(entry.path())?;
             create_symlink(target, dest_path)?;
@@ -306,6 +315,60 @@ fn create_symlink<P: AsRef<Path>, Q: AsRef<Path>>(original: P, link: Q) -> io::R
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[cfg(unix)]
+    #[test]
+    fn installed_resources_are_owner_writable_after_install_and_update() {
+        use std::os::unix::fs::PermissionsExt;
+        use std::time::{SystemTime, UNIX_EPOCH};
+
+        let root = env::temp_dir().join(format!(
+            "specd-bootstrap-copy-{}-{}",
+            std::process::id(),
+            SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        let source = root.join("source");
+        let dest = root.join("installed");
+        fs::create_dir_all(source.join("nested")).unwrap();
+        fs::write(source.join("hook"), "#!/bin/sh\n").unwrap();
+        fs::set_permissions(source.join("hook"), fs::Permissions::from_mode(0o555)).unwrap();
+        let resource = source.join("nested/schema.yaml");
+
+        for revision in ["initial", "updated"] {
+            if resource.exists() {
+                fs::set_permissions(&resource, fs::Permissions::from_mode(0o644)).unwrap();
+            }
+            fs::write(&resource, revision).unwrap();
+            fs::set_permissions(&resource, fs::Permissions::from_mode(0o444)).unwrap();
+
+            copy_dir_replace(&source, &dest).unwrap();
+
+            let installed = dest.join("nested/schema.yaml");
+            assert_eq!(fs::read_to_string(&installed).unwrap(), revision);
+            assert_eq!(
+                fs::metadata(&installed).unwrap().permissions().mode() & 0o777,
+                0o644
+            );
+            assert_eq!(
+                fs::metadata(dest.join("hook"))
+                    .unwrap()
+                    .permissions()
+                    .mode()
+                    & 0o777,
+                0o755
+            );
+            fs::write(&installed, "local edit").unwrap();
+            assert_eq!(
+                fs::metadata(&resource).unwrap().permissions().mode() & 0o777,
+                0o444
+            );
+        }
+
+        fs::remove_dir_all(root).unwrap();
+    }
 
     #[test]
     fn parse_agent_plan_accepts_exact_schema() {

@@ -35,7 +35,13 @@ testers.runNixOSTest {
     };
 
   testScript = ''
+    import json
+    import shlex
+
     start_all()
+
+    def write_file(path, content):
+      machine.succeed(f"printf %s {shlex.quote(content)} > {shlex.quote(path)}")
 
     schema_root = "${specd-bootstrap-sdd-schema}/share/specd-bootstrap/schemas/sdd"
     custom_agent_manifests = "${customAgent}/manifest.yaml"
@@ -58,6 +64,56 @@ testers.runNixOSTest {
     machine.succeed("grep -F 'schema: ./schemas/sdd/schema.yaml' /tmp/specd-bootstrap-new/specd.yaml")
     machine.succeed("cd /tmp/specd-bootstrap-new && specd changes list --format text")
 
+    # The installed schema permits coding before later system design is ready,
+    # and requires finished proposal tasks before final verification.
+    workflow_project = "/tmp/specd-bootstrap-new"
+    machine.succeed(f"git -C {workflow_project} config user.name 'SpecD Test'")
+    machine.succeed(f"git -C {workflow_project} config user.email 'specd-test@example.invalid'")
+
+    def changes(command):
+      return json.loads(machine.succeed(f"cd {workflow_project} && specd changes {command} --format json"))
+
+    machine.succeed(f"mkdir -p {workflow_project}/specs/demo")
+    write_file(f"{workflow_project}/specs/demo/requirements.md", "# Requirements\n")
+    write_file(f"{workflow_project}/specs/demo/system.md", "# System Specification\n")
+    change_path = changes("create incremental --spec default:demo")["changePath"]
+    delta_path = f"{change_path}/deltas/default/demo"
+    machine.succeed(f"mkdir -p {delta_path}")
+    proposal = "# Proposal: incremental\n\nImplement readiness reporting.\n\n- [ ] 1. **Readiness** — Return the current readiness state.\n"
+    write_file(f"{change_path}/proposal.md", proposal)
+    write_file(f"{delta_path}/requirements.md.delta.yaml", (
+      "- op: added\n  position:\n    parent:\n      type: section\n      matches: '^Requirements$'\n  content: |\n"
+      "    ## REQ-001: Report readiness\n\n    Users can request readiness.\n\n"
+      "    ### Scenario: Readiness request\n\n    - WHEN readiness is requested\n"
+      "    - THEN the service returns its current state\n"
+    ))
+    system = (
+      "- op: added\n  position:\n    parent:\n      type: section\n      matches: '^System Specification$'\n  content: |\n"
+      "    ## External Interface\n\n    The CLI reports readiness.\n"
+      "    [REQ-001](requirements.md#req-001-report-readiness).\n\n"
+      "    ## Readiness\n\n    Pending.\n"
+    )
+    write_file(f"{delta_path}/system.md.delta.yaml", system)
+    changes("transition incremental designing")
+    assert changes("validate incremental --artifact proposal")["passed"]
+    assert changes("validate incremental default:demo --artifact requirements")["passed"]
+    changes("transition incremental ready")
+    changes("transition incremental implementing")
+    status = changes("status incremental")
+    assert status["state"] == "implementing"
+    assert next(a for a in status["artifacts"] if a["type"] == "system")["effectiveStatus"] == "in-progress"
+
+    write_file(f"{delta_path}/system.md.delta.yaml", system.replace(
+      "Pending.", "The readiness handler returns the current service state."
+    ))
+    assert changes("validate incremental default:demo --artifact system")["passed"]
+    machine.fail(f"cd {workflow_project} && specd changes transition incremental verifying --format json")
+    write_file(f"{change_path}/proposal.md", proposal.replace("- [ ]", "- [x]"))
+    changes("transition incremental verifying")
+    status = changes("status incremental")
+    assert status["state"] == "verifying"
+    assert next(a for a in status["artifacts"] if a["type"] == "proposal")["effectiveStatus"] == "complete"
+
     machine.succeed("mkdir -p /tmp/specd-bootstrap-existing")
     machine.succeed("cd /tmp/specd-bootstrap-existing && git init")
     machine.succeed("printf '%s\n' 'schema: ./old/schema.yaml' 'workspaces:' '  - name: default' '    path: docs/specs' > /tmp/specd-bootstrap-existing/specd.yaml")
@@ -71,8 +127,8 @@ testers.runNixOSTest {
     machine.succeed("specd-bootstrap --target /tmp/specd-bootstrap-multi --agent codex --agent kilocode")
     machine.succeed("test -f /tmp/specd-bootstrap-multi/.codex/skills/specd-new/SKILL.md")
     machine.succeed("test -f /tmp/specd-bootstrap-multi/.kilocode/skills/specd-new/SKILL.md")
-    machine.succeed("grep -F '$specd-design' /tmp/specd-bootstrap-multi/.codex/skills/specd-new/SKILL.md")
-    machine.succeed("grep -F '/specd-design' /tmp/specd-bootstrap-multi/.kilocode/skills/specd-new/SKILL.md")
+    machine.succeed("grep -F '$specd-design' /tmp/specd-bootstrap-multi/.codex/skills/_specd-shared/workflows/specd-new.md")
+    machine.succeed("grep -F '/specd-design' /tmp/specd-bootstrap-multi/.kilocode/skills/_specd-shared/workflows/specd-new.md")
 
     machine.succeed("mkdir -p /tmp/specd-bootstrap-opencode")
     machine.succeed("cd /tmp/specd-bootstrap-opencode && git init")
@@ -98,20 +154,27 @@ testers.runNixOSTest {
       machine.succeed(f"specd-bootstrap --target {project} --agent {agent}")
       machine.succeed(f"diff -r {source} {installed}")
       machine.succeed(f"diff -r {schema_root} {project}/schemas/sdd")
-      for resource in ["shared.md", "manager.md", "arbiter.md", "coordinator.md"]:
+      for resource in ["shared.md", "item-work.md"]:
         machine.succeed(f"test -s {installed}/_specd-shared/{resource}")
       for skill in workflow_skills:
         machine.succeed(f"test -s {installed}/{skill}/SKILL.md")
         machine.succeed(f"test -s {installed}/_specd-shared/workflows/{skill}.md")
 
-      # An update replaces stale entry, role, procedure and schema content while
-      # preserving the target project's workspace configuration.
-      machine.succeed(f"printf stale > {installed}/_specd-shared/manager.md")
+      # Updating an older installation removes retired resources as well as
+      # replacing changed files, and preserves the project's workspaces.
+      for resource in ["manager.md", "coordinator.md", "arbiter.md"]:
+        machine.succeed(f"printf obsolete > {installed}/_specd-shared/{resource}")
+      for template in ["plan.md", "validate.md"]:
+        machine.succeed(f"printf obsolete > {project}/schemas/sdd/templates/{template}")
       machine.succeed(f"printf stale > {installed}/_specd-shared/workflows/specd-design.md")
       machine.succeed(f"printf stale > {installed}/specd-design/SKILL.md")
       machine.succeed(f"printf stale > {project}/schemas/sdd/templates/proposal.md")
       machine.succeed(f"printf '%s\n' 'schema: ./old/schema.yaml' 'workspaces:' '  - name: default' '    path: docs/specs' > {project}/specd.yaml")
       machine.succeed(f"specd-bootstrap --target {project} --agent {agent}")
+      for resource in ["manager.md", "coordinator.md", "arbiter.md"]:
+        machine.fail(f"test -e {installed}/_specd-shared/{resource}")
+      for template in ["plan.md", "validate.md"]:
+        machine.fail(f"test -e {project}/schemas/sdd/templates/{template}")
       machine.succeed(f"diff -r {source} {installed}")
       machine.succeed(f"diff -r {schema_root} {project}/schemas/sdd")
       machine.succeed(f"grep -F 'path: docs/specs' {project}/specd.yaml")

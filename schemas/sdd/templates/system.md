@@ -1,45 +1,29 @@
 # System Specification
 
-## System Concepts
+## External Interface
 
-<!-- Describe current concepts, contracts, interfaces, invariants, and layer
-     responsibilities that satisfy the requirements. Explain HOW components,
-     relationships, interactions, and mechanisms realize those requirements,
-     and identify where contracts are defined. Restated obligations and abstract
-     guarantees alone are insufficient. Keep choice rationale in ADRs, transition
-     steps in plan, and technical check procedures in validate.
+<!-- The designed entity's external contract: public types/functions, REST,
+     UI, CLI, protobuf, IOCTL, or another relevant interface. Link to existing
+     requirement headings, e.g. [REQ-001](requirements.md#req-001-title). -->
 
-     Each architecture point links to its owning requirement at its section,
-     definition, or list item, e.g. [REQ-001](requirements.md#req-001-title).
-     A section-level reference covers one coherent point; independent points
-     each need their own references. Cross-spec links include the relative
-     path to the owning spec. Reference owners without copying their content. -->
+## {{proposal item name}}
 
-<!-- Define shared rules once; use links and tables for repeated entities/states.
-     Enough detail identifies responsibility, interface, interaction, and material
-     conditions of conformance. Additional prose must resolve an actual ambiguity.
-     Mark partial coverage locally; resolve missing inputs needed by this change.
-     On correction replace the wrong account and its dependent explanations.
-     Leave a standalone current contract; correction history stays outside it. -->
+<!-- Repeat exactly the proposal's item names in order. Initially mark each
+     Pending. Its executor writes a brief design before coding: role, named key
+     participants, relationships to other modules and material external
+     dependencies. Architecture and code develop together by work item;
+     proposal and requirements may be revisited when necessary.
 
-<!-- Large architectural development: first agree actors, subsystem boundaries,
-     interfaces, relationships, and main flows. Prepare subsystem skeletons with
-     known inputs and open questions. Record ordered scopes and revision-specific
-     review states in change-local .context. Fresh groups fill each section.
-     Changed approved interfaces return to review with affected dependent scopes.
-     Validate the single system artifact after all sections and integration are
-     complete and reviewed; only then author validate and plan. -->
+     Describe the current concepts, contracts and mechanisms sufficiently to
+     determine whether an implementation conforms. Reuse shared definitions
+     through links. Distinguish reusable framework contracts from values for
+     their instances; concrete delivered-system values may define its contract.
+     An explicitly requested ADR records significant choice rationale and relevant
+     alternatives; implementation owns routine coding steps and temporary migration
+     mechanics. New ADRs, amendments and superseding records require an explicit
+     user request. -->
 
-<!-- ## Subsystem: <name>
+Pending.
 
-     Status: pending
-     Inputs: <overview, relevant requirements, agreed interfaces>
-     Open questions: <design decisions for this scope>
-
-     Replace this skeleton with the reviewed contract when its scope is done. -->
-
-## Constraints
-
-<!-- List hard system constraints with owning requirement links when applicable.
-     Delete when empty. -->
-
+<!-- Add a brief special-check description on explicit user request, identifying
+     its case, expected evidence and requirement or system owner. -->

@@ -1,8 +1,8 @@
-schema: "./schemas/sdd/schema.yaml"
+schema: ./schemas/sdd/schema.yaml
 context:
-  - file: .specd/context.md
+- file: .specd/context.md
 contextIncludeSpecs:
-  - "default:*"
+- default:*
 contextMode: summary
 workspaces:
   default:
@@ -29,4 +29,4 @@ storage:
       path: .specd/archive/
 plugins:
   agents:
-    - name: "@specd/plugin-agent-codex"
+  - name: '@specd/plugin-agent-codex'
