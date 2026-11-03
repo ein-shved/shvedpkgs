@@ -39,6 +39,10 @@
     modesetting.enable = true;
     open = false;
     nvidiaSettings = true;
+    # Preserve VRAM and run the NVIDIA suspend/resume hooks around system sleep.
+    powerManagement.enable = true;
+    # /tmp is a tmpfs smaller than this GPU's 8 GiB of VRAM.
+    moduleParams.nvidia.NVreg_TemporaryFilePath = "/var/tmp";
   };
 
   # This value determines the NixOS release from which the default
