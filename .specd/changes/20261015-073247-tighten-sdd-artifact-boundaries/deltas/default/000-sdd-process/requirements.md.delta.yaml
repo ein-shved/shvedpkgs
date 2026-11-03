@@ -1,36 +1,125 @@
 - op: modified
   selector:
     type: section
+    matches: '^REQ-001:'
+  content: |
+    The human-readable artifact rules define the meaning and boundaries of SDD
+    artifacts independently of the tools and agents used to produce them.
+
+    ### Scenario: Artifact meaning is discoverable
+
+    - WHEN a developer interprets an SDD artifact
+    - THEN the artifact rules define its responsibility and content
+    - AND tooling instructions remain consistent with those rules
+
+    ### Scenario: Artifact contracts change explicitly
+
+    - WHEN an accepted change revises an artifact's responsibility or format
+    - THEN its rules and dependent authoring instructions are updated together
+
+- op: modified
+  selector:
+    type: section
     matches: '^REQ-003:'
   content: |
-    ## REQ-003: Developers can find current SDD process rules
-
-    Developers must be able to find a complete human-readable definition of
-    the SDD artifact model: accepted formats, terminology, responsibilities,
-    content boundaries, dependencies, and validation semantics.
-
-    The definition is independent of the tools and workflow used to produce
-    artifacts. Changes to artifact contracts update that definition and its
-    translation; changes only to tooling, coordination, or lifecycle execution
-    update their own instructions while preserving the artifact contracts.
+    Developers must be able to find the human-readable artifact model and the
+    instructions for using it. Artifact rules and their Russian translation own
+    content contracts; operational resources own agent and lifecycle behavior.
 
     ### Scenario: Developer finds the artifact model
 
-    - WHEN a developer needs to understand an SDD artifact
-    - THEN the repository's SDD materials lead to the human-readable artifact rules
-    - AND those rules explain its content, format, responsibility, dependencies, and useful examples independently of production tooling
+    - WHEN a developer needs an artifact's format or responsibility
+    - THEN the repository's SDD materials lead to its human-readable rules
+    - AND those rules can be understood independently of production tooling
 
-    ### Scenario: Artifact contract changes remain aligned
+    ### Scenario: Changes update their owners
 
-    - WHEN an accepted change modifies an artifact's format, terminology, responsibility, or content contract
-    - THEN the human-readable artifact rules and their translation are updated
-    - AND authoring instructions remain consistent with the changed contract
+    - WHEN artifact contracts or operational behavior change
+    - THEN the resources owning the changed meaning are updated
+    - AND changes to artifact contracts update both language versions of the rules
 
-    ### Scenario: Workflow changes preserve the artifact model
+- op: modified
+  selector:
+    type: section
+    matches: '^REQ-005:'
+  content: |
+    Current needs and satisfaction conditions belong in requirements; current
+    interfaces, contracts and architecture belong in system. ADRs are created
+    only on the user's explicit request and preserve the context, alternatives
+    and rationale of significant decisions.
+    These artifacts must suffice for the affected work without conversation history.
 
-    - WHEN a change modifies only tooling, coordination, or lifecycle execution
-    - THEN the corresponding operational instructions are updated
-    - AND the human-readable artifact rules retain their existing content contracts
+    ### Scenario: Current architecture is understandable
+
+    - WHEN a developer changes a covered capability
+    - THEN its requirements and system explain the needs and relevant current design
+    - AND temporary notes do not replace those contracts
+
+    ### Scenario: User controls decision records
+
+    - WHEN an architectural choice is made during a change
+    - THEN an ADR is created only on the user's explicit request
+
+    ### Scenario: Code documentation references durable truth
+
+    - WHEN code or its permanent documentation links to a specification
+    - THEN the target document and any referenced heading exist in durable specs
+    - AND the link remains meaningful after the change is archived
+
+- op: modified
+  selector:
+    type: section
+    matches: '^REQ-006:'
+  content: |
+    A change starts with a short proposal and requirements, then develops its
+    architecture and implementation together by high-level work item. Reviewed
+    items can proceed to code while later design remains open.
+    Discoveries may also require revising the proposal or requirements.
+
+    ### Scenario: Begin implementation incrementally
+
+    - WHEN the initial requirements and external-interface skeleton are available
+    - AND a work item's brief design passes independent review
+    - THEN that item's implementation can start without completing later items' design
+
+    ### Scenario: Revisit earlier artifacts when needed
+
+    - WHEN joint architecture and implementation work reveals a needed change in intent or requirements
+    - THEN the proposal or requirements are revised as appropriate
+    - AND affected architecture and implementation are aligned with that revision
+
+    ### Scenario: Small changes stay small
+
+    - WHEN a narrow fix is already covered by current requirements and architecture
+    - THEN it uses one work item and may leave those contracts unchanged
+    - AND a requested regression check can be its only spec addition
+
+    ### Scenario: Existing behavior reuses its owners
+
+    - WHEN an existing spec covers the changed behavior
+    - THEN the change attaches it and revises only the affected contracts
+    - AND uncovered behavior receives an owning spec
+
+- op: modified
+  selector:
+    type: section
+    matches: '^REQ-007:'
+  content: |
+    Acceptance scenarios remain inside their requirements. Special technical
+    check descriptions belong in system only when explicitly requested by the user.
+    Implementation receives appropriate tests and independent code review.
+
+    ### Scenario: Record a requested special check
+
+    - WHEN the user asks to preserve an unusual check or regression case
+    - THEN system describes that case briefly
+    - AND its acceptance meaning remains with the owning requirement
+
+    ### Scenario: Routine implementation checks
+
+    - WHEN an implementation is checked against its requirements and design
+    - THEN appropriate tests and independent code review establish conformance
+    - AND special check descriptions in system reflect explicit user requests
 
 - op: added
   position:
@@ -41,41 +130,46 @@
       type: section
       matches: '^REQ-007:'
   content: |
-    ## REQ-008: Design context follows decision scope
+    ## REQ-008: Each work item receives focused design and code review
 
-    Design work must be divided into reviewable scopes proportionate to the
-    independent decisions involved. Each scope must receive the relevant
-    current knowledge and leave enough agreed state for work to continue.
+    Work items share the system's external interface and receive focused design,
+    implementation, and independent review. Architecture records the key roles,
+    participants and dependencies needed to understand the solution concisely.
 
-    ### Scenario: Small changes preserve continuity
+    ### Scenario: Review and implement one item
 
-    - WHEN a change needs only a narrow set of design decisions
-    - THEN the same participants may carry it from proposal through plan
-    - AND they still review each artifact against its own responsibility
+    - WHEN an executor develops a work item
+    - THEN an independent reviewer checks its brief design and can ask implementation questions
+    - AND the same executor implements it after design review
+    - AND a separate reviewer checks the resulting code
 
-    ### Scenario: Broad design receives fresh attention
+    ### Scenario: Keep architecture sufficient and brief
 
-    - WHEN a change requires several independent architectural decisions
-    - THEN successive design scopes receive fresh participants and context
-    - AND their inputs include the agreed results needed for that scope
-    - AND the user can identify the next scope when the current one closes
+    - WHEN a design question is resolved
+    - THEN system retains only the architectural decision needed to understand the solution
+    - AND familiar idioms, rejected alternatives and routine implementation detail do not inflate it
 
-    ### Scenario: System design is decomposed coherently
+    ### Scenario: Original executor handles user feedback
 
-    - WHEN a large design contains several subsystems
-    - THEN their responsibilities, relationships, and interactions are agreed
-      before detailed subsystem design
-    - AND each subsystem receives focused design and review
-    - AND affected earlier contracts are reconsidered when a subsystem exposes
-      a contradiction
+    - WHEN the user questions or requests changes to an item's code or design
+    - THEN the coordinating session routes that feedback to the item's original executor
+    - AND the original executor handles the response and corrections through user review
+    - AND an unavailable original executor is reported rather than silently replaced
 
-    ### Scenario: Continuation does not require discussion history
+    ### Scenario: Resolve findings proportionately
 
-    - WHEN new participants resume a design scope
-    - THEN they can recover its inputs, unresolved decisions, and next action
-      from current artifacts and concise continuation information
-    - AND rejected drafts and the full earlier discussion are loaded only when
-      needed to resolve a specific question
+    - WHEN implementation reveals a minor issue in an earlier item
+    - THEN the executor may correct it and align the affected design
+
+    ### Scenario: Significant inconsistency needs a decision
+
+    - WHEN a significant inconsistency requires a design decision
+    - THEN work pauses for the user's decision
+
+    ### Scenario: Resume focused work
+
+    - WHEN a new participant resumes an item
+    - THEN current artifacts and concise continuation identify its inputs, progress and unresolved questions
 
 - op: added
   position:
@@ -86,28 +180,25 @@
       type: section
       matches: '^REQ-008:'
   content: |
-    ## REQ-009: Users can delegate design participation
+    ## REQ-009: Users choose review involvement
 
-    Users must be offered a choice of participation during proposal and be
-    able to delegate routine design decisions and artifact acceptance within
-    their stated goal and constraints.
+    Before implementation users can choose review by item, review of the completed
+    change together, or delegation of routine review. Work honors that choice and
+    surfaces significant inconsistencies in every mode.
 
-    ### Scenario: Participation is an informed choice
+    ### Scenario: Review by item
 
-    - WHEN design begins with a proposal
-    - THEN the user is told they can participate in design or delegate it
-    - AND the selected mode governs subsequent design interactions
+    - WHEN the user chooses item review
+    - THEN completed items are presented individually before proceeding to the next item
 
-    ### Scenario: Delegated design progresses without routine user review
+    ### Scenario: Review the result together
 
-    - WHEN the user chooses delegated design
-    - THEN design can proceed through the implementation plan without requiring
-      the user to decide every design issue or review every intermediate artifact
-    - AND decisions remain within the user's stated goal and constraints
+    - WHEN the user chooses batch review
+    - THEN routine design and implementation proceed without intermediate user approval
+    - AND the user receives the completed architecture and implementation together
 
-    ### Scenario: Delegating a large change preserves design quality
+    ### Scenario: Delegate routine review
 
-    - WHEN the user delegates a change with several architectural decisions
-    - THEN scope-appropriate design and independent review still occur
-    - AND the user receives a concise account of the resulting design and
-      unresolved matters that require their participation
+    - WHEN the user delegates participation
+    - THEN routine decisions and independent reviews proceed within the user's goal
+    - AND the user receives a change ready for closure

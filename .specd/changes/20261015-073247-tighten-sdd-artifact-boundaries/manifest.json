@@ -1,7 +1,7 @@
 {
   "name": "tighten-sdd-artifact-boundaries",
   "createdAt": "2026-10-15T07:32:47.545Z",
-  "description": "Make SDD artifacts concise and scope design by independent decisions, with involved or delegated participation, coordinator/executor/manager/arbiter roles, fresh author contexts, staged subsystem design, and revision-specific review before validation.",
+  "description": "Short proposal work items and requirements, then incremental architecture and code with focused original executors and separate design/code review.",
   "schema": {
     "name": "sdd",
     "version": 1
@@ -14,13 +14,13 @@
       "type": "proposal",
       "optional": false,
       "requires": [],
-      "state": "pending-review",
+      "state": "complete",
       "files": [
         {
           "key": "proposal",
           "filename": "proposal.md",
-          "state": "pending-review",
-          "validatedHash": "sha256:0e8fb874eb4236a9f2af0d4ebcce69093c1c2cb01889b09e8947f3c6c4c73d22"
+          "state": "complete",
+          "validatedHash": "sha256:026a1419cddea6c9ec6a17a44c8d13a713d59b9d5b5c1fa83ce28f270ebfdc2a"
         }
       ]
     },
@@ -30,13 +30,13 @@
       "requires": [
         "proposal"
       ],
-      "state": "drifted-pending-review",
+      "state": "complete",
       "files": [
         {
           "key": "default:000-sdd-process",
           "filename": "deltas/default/000-sdd-process/requirements.md.delta.yaml",
-          "state": "drifted-pending-review",
-          "validatedHash": "sha256:32c93cc7b3cdd41e79f73cd8a76d3e3682ec8306a234d6f75c01aaf2f1446d11"
+          "state": "complete",
+          "validatedHash": "sha256:789c5295dd08fce9a5bb35603ab394f630a9392201826dd0abfc6ed840ad7e44"
         }
       ]
     },
@@ -46,30 +46,13 @@
       "requires": [
         "requirements"
       ],
-      "state": "drifted-pending-review",
+      "state": "complete",
       "files": [
         {
           "key": "default:000-sdd-process",
           "filename": "deltas/default/000-sdd-process/system.md.delta.yaml",
-          "state": "drifted-pending-review",
-          "validatedHash": "sha256:a5504a2289dbb6b16ce783e89302589866d9a684012c1812236e1ee49b32fd3f"
-        }
-      ]
-    },
-    {
-      "type": "validate",
-      "optional": false,
-      "requires": [
-        "requirements",
-        "system"
-      ],
-      "state": "pending-review",
-      "files": [
-        {
-          "key": "default:000-sdd-process",
-          "filename": "deltas/default/000-sdd-process/validate.md.delta.yaml",
-          "state": "pending-review",
-          "validatedHash": "sha256:18cb69be55d7c53672bdb80385d13030c0e353d4b5ff7f99aad5dc917370d075"
+          "state": "complete",
+          "validatedHash": "sha256:e22c4c75e54d362479a4ab0baf06d6a9a2029b9f7da57d961f813cc634306c4f"
         }
       ]
     },
@@ -80,31 +63,13 @@
         "requirements",
         "system"
       ],
-      "state": "drifted-pending-review",
+      "state": "skipped",
       "files": [
         {
           "key": "default:000-sdd-process",
           "filename": "deltas/default/000-sdd-process/adrs.md.delta.yaml",
-          "state": "drifted-pending-review",
-          "validatedHash": "sha256:e8eade287c66d2fd6f43ed313916528301fbd7965493c7a169123a12ecde9f47"
-        }
-      ]
-    },
-    {
-      "type": "plan",
-      "optional": false,
-      "requires": [
-        "requirements",
-        "system",
-        "validate"
-      ],
-      "state": "pending-review",
-      "files": [
-        {
-          "key": "plan",
-          "filename": "plan.md",
-          "state": "pending-review",
-          "validatedHash": "sha256:393b01f2be9cf1fdd626f73e0fa90e1cf5337f364b60bd84afc140b77825df53"
+          "state": "skipped",
+          "validatedHash": "__skipped__"
         }
       ]
     }
@@ -379,6 +344,214 @@
       },
       "from": "implementing",
       "to": "designing"
+    },
+    {
+      "type": "artifacts-synced",
+      "at": "2026-11-03T07:56:33.909Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "typesAdded": [],
+      "typesRemoved": [
+        "validate",
+        "plan"
+      ],
+      "filesAdded": [],
+      "filesRemoved": []
+    },
+    {
+      "type": "description-updated",
+      "at": "2026-11-03T07:57:56.821Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "y.shvedov@1440.space"
+      },
+      "description": "Short proposal work items and requirements, then incremental architecture and code with focused original executors and separate design/code review."
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-11-03T08:03:40.807Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "y.shvedov@1440.space"
+      },
+      "from": "designing",
+      "to": "ready"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-11-03T08:03:42.178Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "y.shvedov@1440.space"
+      },
+      "from": "ready",
+      "to": "implementing"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-11-03T08:34:58.639Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "y.shvedov@1440.space"
+      },
+      "from": "implementing",
+      "to": "verifying"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-11-03T08:34:59.599Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "y.shvedov@1440.space"
+      },
+      "from": "verifying",
+      "to": "done"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-11-03T08:35:51.418Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "y.shvedov@1440.space"
+      },
+      "from": "done",
+      "to": "archivable"
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-11-03T11:03:54.740Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "cause": "artifact-drift",
+      "message": "Invalidated because validated artifacts drifted: proposal [proposal]; requirements [default:000-sdd-process]; system [default:000-sdd-process]; adrs [default:000-sdd-process]",
+      "affectedArtifacts": [
+        {
+          "type": "proposal",
+          "files": [
+            "proposal"
+          ]
+        },
+        {
+          "type": "requirements",
+          "files": [
+            "default:000-sdd-process"
+          ]
+        },
+        {
+          "type": "system",
+          "files": [
+            "default:000-sdd-process"
+          ]
+        },
+        {
+          "type": "adrs",
+          "files": [
+            "default:000-sdd-process"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-11-03T11:03:54.740Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "from": "archivable",
+      "to": "designing"
+    },
+    {
+      "type": "artifact-skipped",
+      "at": "2026-11-03T11:06:09.604Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "y.shvedov@1440.space"
+      },
+      "artifactId": "adrs",
+      "reason": "No ADR requested by the user."
+    },
+    {
+      "type": "invalidated",
+      "at": "2026-11-03T11:07:57.267Z",
+      "by": {
+        "name": "specd",
+        "email": "system@getspecd.dev"
+      },
+      "cause": "artifact-drift",
+      "message": "Invalidated because validated artifacts drifted: requirements [default:000-sdd-process]",
+      "affectedArtifacts": [
+        {
+          "type": "requirements",
+          "files": [
+            "default:000-sdd-process"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-11-03T11:21:27.536Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "y.shvedov@1440.space"
+      },
+      "from": "designing",
+      "to": "ready"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-11-03T11:21:59.794Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "y.shvedov@1440.space"
+      },
+      "from": "ready",
+      "to": "implementing"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-11-03T11:22:52.477Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "y.shvedov@1440.space"
+      },
+      "from": "implementing",
+      "to": "verifying"
+    },
+    {
+      "type": "artifact-skipped",
+      "at": "2026-11-03T11:24:54.105Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "y.shvedov@1440.space"
+      },
+      "artifactId": "adrs",
+      "reason": "User requested no ADR authoring; final requirements and system reviewed."
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-11-03T11:26:20.069Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "y.shvedov@1440.space"
+      },
+      "from": "verifying",
+      "to": "done"
+    },
+    {
+      "type": "transitioned",
+      "at": "2026-11-03T11:26:49.694Z",
+      "by": {
+        "name": "Yury Shvedov",
+        "email": "y.shvedov@1440.space"
+      },
+      "from": "done",
+      "to": "archivable"
     }
   ]
 }
