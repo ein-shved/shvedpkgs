@@ -28,8 +28,10 @@ checkbox, for example:
 - [ ] 1. **Interface** — Supported configuration becomes available to callers.
 ```
 
-Item selection and allocation of needs to requirements and current interfaces
-and architecture to system occur together. The proposal lists affected spec IDs
+Alongside the work items, the proposal contains a concise allocation of this
+change's actual content among its affected artifacts. Item selection and this
+allocation occur together: needs and scenarios belong in requirements; current
+interfaces, contracts and architecture belong in system. The proposal lists affected spec IDs
 even when their requirements remain unchanged. Item identities remain stable on
 correction. A small change may have one item. Supporting evidence, alternatives and temporary
 continuation belong outside the normative artifact chain.

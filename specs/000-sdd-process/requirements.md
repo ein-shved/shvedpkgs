@@ -100,10 +100,24 @@ These artifacts must suffice for the affected work without conversation history.
 
 ## REQ-006: Changes that modify behavior pass through SpecD artifacts
 
-A change starts with a short proposal and requirements, then develops its
-architecture and implementation together by high-level work item. Reviewed
-items can proceed to code while later design remains open.
+A change starts with a short proposal containing high-level work items and
+an explicit allocation of the change's content among artifacts. After proposal
+review and the user's involvement choice, requirements and an external-interface
+skeleton precede architecture and implementation developed together by item.
+Reviewed items can proceed to code while later design remains open.
 Discoveries may also require revising the proposal or requirements.
+
+### Scenario: Creating a change produces its proposal
+
+- WHEN the user asks an agent to create a change
+- THEN the agent prepares its short proposal with work items and concrete artifact allocation
+- AND presents the proposal for review before preparing requirements or system
+
+### Scenario: Proposal allocates actual change content
+
+- WHEN a proposal describes a change
+- THEN it briefly identifies what content belongs in each affected artifact
+- AND that allocation accompanies the short high-level work items
 
 ### Scenario: Begin implementation incrementally
 
@@ -190,23 +204,45 @@ participants and dependencies needed to understand the solution concisely.
 
 ## REQ-009: Users choose review involvement
 
-Before implementation users can choose review by item, review of the completed
-change together, or delegation of routine review. Work honors that choice and
-surfaces significant inconsistencies in every mode.
+Every change's proposal is reviewed with the user before the agent asks for
+their level of involvement. The agent waits for the answer before preparing
+requirements or system. The three levels are full involvement, delegation of
+code only, and full delegation. Independent agents review work in every mode;
+any result presented for user review has already passed agent review and
+corrections. Significant inconsistencies reach the user in every mode.
 
-### Scenario: Review by item
+### Scenario: Ask after proposal review
 
-- WHEN the user chooses item review
-- THEN completed items are presented individually before proceeding to the next item
+- WHEN the user has finished reviewing the proposal and its comments are resolved
+- THEN the agent explicitly asks the user to choose one of the three involvement levels
+- AND waits for the answer before preparing requirements or system
 
-### Scenario: Review the result together
+### Scenario: Ask for each new change
 
-- WHEN the user chooses batch review
-- THEN routine design and implementation proceed without intermediate user approval
-- AND the user receives the completed architecture and implementation together
+- GIVEN an involvement preference was supplied earlier
+- WHEN proposal review for a new change finishes
+- THEN the agent still asks for the user's involvement choice for that change
 
-### Scenario: Delegate routine review
+### Scenario: Full involvement
 
-- WHEN the user delegates participation
-- THEN routine decisions and independent reviews proceed within the user's goal
+- WHEN the user chooses full involvement
+- THEN requirements, each item's design and its implemented code receive user review
+- AND each presented result has passed independent agent review and corrections first
+
+### Scenario: Delegate code only
+
+- WHEN the user delegates code only
+- THEN the user reviews agent-reviewed requirements and item designs
+- AND agents implement, review and accept code autonomously within the agreed design
+
+### Scenario: Full delegation
+
+- WHEN the user chooses full delegation after proposal review
+- THEN agents prepare and review requirements, architecture and code autonomously
 - AND the user receives a change ready for closure
+
+### Scenario: Arbiters participate in every mode
+
+- WHEN a work item proceeds in any involvement mode
+- THEN an independent design arbiter reviews its design before implementation
+- AND a separate code arbiter reviews its implementation

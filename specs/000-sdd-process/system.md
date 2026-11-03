@@ -24,6 +24,27 @@ then develop together by item; discoveries may also require revising the
 proposal or requirements and aligning their dependents.
 [REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts).
 
+## Entry
+
+The main session creates the proposal with short work items and explicit
+artifact allocation. An independent proposal arbiter reviews it before user
+review; after comments are resolved, the main session asks the involvement
+question and waits before requirements or system. Continuation associates
+the reviewed proposal with its answered gate for resumption.
+[REQ-006](requirements.md#req-006-changes-that-modify-behavior-pass-through-specd-artifacts),
+[REQ-009](requirements.md#req-009-users-choose-review-involvement).
+
+Shared skills enforce three levels: full involvement adds user review of
+requirements, item design and code; delegation of code keeps user review of
+requirements and item design; full delegation proceeds through agent review.
+Every user-facing review follows independent agent review and corrections.
+Item executors retain their design/code ownership, with independent design
+and separate code arbiters in every mode. Schema instructions define artifact
+composition and ordering; entry procedures and the item protocol own the
+proposal gate, checkpoints and continuation.
+[REQ-008](requirements.md#req-008-each-work-item-receives-focused-design-and-code-review),
+[REQ-009](requirements.md#req-009-users-choose-review-involvement).
+
 ## Artifacts
 
 `rules.md` and its Russian translation own artifact content and responsibility

@@ -1,6 +1,6 @@
 ---
 name: "specd-new"
-description: "Discover intent and create a SpecD change."
+description: "Create a SpecD change, prepare its proposal and begin user review."
 ---
 
 # specd-new

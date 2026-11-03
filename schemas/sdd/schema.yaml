@@ -12,18 +12,35 @@ artifacts:
     template: templates/proposal.md
     requires: []
     instruction: |
-      Write a short problem statement and ordered numbered checkbox work items.
-      Each item has a one-word name and one short sentence describing its purpose.
-      Allocate needs to requirements and current interfaces/architecture to system
-      while choosing the items. Preserve item names and numbers on correction.
-      One item is enough for a small change. List all affected spec IDs, including
-      specs whose requirements remain unchanged.
+      Create the proposal as part of creating the change. Write a short problem
+      statement and ordered numbered checkbox work items, each with a one-word
+      name and one short sentence describing its purpose. Alongside the items,
+      explicitly allocate this change's actual content among affected artifacts:
+      name the needs/scenarios for requirements and interfaces/architecture for
+      system, including unchanged owning needs when appropriate. Preserve item
+      identities on correction. One item is enough for a small change. List all
+      affected spec IDs. Keep supporting research and temporary continuation
+      outside the artifact dependency graph.
 
-      Before implementation, reuse or obtain the user's participation choice:
-      involved with item review, involved with batch review after implementation,
-      or delegated routine review. Batch review permits routine design and coding
-      without intermediate user approval. Keep supporting research and temporary
-      continuation outside the artifact dependency graph.
+      Set Participation to PENDING during proposal review. Complete independent
+      agent review and corrections before presenting the proposal to the user.
+      Resolve the user's proposal comments, then always ask the involvement
+      question for this new change and wait for the answer before preparing
+      requirements or the system skeleton. Earlier preferences do not replace
+      this question. Offer exactly three levels:
+      - full involvement: user reviews agent-reviewed requirements, each item's
+        design and implemented code;
+      - delegate code only: user reviews agent-reviewed requirements and item
+        designs; agents implement and accept code autonomously;
+      - full delegation: agents handle requirements, architecture and code
+        autonomously after proposal review and the involvement answer.
+      Independent design and separate code arbiters participate in every mode.
+      Agent review and correction clearance precede every result's user review.
+      Item/batch presentation is a separate preference, not a delegation level.
+
+      Record the reviewed proposal revision, actual question/answer and selected
+      level, replacing PENDING only after the answer. Resume the same reviewed
+      proposal with its recorded answer without repeating the question.
     rules:
       post:
         - id: content-review
@@ -32,7 +49,9 @@ artifacts:
             Correct misplaced content, contradictions and unsupported statements.
             Replace the wrong account and dependent explanations; keep correction
             history outside current contracts. Keep only text that resolves a
-            concrete ambiguity. Follow the selected user-review mode.
+            concrete ambiguity. Apply the proposal's review boundary or, for
+            downstream content, this change's recorded involvement mode.
+            Complete independent agent review and corrections before any user review.
     preHashCleanup:
       - id: normalize-checkboxes
         pattern: '^([ \t]*-\s+)\[x\]'
@@ -49,6 +68,10 @@ artifacts:
     requires: [proposal]
     delta: true
     instruction: |
+      Begin only after proposal review is complete, its user comments are resolved
+      and this change's actual involvement answer is recorded. A PENDING choice
+      keeps work at the proposal-review/question boundary.
+
       Describe independent user/project needs and satisfaction conditions for
       each affected spec. Reuse existing requirements and authoritative artifact
       rules; use a no-op delta when the needs remain unchanged. A defect in their
@@ -85,6 +108,12 @@ artifacts:
       post:
         - id: content-review
           instruction: *content-review
+        - id: requirements-review
+          instruction: |
+            Complete independent requirements review and corrections in every mode.
+            Full involvement and code-only delegation then require user review
+            and resolved comments before proceeding to the affected design.
+            Full delegation accepts the reviewed requirements autonomously.
 
   - id: system
     scope: spec
@@ -94,6 +123,9 @@ artifacts:
     requires: [requirements]
     delta: true
     instruction: |
+      Prepare system content only after the reviewed proposal's comments are
+      resolved and this change's actual involvement answer is recorded.
+
       Start the affected system content with the designed entity's external
       interface and a skeleton using exactly the proposal's item names and order.
       External means the entity's relevant boundary: public types/functions,
@@ -165,7 +197,10 @@ artifacts:
       Develop system architecture and code together by work item. Revisit and
       correct proposal or requirements when necessary. Pending item sections are
       allowed during implementation. Complete only the current item's design
-      before coding it; later sections may remain pending.
+      before coding it; later sections may remain pending. In every mode, an
+      independent design arbiter reviews the item and corrections are resolved.
+      Full involvement and code-only delegation then require user design review
+      before that item is implemented. Full delegation accepts design autonomously.
       Validate system only after all affected item designs and code reviews are
       complete. Add a brief special-check description on explicit user request.
       Ordinary tests and code review are part of implementation.
@@ -279,12 +314,28 @@ workflow:
       pre:
         - id: initial-artifacts
           instruction: |
-            The main agent prepares proposal, requirements and the external-interface
-            system skeleton and coordinates the work. Use the CLI's live state,
-            instructions and merged previews. Check the skeleton's exact proposal
-            item names/order, or that existing contracts suffice for a no-op fix.
-            Validate proposal and requirements before implementation; system may
-            remain partial. Research agents may supply concise context as needed.
+            The main agent creates the proposal first and coordinates its
+            independent agent review and corrections before user review. After
+            user proposal comments are resolved, always ask this new change's
+            involvement question and wait for the answer before requirements or
+            the external-interface system skeleton. Earlier preferences do not
+            replace the question. Record the reviewed proposal revision and
+            actual asked/answered level; resume that same proposal using its
+            recorded answer.
+
+            The levels are full involvement, delegate code only and full
+            delegation. Full involvement includes user review of agent-reviewed
+            requirements, item designs and code. Code-only delegation includes
+            user review of agent-reviewed requirements and item designs, with
+            autonomous code. Full delegation handles downstream work autonomously.
+            Independent design and separate code arbiters participate in every
+            mode. Resolve agent findings before every user review.
+
+            After the answer, prepare requirements and the system skeleton using
+            live CLI instructions and merged previews. Check exact proposal item
+            names/order or sufficient existing contracts for a no-op fix. Validate
+            proposal and requirements before implementation; system may remain
+            partial. Research agents may supply concise context as needed.
 
   - step: ready
     requires: [proposal, requirements]
@@ -294,7 +345,9 @@ workflow:
           instruction: |
             Confirm the external interface and matching work-item skeleton exist,
             or sufficient existing system contracts cover a narrow no-op fix.
-            Reuse the user's involvement and item/batch review choice. Completing
+            Confirm this change's proposal review and actual involvement answer
+            are recorded and requirements have passed the mode's agent and user
+            reviews. Item/batch presentation is a separate preference. Completing
             later items' architecture is not a prerequisite for coding an item.
 
   - step: implementing
@@ -303,14 +356,19 @@ workflow:
       pre:
         - id: work-items
           instruction: |
-            Work through proposal items in order. Assign each item an executor
-            who reads its sources, writes its brief system design and self-reviews.
-            An independent design reviewer checks it and may ask implementation
+            Work through proposal items in order. Each executor reads its sources,
+            writes the brief system design and self-reviews. An independent design
+            arbiter reviews it in every involvement mode and may ask implementation
             questions; retain only architecturally relevant answers in system.
-            After approval, the same executor implements the item, runs appropriate
-            tests and self-reviews. Another independent reviewer checks the code,
-            separate from both the executor and the design reviewer.
-            Complete the proposal checkbox only after corrections and checks pass.
+            Resolve agent findings before user design review, required in full
+            involvement and code-only delegation. Full delegation accepts the
+            reviewed design autonomously. The same executor then implements the
+            item, runs appropriate tests and self-reviews. Another independent
+            arbiter reviews code, separate from executor and design arbiter, in
+            every mode. Resolve its findings before full-involvement user code
+            review. Code-only delegation and full delegation accept reviewed code
+            autonomously. Complete the checkbox after checks, corrections and
+            the mode's required user reviews pass.
 
             Minor earlier-item corrections and their affected design may be made
             autonomously; stop for the user's decision on significant inconsistencies.
@@ -336,7 +394,11 @@ workflow:
             Require complete aligned system content and finished item code reviews
             before final structural validation. Confirm tests and review cover the
             affected requirements and design, including requested special checks.
-            Present completed items or the completed change as the user selected.
+            Confirm the recorded involvement mode's user checkpoints are complete:
+            full involvement covers agent-reviewed requirements, item designs and
+            code; code-only delegation covers agent-reviewed requirements and
+            designs; full delegation receives a change ready for closure. Every
+            human-presented result first passes independent review and corrections.
             Return feedback to the original item executor. Keep those executors available
             or resumable until human review ends. Surface significant inconsistencies
             for the user's decision; correct minor findings and recheck affected work.

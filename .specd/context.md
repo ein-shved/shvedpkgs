@@ -14,8 +14,9 @@ when behavior changes.
   requirements when necessary; significant inconsistencies need the user's
   decision.
 - Proposal stays short and contains numbered high-level work items, each with a
-  short name and one sentence of purpose. Content allocation and work-item
-  selection happen together; preserve item numbers through corrections.
+  short name and one sentence of purpose, plus explicit allocation of content to
+  artifacts. Choose allocation and work items together; preserve item numbers
+  through corrections.
 - Requirements retain their existing format: independent needs, rationale,
   satisfaction conditions and acceptance scenarios inside each requirement.
   Attach an existing owning spec and use a no-op delta when its needs are already
@@ -39,18 +40,21 @@ when behavior changes.
 
 ## Agent work and review
 
-- The main session prepares proposal, requirements and the system skeleton and
-  coordinates the work. Optional research agents return concise context.
-- Before implementation, reuse the user's stated participation choice or resolve
-  review by item, batch review of the completed change, or delegated routine
-  review. Batch review presents architecture and code after implementation;
-  routine work proceeds without intermediate human approval in that mode.
-- For each item, its original executor writes the brief design, an independent
-  reviewer checks that design, the same executor implements it, and a different
-  reviewer checks the code. Review questions become system text only when the
-  answer is architecturally significant.
-- Retain the original executor through the end of human review, including batch
-  review. The orchestrator forwards user questions and findings to that executor,
+- The main session creates the change with its proposal and coordinates the
+  work. Optional research agents return concise context. Independent proposal
+  review and corrections precede user proposal review and resolution of comments.
+- After user proposal review is resolved, always ask the user's involvement and
+  wait for their answer before requirements or system authoring. Offer full
+  involvement (user reviews requirements, design and code), delegate only code
+  (user reviews requirements and design; agents review code), or full delegation
+  after proposal (agents handle requirements, design and code).
+- In every mode, each item's original executor writes the brief design, an
+  independent reviewer checks it, the same executor implements it, and a different
+  reviewer checks the code. Complete agent review and corrections before any
+  result is presented for human review. Review questions become system text only
+  when the answer is architecturally significant.
+- Retain the original executor through the end of human review.
+  The orchestrator forwards user questions and findings to that executor,
   who answers and corrects its work. Report an unavailable original session
   explicitly; do not silently replace its author or make the corrections in the
   orchestrator.

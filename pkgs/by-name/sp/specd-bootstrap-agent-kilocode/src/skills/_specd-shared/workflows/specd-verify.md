@@ -25,7 +25,8 @@ with merged requirements and system, including any explicitly requested checks.
    live transitions through done/signoff to archivable, applying hooks/context
    at the actual states entered. Never run `changes approve`: present required
    human spec/signoff approval commands and keep continuation while waiting.
-6. Report completed work, tests and material limits. Honor item/batch involvement
-   and route resulting feedback to retained original executors. Delegated work
-   finishes ready for closure. Do not archive unless requested; if archiving is
+6. Report completed work, tests and material limits. Honor the recorded
+   involvement level and present results for user review only after applicable
+   agent reviews and corrections clear. Route feedback to original executors.
+   Fully delegated work finishes ready for closure. Do not archive unless requested; if archiving is
    already authorized, continue to `/specd-archive` without asking again.

@@ -13,9 +13,11 @@ state; this entry point can continue into the authorized lifecycle work.
    `/specd-design`, `/specd-implement` or `/specd-verify` according to live state
    and the user's scope. As shared notes explain, expected partial system work
    does not block implementation; unresolved upstream drift must be reviewed.
-4. Continue through authorized phases without another per-skill approval.
-   A request for status/orientation only remains read-only. Human-only CLI
-   approvals and substantive unresolved decisions still require the user.
+4. Continue through authorized phases, observing the mandatory post-proposal
+   involvement gate and recorded level's user checkpoints. Present results for
+   user review after independent agent review and corrections. A request for
+   status/orientation only remains read-only. Human-only CLI approvals and
+   substantive unresolved decisions still require the user.
 
 Return concise progress or the completed result. Default completion is ready
 for closure; use `/specd-archive` only when archiving is requested.

@@ -2,14 +2,14 @@
 
 The main session drives the work directly. Load only the procedure and source
 content relevant to the current task. The [item protocol](item-work.md) defines
-item authorship and independent reviews.
+the proposal gate, involvement levels, authorship and independent reviews.
 
 ## Scope and sources
 
-- Preserve the user's goal, stopping point and existing authorization. A request
-  to complete the change permits continuing through design, implementation and
-  verification without a new permission question at each skill boundary.
-  Finish ready for closure; archive only when requested.
+- Preserve the user's goal, stopping point and existing authorization. Continue
+  authorized work across skill boundaries, observing the proposal gate and the
+  selected level's user-review checkpoints. Finish ready for closure; archive
+  only when requested.
 - Read exact referenced paths first, resolving relative paths against the
   referring resource and live values such as `changePath` against CLI output.
   Use `rg --files --hidden` or glob discovery only if that path is absent. Apply
@@ -61,14 +61,18 @@ A significant inconsistency requiring a design decision pauses for the user.
 The flow is `proposal → requirements → system ↔ code`: system and implementation
 evolve together throughout each item. Revisit proposal and requirements when
 scope, work items or needs evolve, preserving original authorship and aligning
-dependent work. The schema and
+dependent work. Proposal agent review and user review precede the mandatory
+involvement question; requirements/system wait for the user's answer. Apply the
+item protocol's gate on each new change and resume its recorded answer for the
+same unchanged reviewed proposal. The schema and
 `changes artifact-instruction` supply artifact IDs, scope, paths and composition
 rules. Read `rulesPre`, `instruction` and `rulesPost` together. Fetch schema
 metadata only when fresh instructions/status lack the needed fields. For delta
 selectors, fetch the owning outline when needed rather than inventing structure.
 
-Proposal owns the short numbered high-level work items and completion
-checkboxes. Requirements retain needs and acceptance scenarios. System starts
+Proposal owns the short numbered high-level work items, completion checkboxes
+and concrete allocation of this change's content among artifacts. Requirements
+retain needs and acceptance scenarios. System starts
 with the entity's external interface and the same item skeleton, then records
 brief item architecture alongside implementation. Sufficient existing
 requirements/system can use `no-op` deltas, including for a one-item fix.
@@ -125,7 +129,7 @@ Do not bypass CLI gates or claim completion while checks fail.
 
 Never run `changes approve` yourself. CLI spec/signoff approvals are human-only
 in every participation mode. At a real pending approval, give the user the exact
-approval command and preserve continuation. A participation choice or review
+approval command and preserve continuation. An involvement answer or review
 result does not satisfy that CLI approval.
 
 Honor project commit rules. Without such a rule or a user request, do not commit.
