@@ -1,26 +1,23 @@
 # Proposal: {{change.name}}
 
-<!-- One short problem statement. -->
+**Type:** Update <!-- or Architectural change; classify by design decisions. -->
 
-**Participation: PENDING.**
+<!-- Brief problem statement and scope. -->
 
-<!-- After independent proposal review/corrections and resolved user comments,
-     always ask this change's involvement question and wait. Then record the
-     answered level: full involvement | delegate code only | full delegation.
-     Requirements and system follow the answer. The same reviewed proposal
-     resumes with its recorded answer; item/batch presentation is separate. -->
+| # | Topic | Artifact |
+| - | ----- | -------- |
+| 1 | Name | system |
 
-- [ ] 1. **Name** — One short sentence describing this work item's purpose.
+1. One sentence explaining this topic's actual content and destination.
 
-<!-- Use one-word names and preserve item identities. The system skeleton uses
-     exactly these names in the same order. One item is enough for a small fix. -->
+<!-- Each row <=80 characters; topics use one or two words. Destinations are
+     live schema artifact IDs plus code and context. Rows allocate content,
+     not tasks. Rules, templates and skills are code; orientation is context. -->
 
-**Artifact allocation:**
+<!-- Architectural change ONLY: add a short proposed-system outline whose
+     points describe solution parts and also serve as the implementation plan.
+     Ordinary tests/docs stay with each part's implementation, not extra points.
+     Update has no required plan.
+     Keep progress and the user's explicit involvement choice in continuation. -->
 
-- **Requirements** — <!-- This change's actual needs/scenarios, or unchanged owning needs. -->
-- **System** — <!-- This change's actual interfaces, contracts or architecture. -->
-
-<!-- Keep the affected artifacts and their concrete change content. ADR creation
-     requires an explicit user request. -->
-
-**Affected specs:** <!-- workspace:capability-path IDs, including unchanged needs. -->
+**Affected specs:** <!-- Qualified workspace:capability-path IDs. -->

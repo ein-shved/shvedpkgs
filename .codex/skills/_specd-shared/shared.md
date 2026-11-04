@@ -54,28 +54,30 @@ work: it is not itself a reason to stop implementation or return to designing.
 Proposal/requirements drift must be reviewed and resolved before downstream
 implementation; complete system review/validation is required before verifying
 or archiving. An unchanged dependent may need state revalidation, not rewriting.
-A significant inconsistency requiring a design decision pauses for the user.
+A serious inconsistency, including a required hack/workaround, pauses for the user.
 
 ## Artifacts and incremental readiness
 
 The flow is `proposal → requirements → system ↔ code`: system and implementation
 evolve together throughout each item. Revisit proposal and requirements when
 scope, work items or needs evolve, preserving original authorship and aligning
-dependent work. Proposal agent review and user review precede the mandatory
-involvement question; requirements/system wait for the user's answer. Apply the
-item protocol's gate on each new change and resume its recorded answer for the
-same unchanged reviewed proposal. The schema and
-`changes artifact-instruction` supply artifact IDs, scope, paths and composition
-rules. Read `rulesPre`, `instruction` and `rulesPost` together. Fetch schema
+dependent work. After writing proposal, obtain an explicit involvement choice
+unless the user already supplied one maximally explicitly. Never guess from indirect cues;
+reuse the recorded choice on resume and apply user changes at any time. Follow
+[item protocol](item-work.md) for mode boundaries, authors and arbitration.
+The schema and `changes artifact-instruction` supply artifact IDs, scope, paths
+and composition rules. Read `rulesPre`, `instruction` and `rulesPost` together. Fetch schema
 metadata only when fresh instructions/status lack the needed fields. For delta
 selectors, fetch the owning outline when needed rather than inventing structure.
 
-Proposal owns the short numbered high-level work items, completion checkboxes
-and concrete allocation of this change's content among artifacts. Requirements
-retain needs and acceptance scenarios. System starts
-with the entity's external interface and the same item skeleton, then records
-brief item architecture alongside implementation. Sufficient existing
-requirements/system can use `no-op` deltas, including for a one-item fix.
+Proposal owns concise intent, change type and concrete artifact allocation.
+Architectural changes add a short system outline whose points simultaneously
+serve as the implementation plan. Updates need no outline or plan and may leave
+all other SDD artifacts unchanged. Allocation topics are never task checkboxes.
+Requirements retain independent needs and acceptance scenarios. System starts
+with the entity's external interface; architectural details develop by outline
+point together with implementation. Sufficient existing contracts use no-op
+requirements/system deltas when the schema needs them.
 Create or update ADR content only when the user explicitly requests it. Preserve
 existing ADR history and include requested ADR changes in applicable reviews
 and final artifact validation. Ordinary work uses requirements, system and code;
@@ -102,8 +104,9 @@ shape/state and does not replace semantic or code review:
 Validate initial proposal and requirements before implementation readiness.
 Incomplete system may evolve during `implementing`; later item designs must not
 delay a reviewed item's code. After all item reviews, align and validate the
-complete system before `verifying` or archive. Proposal completion gates final
-verification/archive, not the start of implementation.
+complete system before `verifying` or archive. All applicable checks gate
+readiness for archive; there are no proposal checkbox completion rules. Initial structural validation is allowed before
+code, with final validation repeated after relevant contract changes.
 
 ## Hooks and transitions
 
@@ -134,4 +137,6 @@ result does not satisfy that CLI approval.
 
 Honor project commit rules. Without such a rule or a user request, do not commit.
 Keep execution evidence and concise continuation outside normative artifacts;
-follow the artifact rules for system content.
+follow the artifact rules for system content. For process changes read
+[process development](process-development.md): run retained blind scenarios,
+and use its GitHub feedback guidance when process defects are discovered.

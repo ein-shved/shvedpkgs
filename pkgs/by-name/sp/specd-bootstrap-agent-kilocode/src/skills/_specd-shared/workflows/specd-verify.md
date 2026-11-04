@@ -4,7 +4,7 @@ Read [shared notes](../shared.md). Verification compares actual implementation
 with merged requirements and system, including any explicitly requested checks.
 
 1. Read status and load verifying context before hooks/instructions. Confirm
-   proposal items passed their reviews/checks and the complete system was
+   the affected work passed its reviews/checks and the complete system was
    structurally validated. Inspect review-required final contracts before
    progress; route corrections to their original executors.
 2. Enter/resume verifying through the shared hook/transition protocol. Load only
@@ -12,7 +12,10 @@ with merged requirements and system, including any explicitly requested checks.
    content; otherwise use `changes spec-preview <name> <specId> --artifact <id>`.
    Raw deltas alone are insufficient.
 3. Evaluate every affected requirement scenario against the implementation.
-   Run appropriate tests/checks, inspect results and identify coverage limits.
+   Run all applicable project, change-artifact, SpecD and user checks; these
+   sources accumulate obligations. Inspect results and identify coverage limits.
+   Process changes require retained blind scenarios from
+   [process development](../process-development.md), with root links in results.
    Reuse valid item evidence rather than rerunning checks without changed inputs
    or an unresolved concern. Record actual pass/fail evidence outside normative
    artifacts; do not invent successful verification.

@@ -1,95 +1,93 @@
-# Work-item protocol
+# Authorship, involvement and independent review
 
-The main session owns the initial proposal/requirements, external-interface
-and item skeleton in system, involvement checkpoints, integration and lifecycle
-routing. Optional research workers return compact verified context.
+The main agent holds the overall change context and authors initial artifacts.
+It never writes code. For architectural changes it also delegates detailed
+item design. Use actual independent subagent contexts, not role labels within
+one conversation. If unavailable, report the limit and preserve continuation.
 
-## Proposal review and involvement
+## Proposal and involvement
 
-For every new change, prepare the short proposal with its concrete artifact
-allocation and high-level work items. An independent proposal arbiter reviews
-it; the original author resolves findings before the main session presents it
-to the user. Resolve user comments through that author and clear affected agent
-review findings before presenting the corrected proposal again.
+Before writing proposal, the main agent reads only the task and SDD artifacts.
+When they are insufficient, a research subagent gathers the necessary context;
+the main agent does not inspect code, browse or investigate details itself.
+Classify by architectural decisions, not code volume. Follow live proposal
+instructions for format; allocation rows are destinations, not a task plan.
+Only architectural changes have a short system outline serving as the plan.
+Its points describe solution parts. Ordinary tests and usage docs belong with
+the related part's implementation, not standalone outline/system sections.
+A request to write or run tests alone does not request special-check prose in
+system; that description needs an explicit request of its own.
 
-After user proposal review is complete, always ask the actual user to choose:
+After writing proposal, ask the user for one of these levels unless they have
+already selected it MAXIMALLY EXPLICITLY. Do not infer a choice from behaviour,
+approvals, prior collaboration style or a generic instruction to continue.
+Do not prepare downstream work while a required choice is missing.
 
-- **Full involvement:** user review of agent-reviewed requirements, item designs
-  and implemented code.
-- **Delegate code only:** user review of agent-reviewed requirements and item
-  designs; agents implement, review and accept code autonomously.
-- **Full delegation:** agents prepare, review and accept requirements, item
-  designs and code autonomously after this proposal review and answer.
+- **Full involvement:** present successive artifacts and wait for approval;
+  discuss and obtain approval of every design/code stage and transition,
+  including returns from code to design.
+- **Partial involvement:** independently prepare initial artifacts/design:
+  external API and skeleton/plan for architectural change; necessary design
+  edits for Update. Obtain user review, then independently implement and return
+  the implementation. Do not impose per-item user design/code gates afterward.
+- **Full delegation:** independently develop artifacts/code and deliver a result
+  ready for archiving, after all applicable checks and independent reviews.
 
-Wait for the answer before preparing requirements or system. Ask after proposal
-review for each new change even when an earlier preference was supplied. Record
-the reviewed proposal revision, resolved user review and actual question/answer
-in change-local continuation. Resume that answered gate for the same unchanged
-reviewed proposal without asking again; recording the answer and task progress
-marks do not reopen it. Changed proposal meaning receives renewed review and
-its involvement question before dependent requirements/system work proceeds.
+Record the explicit choice and its source in continuation; reuse it on resume.
+The user can switch at any time. Apply the latest explicit choice immediately
+and pause running work as needed; do not finish a now-unapproved stage under an
+old level. Preserve useful work and ask only about an actually unclear choice.
+Scope-specific explicit user instructions continue to control that scope.
 
-In every mode, requirements receive independent agent review and corrections.
-Each item has an independent design arbiter and a separate code arbiter. Every
-result presented for user review has already passed its applicable agent review
-and corrections. Full involvement and code-only delegation wait for user review
-of requirements and item design before implementation; full involvement also
-waits for user review of agent-reviewed code before completing the item.
-Significant inconsistencies reach the user in every mode. Full delegation
-returns a change ready for closure.
+## Independent arbitration
 
-## Authorship
+Before any SDD artifact is submitted for review, an independent nonauthor
+arbiter checks the actual artifact (merged preview for deltas):
 
-Assign an executor to each item, with exact source pointers, scope, applicable
-requirements, relevant system section, dependencies and expected checks. Record
-the item-to-executor session mapping in change-local continuation, alongside
-progress, review outcomes and unresolved questions. Keep/resume these original
-executor sessions through user feedback and closure.
+- Formal artifact requirements, simplicity and readability for the owner.
+- Consistency with other artifacts and the user's requests.
+- Correct content boundaries: reject ordinary tests/docs promoted into outline
+  points or system sections without an explicit special-check-description request.
 
-All later user questions and corrections concerning an item's code or artifact
-return to its original executor. The main session forwards feedback and
-coordinates affected owners; it does not edit that item itself or launch a
-replacement author. If the original session is unavailable, explicitly report
-the limitation and preserve continuation rather than silently substituting.
-The original executor handles minor necessary corrections to earlier items and
-informs their owners; substantive inconsistencies pause for the user.
+The original author resolves findings before submission. Agent review does
+not substitute for required user approval or human-only CLI approvals.
 
-## One item, from design to code
+Use the SAME independent nonauthor arbiters for design and code, in order:
 
-1. **Executor:** read relevant current sources directly. Add the shortest
-   sufficient system description: key role, named participants, module
-   relationships and significant external dependencies. Reuse shared contracts.
-   Omit familiar idioms, rejected alternatives and routine implementation detail.
-2. **Independent design arbiter:** read actual requirements, the system section
-   and relevant sources. Check sufficiency and consistency; ask implementation
-   questions where they expose architectural risk. Decide which answers matter
-   to system and which can be resolved in code. Answers do not automatically
-   become architecture prose. Return concrete findings or approval. The original
-   executor clears findings before required user design review; wait for that
-   user review in full involvement and code-only delegation.
-3. **Same executor:** implement immediately after the applicable design reviews
-   clear. Develop system and code together, carrying architectural decisions
-   between them as work progresses. Revisit proposal/requirements through their
-   original authors when scope or needs evolve, applying the affected reviews
-   and involvement checkpoint. Run appropriate tests and required checks. Minor
-   corrections stay autonomous; significant inconsistencies need the user's
-   decision. Re-review materially changed item design before continuing.
-4. **Separate code arbiter:** use a context distinct from both executor and design
-   arbiter. Inspect the actual diff, affected callers/contracts and check results.
-   Check code/documentation spec links: the durable document and any referenced
-   anchor must exist and remain meaningful after archive. Report concrete bugs,
-   omissions or inconsistencies.
-5. **Original executor:** fix findings and clear code re-review as needed before
-   any required user code review. Mark the proposal item done after required
-   checks, agent review and the selected level's user reviews pass. Preserve
-   concise evidence outside proposal/system; later feedback returns here.
+1. Review new or updated design before implementation for consistency with
+   other subsystems' requirements and design; resolve findings before coding.
+2. Review implementation for preservation of those requirements and design.
+3. Check cleanliness against the language and project's conventions.
 
-Use supported independent-agent tools and actual available capacity. Reviewers
-read sources directly and do not author reviewed code/artifacts. Do not
-impersonate independent review by relabeling one context. If independent contexts
-are unavailable, report the limitation and keep the item resumable.
+Resolve code findings before implementation review. Arbiters read actual
+sources; retain only architecturally material answers in system. Re-review
+materially revised design before continuing code.
 
-After all items, the main session checks integration and completeness, routing
-needed corrections to original executors. Validate the complete system, perform
-authorized final verification and deliver the reviewed result with actual check
-evidence. Archive only when authorized.
+## Execution and original authors
+
+- **Architectural change:** assign a separate executor to each plan point.
+  It develops that point's detailed design, clears arbitration and applicable
+  user approvals, then implements it with checks. Later detailed design waits
+  until needed; do not turn allocation table rows into executor assignments.
+- **Update:** after proposal, the main agent may edit design if it already
+  knows what and where to change. Otherwise a subagent researches and updates
+  design; that same subagent may implement. Delegate code in either case.
+  Necessary artifact edits may be absent; sufficient contracts use no-op deltas.
+
+Give executors exact scope, sources, applicable contracts and expected checks.
+Record artifact/item-to-author sessions and arbiter sessions in continuation.
+Keep original authors available/resumable through user review and corrections.
+User feedback MUST return to the original author: the same code/design
+subagent, or the main agent for its own artifact. The coordinator forwards
+feedback and never silently edits another author's work or replaces them.
+If an author is unavailable, tell the user and preserve continuation.
+
+At EVERY involvement level, stop for a serious inconsistency, explain it and
+ask the user how to proceed. This includes blockers and issues requiring a hack
+or workaround even when progress is technically possible. Do not implement a
+workaround to avoid escalation. Resume only after the user's decision.
+
+Integration aligns affected owners; correct upstream artifacts through their
+original authors. Pass all applicable checks from the project, change artifacts,
+SpecD processes and user; these sources accumulate obligations. Deliver actual
+evidence, preserving process-test artifacts. Archive only on user command.

@@ -2,28 +2,22 @@
 
 ## External Interface
 
-<!-- The designed entity's external contract: public types/functions, REST,
-     UI, CLI, protobuf, IOCTL, or another relevant interface. Link to existing
+<!-- The designed entity's relevant external contract. Link to existing
      requirement headings, e.g. [REQ-001](requirements.md#req-001-title). -->
 
-## {{proposal item name}}
+<!-- Architectural change: add sections matching the proposal outline's
+     names/order; its points also serve as the implementation plan. Develop
+     each point's brief design together with code: role, named participants,
+     relationships and material dependencies. Later points may remain pending
+     until needed.
 
-<!-- Repeat exactly the proposal's item names in order. Initially mark each
-     Pending. Its executor writes a brief design before coding: role, named key
-     participants, relationships to other modules and material external
-     dependencies. Architecture and code develop together by work item;
-     proposal and requirements may be revisited when necessary.
+     Update: add only necessary sections, preserving sufficient contracts;
+     a no-op may suffice. No outline/skeleton is required.
 
-     Describe the current concepts, contracts and mechanisms sufficiently to
-     determine whether an implementation conforms. Reuse shared definitions
-     through links. Distinguish reusable framework contracts from values for
-     their instances; concrete delivered-system values may define its contract.
-     An explicitly requested ADR records significant choice rationale and relevant
-     alternatives; implementation owns routine coding steps and temporary migration
-     mechanics. New ADRs, amendments and superseding records require an explicit
-     user request. -->
-
-Pending.
-
-<!-- Add a brief special-check description on explicit user request, identifying
-     its case, expected evidence and requirement or system owner. -->
+     Use short paragraphs, lists and subsections. Describe current interfaces
+     and mechanisms; link shared definitions rather than repeating them. Omit
+     routine coding steps, familiar idioms and discussion history. Distinctive
+     key properties should be mentioned. Special-check descriptions and ADR
+     creation/amendment require explicit user request. A request to write/run
+     tests alone does not request special-check prose here; ordinary tests and
+     usage docs remain with the related solution part's implementation. -->

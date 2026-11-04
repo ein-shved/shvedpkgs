@@ -1,34 +1,25 @@
-# specd-new — create and review the proposal
+# specd-new — create and prepare the proposal
 
-Read [shared notes](../shared.md) and the [item protocol](../item-work.md).
-The main session owns discovery, creation and the initial proposal gate.
+Read [shared notes](../shared.md) and [item protocol](../item-work.md).
+The main agent owns change creation and initial artifacts, avoiding details.
 
-1. Load `specd project context --format text` and workspace status needed for
-   ownership and code roots. Reuse supplied goals and constraints; investigate
-   missing facts. Read relevant spec summaries/full contracts through the CLI
-   and affected code at its actual root. Optional research workers return
-   compact verified context.
-2. Choose a short change name, one-line purpose and affected owning specs.
-   Existing covered behavior still attaches its spec; uncovered behavior needs
-   an owning spec. Exclude readOnly write targets. Ask only for material scope
-   choices that cannot be inferred from the user's request.
-3. When creation is authorized, run
-   `specd changes create <name> --spec <specId> --description <description> --format toon`
-   (omit `--spec` if scope is not known yet). If it exists, inspect that change's
-   live state and resume it. Resolve overlap warnings as shared notes require.
-   Obtain the real `changePath` from response/status.
-4. Load drafting context before drafting hooks/instructions. Run entry hooks,
-   register known real spec dependencies when needed, and save useful verified
-   discovery, decisions and open questions in exact change-local
-   `.specd-exploration.md`/`.context`. Complete drafting hooks.
-5. Continue directly into `/specd-design` to prepare the short proposal, including
-   concrete artifact allocation and high-level work items. Creation includes
-   this proposal. Obtain independent proposal review and corrections before
-   presenting it for user review; resolve that review through its original author.
-6. After user proposal review finishes, ask the mandatory involvement question
-   from the item protocol and wait. Earlier preferences do not replace this
-   question for the new change. Requirements/system follow the recorded answer.
-   For a resumed unchanged reviewed proposal, reuse its recorded answered gate.
-7. Continue authorized work directly after the answer. A creation-only request
-   ends with the reviewed proposal and recorded choice; broader authorization
-   continues through the chosen involvement checkpoints.
+1. Load project context and fresh status for workspace ownership/code roots.
+   Read relevant SDD summaries/full contracts through the CLI. Use the task and
+   those artifacts for classification. Delegate any missing research context;
+   the main agent does not inspect code or browse during proposal preparation.
+2. Choose a short name, purpose and affected owning specs. Attach existing
+   owning specs even if needs remain unchanged; exclude readOnly write targets.
+   Ask only for material scope choices not resolved by available task context.
+3. Run `specd changes create <name> --spec <specId> --description <description>
+   --format toon` when creation is authorized, or resume the existing change.
+   Obtain the real changePath and handle overlap warnings as shared notes say.
+4. Load actual drafting context before hooks/instructions. Save useful research
+   in change-local .specd-exploration.md and continuation in .context. Keep these
+   outside the artifact graph. Complete actual phase hooks/instructions.
+5. Continue into `/specd-design` to write the short proposal in the live format.
+   After writing it obtain the explicit involvement choice unless already
+   maximally explicitly supplied. Never infer it. Apply its review boundaries,
+   with independent artifact arbitration before user review.
+6. Continue within authorized scope after the choice. Reuse the recorded choice
+   on resume and honor changes at any time. A creation-only request ends with
+   the proposal and involvement handling; broader work continues by that level.

@@ -1,47 +1,35 @@
-# specd-implement — review and implement each item
+# specd-implement — delegate design and code
 
-Read [shared notes](../shared.md) and the [item protocol](../item-work.md).
+Read [shared notes](../shared.md) and [item protocol](../item-work.md).
 
-1. Read live status and load implementing context before hooks or writes.
-   Obtain workspace ownership/codeRoot, inspect blockers/review reasons and
-   follow the actual readiness route. Proposal and requirements must be complete
-   before entering implementation. Handle routine upstream repairs within the
-   authorized work. Assess review/nextAction by the affected artifact;
-   ongoing system work continues in implementing.
-   Confirm the proposal's recorded user review and answered involvement gate;
-   if unfinished, complete that gate before further requirements/system or code.
-2. Read proposal's task-bearing items, merged relevant requirements, the system
-   interface/skeleton and real dependency contracts. Use schema/status paths;
-   load relevant artifacts and continuation. Confirm independent requirements
-   review and required user requirements review have cleared. Run entry hooks
-   and transition to implementing using the shared protocol, or resume the phase.
-3. Work through ordered proposal items, respecting dependencies. For each,
-   assign/retain its executor and record the author mapping in continuation.
-   Apply the item protocol: brief system section → independent design review →
-   same executor's implementation and tests → separate code review → fixes and
-   checkbox completion. System and implementation evolve together throughout
-   the item; revisit proposal/requirements through their original authors when
-   scope or needs evolve. A reviewed item reaches code before later item design.
-   In full involvement and code-only delegation, clear user design review after
-   agent corrections and before coding. Full involvement also clears user code
-   review after the separate code arbiter's findings are resolved. Full
-   delegation proceeds through agent reviews within scope.
-4. Keep original executor sessions available through required user reviews and
-   later feedback. Forward questions/corrections to them; do not
-   edit their work as orchestrator or silently replace authors. Record any
-   unavailable-session limitation explicitly.
-5. After the last reviewed item, check system/code integration and route
-   corrections to their original executors. Validate the now-complete system
-   and any explicitly requested ADR changes, then run implementing
-   post-hooks/instructions. Repair actual drift or missing dependencies within
-   scope; do not claim completion prematurely.
-6. Continue authorized `/specd-verify` work and present completed architecture,
-   code and real check evidence according to the recorded involvement level.
-   When implementation alone was requested, stop at that requested boundary.
-   Default full delivery is ready for closure, with no automatic archive.
+1. Read live status, workspace ownership and relevant continuation/contracts.
+   Load implementing context before hooks/writes. Follow native readiness with
+   validated proposal/requirements and actual state transitions. Resolve
+   upstream drift through original authors; partial later system work is normal.
+2. Confirm the latest explicit involvement choice and required reviews. Do not
+   infer one from an instruction to proceed. Honor scope-specific authorization
+   and switches at any time, pausing work as required by the new checkpoints.
+3. The main agent coordinates and never writes code. For architectural change,
+   assign a separate executor per outline/plan point for its design and code.
+   Only needed design precedes coding that point; later detailed design waits.
+   For Update, delegate necessary code without inventing outline/tasks; the main
+   agent may have updated sufficient design, or a researcher may design and code.
+4. The same independent nonauthor arbiters first review new/updated design
+   against other subsystems' requirements/design, then code preservation of
+   those contracts, then cleanliness for the language/project. Resolve design
+   findings before coding and code findings before implementation review.
+   Full involvement also requires user approval of each stage and transitions
+   in either direction. Partial involvement autonomously implements after
+   initial-design user review; full delegation works independently throughout.
+5. Keep original author/arbiter sessions and ownership in continuation. Return
+   user corrections to that same author, never silently substitute or edit
+   another author's work; report unavailable authors. Re-review changed design.
+   Serious inconsistencies, including required hacks/workarounds, stop for the
+   user's decision even when technically unblocked.
+6. Run applicable checks and inspect integration. Process changes also require
+   [retained blind scenario tests](../process-development.md). Validate complete
+   system/requested ADR changes after reviewed implementation, complete hooks,
+   and continue authorized `/specd-verify`. No checkbox tracking is required.
 
-The executor may make minor necessary fixes in earlier items and notify their
-owners. Significant design inconsistencies pause for the user's decision.
-Commit only when project rules or the user authorize it. Code/docs links must
-resolve to existing durable spec documents and any referenced anchors, remaining
-meaningful after archive. Check them during authoring and code review.
+Return actual implementation/check evidence under the current involvement level.
+Archive only on user command; commit only when authorized by user/project rules.

@@ -13,8 +13,8 @@ state; this entry point can continue into the authorized lifecycle work.
    `$specd-design`, `$specd-implement` or `$specd-verify` according to live state
    and the user's scope. As shared notes explain, expected partial system work
    does not block implementation; unresolved upstream drift must be reviewed.
-4. Continue through authorized phases, observing the mandatory post-proposal
-   involvement gate and recorded level's user checkpoints. Present results for
+4. Continue through authorized phases, observing the explicit post-proposal
+   involvement choice and latest level's user checkpoints. Present results for
    user review after independent agent review and corrections. A request for
    status/orientation only remains read-only. Human-only CLI approvals and
    substantive unresolved decisions still require the user.

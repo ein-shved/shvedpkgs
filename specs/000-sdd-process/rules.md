@@ -3,8 +3,9 @@
 ## Scope and authority
 
 These rules define artifact meaning, content and relationships independently
-of the tools and agents that produce them. Production roles, review routing and
-CLI lifecycle mechanics belong in operational instructions and the schema.
+of the tools and agents that produce them. Artifact formats belong to the
+schema/templates; production roles and review operations belong to skills.
+CLI lifecycle mechanics remain governed by SpecD.
 
 Artifact-model changes are authored in this English document, and the accepted
 content is translated in full into [Russian](rules.ru.md). English is authoritative
@@ -17,29 +18,32 @@ on explicit user request preserve significant decisions. The artifact dependency
 Requirements and system are the durable current truth; conversation and temporary
 notes are supporting context.
 
+## Readability
+
+Artifacts should be simple for an owner familiar with the project's domain.
+Use focused sections, short paragraphs, subsections and lists to expose sequence
+and relationships. Shared concepts have one definition with links from uses.
+Distinctive key project properties should be mentioned. Omit detail that does
+not help the owner understand the current contract; omissions and inaccuracies
+are permitted when they make an artifact easier to grasp.
+
+For example, a dense paragraph combining artifact roles, user involvement and
+review rules is hard to scan. Separate them into named sections; express modes
+as short lists and ordered work as numbered steps. Prefer the shortest sufficient
+account over a complete recital of familiar conventions.
+
 ## Proposal
 
-A proposal explains the problem and affected scope briefly and contains the
-ordered high-level work items for the change. Each item has a stable number, a
-one-word name, one short sentence describing its purpose and a completion
-checkbox, for example:
+A proposal briefly explains change intent, problem, scope and the allocation of
+content among affected artifacts. It distinguishes a localized Update from an
+architectural change. For an architectural change, a short proposed-system
+outline also serves as the implementation plan. An Update needs no outline or
+plan; its other SDD artifacts may remain unchanged.
 
-```markdown
-- [ ] 1. **Interface** — Supported configuration becomes available to callers.
-```
-
-Alongside the work items, the proposal contains a concise allocation of this
-change's actual content among its affected artifacts. Item selection and this
-allocation occur together: needs and scenarios belong in requirements; current
-interfaces, contracts and architecture belong in system. The proposal lists affected spec IDs
-even when their requirements remain unchanged. Item identities remain stable on
-correction. A small change may have one item. Supporting evidence, alternatives and temporary
-continuation belong outside the normative artifact chain.
-
-The proposal describes this change's intent and work. Requirements and system
-own current needs and design. A completed checkbox means the item
-has reached a checked, coherent state; required correctness checks cannot remain
-pending. Completed proposals remain change history.
+Needs and scenarios belong in requirements; current interfaces and architecture
+belong in system. Supporting research and temporary continuation stay outside
+the normative artifact chain. The schema and template define proposal format.
+The proposal is temporary and is deleted after successful change archiving.
 
 ## Requirements
 
@@ -206,11 +210,13 @@ coding steps, file-by-file instructions and temporary migration mechanics belong
 to implementation. System retains the resulting current contract and the material
 mechanisms needed to understand it.
 
-### Work-item architecture and checks
+### Architecture and checks
 
-The affected system content starts with the designed entity's external interface
-and sections matching exactly the proposal's work-item names and order. The external
-interface is relative to that entity: public library types/functions, REST, UI,
+The affected system content starts with the designed entity's external interface.
+For an architectural change, sections follow the proposal's short system outline,
+whose points also serve as the implementation plan. An Update uses only needed
+sections or preserves sufficient existing contracts. The external interface is
+relative to that entity: public library types/functions, REST, UI,
 CLI, protobuf, IOCTL or another relevant boundary. Each item section records its
 role, named key participants, relationships with other modules and material
 external dependencies needed to understand the solution.
@@ -226,6 +232,12 @@ An explicit user request adds a brief special-check description to system. It
 identifies the case and expected evidence and references its requirement or
 system owner. Acceptance conditions remain in requirements. Ordinary tests and
 correctness checks are part of implementation.
+
+Architectural outline points describe solution parts. Ordinary tests and usage
+documentation stay with the related part's implementation, not standalone
+outline points or system sections. Asking to write or run tests alone does not
+request a special-check description in system; that prose needs an explicit
+request of its own.
 
 ## Optional architecture decision records
 
@@ -318,7 +330,7 @@ validation gap with regression evidence. Deployment and operation may supply
 further evidence. Discoveries after completion receive explicit corrective work
 while current contracts are updated as needed.
 
-Requirements and system remain living current contracts. ADRs and completed
-proposals preserve history. Temporary guidance and discovery notes may be
+Requirements and system remain living current contracts. ADRs preserve decision history. Proposals are deleted after successful
+change archiving. Temporary guidance and discovery notes may be
 refreshed or removed when no longer useful; they must not become competing
 sources of current system truth.

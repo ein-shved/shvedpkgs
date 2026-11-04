@@ -64,8 +64,8 @@ testers.runNixOSTest {
     machine.succeed("grep -F 'schema: ./schemas/sdd/schema.yaml' /tmp/specd-bootstrap-new/specd.yaml")
     machine.succeed("cd /tmp/specd-bootstrap-new && specd changes list --format text")
 
-    # The installed schema permits coding before later system design is ready,
-    # and requires finished proposal tasks before final verification.
+    # Architectural work can start before later design is ready. Neither branch
+    # needs proposal checkboxes; Update may reuse unchanged SDD contracts.
     workflow_project = "/tmp/specd-bootstrap-new"
     machine.succeed(f"git -C {workflow_project} config user.name 'SpecD Test'")
     machine.succeed(f"git -C {workflow_project} config user.email 'specd-test@example.invalid'")
@@ -79,7 +79,11 @@ testers.runNixOSTest {
     change_path = changes("create incremental --spec default:demo")["changePath"]
     delta_path = f"{change_path}/deltas/default/demo"
     machine.succeed(f"mkdir -p {delta_path}")
-    proposal = "# Proposal: incremental\n\nImplement readiness reporting.\n\n- [ ] 1. **Readiness** — Return the current readiness state.\n"
+    proposal = (
+      "# Proposal: incremental\n\n**Type:** Architectural change\n\nImplement readiness reporting.\n\n"
+      "| # | Topic | Artifact |\n| - | ----- | -------- |\n| 1 | Readiness | system |\n\n"
+      "1. Describe readiness reporting.\n\n## Proposed system\n\n1. Readiness.\n"
+    )
     write_file(f"{change_path}/proposal.md", proposal)
     write_file(f"{delta_path}/requirements.md.delta.yaml", (
       "- op: added\n  position:\n    parent:\n      type: section\n      matches: '^Requirements$'\n  content: |\n"
@@ -107,12 +111,44 @@ testers.runNixOSTest {
       "Pending.", "The readiness handler returns the current service state."
     ))
     assert changes("validate incremental default:demo --artifact system")["passed"]
-    machine.fail(f"cd {workflow_project} && specd changes transition incremental verifying --format json")
-    write_file(f"{change_path}/proposal.md", proposal.replace("- [ ]", "- [x]"))
     changes("transition incremental verifying")
     status = changes("status incremental")
     assert status["state"] == "verifying"
     assert next(a for a in status["artifacts"] if a["type"] == "proposal")["effectiveStatus"] == "complete"
+
+    for step in ["done", "archivable"]:
+      changes(f"transition incremental {step}")
+    archive_result = changes("archive incremental")["archivePath"]
+    archive_path = machine.succeed(f"cd {workflow_project} && realpath {shlex.quote(archive_result)}").strip()
+    # Agent post-instructions remove only the successful archive's proposal.
+    machine.succeed(f"test -f {shlex.quote(archive_path)}/proposal.md")
+    machine.succeed(f"rm -- {shlex.quote(archive_path)}/proposal.md")
+    machine.fail(f"test -e {shlex.quote(archive_path)}/proposal.md")
+    machine.succeed(f"test -d {shlex.quote(archive_path)}/deltas")
+
+    original_requirements = machine.succeed(f"cat {workflow_project}/specs/demo/requirements.md")
+    original_system = machine.succeed(f"cat {workflow_project}/specs/demo/system.md")
+    update_path = changes("create localized --spec default:demo")["changePath"]
+    machine.succeed(f"mkdir -p {update_path}/deltas/default/demo")
+    write_file(f"{update_path}/proposal.md", (
+      "# Proposal: localized\n\n**Type:** Update\n\nCorrect readiness formatting.\n\n"
+      "| # | Topic | Artifact |\n| - | ----- | -------- |\n| 1 | Output | code |\n\n"
+      "1. Correct readiness output without changing its contract.\n\n"
+      "**Affected specs:** default:demo\n"
+    ))
+    for artifact in ["requirements", "system"]:
+      write_file(f"{update_path}/deltas/default/demo/{artifact}.md.delta.yaml", "- op: no-op\n")
+    changes("transition localized designing")
+    assert changes("validate localized --artifact proposal")["passed"]
+    assert changes("validate localized default:demo --artifact requirements")["passed"]
+    for step in ["ready", "implementing"]:
+      changes(f"transition localized {step}")
+    assert changes("validate localized default:demo --artifact system")["passed"]
+    for step in ["verifying", "done", "archivable"]:
+      changes(f"transition localized {step}")
+    changes("archive localized")
+    assert machine.succeed(f"cat {workflow_project}/specs/demo/requirements.md") == original_requirements
+    assert machine.succeed(f"cat {workflow_project}/specs/demo/system.md") == original_system
 
     machine.succeed("mkdir -p /tmp/specd-bootstrap-existing")
     machine.succeed("cd /tmp/specd-bootstrap-existing && git init")
@@ -154,7 +190,7 @@ testers.runNixOSTest {
       machine.succeed(f"specd-bootstrap --target {project} --agent {agent}")
       machine.succeed(f"diff -r {source} {installed}")
       machine.succeed(f"diff -r {schema_root} {project}/schemas/sdd")
-      for resource in ["shared.md", "item-work.md"]:
+      for resource in ["shared.md", "item-work.md", "process-development.md"]:
         machine.succeed(f"test -s {installed}/_specd-shared/{resource}")
       for skill in workflow_skills:
         machine.succeed(f"test -s {installed}/{skill}/SKILL.md")
