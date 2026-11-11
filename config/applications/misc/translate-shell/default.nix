@@ -1,7 +1,6 @@
-{ ... }:
+{ config, ... }:
 {
   config = {
-    programs.translate-shell.enable = true;
+    programs.translate-shell.enable = config.hardware.isGraphic;
   };
 }
-

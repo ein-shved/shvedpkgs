@@ -2,14 +2,17 @@
   pkgs,
   pkgsUnstable,
   config,
+  lib,
   ...
 }:
 {
-  environment.systemPackages = with pkgs; [
-    (if config.hardware.isDevelopment then vim-configured else vim-configured-nodev)
-  ];
-  environment.graphicPackages = with pkgsUnstable; [
-    neovide
-  ];
-  environment.variables.EDITOR = "vim";
+  config = lib.mkIf (!config.hardware.isVps) {
+    environment.systemPackages = with pkgs; [
+      (if config.hardware.isDevelopment then vim-configured else vim-configured-nodev)
+    ];
+    environment.graphicPackages = with pkgsUnstable; [
+      neovide
+    ];
+    environment.variables.EDITOR = "vim";
+  };
 }

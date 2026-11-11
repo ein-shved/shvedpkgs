@@ -1,7 +1,6 @@
-{ ... }:
+{ config, ... }:
 {
   config = {
-    programs.pass.enable = true;
+    programs.pass.enable = config.hardware.isGraphic;
   };
 }
-

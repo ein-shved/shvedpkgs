@@ -1,5 +1,5 @@
 let
-  flake = builtins.getFlake (toString ../..);
+  flake = builtins.getFlake "git+file://${toString ../..}";
   inputs = flake.inputs;
   lib = import ../../lib inputs;
   mkSystem =
@@ -216,6 +216,151 @@ let
       ++ modules
     );
   repoPlain = repoActive [ ];
+  repoDevelopment = repoActive [ { hardware.isDevelopment = true; } ];
+  repoDevelopmentNoHome = mkRepo [
+    {
+      user.name = "alice";
+      hardware.isDevelopment = true;
+    }
+  ];
+  gitPackages =
+    host: with host.pkgs; [
+      gitFull
+      git-lfs
+      gitaliases
+      git-review
+      git-autofixup
+    ];
+  hasGitPackages =
+    host:
+    builtins.all (
+      pkg: builtins.elem (toString pkg) (map toString host.config.environment.systemPackages)
+    ) (gitPackages host);
+  hasNoGitPackages =
+    host:
+    builtins.all (
+      pkg: !(builtins.elem (toString pkg) (map toString host.config.environment.systemPackages))
+    ) (gitPackages host);
+  developmentTools =
+    host: with host.pkgs; [
+      file
+      inotify-tools
+      jq
+      stdmanpages
+    ];
+  hasDevelopmentTools =
+    expected: host:
+    builtins.all (
+      pkg: builtins.elem (toString pkg) (map toString host.config.environment.systemPackages) == expected
+    ) (developmentTools host);
+  repoHeadlessVps = mkRepo [
+    {
+      user.name = "alice";
+      hardware.isVps = true;
+      services.gerrit.serverId = "test-vps-server";
+    }
+  ];
+  repoGraphicalVps = repoActive [
+    {
+      hardware.isVps = true;
+      hardware.isGraphic = true;
+      services.gerrit.serverId = "test-graphical-vps-server";
+    }
+  ];
+  repoDevelopmentVps = repoHeadlessVps.extendModules {
+    modules = [
+      {
+        hardware.isDevelopment = true;
+        home.enable = true;
+      }
+    ];
+  };
+  repoDevelopmentVpsNoHome = repoHeadlessVps.extendModules {
+    modules = [ { hardware.isDevelopment = true; } ];
+  };
+  repoVpsOverrides = repoHeadlessVps.extendModules {
+    modules = [
+      {
+        services.avahi.enable = lib.mkForce true;
+        services.cifsKeyutils.enable = true;
+        services.power-profiles-daemon.enable = lib.mkForce true;
+        services.udisks2.enable = lib.mkForce true;
+        services.upower.enable = lib.mkForce true;
+        programs.pass.enable = lib.mkForce true;
+        programs.translate-shell.enable = lib.mkForce true;
+        programs.starship.enable = lib.mkForce true;
+        xdg.icons.enable = lib.mkForce true;
+        xdg.sounds.enable = lib.mkForce true;
+        fonts.fontconfig.enable = lib.mkForce true;
+      }
+    ];
+  };
+  vpsFeatures = cfg: [
+    cfg.services.cifsKeyutils.enable
+  ];
+  desktopFeatures = cfg: [
+    cfg.services.avahi.enable
+    cfg.programs.pass.enable
+    cfg.programs.gnupg.agent.enable
+    cfg.programs.translate-shell.enable
+    cfg.programs.starship.enable
+    cfg.services.power-profiles-daemon.enable
+    cfg.services.udisks2.enable
+    cfg.services.upower.enable
+    cfg.xdg.icons.enable
+    cfg.xdg.sounds.enable
+    cfg.fonts.fontconfig.enable
+  ];
+  vpsPackages =
+    host: with host.pkgs; [
+      binutils
+      cifs-utils
+      dhcps
+      minicom
+      sshfs
+      usbutils
+    ];
+  hasVpsPackages =
+    expected: host:
+    builtins.all (
+      pkg: builtins.elem (toString pkg) (map toString host.config.environment.systemPackages) == expected
+    ) (vpsPackages host);
+  desktopPackages =
+    host: with host.pkgs; [
+      dconf
+      fontconfig
+      hicolor-icon-theme
+      sound-theme-freedesktop
+      starship
+      (pass.withExtensions (exts: [ exts.pass-otp ]))
+    ];
+  hasDesktopPackages =
+    expected: host:
+    builtins.all (
+      pkg: builtins.elem (toString pkg) (map toString host.config.environment.systemPackages) == expected
+    ) (desktopPackages host);
+  hasAvahiEffects =
+    expected: host:
+    (host.config.systemd.services ? avahi-daemon) == expected
+    && builtins.elem 5353 host.config.networking.firewall.allowedUDPPorts == expected
+    &&
+      builtins.elem (toString host.pkgs.nssmdns) (map toString host.config.system.nssModules.list)
+      == expected
+    && builtins.any (lib.hasPrefix "mdns") host.config.system.nssDatabases.hosts == expected;
+  hasConfiguredEditor =
+    expected: host:
+    let
+      editor =
+        if host.config.hardware.isDevelopment then
+          host.pkgs.vim-configured
+        else
+          host.pkgs.vim-configured-nodev;
+    in
+    builtins.elem (toString editor) (map toString host.config.environment.systemPackages) == expected;
+  hasNeovideContribution =
+    expected: host:
+    builtins.any (pkg: lib.getName pkg == "neovide") host.config.environment.graphicPackages
+    == expected;
   repoDisabled = mkRepo [
     {
       programs.pass.enable = lib.mkForce false;
@@ -242,7 +387,7 @@ let
   repoUnmanaged = module: (mkRepo [ module ]).config;
   repoBrowser = repoUnmanaged { programs.firefox.enable = true; };
   repoChromium = repoUnmanaged { programs.chromium.enable = lib.mkForce true; };
-  repoPass = repoUnmanaged { programs.pass.enable = true; };
+  repoPass = repoUnmanaged { programs.pass.enable = lib.mkForce true; };
   repoTrust = repoUnmanaged { kl.trust.enable = true; };
   repoGraphicOff = repoUnmanaged {
     hardware.isGraphic = true;
@@ -500,12 +645,118 @@ in
   };
   transmissionMissingLogin =
     (repoUnmanaged { services.transmission.enable = true; }).system.build.toplevel.drvPath;
+  gitChecks = {
+    developmentManaged =
+      hasGitPackages repoDevelopment
+      && hasDevelopmentTools true repoDevelopment
+      && repoDevelopment.config.hm.programs.git.enable
+      && repoDevelopment.config.hm.programs.git.lfs.enable
+      && repoDevelopment.config.hm.programs.git.package == repoDevelopment.pkgs.gitFull;
+    developmentWithoutHome =
+      hasGitPackages repoDevelopmentNoHome
+      && hasDevelopmentTools true repoDevelopmentNoHome
+      && repoDevelopmentNoHome.config.home-manager.users == { }
+      && repoDevelopmentNoHome.config.system.build.toplevel.drvPath != "";
+    nondevelopmentManaged =
+      hasNoGitPackages repoPlain
+      && hasDevelopmentTools false repoPlain
+      && !repoPlain.config.hm.programs.git.enable
+      && !repoPlain.config.hm.programs.git.lfs.enable;
+    nondevelopmentWithoutHome =
+      hasNoGitPackages repoAccount
+      && hasDevelopmentTools false repoAccount
+      && repoAccount.config.home-manager.users == { };
+    developmentVpsManaged =
+      hasGitPackages repoDevelopmentVps
+      && hasDevelopmentTools true repoDevelopmentVps
+      && repoDevelopmentVps.config.hm.programs.git.enable;
+    developmentVpsWithoutHome =
+      hasGitPackages repoDevelopmentVpsNoHome
+      && hasDevelopmentTools true repoDevelopmentVpsNoHome
+      && repoDevelopmentVpsNoHome.config.home-manager.users == { };
+    nixCompletionsPreserved =
+      builtins.all
+        (
+          host:
+          host.config.programs.bash.completion.enable
+          && builtins.elem (toString host.pkgs.nix-bash-completions) (
+            map toString host.config.environment.systemPackages
+          )
+        )
+        [
+          repoPlain
+          repoAccount
+          repoDevelopment
+          repoDevelopmentNoHome
+          repoHeadlessVps
+          repoDevelopmentVps
+          repoDevelopmentVpsNoHome
+        ];
+  };
+  vpsChecks = {
+    headless =
+      builtins.all (enabled: !enabled) (vpsFeatures repoHeadlessVps.config)
+      && builtins.all (enabled: !enabled) (desktopFeatures repoHeadlessVps.config)
+      && hasDesktopPackages false repoHeadlessVps
+      && hasVpsPackages false repoHeadlessVps
+      && repoHeadlessVps.config.services.avahi.nssmdns4
+      && repoHeadlessVps.config.services.avahi.openFirewall
+      && hasAvahiEffects false repoHeadlessVps
+      && !(repoHeadlessVps.config.environment.etc ? "request-key.conf")
+      && repoHeadlessVps.config.networking.networkmanager.enable
+      && repoHeadlessVps.config.services.gerrit.enable
+      && repoHeadlessVps.config.services.openssh.enable;
+    nonVpsPreserved =
+      builtins.all (enabled: enabled) (vpsFeatures repoPlain.config)
+      && hasVpsPackages true repoPlain
+      && builtins.all (enabled: !enabled) (desktopFeatures repoPlain.config)
+      && hasDesktopPackages false repoPlain
+      && hasAvahiEffects false repoPlain;
+    graphicalVpsPreserved =
+      builtins.all (enabled: enabled) (vpsFeatures repoGraphicalVps.config)
+      && hasVpsPackages true repoGraphicalVps
+      && builtins.all (enabled: enabled) (desktopFeatures repoGraphicalVps.config)
+      && hasDesktopPackages true repoGraphicalVps
+      && hasAvahiEffects true repoGraphicalVps
+      && repoGraphicalVps.config.hm.programs.kitty.enable
+      && repoGraphicalVps.config.hm.home.activationPackage.drvPath != "";
+    featureOverrides =
+      builtins.all (enabled: enabled) (vpsFeatures repoVpsOverrides.config)
+      && builtins.all (enabled: enabled) (desktopFeatures repoVpsOverrides.config)
+      && hasAvahiEffects true repoVpsOverrides;
+  };
+  editorChecks = {
+    nonVps =
+      hasConfiguredEditor true repoPlain
+      && hasConfiguredEditor true repoDevelopment
+      && hasNeovideContribution true repoPlain
+      && repoPlain.config.environment.variables.EDITOR == "vim"
+      && repoDevelopment.config.environment.variables.EDITOR == "vim";
+    vps =
+      builtins.all
+        (
+          host:
+          hasConfiguredEditor false host
+          && hasNeovideContribution false host
+          && host.config.environment.variables.EDITOR == "nano"
+          && host.config.programs.nano.enable
+          && builtins.elem (toString host.config.programs.nano.package) (
+            map toString host.config.environment.systemPackages
+          )
+        )
+        [
+          repoHeadlessVps
+          repoGraphicalVps
+          repoDevelopmentVps
+          repoDevelopmentVpsNoHome
+        ];
+  };
   consumerChecks = {
     absent =
       repoAbsent.config.home-manager.users == { }
       && !repoAbsent.options.user.name.isDefined
       && !repoAbsent.config.services.transmission.enable
-      && repoAbsent.config.programs.pass.enable
+      && !repoAbsent.config.programs.pass.enable
       && repoAbsent.config.system.build.toplevel.drvPath != "";
     accountOnly =
       repoAccount.config.home-manager.users == { }
@@ -523,11 +774,9 @@ in
       && repoAbsent.config.environment.systemPackages != [ ]
       && repoAbsent.config.users.users.secondary.home == "/srv/secondary";
     managed =
-      repoPlain.config.hm.programs.git.enable
-      && repoPlain.config.hm.programs.ssh.enable
+      repoPlain.config.hm.programs.ssh.enable
       && repoPlain.config.hm.programs.kitty.enable
       && repoPlain.config.hm.home.file ? ".toprc"
-      && repoPlain.config.hm.home.activation ? installPassGpgKey
       && repoPlain.config.hm.home.activation ? transmission-daemon
       && !(repoPlain.config.hm.home.activation ? mergeMzNssDb);
     graphical =
@@ -611,6 +860,7 @@ in
     accountMetadata =
       (repoActive [
         {
+          hardware.isDevelopment = true;
           user.humanName = "Alice Example";
           user.mail = "alice@example.invalid";
         }

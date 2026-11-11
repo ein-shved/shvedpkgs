@@ -54,6 +54,9 @@ done
 
 if [[ ${1:-} != --account-home-only ]]; then
   check consumerChecks
+  check gitChecks
+  check vpsChecks
+  check editorChecks
   check transmissionChecks
   reject transmissionMissingLogin 'option .user.name.*no value defined'
   for name in printing vpn media cntlm kl domain; do
@@ -114,9 +117,51 @@ fi
 echo '+ nix eval --impure --json --file tests/modules/primary-user-hm-hosts.nix'
 nix eval --impure --json --file tests/modules/primary-user-hm-hosts.nix \
   > "$logdir/hosts.json" 2> "$logdir/hosts.stderr"
-jq -e 'all(.[]; .homeEnabled and .account.isNormalUser
-  and .account.createHome and .hm.useGlobalPkgs
-  and .hm.username == .login and .hm.homeDirectory == .account.home)' \
+jq -e 'all(to_entries[];
+  .value as $host |
+  $host.account.isNormalUser and $host.account.createHome
+  and all($host.gitPackages[]; .installed == $host.features.development)
+  and all($host.developmentPackages[]; .installed == $host.features.development)
+  and all($host.desktopPackages[]; .installed == $host.features.graphical)
+  and all($host.desktopFeatures[]; . == $host.features.graphical)
+  and $host.avahi.nssmdns4 and $host.avahi.openFirewall
+  and $host.avahi.nssModule == $host.features.graphical
+  and $host.avahi.nssHosts == $host.features.graphical
+  and $host.avahi.unit == $host.features.graphical
+  and $host.features.mdnsFirewall == $host.features.graphical
+  and $host.features.networkManager
+  and $host.features.bashCompletion and $host.features.nixBashCompletions
+  and $host.editor.configured == ($host.features.vps | not)
+  and $host.editor.neovideContribution == ($host.features.vps | not)
+  and (if $host.features.vps then $host.editor.command == "nano" and $host.editor.nano
+       else $host.editor.command == "vim" end)
+  and (if $host.features.vps and ($host.features.graphical | not) then
+    all($host.vpsFeatures[]; . == false)
+    and all($host.vpsPackages[]; .installed == false)
+    and ($host.features.mdnsFirewall | not)
+    and ($host.features.requestKey | not)
+  else all($host.vpsFeatures[]; . == true) end)
+  and (if .key == "gerrit" then
+    $host.login == "gerrit-admin"
+    and $host.account.home == "/home/gerrit-admin"
+    and ($host.homeEnabled | not) and $host.hm == null
+    and $host.homeManagerUsers == [] and $host.homeManagerServices == []
+    and $host.features.vps and $host.features.gerrit
+    and $host.features.gerritUnit and $host.features.gerritFirewall
+    and $host.features.openssh
+    and ($host.features.sshPasswordAuthentication | not)
+    and ($host.features.sudoWheelNeedsPassword | not)
+    and ($host.features.transmission | not)
+    and ($host.features.transmissionUnit | not)
+    and ($host.features.transmissionSetupUnit | not)
+    and ($host.account.extraGroups | index("wheel")) != null
+    and ($host.account.extraGroups | index("transmission")) == null
+  else
+    $host.homeEnabled and $host.hm.useGlobalPkgs
+    and $host.hm.username == $host.login
+    and $host.hm.homeDirectory == $host.account.home
+    and $host.hm.git == $host.features.development
+  end))' \
   "$logdir/hosts.json" > /dev/null
 jq 'map_values({login, homeEnabled, hm})' "$logdir/hosts.json"
 

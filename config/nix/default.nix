@@ -6,6 +6,10 @@
   ...
 }:
 {
+  nixpkgs.flake = {
+    setFlakeRegistry = !config.hardware.isVps;
+    setNixPath = !config.hardware.isVps;
+  };
   systemd.services.generate-nix-cache-key = {
     wantedBy = [ "multi-user.target" ];
     serviceConfig.Type = "oneshot";

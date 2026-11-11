@@ -26,7 +26,7 @@ let
 in
 {
   config = {
-    hm.programs.git = {
+    hm.programs.git = lib.mkIf config.hardware.isDevelopment {
       enable = true;
       lfs.enable = true;
       package = pkgs.gitFull;
@@ -68,12 +68,12 @@ in
         }
       ];
     };
-    environment.systemPackages = with pkgs; [
+    environment.developmentPackages = with pkgs; [
+      gitFull
+      git-lfs
       gitaliases
       git-review
       git-autofixup
-    ];
-    environment.developmentPackages = with pkgs; [
       libclang.python # For git format-patch
       clang-tools
     ];

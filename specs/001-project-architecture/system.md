@@ -102,11 +102,9 @@ Mixed modules retain independently selected system packages, certificates and
 services when home integration is off. System policy specifically providing a
 primary-home workflow may follow `home.enable`.
 
-Existing named hosts select `home.enable = true` in their own configurations
-beside hardware role flags; boot and test profiles select it individually.
-`hosts/default.nix` keeps shared primary-user defaults separate from that
-selection. Its inline synthetic `generic` definition selects home integration
-alongside its identity and role flags.
+Named hosts and boot/test profiles select `home.enable` individually.
+`hosts/default.nix` keeps shared primary-user defaults separate.
+The synthetic `generic` host selects home integration alongside its roles.
 
 ## Project Layers
 
@@ -184,8 +182,7 @@ Source: [modules/os-specific/linux/keyutils/default.nix](../../modules/os-specif
 
 Purpose: TBD.
 
-Selection: `services.cifsKeyutils.enable`.
-Repository policy: `true` on every repository host; reusable default: `false`.
+Selection: `services.cifsKeyutils.enable`; reusable default: `false`.
 
 Reference: [REQ-006](requirements.md#req-006-reusable-modules-are-optional-and-disabled-by-default).
 

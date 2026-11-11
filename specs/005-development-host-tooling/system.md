@@ -10,8 +10,16 @@ the command lookup path:
 - `bear`
 - `clang-tools`
 - `docker`
+- `file`
 - `gdb`
 - `gh`
+- `gitFull`
+- `git-lfs`
+- `git-review`
+- `gitaliases`
+- `git-autofixup`
+- `inotify-tools`
+- `jq`
 - `libclang.python`
 - `man`
 - `man-pages`
@@ -21,6 +29,7 @@ the command lookup path:
 - `nixpkgs-review`
 - `shunit2`
 - `specd`
+- `stdmanpages`
 
 Development-host policy selects these packages through
 `environment.developmentPackages`.

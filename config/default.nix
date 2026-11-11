@@ -9,7 +9,7 @@
     hardware.programmers.stm32.enable = lib.mkDefault config.hardware.isDevelopment;
     programs.nixos-cli.enable = lib.mkDefault config.hardware.isDevelopment;
     services = {
-      cifsKeyutils.enable = lib.mkDefault true;
+      cifsKeyutils.enable = lib.mkDefault (!(config.hardware.isVps && !config.hardware.isGraphic));
       logind.settings.Login = lib.mkIf config.hardware.isDevelopment {
         HandlePowerKey = lib.mkDefault "suspend";
         HandleLidSwitch = lib.mkDefault "ignore";

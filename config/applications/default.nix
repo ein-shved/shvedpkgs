@@ -1,33 +1,40 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+let
+  leanVps = config.hardware.isVps && !config.hardware.isGraphic;
+in
 {
   config = {
-    environment.systemPackages = with pkgs; [
-      ascii
-      bash-completion
-      binutils
-      cifs-utils
-      dconf
-      dhcps
-      file
-      inotify-tools
-      jq
-      killall
-      minicom
-      nix-bash-completions
-      nixos-option
-      psmisc
-      screen
-      sshfs
-      stdmanpages
-      tcpdump
-      unzip
-      usbutils
-      wget
-      zstd
-    ];
+    environment.systemPackages =
+      with pkgs;
+      [
+        ascii
+        bash-completion
+        killall
+        nixos-option
+        psmisc
+        screen
+        tcpdump
+        unzip
+        wget
+        zstd
+      ]
+      ++ lib.optionals (!leanVps) [
+        binutils
+        cifs-utils
+        dhcps
+        minicom
+        sshfs
+        usbutils
+      ];
 
     environment.graphicPackages = with pkgs; [
       cdrkit
+      dconf
       eog
       evince
       fontconfig.lib
@@ -59,8 +66,11 @@
       docker
       dowork
       esp-config
+      file
       gdb
       gh
+      inotify-tools
+      jq
       man
       man-pages
       man-pages-posix
@@ -69,6 +79,7 @@
       nixpkgs-review
       shunit2
       specd
+      stdmanpages
     ];
   };
 }

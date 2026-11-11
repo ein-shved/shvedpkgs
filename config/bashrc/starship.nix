@@ -1,7 +1,7 @@
-{ ... }:
+{ config, ... }:
 {
   config.programs.starship = {
-    enable = true;
+    enable = config.hardware.isGraphic;
     settings = {
       shlvl = {
         disabled = false;

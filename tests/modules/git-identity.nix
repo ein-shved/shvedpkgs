@@ -8,10 +8,12 @@ testers.runNixOSTest {
       humanName = "Alice Example";
     };
     home.enable = true;
+    hardware.isDevelopment = true;
     kl.domain.enable = true;
     assertions = [
       {
-        assertion = config.user.domainName == "example"
+        assertion =
+          config.user.domainName == "example"
           && config.kl.domain.hostname == "example"
           && config.kl.domain.host == "example.avp.ru";
         message = "KL domain identity uses the primary user's surname";

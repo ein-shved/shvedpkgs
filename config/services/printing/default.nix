@@ -3,7 +3,7 @@
   config.services = {
     printing.enable = config.hardware.isGraphic;
     avahi = {
-      enable = true;
+      enable = config.hardware.isGraphic;
       nssmdns4 = true;
       openFirewall = true;
     };

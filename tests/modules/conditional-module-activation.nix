@@ -1,5 +1,5 @@
 let
-  flake = builtins.getFlake (toString ../..);
+  flake = builtins.getFlake "git+file://${toString ../..}";
   inputs = flake.inputs;
   lib = import ../../lib inputs;
   mkSystem =
@@ -583,11 +583,11 @@ in
           f = s.features;
         in
         f.wakeOnPowerButtonOnly == f.development
-        && f.cifsKeyutils
+        && f.cifsKeyutils == (!(f.vps && !f.graphical))
         && f.avr == f.development
         && f.stm32 == f.development
         && f.wakeUnit == f.development
-        && f.requestKey
+        && f.requestKey == f.cifsKeyutils
         && f.programmerRules.avr == f.development
         && f.programmerRules.stm32 == f.development
         && (

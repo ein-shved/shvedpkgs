@@ -8,7 +8,7 @@
   user.humanName = "The Gerrit";
   networking.hostName = "gerrit";
   programs.nixos-cli.remoteAddress = "gerrit.shved.org";
-  home.enable = true;
+  home.enable = false;
   hardware.isVps = true;
 
   boot.loader.grub.enable = true;

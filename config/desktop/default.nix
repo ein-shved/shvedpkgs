@@ -11,12 +11,16 @@ in
   config = {
     services.gnome.gnome-keyring.enable = lib.mkDefault config.hardware.isGraphic;
     services.gnome.gcr-ssh-agent.enable = false;
-    fonts = mkGraphic {
-      packages = with pkgs; [
+    fonts.packages = mkGraphic (
+      with pkgs;
+      [
         jetbrains-mono
         nerd-fonts.jetbrains-mono
-      ];
-    };
+      ]
+    );
+    fonts.fontconfig.enable = config.hardware.isGraphic;
+    xdg.icons.enable = config.hardware.isGraphic;
+    xdg.sounds.enable = config.hardware.isGraphic;
     time.timeZone = "Europe/Moscow";
     i18n.extraLocaleSettings = {
       LC_MESSAGES = "en_US.UTF-8";
