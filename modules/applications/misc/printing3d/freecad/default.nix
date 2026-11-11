@@ -8,6 +8,7 @@ let
   inherit (pkgs) fetchFromGitHub freecad-wayland;
   inherit (lib) mkIf;
   cfg = config.environment;
+  mcpEnabled = config.services.codex.enable && cfg.printing3d.enable;
 
   open-theme = fetchFromGitHub {
     owner = "obelisk79";
@@ -19,7 +20,8 @@ let
   freecad-customized = freecad-wayland.customize {
     modules = [
       open-theme
-    ];
+    ]
+    ++ lib.optional mcpEnabled pkgs.freecad-mcp.addon;
     pythons = [
       (
         ps: with ps; [
@@ -42,6 +44,6 @@ let
 in
 {
   config.environment = mkIf cfg.printing3d.enable {
-    systemPackages = [ freecad-customized ];
+    systemPackages = [ freecad-customized ] ++ lib.optional mcpEnabled pkgs.freecad-mcp;
   };
 }

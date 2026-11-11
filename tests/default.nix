@@ -9,6 +9,7 @@ let
     ./modules/nixos-cli-module.nix
     ./modules/codex-service.nix
     ./modules/codex-config.nix
+    ./modules/freecad-mcp
     ./modules/cifs-keyutils.nix
     ./modules/avr.nix
     ./modules/stm32.nix

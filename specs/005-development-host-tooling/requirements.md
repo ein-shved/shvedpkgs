@@ -156,3 +156,27 @@ Remote work must use the primary user's Codex environment.
 - AND the primary user has existing Codex configuration, authentication and persistent state
 - WHEN the primary user works through Codex remote control
 - THEN remote work uses the same Codex configuration, authentication and persistent state as their local Codex work
+
+## REQ-004: Model in FreeCAD through Codex
+
+On a host configured with both Codex and FreeCAD, the primary user must
+receive an installed and configured MCP connection for creating,
+inspecting and modifying 3D models in their running FreeCAD session.
+
+### Scenario: Both applications provide the connection automatically
+
+- WHEN the host configuration providing both Codex and FreeCAD is activated
+- THEN the MCP connection components and Codex connection settings are available
+- AND the primary user does not need to install the bridge or edit Codex configuration manually
+
+### Scenario: Model after opening FreeCAD
+
+- WHEN the primary user opens FreeCAD and asks Codex to create, inspect or modify a 3D model
+- THEN Codex can perform the requested modeling operation in that session through MCP
+- AND the primary user does not need to start the bridge manually
+
+### Scenario: A host lacks one or both applications
+
+- WHEN a host is configured with only Codex, only FreeCAD, or neither application
+- THEN the joint MCP connection is not selected automatically
+- AND that integration does not cause missing applications to be installed

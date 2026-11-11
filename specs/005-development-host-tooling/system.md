@@ -79,6 +79,24 @@ below `$CODEX_HOME/config.toml`; profiles, trusted project configuration
 and CLI overrides retain their upstream precedence. NixOS updates replace
 system defaults while preserving user configuration, credentials and state.
 
+## FreeCAD connection
+
+Codex connects to FreeCAD through `mcp_servers.freecad` in shared
+`services.codex.settings`, for
+[REQ-004](requirements.md#req-004-model-in-freecad-through-codex).
+
+- **Selection:** both `services.codex.enable` and
+  `environment.printing3d.enable` must be true.
+- **Launch:** Codex starts `${pkgs.freecad-mcp}/bin/freecad-mcp` over
+  stdio, with `args = ["--host", "127.0.0.1"]`.
+- **Connection:** the process reaches the
+  [FreeCAD addon](../006-graphical-hosts/system.md#freecad-mcp-bridge)
+  through local XML-RPC on port 9875.
+- **Overrides:** settings are overrideable system defaults; users can
+  disable the connection with `mcp_servers.freecad.enabled = false`.
+- **Session:** tools remain discoverable with FreeCAD closed; opening
+  FreeCAD starts its bridge automatically for modeling.
+
 ## SpecD CLI Package
 
 The repository package set provides:

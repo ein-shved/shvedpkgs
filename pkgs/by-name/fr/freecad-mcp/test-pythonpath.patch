@@ -1,0 +1,8 @@
+--- a/tests/test_tool_errors.py
++++ b/tests/test_tool_errors.py
+@@ -3 +3,2 @@
+ import asyncio
++import os
+@@ -162 +163 @@
+-        params = StdioServerParameters(command=sys.executable, args=[str(Path(__file__))])
++        params = StdioServerParameters(command=sys.executable, args=[str(Path(__file__))], env={"PYTHONPATH": os.environ["PYTHONPATH"]})

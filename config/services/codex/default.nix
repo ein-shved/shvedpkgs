@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   pkgsUnstable,
   ...
 }:
@@ -21,6 +22,15 @@
         ];
       };
     }
+    (lib.mkIf (config.services.codex.enable && config.environment.printing3d.enable) {
+      settings.mcp_servers.freecad = {
+        command = lib.mkDefault (lib.getExe pkgs.freecad-mcp);
+        args = lib.mkDefault [
+          "--host"
+          "127.0.0.1"
+        ];
+      };
+    })
     (lib.mkIf config.hardware.isDevelopment {
       enable = true;
       remoteControl.enable = true;

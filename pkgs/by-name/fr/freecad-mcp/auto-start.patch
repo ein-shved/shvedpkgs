@@ -1,0 +1,10 @@
+--- a/addon/FreeCADMCP/InitGui.py
++++ b/addon/FreeCADMCP/InitGui.py
+@@ -62 +62,7 @@
++from rpc_server.settings import load_settings, save_settings
++
++_mcp_settings = load_settings()
++_mcp_settings["auto_start_rpc"] = True
++save_settings(_mcp_settings)
++
+ QtCore.QTimer.singleShot(0, _auto_start_mcp)
