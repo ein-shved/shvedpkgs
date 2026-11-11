@@ -10,6 +10,7 @@ let
   absolutePath = lib.types.strMatching "/.*";
   account = config.users.users.${cfg.user};
   listener = if cfg.socketPath == null then "unix://" else "unix://${cfg.socketPath}";
+  toml = pkgs.formats.toml { };
 in
 {
   options.services.codex = {
@@ -36,6 +37,11 @@ in
       defaultText = lib.literalExpression ''"''${config.services.codex.home}/.codex"'';
       description = "Directory containing user-owned Codex state and authentication.";
     };
+    settings = lib.mkOption {
+      type = toml.type;
+      default = { };
+      description = "Shared Codex defaults written to /etc/codex/config.toml. User configuration takes precedence. Values are stored in the Nix store and must not contain secrets.";
+    };
     socketPath = lib.mkOption {
       type = lib.types.nullOr absolutePath;
       default = null;
@@ -46,6 +52,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
+    environment.etc."codex/config.toml".source = toml.generate "codex-config.toml" cfg.settings;
     systemd.services.codex = {
       description = "Shared Codex app-server";
       wantedBy = [ "multi-user.target" ];

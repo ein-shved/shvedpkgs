@@ -50,6 +50,7 @@ The repository provides the NixOS service `services.codex` for
 | `user` | Required existing account. |
 | `home` | Selected account's home. |
 | `codexHome` | `${home}/.codex`; Codex configuration, authentication and state. |
+| `settings` | `{}`; TOML-compatible attribute set of shared system defaults. |
 | `socketPath` | `null`: standard Unix socket; otherwise an absolute custom socket path. |
 | `remoteControl.enable` | `false`; enables outbound remote control. |
 
@@ -63,6 +64,20 @@ Systemd runs the selected package approximately as
 It starts at boot as `user`, with `home` as working directory and `HOME`,
 and `codexHome` as `CODEX_HOME`. It prepares the state directory, stays
 running after logout and restarts on failure.
+
+The enabled module renders `settings` to `/etc/codex/config.toml`.
+Repository policy supplies enabled Codex installations with
+`model_reasoning_effort = "xhigh"` and `tui.vim_mode_default = true`,
+with this ordered `tui.status_line`:
+
+```toml
+tui.status_line = ["thread-name", "project-name", "git-branch", "five-hour-limit", "weekly-limit", "used-tokens", "model-with-reasoning"]
+```
+
+Local CLI and app-server use Codex's native system configuration layer,
+below `$CODEX_HOME/config.toml`; profiles, trusted project configuration
+and CLI overrides retain their upstream precedence. NixOS updates replace
+system defaults while preserving user configuration, credentials and state.
 
 ## SpecD CLI Package
 

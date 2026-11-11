@@ -8,6 +8,7 @@ let
     ./modules/project-arguments.nix
     ./modules/nixos-cli-module.nix
     ./modules/codex-service.nix
+    ./modules/codex-config.nix
     ./modules/cifs-keyutils.nix
     ./modules/avr.nix
     ./modules/stm32.nix
