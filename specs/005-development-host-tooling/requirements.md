@@ -157,26 +157,34 @@ Remote work must use the primary user's Codex environment.
 - WHEN the primary user works through Codex remote control
 - THEN remote work uses the same Codex configuration, authentication and persistent state as their local Codex work
 
-## REQ-004: Model in FreeCAD through Codex
+## REQ-004: Use 3D modeling and printing tools through Codex
 
-On a host configured with both Codex and FreeCAD, the primary user must
-receive an installed and configured MCP connection for creating,
-inspecting and modifying 3D models in their running FreeCAD session.
+On hosts with Codex and supported 3D modeling or printing tools, the primary
+user must receive installed and configured MCP connections for those tools.
+Supported tools are FreeCAD for modeling and PrusaSlicer for slicing.
 
-### Scenario: Both applications provide the connection automatically
+### Scenario: Connections are available automatically
 
-- WHEN the host configuration providing both Codex and FreeCAD is activated
-- THEN the MCP connection components and Codex connection settings are available
-- AND the primary user does not need to install the bridge or edit Codex configuration manually
+- WHEN a host configuration providing Codex and a supported tool is activated
+- THEN the tool's MCP components and Codex connection settings are available
+- AND the primary user need not install them or edit settings manually
 
 ### Scenario: Model after opening FreeCAD
 
-- WHEN the primary user opens FreeCAD and asks Codex to create, inspect or modify a 3D model
-- THEN Codex can perform the requested modeling operation in that session through MCP
+- WHEN the primary user opens FreeCAD and asks Codex to create, inspect or
+  modify a 3D model
+- THEN Codex can perform the modeling operation in that session through MCP
 - AND the primary user does not need to start the bridge manually
 
-### Scenario: A host lacks one or both applications
+### Scenario: Slice a model with PrusaSlicer
 
-- WHEN a host is configured with only Codex, only FreeCAD, or neither application
-- THEN the joint MCP connection is not selected automatically
-- AND that integration does not cause missing applications to be installed
+- GIVEN a local STL model and a compatible PrusaSlicer configuration profile
+- WHEN the primary user asks Codex to slice it through PrusaSlicer
+- THEN Codex can produce a local G-code file through MCP
+- AND neither an open slicer window nor a printer connection is required
+
+### Scenario: A host lacks an application
+
+- WHEN a host lacks Codex or a particular supported tool
+- THEN that tool's MCP connection is not selected automatically
+- AND the integration does not cause missing applications to be installed

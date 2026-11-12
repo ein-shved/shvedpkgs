@@ -20,7 +20,7 @@ let
           services.codex = {
             enable = codex;
             user = "designer";
-            package = pkgsUnstable.codex;
+            package = pkgs.codex;
           };
         }
         extra
@@ -82,7 +82,7 @@ testers.runNixOSTest {
       services.codex = {
         enable = true;
         user = "designer";
-        package = pkgsUnstable.codex;
+        package = pkgs.codex;
       };
       services.gitwatch.modeling3d.enable = lib.mkForce false;
       environment.systemPackages = [

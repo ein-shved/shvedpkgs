@@ -62,7 +62,7 @@ disabling built-in website password saving.
 `environment.printing3d.enable` installs the customized FreeCAD GUI.
 [Joint selection](../005-development-host-tooling/system.md#freecad-connection)
 adds its MCP bridge for
-[REQ-004](../005-development-host-tooling/requirements.md#req-004-model-in-freecad-through-codex).
+[REQ-004](../005-development-host-tooling/requirements.md#req-004-use-3d-modeling-and-printing-tools-through-codex).
 
 ### Delivery
 

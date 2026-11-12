@@ -24,7 +24,8 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       pkgs.prusa-slicer
-    ];
+    ]
+    ++ lib.optional config.services.codex.enable pkgs.mcp-3d-printer-server;
     hm.home.activation.prusaConfig = lib.mkIf (cfg.prusaConfig != null) (
       lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         configDir=$HOME/.config/PrusaSlicer
