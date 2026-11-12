@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  pkgsUnstable,
   ...
 }:
 {
@@ -35,7 +34,7 @@
       enable = true;
       remoteControl.enable = true;
       user = config.user.name;
-      package = pkgsUnstable.codex;
+      package = pkgs.codex;
     })
   ];
 }
