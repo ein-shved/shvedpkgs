@@ -1,7 +1,6 @@
 {
   testers,
   pkgs,
-  pkgsUnstable,
   lib,
 }:
 let
@@ -11,7 +10,7 @@ let
     import pexpect
 
     child = pexpect.spawn(
-        "${lib.getExe pkgsUnstable.codex}",
+        "${lib.getExe pkgs.codex}",
         ["--remote", "unix://", "--no-alt-screen"],
         env=dict(os.environ, TERM="xterm-256color"),
         encoding="utf-8", timeout=60,
@@ -65,7 +64,7 @@ testers.runNixOSTest {
         machine.succeed("runuser -u developer -- touch /home/developer/.codex/writable")
         machine.succeed("test ! -e /home/developer/.codex/auth.json")
         pid = server_pid()
-        assert machine.succeed(f"readlink /proc/{pid}/exe").strip() == "${lib.getExe pkgsUnstable.codex}"
+        assert machine.succeed(f"readlink /proc/{pid}/exe").strip() == "${lib.getExe pkgs.codex}"
         assert "Codex could not find bubblewrap on PATH" not in machine.succeed(
             "journalctl -u codex.service --no-pager"
         )
@@ -88,7 +87,7 @@ testers.runNixOSTest {
         )
         machine.send_chars("codex --version > ~/codex-version\n")
         machine.wait_for_file("/home/developer/codex-version")
-        assert machine.succeed("cat /home/developer/codex-version").strip() == "codex-cli ${pkgsUnstable.codex.version}"
+        assert machine.succeed("cat /home/developer/codex-version").strip() == "codex-cli ${pkgs.codex.version}"
         machine.send_chars("exit\n")
         machine.wait_until_fails("loginctl list-sessions --no-legend | grep -w developer")
         machine.sleep(15)

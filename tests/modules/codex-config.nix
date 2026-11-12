@@ -1,7 +1,6 @@
 {
   testers,
   pkgs,
-  pkgsUnstable,
   lib,
 }:
 let
@@ -19,7 +18,7 @@ let
         import time
         from websockets.sync.client import unix_connect
 
-        CODEX = "${lib.getExe pkgsUnstable.codex}"
+        CODEX = "${lib.getExe pkgs.codex}"
 
         child = None
         remote = None
@@ -128,7 +127,7 @@ testers.runNixOSTest {
     services.codex = {
       enable = true;
       user = "developer";
-      package = pkgsUnstable.codex;
+      package = pkgs.codex;
     };
     specialisation.updated.configuration.services.codex.settings = {
       model_reasoning_effort = lib.mkForce "high";

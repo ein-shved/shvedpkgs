@@ -72,7 +72,7 @@ in
 {
   programs.niri = {
     enable = config.hardware.isGraphic;
-    package = pkgs.niri-lightdm-wa;
+    package = pkgs.niri;
   };
   hm.programs.niri.settings = {
     inherit outputs;
