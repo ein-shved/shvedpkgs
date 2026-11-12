@@ -29,6 +29,14 @@
           "127.0.0.1"
         ];
       };
+      settings.mcp_servers.prusaslicer = {
+        command = lib.mkDefault (lib.getExe pkgs.mcp-3d-printer-server);
+        env = {
+          MCP_TRANSPORT = lib.mkDefault "stdio";
+          SLICER_TYPE = lib.mkDefault "prusaslicer";
+          SLICER_PATH = lib.mkDefault (lib.getExe' pkgs.prusa-slicer "prusa-slicer");
+        };
+      };
     })
     (lib.mkIf config.hardware.isDevelopment {
       enable = true;

@@ -58,23 +58,24 @@ The repository provides the NixOS service `services.codex` for
 | `package` | `pkgs.codex` |
 | `user` | Required existing account. |
 | `home` | Selected account's home. |
-| `codexHome` | `${home}/.codex`; Codex configuration, authentication and state. |
-| `settings` | `{}`; TOML-compatible attribute set of shared system defaults. |
-| `socketPath` | `null`: standard Unix socket; otherwise an absolute custom socket path. |
+| `codexHome` | `${home}/.codex`; configuration, authentication and state. |
+| `settings` | `{}`; TOML-compatible shared system defaults. |
+| `socketPath` | `null`: standard Unix socket; or an absolute custom path. |
 | `remoteControl.enable` | `false`; enables outbound remote control. |
 
 For `hardware.isDevelopment`, development policy enables the service and
-remote control for the primary user with `pkgsUnstable.codex`. When enabled,
-the module installs the selected package system-wide
+remote control for the primary user with the repository's `pkgs.codex`.
+When enabled, the module installs the selected package system-wide
 ([REQ-001](requirements.md#req-001-development-hosts-expose-required-workflow-tools)).
 
 Systemd runs the selected package approximately as
 `codex app-server [--remote-control] --listen unix://[<socketPath>]`.
 It starts at boot as `user`, with `home` as working directory and `HOME`,
-and `codexHome` as `CODEX_HOME`. It prepares the state directory, stays
-running after logout and restarts on failure.
+and `codexHome` as `CODEX_HOME`.
 
-The enabled module renders `settings` to `/etc/codex/config.toml`.
+It prepares the state directory, stays running after logout and restarts
+on failure. The enabled module renders `settings` to `/etc/codex/config.toml`.
+
 Repository policy supplies enabled Codex installations with
 `model_reasoning_effort = "xhigh"` and `tui.vim_mode_default = true`,
 with this ordered `tui.status_line`:
@@ -85,14 +86,16 @@ tui.status_line = ["thread-name", "project-name", "git-branch", "five-hour-limit
 
 Local CLI and app-server use Codex's native system configuration layer,
 below `$CODEX_HOME/config.toml`; profiles, trusted project configuration
-and CLI overrides retain their upstream precedence. NixOS updates replace
-system defaults while preserving user configuration, credentials and state.
+and CLI overrides retain their upstream precedence.
+
+NixOS updates replace system defaults while preserving user configuration,
+credentials and state.
 
 ## FreeCAD connection
 
 Codex connects to FreeCAD through `mcp_servers.freecad` in shared
 `services.codex.settings`, for
-[REQ-004](requirements.md#req-004-model-in-freecad-through-codex).
+[REQ-004](requirements.md#req-004-use-3d-modeling-and-printing-tools-through-codex).
 
 - **Selection:** both `services.codex.enable` and
   `environment.printing3d.enable` must be true.
@@ -274,3 +277,20 @@ Traceability:
 
 - Satisfies
   [`REQ-002: Bootstrap projects with the repository SDD setup`](requirements.md#req-002-bootstrap-projects-with-the-repository-sdd-setup).
+
+## PrusaSlicer connection
+
+Codex starts `pkgs.mcp-3d-printer-server` through
+`mcp_servers.prusaslicer` in shared `services.codex.settings`, for
+[REQ-004](requirements.md#req-004-use-3d-modeling-and-printing-tools-through-codex).
+
+- **Selection:** both `services.codex.enable` and
+  `environment.printing3d.enable` must be true.
+- **Launch:** the pinned upstream server runs over stdio with
+  `MCP_TRANSPORT=stdio`, `SLICER_TYPE=prusaslicer` and
+  `SLICER_PATH` pointing to the packaged PrusaSlicer executable.
+- **Slicing:** `slice_stl` accepts a local STL and an exported PrusaSlicer
+  INI via `slicer_profile`, retaining the generated local G-code file.
+  Neither the GUI nor printer credentials are needed for slicing.
+- **Overrides:** connection settings are overrideable system defaults;
+  users can set `mcp_servers.prusaslicer.enabled = false` locally.

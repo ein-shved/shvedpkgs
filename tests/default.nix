@@ -10,6 +10,7 @@ let
     ./modules/codex-service.nix
     ./modules/codex-config.nix
     ./modules/freecad-mcp
+    ./modules/prusaslicer-mcp
     ./modules/cifs-keyutils.nix
     ./modules/avr.nix
     ./modules/stm32.nix
