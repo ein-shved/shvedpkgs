@@ -42,6 +42,11 @@ in
       default = { };
       description = "Shared Codex defaults written to /etc/codex/config.toml. User configuration takes precedence. Values are stored in the Nix store and must not contain secrets.";
     };
+    requirements = lib.mkOption {
+      type = toml.type;
+      default = { };
+      description = "Mandatory Codex requirements written to /etc/codex/requirements.toml. Values are stored in the Nix store and must not contain secrets.";
+    };
     socketPath = lib.mkOption {
       type = lib.types.nullOr absolutePath;
       default = null;
@@ -53,8 +58,10 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     environment.etc."codex/config.toml".source = toml.generate "codex-config.toml" cfg.settings;
+    environment.etc."codex/requirements.toml".source = toml.generate "codex-requirements.toml" cfg.requirements;
     systemd.services.codex = {
       description = "Shared Codex app-server";
+      restartTriggers = [ config.environment.etc."codex/requirements.toml".source ];
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
