@@ -29,9 +29,9 @@
         "~/.aws"
         "~/.config/sops/age"
         "/etc/ssh"
-        "/run/agenix"
         "/run/agenix.d"
-        "/var/lib/acme"
+        # TODO: remove after fix https://github.com/openai/codex/issues/40433
+        # "/var/lib/acme"
       ];
       settings = {
         model_reasoning_effort = "xhigh";
