@@ -28,6 +28,14 @@ is selected by name without repeating connection and update settings.
 - AND the selected host is updated after the correct password is entered
 - AND the user does not need to supply additional connection or update flags
 
+### Scenario: Current local repository inputs
+
+- GIVEN the system flake refers to a local repository
+- AND its lock file is absent or records an older repository revision
+- WHEN the user updates the system
+- THEN the update uses the revision selected by the repository source reference
+- AND no newly generated system-flake lock is persisted
+
 ## REQ-002: Compatibility with nixos-rebuild arguments
 
 The `nixos` utility must support all `nixos-rebuild` arguments, preserving
@@ -35,17 +43,23 @@ their meaning, and allow them to be used together with its own arguments.
 Exceptions for `switch` and `test` on hosts that require a reboot are defined
 in [REQ-003](#req-003-updating-hosts-that-require-a-reboot).
 
+The fixed flake-input policy in
+[REQ-001](#req-001-updating-the-local-or-a-named-remote-host)
+is an additional exception.
+
 ### Scenario: Preserving the meaning of nixos-rebuild arguments
 
 - GIVEN the user has selected a valid `nixos-rebuild` operation and arguments
 - WHEN the user passes them through `nixos`
-- THEN the operation and arguments retain their `nixos-rebuild` meaning, subject to the exceptions in REQ-003
+- THEN the operation and arguments retain their `nixos-rebuild` meaning,
+  subject to the exceptions above
 
 ### Scenario: Combining arguments
 
 - WHEN the user invokes `nixos` with the utility's own arguments and `nixos-rebuild` arguments
 - THEN the utility's own arguments apply as intended
-- AND the `nixos-rebuild` arguments retain their meaning, subject to the exceptions in REQ-003
+- AND the `nixos-rebuild` arguments retain their meaning,
+  subject to the exceptions above
 
 ## REQ-003: Updating hosts that require a reboot
 

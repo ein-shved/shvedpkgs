@@ -163,8 +163,9 @@ testers.runNixOSTest {
         assert path.startswith("/nix/store/") and path.endswith("nixos-cli-catalog.json"), path
         return json.loads(machine.succeed("cat " + shlex.quote(path)))
 
+    defaults = ["--recreate-lock-file", "--no-write-lock-file"]
     local = invoke(["switch"])
-    assert local["argv"] == ["switch"], local
+    assert local["argv"] == defaults + ["switch"], local
     catalog = read_catalog(local)
     expected = {
         "alpha": {"target_host": "new.example", "user": "new-user", "use_sudo": True, "ask_sudo_password": True},
@@ -190,7 +191,7 @@ testers.runNixOSTest {
         address = settings["target_host"]
         if "user" in settings:
             address = settings["user"] + "@" + address
-        argv = ["--target-host", address]
+        argv = defaults + ["--target-host", address]
         if settings["use_sudo"]:
             argv += ["--ask-sudo-password" if settings["ask_sudo_password"] else "--sudo"]
         argv += ["switch"]
@@ -198,7 +199,7 @@ testers.runNixOSTest {
         assert result["argv"] == argv, (name, result)
         assert result["catalog"] == local["catalog"]
 
-    assert invoke(["module-runtime", "switch"])["argv"] == ["switch"]
+    assert invoke(["module-runtime", "switch"])["argv"] == defaults + ["switch"]
     help_text = machine.succeed("nixos --help")
     assert "module-runtime" in help_text and "added-host" in help_text
     assert read_catalog(local) == catalog and "module-runtime" not in catalog
@@ -206,16 +207,16 @@ testers.runNixOSTest {
     empty_binary = "${command empty}/bin/nixos"
     empty_result = invoke(["switch"], empty_binary)
     assert read_catalog(empty_result) == {}
-    assert invoke(["module-runtime", "switch"], empty_binary)["argv"] == ["switch"]
+    assert invoke(["module-runtime", "switch"], empty_binary)["argv"] == defaults + ["switch"]
     assert "module-runtime" in machine.succeed(empty_binary + " --help")
     assert read_catalog(empty_result) == {}
 
     collision_binary = "${command collision}/bin/nixos"
     collision_result = invoke(["module-runtime", "switch"], collision_binary)
-    assert collision_result["argv"] == ["--target-host", "remote-user@runtime.example", "switch"]
+    assert collision_result["argv"] == defaults + ["--target-host", "remote-user@runtime.example", "switch"]
     assert read_catalog(collision_result)["module-runtime"] == {
         "target_host": "runtime.example", "user": "remote-user", "use_sudo": False, "ask_sudo_password": True,
     }
-    assert invoke(["switch"], collision_binary)["argv"] == ["switch"]
+    assert invoke(["switch"], collision_binary)["argv"] == defaults + ["switch"]
   '';
 }

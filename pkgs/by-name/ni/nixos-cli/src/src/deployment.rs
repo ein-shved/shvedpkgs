@@ -33,6 +33,7 @@ fn is_arguments_contains(arguments: &[OsString], names: &[&str]) -> bool {
 /// launch error. The caller retains its environment, directory and standard IO.
 pub fn exec(host: Option<&HostConfig>, args: &[OsString]) -> io::Error {
     let mut command = Command::new("nixos-rebuild");
+    command.args(["--recreate-lock-file", "--no-write-lock-file"]);
     let is_contains = |names: &[&str]| is_arguments_contains(args, names);
 
     // An explicit target replaces both the catalog address and its sudo policy.

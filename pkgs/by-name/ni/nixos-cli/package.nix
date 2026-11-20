@@ -5,6 +5,8 @@
   makeWrapper,
   installShellFiles,
   nixos-rebuild,
+  nix,
+  gitMinimal,
   catalog ? null,
 }:
 
@@ -36,7 +38,11 @@ rustPlatform.buildRustPackage {
       --replace-fail '@upstream@' '${nixos-rebuild}'
   '';
 
-  nativeCheckInputs = [ clippy ];
+  nativeCheckInputs = [
+    clippy
+    (lib.getBin nix)
+    gitMinimal
+  ];
 
   preCheck = ''
     echo "Running cargo clippy"

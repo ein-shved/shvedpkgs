@@ -238,9 +238,9 @@ This entry is not serialized to JSON and does not create a remote `HostConfig`.
   password prompting mode
   ([REQ-001](requirements.md#req-001-updating-the-local-or-a-named-remote-host),
   [REQ-002](requirements.md#req-002-compatibility-with-nixos-rebuild-arguments)).
-- `nixos-rebuild` and its arguments control `flake.lock` handling;
-  `nixos` does not delete the file before launch
-  ([REQ-002](requirements.md#req-002-compatibility-with-nixos-rebuild-arguments)).
+- `deployment` always adds `--recreate-lock-file` and
+  `--no-write-lock-file` to `nixos-rebuild` for [REQ-001](requirements.md#req-001-updating-the-local-or-a-named-remote-host).
+  Nix resolves inputs afresh without writing the system-flake lock.
 - `deployment` replaces the current process with `nixos-rebuild`, passing
   separate arguments while preserving the environment, working directory,
   and standard streams. The upstream exit code or signal becomes the result of `nixos`

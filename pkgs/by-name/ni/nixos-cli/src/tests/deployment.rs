@@ -124,12 +124,28 @@ impl Fixture {
     fn success(&self, args: &[&str], expected: &[&str]) {
         let output = self.run(self.command().args(args), b"");
         assert!(output.status.success(), "{:?}", output.status);
-        self.assert_argv(&expected.iter().map(OsString::from).collect::<Vec<_>>());
+        self.assert_argv(
+            &["--recreate-lock-file", "--no-write-lock-file"]
+                .into_iter()
+                .chain(expected.iter().copied())
+                .map(OsString::from)
+                .collect::<Vec<_>>(),
+        );
     }
 }
 
 impl Drop for Fixture {
     fn drop(&mut self) {
+        // The real-Nix regression owns an isolated store with read-only files.
+        let store = self.directory.join("store");
+        if store.exists() {
+            assert!(Command::new(executable("chmod"))
+                .args(["-R", "u+w"])
+                .arg(store)
+                .status()
+                .unwrap()
+                .success());
+        }
         fs::remove_dir_all(&self.directory).unwrap();
     }
 }
@@ -369,7 +385,13 @@ fn exec_preserves_pid_native_arguments_environment_cwd_and_streams() {
         b"stdin\0\xff\nsecond line\n",
     );
     assert!(output.status.success());
-    fixture.assert_argv(&upstream);
+    fixture.assert_argv(
+        &["--recreate-lock-file", "--no-write-lock-file"]
+            .into_iter()
+            .map(OsString::from)
+            .chain(upstream)
+            .collect::<Vec<_>>(),
+    );
     assert!(!fixture.cwd.join("unexpected").exists());
 }
 
@@ -415,6 +437,8 @@ fn flake_lock_is_untouched_before_and_after_upstream() {
         assert!(output.status.success());
         fixture.assert_argv(
             &[
+                "--recreate-lock-file",
+                "--no-write-lock-file",
                 "--target-host",
                 "operator@server.example",
                 "--ask-sudo-password",
@@ -432,6 +456,143 @@ fn flake_lock_is_untouched_before_and_after_upstream() {
             assert!(!lock.exists());
         }
     }
+}
+
+#[test]
+fn real_nix_uses_current_git_input_without_persisting_a_system_lock() {
+    let fixture = Fixture::new(host());
+    let repo = fixture.directory.join("repo");
+    let system = fixture.directory.join("system");
+    fs::create_dir(&repo).unwrap();
+    fs::create_dir(&system).unwrap();
+    let git = |args: &[&str]| {
+        let output = Command::new(executable("git"))
+            .args([
+                "-c",
+                "user.name=Test",
+                "-c",
+                "user.email=test@example.invalid",
+                "-c",
+                "commit.gpgsign=false",
+                "-C",
+            ])
+            .arg(&repo)
+            .args(args)
+            .output()
+            .unwrap();
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+    };
+    git(&["init", "--quiet"]);
+    fs::write(repo.join("marker"), "A").unwrap();
+    git(&["add", "marker"]);
+    git(&["commit", "--quiet", "-m", "A"]);
+    fs::write(
+        system.join("flake.nix"),
+        format!(
+            "{{ inputs.repo = {{ url = \"git+file:{}\"; flake = false; }}; \
+         outputs = {{ self, repo }}: {{ marker = builtins.readFile (repo + \"/marker\"); }}; }}",
+            repo.display(),
+        ),
+    )
+    .unwrap();
+    let nix = executable("nix");
+    let store = format!("local?root={}", fixture.directory.join("store").display());
+    let cache = fixture.directory.join("cache");
+    let configure = |command: &mut Command| {
+        command
+            .env(
+                "NIX_CONFIG",
+                "experimental-features = nix-command flakes\nsubstituters =\n",
+            )
+            .env("XDG_CACHE_HOME", &cache);
+    };
+    let mut evaluate = Command::new(&nix);
+    configure(&mut evaluate);
+    evaluate
+        .args(["--store", &store, "eval", "--raw"])
+        .arg(format!("path:{}#marker", system.display()));
+    let initial = evaluate.output().unwrap();
+    assert!(
+        initial.status.success(),
+        "{}",
+        String::from_utf8_lossy(&initial.stderr)
+    );
+    assert_eq!(initial.stdout, b"A");
+    let lock = system.join("flake.lock");
+    let original = fs::read(&lock).unwrap();
+    fs::write(repo.join("marker"), "B").unwrap();
+    git(&["commit", "--quiet", "-am", "B"]);
+
+    // Only nixos-rebuild is replaced: the real CLI hands its arguments to
+    // real Nix evaluation of a minimal flake, without activating a system.
+    fs::write(
+        fixture.bin.join("nixos-rebuild"),
+        format!(
+            "#!{}\n{}",
+            executable("sh").display(),
+            r#"
+set -eu
+remaining=$#
+while [ "$remaining" -gt 0 ]; do
+    arg=$1
+    shift
+    remaining=$((remaining - 1))
+    case "$arg" in
+        build|switch|--sudo|--ask-sudo-password) ;;
+        --target-host) shift; remaining=$((remaining - 1)) ;;
+        --flake) source=$1; shift; remaining=$((remaining - 1)) ;;
+        *) set -- "$@" "$arg" ;;
+    esac
+done
+exec "$REAL_NIX" --store "$TEST_STORE" eval --raw "${source%#*}#marker" "$@"
+"#
+        ),
+    )
+    .unwrap();
+    let run = |target: Option<&str>, expected: &[u8]| {
+        let mut command = fixture.command();
+        configure(&mut command);
+        command.env("REAL_NIX", &nix).env("TEST_STORE", &store);
+        // Restore the fixture first on PATH while keeping real Nix's tools.
+        let path = std::env::join_paths(
+            std::iter::once(fixture.bin.clone())
+                .chain(std::env::split_paths(&std::env::var_os("PATH").unwrap())),
+        )
+        .unwrap();
+        command.env("PATH", path);
+        if let Some(target) = target {
+            command.arg(target);
+        }
+        let output = command
+            .args(["build", "--flake"])
+            .arg(format!("path:{}#configuration", system.display()))
+            .output()
+            .unwrap();
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert_eq!(output.stdout, expected);
+    };
+    let stale = evaluate.output().unwrap();
+    assert!(
+        stale.status.success(),
+        "{}",
+        String::from_utf8_lossy(&stale.stderr)
+    );
+    assert_eq!(stale.stdout, b"A");
+    run(None, b"B");
+    assert_eq!(fs::read(&lock).unwrap(), original);
+    run(Some("remote"), b"B");
+    assert_eq!(fs::read(&lock).unwrap(), original);
+    fs::remove_file(&lock).unwrap();
+    run(None, b"B");
+    assert!(!lock.exists());
 }
 
 #[test]
