@@ -93,10 +93,16 @@ Change scope is different from a spec dependency (`changes deps`). Declare only
 real dependencies. Surface overlap warnings with affected specs/changes and
 resolve their actual risk before proceeding; never silently allow archive overlap.
 
-Inspect merged deltas using `changes spec-preview <name> <specId>`, filtered by
-artifact when useful. Raw deltas alone cannot establish the resulting contract.
-Review change-scoped proposal content directly. Structural validation checks
-shape/state and does not replace semantic or code review:
+Inspect spec deltas in both views: `changes spec-preview <name> <specId> --diff`
+and the same command without `--diff`, adding `--artifact <id>` when useful.
+Read the original artifact and unchanged parts as context for the change.
+
+For change-scoped artifacts, compare the original and current file and read
+its complete result; a new artifact has an empty original version.
+Raw deltas alone cannot establish the resulting contract.
+
+Structural validation checks shape/state and does not replace semantic or
+code review:
 
 - Change artifact: `specd changes validate <name> --artifact <id> --format text`.
 - Spec artifact: `specd changes validate <name> <specId> --artifact <id> --format text`.

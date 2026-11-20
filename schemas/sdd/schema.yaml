@@ -83,15 +83,22 @@ artifacts:
             - Retain necessary needs/contracts; do not invent guarantees or
               edge-case prose for exhaustiveness. Define each contract once and
               reference its owner from other uses.
+
             - Separate distinct topics with headings. Use lists and subpoints
               for independent properties, conditions and steps; more source lines
               are acceptable when they make the selected content easier to read.
+
+            - Separate sibling items in Markdown lists with blank lines when
+              any item in that list spans multiple source lines.
+
             - Keep each ordinary prose paragraph to at most three Markdown source
               lines, each at most 80 source characters. Apply the same limits
               inside list items; do not hide a dense enumeration in a long bullet.
+
             - Every table row must fit within 80 source characters. If it cannot,
               replace the table with lists; do not compress necessary meaning or
               use cell line-break tricks to preserve the table.
+
             - Code blocks and standalone public signatures are outside prose
               limits. Preserve indivisible path/URL spans; only the span is
               exempt, not its surrounding prose or paragraph. Inline signatures
@@ -105,8 +112,9 @@ artifacts:
           instruction: *agent-review-rules
         - id: content-review
           instruction: &content-review |
-            Review the executor's changes and their effects in the artifact,
-            using the merged result for a delta and unchanged material as context.
+            Review the executor's changes and their effects through both the diff
+            against the original version and the complete resulting artifact;
+            use the merged result for a delta and unchanged material as context.
 
             Correct misplaced content, contradictions and unsupported statements.
             Reject ordinary tests/docs promoted into architectural outline or
@@ -124,10 +132,12 @@ artifacts:
             oversized tables with lists instead of compacting text or splitting
             cells. Limit prose exceptions to code blocks, standalone signatures
             and indivisible path/URL spans, never the surrounding paragraph.
+            Check Markdown list spacing against COMMON-09.
             Ordinary readability findings are normal internal review work, not
             a final process failure or a reason to stop at a FAIL report.
             The independent arbiter gives concrete findings; the original author
-            corrects them; the same arbiter inspects the updated merged artifact.
+            corrects them; the same arbiter rechecks the updated diff and complete
+            resulting artifact.
             Repeat until ordinary findings are resolved before user review,
             respecting the current involvement level's user checkpoints. Serious
             actual requirement conflicts or a needed hack/workaround still stop

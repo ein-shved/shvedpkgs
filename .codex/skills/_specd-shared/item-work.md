@@ -42,15 +42,21 @@ Scope-specific explicit user instructions continue to control that scope.
 ## Independent arbitration
 
 Before any SDD artifact is submitted for review, an independent nonauthor
-arbiter checks the actual artifact (merged preview for deltas):
+arbiter reads both its diff and complete result as described in
+[shared notes](shared.md#artifacts-and-incremental-readiness), then checks:
 
 - Formal artifact requirements, simplicity and readability for the owner.
+
 - Consistency with other artifacts and the user's requests.
+
 - Correct content boundaries: reject ordinary tests/docs promoted into outline
   points or system sections without an explicit special-check-description request.
 
-The original author resolves findings before submission. Agent review does
-not substitute for required user approval or human-only CLI approvals.
+- All applicable rules in the project's review catalogue.
+
+The original author resolves findings before submission; the same arbiter
+rechecks both views. Agent review does not substitute for required user
+approval or human-only CLI approvals.
 
 Use the SAME independent nonauthor arbiters for design and code, in order:
 

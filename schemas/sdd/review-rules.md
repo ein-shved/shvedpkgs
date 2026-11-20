@@ -28,21 +28,31 @@ These rules apply to all artifacts, including code.
 - **COMMON-01:** Do not change code or an artifact if the task can be
   satisfied without that change; code refactoring requires explicit
   user authorization.
+
 - **COMMON-02:** Prefer a simpler, more obvious or smaller alternative
   for a design, code or architecture decision when it satisfies the
   same requirements and contracts without reducing clarity.
+
 - **COMMON-03:** Do not add needs, guarantees or prohibitions unsupported by
   the user's request or the applicable contracts.
+
 - **COMMON-04:** Do not repeat a shared definition or contract at each use;
   define it once and reference its owner.
+
 - **COMMON-05:** Do not pack separate topics into a dense paragraph;
   separate them with headings, lists or focused paragraphs.
+
 - **COMMON-06:** Do not exceed three source lines per prose paragraph or
   80 characters per prose line, including prose inside list items.
+
 - **COMMON-07:** Exempt code blocks, standalone public signatures and
   indivisible path/URL spans from COMMON-06, but not surrounding prose.
+
 - **COMMON-08:** Do not exceed 80 characters in any table row; use a list
   instead of compressing meaning or inserting cell line breaks.
+
+- **COMMON-09:** In Markdown artifacts, separate sibling list items with
+  blank lines when any item in that list spans multiple source lines.
 
 ## Requirements Rules
 

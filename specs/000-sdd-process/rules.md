@@ -32,6 +32,9 @@ review rules is hard to scan. Separate them into named sections; express modes
 as short lists and ordered work as numbered steps. Prefer the shortest sufficient
 account over a complete recital of familiar conventions.
 
+In Markdown lists, separate sibling items with blank lines when any item
+in that list spans multiple source lines.
+
 ## Proposal
 
 A proposal briefly explains change intent, problem, scope and the allocation of

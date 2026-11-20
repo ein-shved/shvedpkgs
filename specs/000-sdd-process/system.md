@@ -165,6 +165,8 @@ These rules apply to all artifacts, including code.
   indivisible path/URL spans from COMMON-06, but not surrounding prose.
 - **COMMON-08:** Do not exceed 80 characters in any table row; use a list
   instead of compressing meaning or inserting cell line breaks.
+- **COMMON-09:** In Markdown artifacts, separate sibling list items with
+  blank lines when any item in that list spans multiple source lines.
 
 ### Requirements Rules
 
@@ -239,12 +241,19 @@ launches a research subagent to gather the necessary context.
 
 ### Before artifact review
 
-Before submitting an SDD artifact for review, an independent arbiter checks:
+Before submitting an SDD artifact for review, an independent nonauthor
+arbiter checks both the diff against the original version and the complete
+resulting artifact:
 
 - Compliance with artifact requirements, including simplicity/readability.
 - Consistency with other artifacts and user requests.
+- Compliance with all applicable [Agent Review Rules](#agent-review-rules).
 
-Findings are resolved before submission.
+Findings are resolved before submission; the same arbiter rechecks both
+views after corrections.
+
+[REQ-002](requirements.md#req-002-artifacts-are-simple-to-understand),
+[REQ-003](requirements.md#req-003-sdd-minimally-delays-the-start-of-coding).
 
 ### Design and implementation
 
