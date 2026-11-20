@@ -77,6 +77,18 @@ testers.runNixOSTest {
     write_file(f"{workflow_project}/specs/demo/requirements.md", "# Requirements\n")
     write_file(f"{workflow_project}/specs/demo/system.md", "# System Specification\n")
     change_path = changes("create incremental --spec default:demo")["changePath"]
+    rulebook_path = "schemas/sdd/review-rules.md"
+    machine.succeed(f"test -s {workflow_project}/{rulebook_path}")
+    review_instructions = []
+    for artifact in ["proposal", "requirements", "system", "adrs"]:
+      instruction = changes(f"artifact-instruction incremental {artifact}")
+      review = next(rule for rule in instruction["rulesPre"] if rulebook_path in rule)
+      assert review in instruction["rulesPost"]
+      review_instructions.append(review)
+    assert len(set(review_instructions)) == 1
+    hooks = changes("hook-instruction incremental implementing --phase pre")
+    review_hook = next(hook for hook in hooks["instructions"] if hook["id"] == "agent-review-rules")
+    assert review_hook["text"] == review_instructions[0]
     delta_path = f"{change_path}/deltas/default/demo"
     machine.succeed(f"mkdir -p {delta_path}")
     proposal = (
@@ -205,6 +217,7 @@ testers.runNixOSTest {
       machine.succeed(f"printf stale > {installed}/_specd-shared/workflows/specd-design.md")
       machine.succeed(f"printf stale > {installed}/specd-design/SKILL.md")
       machine.succeed(f"printf stale > {project}/schemas/sdd/templates/proposal.md")
+      machine.succeed(f"printf stale > {project}/{rulebook_path}")
       machine.succeed(f"printf '%s\n' 'schema: ./old/schema.yaml' 'workspaces:' '  - name: default' '    path: docs/specs' > {project}/specd.yaml")
       machine.succeed(f"specd-bootstrap --target {project} --agent {agent}")
       for resource in ["manager.md", "coordinator.md", "arbiter.md"]:

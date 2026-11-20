@@ -66,6 +66,14 @@ artifacts:
       design then code. Archive only at the user's command in every mode.
     rules:
       pre:
+        - id: agent-review-rules
+          instruction: &agent-review-rules |
+            Read schemas/sdd/review-rules.md from the project root before
+            authoring, assigning or reviewing work.
+
+            Give executors and independent arbiters the same catalogue and applicable
+            project extensions. Follow its review scope, levels, correction loop and
+            response to executor doubt for all artifacts, including code.
         - id: sufficient-content
           instruction: &sufficient-content |
             Reduce semantic load by removing unnecessary details and repetition,
@@ -93,9 +101,13 @@ artifacts:
             to fill a format or preserve every draft paragraph. Judge whether a
             domain-familiar owner can readily understand the resulting artifact.
       post:
+        - id: agent-review-rules
+          instruction: *agent-review-rules
         - id: content-review
           instruction: &content-review |
-            Reread the affected artifact, using the merged result for a delta.
+            Review the executor's changes and their effects in the artifact,
+            using the merged result for a delta and unchanged material as context.
+
             Correct misplaced content, contradictions and unsupported statements.
             Reject ordinary tests/docs promoted into architectural outline or
             system sections. A request to write/run tests alone does not request
@@ -189,9 +201,13 @@ artifacts:
         required: true
     rules:
       pre:
+        - id: agent-review-rules
+          instruction: *agent-review-rules
         - id: sufficient-content
           instruction: *sufficient-content
       post:
+        - id: agent-review-rules
+          instruction: *agent-review-rules
         - id: content-review
           instruction: *content-review
         - id: requirements-review
@@ -336,9 +352,13 @@ artifacts:
         required: true
     rules:
       pre:
+        - id: agent-review-rules
+          instruction: *agent-review-rules
         - id: sufficient-content
           instruction: *sufficient-content
       post:
+        - id: agent-review-rules
+          instruction: *agent-review-rules
         - id: content-review
           instruction: *content-review
 
@@ -367,9 +387,13 @@ artifacts:
       Target whole ADR sections; added operations include the section heading.
     rules:
       pre:
+        - id: agent-review-rules
+          instruction: *agent-review-rules
         - id: sufficient-content
           instruction: *sufficient-content
       post:
+        - id: agent-review-rules
+          instruction: *agent-review-rules
         - id: content-review
           instruction: *content-review
 
@@ -468,6 +492,8 @@ workflow:
     requires: [proposal, requirements]
     hooks:
       pre:
+        - id: agent-review-rules
+          instruction: *agent-review-rules
         - id: implementation-roles
           instruction: |
             The main agent never writes code or architectural details. Assign
