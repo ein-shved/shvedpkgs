@@ -58,12 +58,33 @@ fn main() -> Result<()> {
         )
     })?;
 
-    copy_dir_replace(&schema_root, &args.target.join("schemas/sdd"))
-        .map_err(|err| format!("failed to materialize schema assets: {err}"))?;
-
     let specd_yaml = args.target.join("specd.yaml");
-    if specd_yaml.exists() {
-        update_specd_yaml(&specd_yaml)?;
+    let updated_config = if specd_yaml.exists() {
+        let original = fs::read_to_string(&specd_yaml)
+            .map_err(|err| format!("failed to read {}: {err}", specd_yaml.display()))?;
+        Some(update_specd_yaml_text(
+            &original,
+            &args.target,
+            &schema_root,
+        )?)
+    } else {
+        None
+    };
+    let schema_ref = updated_config
+        .as_ref()
+        .map(|(schema_ref, _)| schema_ref.as_str())
+        .unwrap_or(SCHEMA_REF);
+    let schema_file = args.target.join(schema_ref);
+    if schema_ref == SCHEMA_REF {
+        copy_dir_replace(&schema_root, &args.target.join("schemas/sdd"))
+    } else {
+        materialize_schema(&schema_root, &schema_file)
+    }
+    .map_err(|err| format!("failed to materialize schema assets: {err}"))?;
+
+    if let Some((_, updated)) = updated_config {
+        fs::write(&specd_yaml, updated)
+            .map_err(|err| format!("failed to write {}: {err}", specd_yaml.display()))?;
     } else {
         run_specd_init(&args.target)?;
     }
@@ -222,27 +243,73 @@ fn validate_destination_skills_dir(path: &Path) -> Result<()> {
     Ok(())
 }
 
-fn update_specd_yaml(path: &Path) -> Result<()> {
-    let original = fs::read_to_string(path)
-        .map_err(|err| format!("failed to read {}: {err}", path.display()))?;
-    let updated = update_specd_yaml_text(&original)?;
-
-    fs::write(path, updated).map_err(|err| format!("failed to write {}: {err}", path.display()))
-}
-
-fn update_specd_yaml_text(original: &str) -> Result<String> {
+fn update_specd_yaml_text(
+    original: &str,
+    config_dir: &Path,
+    schema_root: &Path,
+) -> Result<(String, String)> {
     let mut document = serde_yaml::from_str::<Value>(original)
         .map_err(|err| format!("failed to parse specd.yaml: {err}"))?;
     let mapping = document
         .as_mapping_mut()
         .ok_or("specd.yaml must contain a top-level mapping")?;
 
+    let schema_ref = mapping
+        .get(Value::String("schema".to_string()))
+        .and_then(Value::as_str)
+        .filter(|schema_ref| {
+            Path::new(schema_ref).is_absolute()
+                || schema_ref.starts_with("./")
+                || schema_ref.starts_with("../")
+        })
+        .filter(|schema_ref| {
+            let installed_name = schema_name(&config_dir.join(schema_ref));
+            installed_name.is_some()
+                && installed_name == schema_name(&schema_root.join("schema.yaml"))
+        })
+        .unwrap_or(SCHEMA_REF)
+        .to_string();
+
     mapping.insert(
         Value::String("schema".to_string()),
-        Value::String(SCHEMA_REF.to_string()),
+        Value::String(schema_ref.clone()),
     );
 
-    serde_yaml::to_string(&document).map_err(|err| format!("failed to serialize specd.yaml: {err}"))
+    let updated = serde_yaml::to_string(&document)
+        .map_err(|err| format!("failed to serialize specd.yaml: {err}"))?;
+    Ok((schema_ref, updated))
+}
+
+fn schema_name(path: &Path) -> Option<String> {
+    let content = fs::read_to_string(path).ok()?;
+    let document = serde_yaml::from_str::<Value>(&content).ok()?;
+    document
+        .as_mapping()?
+        .get(Value::String("name".to_string()))?
+        .as_str()
+        .map(str::to_owned)
+}
+
+fn materialize_schema(source: &Path, schema_file: &Path) -> io::Result<()> {
+    let dest = schema_file.parent().expect("schema file has a parent");
+    let file_name = schema_file.file_name().expect("schema file has a name");
+    if file_name != "schema.yaml" && source.join(file_name).try_exists()? {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "schema file name conflicts with a packaged companion asset",
+        ));
+    }
+    fs::create_dir_all(dest)?;
+    for entry in fs::read_dir(source)? {
+        let entry = entry?;
+        let dest_path = if entry.file_name() == "schema.yaml" {
+            schema_file.to_path_buf()
+        } else {
+            dest.join(entry.file_name())
+        };
+        copy_entry(&entry.path(), &dest_path)?;
+    }
+    Ok(())
 }
 
 fn run_specd_init(target: &Path) -> Result<()> {
@@ -272,27 +339,33 @@ fn copy_dir_replace(source: &Path, dest: &Path) -> io::Result<()> {
 fn copy_dir_contents(source: &Path, dest: &Path) -> io::Result<()> {
     for entry in fs::read_dir(source)? {
         let entry = entry?;
-        let file_type = entry.file_type()?;
         let dest_path = dest.join(entry.file_name());
+        copy_entry(&entry.path(), &dest_path)?;
+    }
+    Ok(())
+}
 
-        if file_type.is_dir() {
-            fs::create_dir_all(&dest_path)?;
-            copy_dir_contents(&entry.path(), &dest_path)?;
-        } else if file_type.is_file() {
-            fs::copy(entry.path(), &dest_path)?;
-            let mut permissions = fs::metadata(&dest_path)?.permissions();
-            #[cfg(unix)]
-            {
-                use std::os::unix::fs::PermissionsExt;
-                permissions.set_mode(permissions.mode() | 0o200);
-            }
-            #[cfg(not(unix))]
-            permissions.set_readonly(false);
-            fs::set_permissions(dest_path, permissions)?;
-        } else if file_type.is_symlink() {
-            let target = fs::read_link(entry.path())?;
-            create_symlink(target, dest_path)?;
+fn copy_entry(source: &Path, dest: &Path) -> io::Result<()> {
+    let file_type = fs::symlink_metadata(source)?.file_type();
+    if (file_type.is_file() || file_type.is_symlink()) && dest.symlink_metadata().is_ok() {
+        fs::remove_file(dest)?;
+    }
+    if file_type.is_dir() {
+        copy_dir_replace(source, dest)?;
+    } else if file_type.is_file() {
+        fs::copy(source, dest)?;
+        let mut permissions = fs::metadata(dest)?.permissions();
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            permissions.set_mode(permissions.mode() | 0o200);
         }
+        #[cfg(not(unix))]
+        permissions.set_readonly(false);
+        fs::set_permissions(dest, permissions)?;
+    } else if file_type.is_symlink() {
+        let target = fs::read_link(source)?;
+        create_symlink(target, dest)?;
     }
 
     Ok(())
@@ -364,6 +437,63 @@ mod tests {
             assert_eq!(
                 fs::metadata(&resource).unwrap().permissions().mode() & 0o777,
                 0o444
+            );
+        }
+
+        fs::remove_dir_all(root).unwrap();
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn relocated_readonly_schema_assets_can_be_updated_in_place() {
+        use std::os::unix::fs::PermissionsExt;
+        use std::time::{SystemTime, UNIX_EPOCH};
+
+        let root = env::temp_dir().join(format!(
+            "specd-bootstrap-readonly-{}-{}",
+            std::process::id(),
+            SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        let source = root.join("source");
+        let dest = root.join("installed");
+        fs::create_dir_all(source.join("templates")).unwrap();
+        fs::create_dir_all(&dest).unwrap();
+        fs::write(dest.join("keep.txt"), "unrelated sibling").unwrap();
+        fs::write(dest.join("specd.yaml"), "project configuration").unwrap();
+        let schema_file = dest.join("custom.yaml");
+
+        for revision in ["first", "repeated"] {
+            fs::write(source.join("schema.yaml"), revision).unwrap();
+            fs::write(source.join("review-rules.md"), revision).unwrap();
+            fs::write(source.join("templates/proposal.md"), revision).unwrap();
+            for name in ["custom.yaml", "review-rules.md"] {
+                let installed = dest.join(name);
+                if !installed.exists() {
+                    fs::write(&installed, "old resource").unwrap();
+                }
+                fs::set_permissions(&installed, fs::Permissions::from_mode(0o444)).unwrap();
+            }
+
+            materialize_schema(&source, &schema_file).unwrap();
+
+            for name in ["custom.yaml", "review-rules.md", "templates/proposal.md"] {
+                let installed = dest.join(name);
+                assert_eq!(fs::read_to_string(&installed).unwrap(), revision);
+                assert_ne!(
+                    fs::metadata(&installed).unwrap().permissions().mode() & 0o200,
+                    0
+                );
+            }
+            assert_eq!(
+                fs::read_to_string(dest.join("keep.txt")).unwrap(),
+                "unrelated sibling"
+            );
+            assert_eq!(
+                fs::read_to_string(dest.join("specd.yaml")).unwrap(),
+                "project configuration"
             );
         }
 
@@ -470,7 +600,7 @@ destinationSkillsDir: ../.codex/skills
 
     #[test]
     fn update_specd_yaml_replaces_schema_and_keeps_other_fields() {
-        let updated = update_specd_yaml_text(
+        let (_, updated) = update_specd_yaml_text(
             r#"
 schema: ./old/schema.yaml
 workspaces:
@@ -479,6 +609,8 @@ workspaces:
 metadata:
   keep: true
 "#,
+            Path::new("."),
+            Path::new("."),
         )
         .expect("specd.yaml should update");
         let document = serde_yaml::from_str::<Value>(&updated).expect("updated yaml should parse");
@@ -512,12 +644,14 @@ metadata:
 
     #[test]
     fn update_specd_yaml_adds_schema_when_missing() {
-        let updated = update_specd_yaml_text(
+        let (_, updated) = update_specd_yaml_text(
             r#"
 workspaces:
   - name: default
     path: docs/specs
 "#,
+            Path::new("."),
+            Path::new("."),
         )
         .expect("specd.yaml should update");
         let document = serde_yaml::from_str::<Value>(&updated).expect("updated yaml should parse");

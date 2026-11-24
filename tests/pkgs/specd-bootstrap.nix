@@ -36,6 +36,7 @@ testers.runNixOSTest {
 
   testScript = ''
     import json
+    import re
     import shlex
 
     start_all()
@@ -82,7 +83,8 @@ testers.runNixOSTest {
     review_instructions = []
     for artifact in ["proposal", "requirements", "system", "adrs"]:
       instruction = changes(f"artifact-instruction incremental {artifact}")
-      review = next(rule for rule in instruction["rulesPre"] if rulebook_path in rule)
+      review = next(rule for rule in instruction["rulesPre"] if "review-rules.md" in rule)
+      assert "schemaRef" in review and "projectRoot" in review
       assert review in instruction["rulesPost"]
       review_instructions.append(review)
     assert len(set(review_instructions)) == 1
@@ -169,6 +171,94 @@ testers.runNixOSTest {
     machine.succeed("grep -F 'schema: ./schemas/sdd/schema.yaml' /tmp/specd-bootstrap-existing/specd.yaml")
     machine.succeed("grep -F 'path: docs/specs' /tmp/specd-bootstrap-existing/specd.yaml")
     machine.succeed("test -f /tmp/specd-bootstrap-existing/.codex/skills/specd/SKILL.md")
+
+    expected_schema = json.loads(machine.succeed(
+      "cd /tmp/specd-bootstrap-new && specd schema show --raw --templates --format json"
+    ))
+    schema_source = machine.succeed(f"cat {schema_root}/schema.yaml")
+    config_source = machine.succeed("cat /tmp/specd-bootstrap-new/specd.yaml")
+    stale_schema = re.sub(r"(?m)^version: .*", "version: 999", schema_source)
+
+    # Match schema metadata, retain the complete reference, and refresh the
+    # active schema and templates without removing unrelated parent contents.
+    for layout, schema_path in [
+      ("relocated", ".specd/schemas/sdd/schema.yaml"),
+      ("root", "custom-schema.yaml"),
+      ("absolute", ".specd/schemas/sdd/custom-schema.yaml"),
+      ("parent", "../specd-bootstrap-shared/custom-schema.yaml"),
+    ]:
+      project = f"/tmp/specd-bootstrap-location-{layout}"
+      schema_file = f"{project}/{schema_path}"
+      schema_dir = schema_file.rsplit("/", 1)[0]
+      schema_ref = schema_file if layout == "absolute" else f"./{schema_path}"
+      if layout == "parent":
+        schema_ref = schema_path
+      machine.succeed(f"mkdir -p {project} {schema_dir}/templates && git -C {project} init")
+      config = re.sub(r"(?m)^schema: .*", f"schema: {json.dumps(schema_ref)}", config_source)
+      write_file(f"{project}/specd.yaml", config.replace("path: specs/", "path: docs/specs"))
+      write_file(f"{schema_dir}/keep.txt", "unrelated sibling")
+      for revision in ["first", "repeated"]:
+        write_file(schema_file, stale_schema)
+        write_file(f"{schema_dir}/templates/proposal.md", f"# {revision} stale template")
+        write_file(f"{schema_dir}/templates/retired.md", "retired template")
+        machine.succeed(f"cd /tmp && specd-bootstrap --target {project} --agent codex")
+        status = json.loads(machine.succeed(f"cd {project} && specd project status --format json"))
+        assert status["schemaRef"] == schema_ref
+        active_schema = json.loads(machine.succeed(
+          f"cd {project} && specd schema show --raw --templates --format json"
+        ))
+        assert active_schema == expected_schema
+        machine.succeed(f"cmp {schema_root}/schema.yaml {schema_file}")
+        machine.succeed(f"grep -F 'path: docs/specs' {project}/specd.yaml")
+        assert machine.succeed(f"cat {schema_dir}/keep.txt") == "unrelated sibling"
+        machine.fail(f"test -e {schema_dir}/templates/retired.md")
+        machine.fail(f"test -e {project}/schemas/sdd/schema.yaml")
+        machine.fail(f"test -e {project}/.specd/schemas/schemas/sdd/schema.yaml")
+
+      machine.succeed(f"mkdir -p {project}/docs/specs/demo")
+      write_file(f"{project}/docs/specs/demo/requirements.md", "# Requirements\n")
+      write_file(f"{project}/docs/specs/demo/system.md", "# System Specification\n")
+      machine.succeed(f"git -C {project} config user.name 'SpecD Test'")
+      machine.succeed(f"git -C {project} config user.email 'specd-test@example.invalid'")
+      machine.succeed(f"cd {project} && specd changes create inspect --spec default:demo")
+      instruction = json.loads(machine.succeed(
+        f"cd {project} && specd changes artifact-instruction inspect proposal --format json"
+      ))
+      assert review_instructions[0] in instruction["rulesPre"]
+      assert review_instructions[0] in instruction["rulesPost"]
+      machine.succeed(f"test -s {schema_dir}/review-rules.md")
+      machine.fail(f"test -e {project}/schemas/sdd/review-rules.md")
+
+    # A different or undetermined name keeps the existing default fallback.
+    for label, contents in [
+      ("different", "name: another-schema\n"),
+      ("nonstring", "name: 42\n"),
+      ("malformed", "name: [\n"),
+    ]:
+      project = f"/tmp/specd-bootstrap-fallback-{label}"
+      machine.succeed(f"mkdir -p {project}/.specd && git -C {project} init")
+      config = re.sub(r"(?m)^schema: .*", "schema: ./.specd/custom.yaml", config_source)
+      write_file(f"{project}/specd.yaml", config)
+      write_file(f"{project}/.specd/custom.yaml", contents)
+      machine.succeed(f"specd-bootstrap --target {project} --agent codex")
+      status = json.loads(machine.succeed(f"cd {project} && specd project status --format json"))
+      assert status["schemaRef"] == "./schemas/sdd/schema.yaml"
+      assert machine.succeed(f"cat {project}/.specd/custom.yaml") == contents
+      active_schema = json.loads(machine.succeed(
+        f"cd {project} && specd schema show --raw --templates --format json"
+      ))
+      assert active_schema == expected_schema
+
+    project = "/tmp/specd-bootstrap-filename-conflict"
+    machine.succeed(f"mkdir -p {project}/.specd && git -C {project} init")
+    config = re.sub(r"(?m)^schema: .*", "schema: ./.specd/review-rules.md", config_source)
+    write_file(f"{project}/specd.yaml", config)
+    write_file(f"{project}/.specd/review-rules.md", schema_source)
+    machine.fail(f"specd-bootstrap --target {project} --agent codex")
+    assert machine.succeed(f"cat {project}/specd.yaml") == config
+    assert machine.succeed(f"cat {project}/.specd/review-rules.md") == schema_source
+    machine.fail(f"test -e {project}/.specd/templates")
+    machine.fail(f"test -e {project}/.codex")
 
     machine.succeed("mkdir -p /tmp/specd-bootstrap-multi")
     machine.succeed("cd /tmp/specd-bootstrap-multi && git init")

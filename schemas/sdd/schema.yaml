@@ -68,8 +68,12 @@ artifacts:
       pre:
         - id: agent-review-rules
           instruction: &agent-review-rules |
-            Read schemas/sdd/review-rules.md from the project root before
+            Read `review-rules.md` beside the active schema file before
             authoring, assigning or reviewing work.
+
+            Use `schemaRef` from `specd project status --format toon` to find
+            the schema. Resolve relative file references against the reported
+            `projectRoot`.
 
             Give executors and independent arbiters the same catalogue and applicable
             project extensions. Follow its review scope, levels, correction loop and

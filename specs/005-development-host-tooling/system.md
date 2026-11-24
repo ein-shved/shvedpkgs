@@ -195,11 +195,12 @@ share/specd-bootstrap/schemas/sdd/templates/
 
 The schema file references artifact templates with paths relative to the
 schema file, such as `templates/requirements.md` and `templates/system.md`.
-The bootstrap command therefore materializes the complete `schemas/sdd/`
-tree into the target project, not only `schema.yaml`. In a bootstrapped
-target project, `specd.yaml` points at `./schemas/sdd/schema.yaml`, and
-SpecD resolves the schema's template references under
-`./schemas/sdd/templates/`.
+
+The bootstrap command materializes the schema file and its companion assets,
+preserving their paths relative to the schema file.
+
+The default schema reference is `./schemas/sdd/schema.yaml`. Existing local
+schema references resolve relative to `specd.yaml` unless they are absolute.
 
 Each agent skill package exposes this layout at its package output root:
 
@@ -241,13 +242,16 @@ wrapper default.
 
 The bootstrap command performs these actions for a target project:
 
-- materializes or updates `schemas/sdd/` in the target project from the
-  schema asset package;
-- creates `specd.yaml` with `specd init --schema ./schemas/sdd/schema.yaml`
-  when the target project has no SpecD configuration;
-- when `specd.yaml` already exists, parses it as YAML and updates the
-  schema reference to `./schemas/sdd/schema.yaml` while preserving unrelated
-  project configuration fields, though YAML formatting may be normalized;
+- parses an existing `specd.yaml` as YAML, preserving unrelated project
+  configuration fields, though YAML formatting may be normalized;
+- when the configured local schema and the packaged schema have the same
+  string-valued YAML `name`, updates that schema file and its companion
+  assets in place, preserving the configured reference and file name;
+- if the schema names differ or cannot be determined, installs the schema
+  assets at the default location and selects the default schema reference;
+- when no SpecD configuration exists, installs the default schema assets
+  before creating `specd.yaml` with
+  `specd init --schema ./schemas/sdd/schema.yaml`;
 - for each selected agent, reads that agent package manifest and
   materializes or updates the manifest-declared source skill payload at the
   manifest-declared destination directory;
