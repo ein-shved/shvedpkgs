@@ -66,9 +66,19 @@ unless the user already supplied one maximally explicitly. Never guess from indi
 reuse the recorded choice on resume and apply user changes at any time. Follow
 [item protocol](item-work.md) for mode boundaries, authors and arbitration.
 The schema and `changes artifact-instruction` supply artifact IDs, scope, paths
-and composition rules. Read `rulesPre`, `instruction` and `rulesPost` together. Fetch schema
-metadata only when fresh instructions/status lack the needed fields. For delta
-selectors, fetch the owning outline when needed rather than inventing structure.
+and composition rules. Read `rulesPre`, `instruction` and `rulesPost` together.
+Fetch schema metadata only when fresh instructions/status lack the needed fields.
+
+Before writing deltas, run
+`specd changes artifact-instruction <name> <artifact> --format text` for the
+intended delta-enabled artifact, such as `requirements` or `system`.
+
+Read its `[delta]` section with the artifact instructions and rules. In
+JSON/TOON, `delta.formatInstructions` gives the general format and examples;
+`delta.domainInstructions` gives schema-specific guidance.
+
+For delta selectors, fetch the owning outline when needed rather than inventing
+structure.
 
 Proposal owns concise intent, change type and concrete artifact allocation.
 Architectural changes add a short system outline whose points simultaneously
